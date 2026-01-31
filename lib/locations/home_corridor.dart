@@ -344,6 +344,8 @@ class _HomeCorridorState extends State<HomeCorridor> {
 
           _timeController.addMinutes(5);
 
+          final roomData = LocationsData.homeRooms[name];
+
           if (name == "Кімната гг") {
             _inventory.addItem(const GameItem(
               id: "condoms_pack",
@@ -351,7 +353,13 @@ class _HomeCorridorState extends State<HomeCorridor> {
               description: "Упаковка на 10 шт. Про всяк випадок...",
             ));
             newsMessage = "Ти знайшов пачку презервативів у себе в кімнаті.";
-          } else {
+          }
+// 2. Додаємо перевірку: якщо кімната заблокована
+          else if (roomData != null && roomData.isLocked) {
+            newsMessage = roomData.description; // Виведе "Підвал зараз закритий, ключі у мами."
+          }
+// 3. Якщо кімната не заблокована і це не Кімната гг
+          else {
             newsMessage = "Ви увійшли в $name.";
           }
         });

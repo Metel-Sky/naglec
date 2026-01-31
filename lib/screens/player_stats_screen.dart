@@ -12,7 +12,7 @@ class PlayerStatsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Статистика персонажа'),
-        backgroundColor: GameTheme.primaryColor,
+        backgroundColor: GameTheme.mainGrey,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
