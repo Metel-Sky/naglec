@@ -4,7 +4,7 @@ class RoomData {
   final String description;
   final bool isLocked;
 
-  // Додайте слово const перед назвою класу тут:
+  // Обов'язково const перед RoomData
   const RoomData({
     required this.name,
     required this.imagePath,

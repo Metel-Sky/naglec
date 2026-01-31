@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:naglec/main.dart';
 import '../data/locations_room_data.dart';
+import '../left_panel/main_left_sidebar.dart';
 import '../left_panel/stats_bottom_menu.dart';
 import '../left_panel/stats_girls_card.dart';
 import '../left_panel/stats_main_menu.dart';
@@ -11,6 +12,7 @@ import '../models/item_model.dart';
 import '../theme/game_theme.dart';
 import '../left_panel/stats_header_card.dart';
 import '../services/character_controller.dart';
+import '../widgets/game_dialog_panel.dart';
 
 class HomeCorridor extends StatefulWidget {
   const HomeCorridor({super.key});
@@ -63,57 +65,18 @@ class _HomeCorridorState extends State<HomeCorridor> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             // ЛІВА ПАНЕЛЬ======================================================
-            ConstrainedBox(
-              constraints: const BoxConstraints(minWidth: 250, maxWidth: 300),
-              child: Column(
-                children: [
-                  _buildDebugButton(context),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(13),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: GameTheme.bgDark,
-                      ),
-                      child: Column(
-                        children: [
-                          // Хедер зі статами====================================
-                          Expanded(
-                            flex: 23,
-                            child: StatsHeaderCard(
-                              stats: _playerStats,
-                              onStatsChanged: () => setState(() {}),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          // Головне меню (Рюкзак тут)==========================
-                          Expanded(
-                            flex: 30,
-                            child: StatsMainMenu(
-                              onBackpackTap: _openBackpack,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          // Нижнє меню
-                          Expanded(
-                              flex: 30,
-                              child: StatsBottomMenu(
-                                onBackpackTap: _openBackpack,
-                                onPersonTap: _openStats,
-                              )
-                          ),
-                          const SizedBox(height: 10),
-                          const Expanded(flex: 23, child: StatsGirlsCard()),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            MainLeftSidebar(
+              playerStats: _playerStats,
+              onBackpackTap: _openBackpack,
+              onPersonTap: _openStats,
+              onRefresh: () => setState(() {}),
             ),
+            // ЛІВА ПАНЕЛЬ======================================================
+
             const SizedBox(width: 12),
+
             // ПРАВА ЧАСТИНА (Ігрове поле)======================================
             Expanded(
               child: Column(
@@ -175,34 +138,27 @@ class _HomeCorridorState extends State<HomeCorridor> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+
+                        //==============Віджет зміни локацій======================
                         Expanded(
-                          flex: 3,
-                          child: NewsPanel(customMessage: newsMessage),
-                        ),
-                        const SizedBox(width: 12),
-                        Container(
-                          width: 200,
-                          decoration: BoxDecoration(
-                            color: GameTheme.bgDark,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                _navButton("На вулицю"),
-                                _navButton("В місто"),
-                                _navButton("Пригород"),
-                                _navButton("Спальний р-н"),
-                                _navButton("Коледж"),
-                                _navButton("В місто"),
-                                _navButton("Пригород"),
-                                _navButton("Спальний р-н"),
-                                _navButton("Коледж"),
-                              ],
-                            ),
+                          flex: 27,
+                          child: GameDialogPanel(
+                            message: newsMessage,
+                            navButtons: [
+                              _navButton("На вулицю"),
+                              _navButton("В місто"),
+                              _navButton("Пригород"),
+                              _navButton("Спальний р-н"),
+                              _navButton("Коледж"),
+                              _navButton("В місто"),
+                              _navButton("Пригород"),
+                              _navButton("Спальний р-н"),
+                              _navButton("Коледж"),
+                            ],
                           ),
                         ),
+                        //==============Віджет зміни локацій======================
+
                       ],
                     ),
                   ),
@@ -259,10 +215,14 @@ class _HomeCorridorState extends State<HomeCorridor> {
       onTap: () => setState(() {
         isInsideRoom = false;
         currentRoom = "Коридор";
+
+        // ДОДАЙ ЦЕЙ РЯДОК:
+        newsMessage = "Ви в коридорі.";
       }),
       child: Container(
-        width: 32, height: 32,
-        decoration: BoxDecoration(color: Colors.white10, shape: BoxShape.circle),
+        width: 32,
+        height: 32,
+        decoration: const BoxDecoration(color: Colors.white10, shape: BoxShape.circle),
         child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 16),
       ),
     );
@@ -334,45 +294,25 @@ class _HomeCorridorState extends State<HomeCorridor> {
 
     return GestureDetector(
       onTap: () {
+        final roomData = LocationsData.homeRooms[name];
+
         setState(() {
+          // 1. ПЕРЕВІРКА НА ЗАМОК
+          if (roomData != null && roomData.isLocked) {
+            // Зклеюємо стандартну фразу та опис з бази даних
+            newsMessage = "Двері в кімнату зачинені. ";
+            return; // Виходимо, щоб не було напису "Ви увійшли"
+          }
+
+          // 2. ЛОГІКА ДЛЯ ВІДКРИТИХ ДВЕРЕЙ
+          // (Цей код виконається, тільки якщо спрацював НЕ замок)
           currentRoom = name;
           isInsideRoom = true;
-
-          // ОБОВ'ЯЗКОВО ДОДАЙ ЦІ ДВА РЯДКИ:
           isBackpackOpen = false;
           isStatsOpen = false;
-
           _timeController.addMinutes(5);
+          newsMessage = "Ви увійшли в $name.";
 
-          // 1. Отримуємо дані про кімнату з нашої бази
-          final roomData = LocationsData.homeRooms[name];
-
-          setState(() {
-            // ПЕРЕВІРКА: чи заблокована кімната
-            if (roomData != null && roomData.isLocked) {
-              newsMessage = roomData.description; // "Підвал закритий..."
-              // Ми не міняємо currentRoom і не ставимо isInsideRoom = true,
-              // тому гравець залишається в коридорі.
-              return;
-            }
-
-            // Якщо кімната ВІДКРИТА:
-            currentRoom = name; // Оновлюємо назву кімнати
-            isInsideRoom = true; // Тепер ми всередині
-
-            if (name == "Кімната гг") {
-              _inventory.addItem(const GameItem(
-                id: "condoms_pack",
-                name: "Пачка презервативів",
-                description: "Упаковка на 10 шт. Про всяк випадок...",
-              ));
-              newsMessage = "Ти знайшов пачку презервативів у себе в кімнаті.";
-            } else {
-              newsMessage = "Ви увійшли в $name.";
-            }
-
-            //===========================================================================
-          });
         });
       },
       child: Container(
@@ -433,16 +373,16 @@ class _HomeCorridorState extends State<HomeCorridor> {
     );
   }
 
-  Widget _buildDebugButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.withOpacity(0.7)),
-        onPressed: () => Navigator.pop(context),
-        child: const Text("DEBUG: В МЕНЮ", style: TextStyle(color: Colors.white)),
-      ),
-    );
-  }
+  // Widget _buildDebugButton(BuildContext context) {
+  //   return SizedBox(
+  //     width: double.infinity,
+  //     child: ElevatedButton(
+  //       style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.withOpacity(0.7)),
+  //       onPressed: () => Navigator.pop(context),
+  //       child: const Text("DEBUG: В МЕНЮ", style: TextStyle(color: Colors.white)),
+  //     ),
+  //   );
+  // }
 
   Widget _debugTimeBtn(String label, VoidCallback onTap) {
     return GestureDetector(
@@ -454,40 +394,40 @@ class _HomeCorridorState extends State<HomeCorridor> {
     );
   }
 
-  Widget _buildCharacterStatsView() {
-    final p = _character.player;
-    return Container(
-      padding: const EdgeInsets.all(20),
-      color: GameTheme.bgDark,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("ПЕРСОНАЖ: ${p.name.toUpperCase()}", style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold)),
-          const Divider(color: GameTheme.textGreen),
-          const SizedBox(height: 20),
-          _statRow("Інтелект", p.intellect, Icons.psychology),
-          _statRow("Харизма", p.charisma, Icons.auto_awesome),
-          _statRow("Сила", p.strength, Icons.fitness_center),
-          const Spacer(),
-          Text("Гроші: ${p.money} \$", style: const TextStyle(fontSize: 20, color: Colors.yellow)),
-        ],
-      ),
-    );
-  }
+  // Widget _buildCharacterStatsView() {
+  //   final p = _character.player;
+  //   return Container(
+  //     padding: const EdgeInsets.all(20),
+  //     color: GameTheme.bgDark,
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text("ПЕРСОНАЖ: ${p.name.toUpperCase()}", style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold)),
+  //         const Divider(color: GameTheme.textGreen),
+  //         const SizedBox(height: 20),
+  //         _statRow("Інтелект", p.intellect, Icons.psychology),
+  //         _statRow("Харизма", p.charisma, Icons.auto_awesome),
+  //         _statRow("Сила", p.strength, Icons.fitness_center),
+  //         const Spacer(),
+  //         Text("Гроші: ${p.money} \$", style: const TextStyle(fontSize: 20, color: Colors.yellow)),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Widget _statRow(String label, int value, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          Icon(icon, color: GameTheme.textGreen, size: 30),
-          const SizedBox(width: 15),
-          Text("$label:", style: const TextStyle(color: Colors.white70, fontSize: 18)),
-          const Spacer(),
-          Text("$value", style: const TextStyle(color: GameTheme.textGreen, fontSize: 20, fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
+  // Widget _statRow(String label, int value, IconData icon) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 10),
+  //     child: Row(
+  //       children: [
+  //         Icon(icon, color: GameTheme.textGreen, size: 30),
+  //         const SizedBox(width: 15),
+  //         Text("$label:", style: const TextStyle(color: Colors.white70, fontSize: 18)),
+  //         const Spacer(),
+  //         Text("$value", style: const TextStyle(color: GameTheme.textGreen, fontSize: 20, fontWeight: FontWeight.bold)),
+  //       ],
+  //     ),
+  //   );
+  // }
 
 }
