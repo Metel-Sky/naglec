@@ -344,24 +344,35 @@ class _HomeCorridorState extends State<HomeCorridor> {
 
           _timeController.addMinutes(5);
 
+          // 1. Отримуємо дані про кімнату з нашої бази
           final roomData = LocationsData.homeRooms[name];
 
-          if (name == "Кімната гг") {
-            _inventory.addItem(const GameItem(
-              id: "condoms_pack",
-              name: "Пачка презервативів",
-              description: "Упаковка на 10 шт. Про всяк випадок...",
-            ));
-            newsMessage = "Ти знайшов пачку презервативів у себе в кімнаті.";
-          }
-// 2. Додаємо перевірку: якщо кімната заблокована
-          else if (roomData != null && roomData.isLocked) {
-            newsMessage = roomData.description; // Виведе "Підвал зараз закритий, ключі у мами."
-          }
-// 3. Якщо кімната не заблокована і це не Кімната гг
-          else {
-            newsMessage = "Ви увійшли в $name.";
-          }
+          setState(() {
+            // ПЕРЕВІРКА: чи заблокована кімната
+            if (roomData != null && roomData.isLocked) {
+              newsMessage = roomData.description; // "Підвал закритий..."
+              // Ми не міняємо currentRoom і не ставимо isInsideRoom = true,
+              // тому гравець залишається в коридорі.
+              return;
+            }
+
+            // Якщо кімната ВІДКРИТА:
+            currentRoom = name; // Оновлюємо назву кімнати
+            isInsideRoom = true; // Тепер ми всередині
+
+            if (name == "Кімната гг") {
+              _inventory.addItem(const GameItem(
+                id: "condoms_pack",
+                name: "Пачка презервативів",
+                description: "Упаковка на 10 шт. Про всяк випадок...",
+              ));
+              newsMessage = "Ти знайшов пачку презервативів у себе в кімнаті.";
+            } else {
+              newsMessage = "Ви увійшли в $name.";
+            }
+
+            //===========================================================================
+          });
         });
       },
       child: Container(
