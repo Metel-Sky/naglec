@@ -2,32 +2,30 @@ import 'package:flutter/material.dart';
 import '../theme/game_theme.dart';
 
 class StatsBottomMenu extends StatelessWidget {
-  // Ми залишаємо цей параметр, щоб не було помилок у коридорі,
-  // навіть якщо не використовуємо його тут прямо зараз.
   final VoidCallback onBackpackTap;
+  final VoidCallback onPersonTap; // 1. Додаємо новий параметр для ГГ
 
   const StatsBottomMenu({
     super.key,
     required this.onBackpackTap,
+    required this.onPersonTap, // 2. Робимо його обов'язковим
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Кнопка Персонажа
+        // Кнопка Персонажа (ГГ)
         Expanded(
           child: _buildIconButton(
             icon: Icons.person_outline,
-            onTap: () {
-              print("Профіль персонажа");
-            },
+            onTap: onPersonTap, // 3. Викликаємо передану функцію замість print
           ),
         ),
 
         const SizedBox(width: 8),
 
-        // ПОВЕРТАЄМО НАЛАШТУВАННЯ (Шестерню)
+        // Кнопка Налаштування
         Expanded(
           child: _buildIconButton(
             icon: Icons.settings_outlined,
@@ -49,7 +47,7 @@ class StatsBottomMenu extends StatelessWidget {
           child: Icon(
             icon,
             size: 40,
-            color: GameTheme.bgDark, // Твій фірмовий зелений
+            color: GameTheme.bgDark,
           ),
         ),
       ),

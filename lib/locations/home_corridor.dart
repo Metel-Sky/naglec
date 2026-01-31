@@ -10,6 +10,7 @@ import '../services/player_stats_controller.dart';
 import '../models/item_model.dart';
 import '../theme/game_theme.dart';
 import '../left_panel/stats_header_card.dart';
+import '../services/character_controller.dart';
 
 class HomeCorridor extends StatefulWidget {
   const HomeCorridor({super.key});
@@ -20,11 +21,13 @@ class HomeCorridor extends StatefulWidget {
 
 class _HomeCorridorState extends State<HomeCorridor> {
   // 1. Ініціалізація контролерів
-  bool isBackpackOpen = false;
+  final CharacterController _character = CharacterController();
   final InventoryController _inventory = InventoryController();
   final GameTimeController _timeController = GameTimeController();
   final PlayerStatsController _playerStats = PlayerStatsController();
 
+  bool isStatsOpen = false;
+  bool isBackpackOpen = false;
   String currentRoom = "Коридор";
   bool isInsideRoom = false;
   String newsMessage = "Ласкаво просимо до гри...";
@@ -36,6 +39,17 @@ class _HomeCorridorState extends State<HomeCorridor> {
       if (isBackpackOpen) {
         isInsideRoom = false; // Виходимо з кімнати, якщо були в ній
         newsMessage = "Ви відкрили рюкзак...";
+      }
+    });
+  }
+
+  void _openStats() {
+    setState(() {
+      isStatsOpen = !isStatsOpen;
+      if (isStatsOpen) {
+        isBackpackOpen = false;
+        isInsideRoom = false;
+        newsMessage = "Ви переглядаєте характеристики персонажа";
       }
     });
   }
@@ -87,6 +101,7 @@ class _HomeCorridorState extends State<HomeCorridor> {
                               flex: 30,
                               child: StatsBottomMenu(
                                 onBackpackTap: _openBackpack,
+                                onPersonTap: _openStats,
                               )
                           ),
                           const SizedBox(height: 10),
@@ -411,6 +426,42 @@ class _HomeCorridorState extends State<HomeCorridor> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Text(label, style: const TextStyle(color: GameTheme.textGreen, fontSize: 18, fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+
+  Widget _buildCharacterStatsView() {
+    final p = _character.player;
+    return Container(
+      padding: const EdgeInsets.all(20),
+      color: GameTheme.bgDark,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("ПЕРСОНАЖ: ${p.name.toUpperCase()}", style: const TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold)),
+          const Divider(color: GameTheme.textGreen),
+          const SizedBox(height: 20),
+          _statRow("Інтелект", p.intellect, Icons.psychology),
+          _statRow("Харизма", p.charisma, Icons.auto_awesome),
+          _statRow("Сила", p.strength, Icons.fitness_center),
+          const Spacer(),
+          Text("Гроші: ${p.money} \$", style: const TextStyle(fontSize: 20, color: Colors.yellow)),
+        ],
+      ),
+    );
+  }
+
+  Widget _statRow(String label, int value, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Icon(icon, color: GameTheme.textGreen),
+          const SizedBox(width: 10),
+          Text("$label:", style: const TextStyle(color: Colors.white70, fontSize: 18)),
+          const Spacer(),
+          Text("$value", style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+        ],
       ),
     );
   }
