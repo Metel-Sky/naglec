@@ -337,6 +337,11 @@ class _HomeCorridorState extends State<HomeCorridor> {
         setState(() {
           currentRoom = name;
           isInsideRoom = true;
+
+          // ОБОВ'ЯЗКОВО ДОДАЙ ЦІ ДВА РЯДКИ:
+          isBackpackOpen = false;
+          isStatsOpen = false;
+
           _timeController.addMinutes(5);
 
           if (name == "Кімната гг") {
@@ -453,16 +458,17 @@ class _HomeCorridorState extends State<HomeCorridor> {
 
   Widget _statRow(String label, int value, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
-          Icon(icon, color: GameTheme.textGreen),
-          const SizedBox(width: 10),
+          Icon(icon, color: GameTheme.textGreen, size: 30),
+          const SizedBox(width: 15),
           Text("$label:", style: const TextStyle(color: Colors.white70, fontSize: 18)),
           const Spacer(),
-          Text("$value", style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+          Text("$value", style: const TextStyle(color: GameTheme.textGreen, fontSize: 20, fontWeight: FontWeight.bold)),
         ],
       ),
     );
   }
+
 }
