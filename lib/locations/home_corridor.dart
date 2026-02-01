@@ -72,6 +72,7 @@ class _HomeCorridorState extends State<HomeCorridor> {
               onBackpackTap: _openBackpack,
               onPersonTap: _openStats,
               onRefresh: () => setState(() {}),
+              onDebugMenuTap: () => Navigator.pop(context), // Передаємо дію сюди
             ),
             // ЛІВА ПАНЕЛЬ======================================================
 
@@ -172,6 +173,8 @@ class _HomeCorridorState extends State<HomeCorridor> {
   }
 
   // --- ДОПОМІЖНІ ВІДЖЕТИ ---
+
+
 
   Widget _buildBackpackGrid() {
     return GridView.builder(
