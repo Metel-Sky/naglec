@@ -9,7 +9,7 @@ import '../locations/home_view.dart';
 import '../services/game_time_controller.dart';
 import '../services/inventory_controller.dart';
 import '../services/player_stats_controller.dart';
-import 'player_stats_screen.dart'; // <-- Новий імпорт
+import 'player_stats_screen.dart'; // Переконайся, що там клас PlayerStatsView (без Scaffold)
 
 class MainGameScreen extends StatefulWidget {
   const MainGameScreen({super.key});
@@ -27,23 +27,8 @@ class _MainGameScreenState extends State<MainGameScreen> {
   String currentRoom = "Коридор";
   bool isInsideRoom = false;
   bool isBackpackOpen = false;
+  bool isStatsOpen = false; // <-- ДОДАНО: Змінна стану для характеристик
   String newsMessage = "Ласкаво просимо...";
-
-  void _toggleBackpack() {
-    setState(() {
-      isBackpackOpen = !isBackpackOpen;
-      newsMessage = isBackpackOpen ? "Ви відкрили рюкзак." : "Рюкзак закрито.";
-    });
-  }
-
-  void _openPlayerStats() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PlayerStatsScreen(playerStatsController: _playerStats),
-      ),
-    );
-  }
 
   void _handleRoomEntry(String name) {
     final roomData = LocationsData.homeRooms[name];
@@ -55,6 +40,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
       currentRoom = name;
       isInsideRoom = true;
       isBackpackOpen = false;
+      isStatsOpen = false; // Закриваємо стати при вході в кімнату
       _timeController.addMinutes(5);
       newsMessage = "Ви увійшли в $name.";
     });
@@ -70,11 +56,23 @@ class _MainGameScreenState extends State<MainGameScreen> {
           children: [
             MainLeftSidebar(
               playerStats: _playerStats,
-              onBackpackTap: _toggleBackpack,
-              onPersonTap: _openPlayerStats, // <-- Використовуємо новий метод
+              onBackpackTap: () => setState(() {
+                isBackpackOpen = !isBackpackOpen;
+                isStatsOpen = false;
+                newsMessage = isBackpackOpen ? "Відкрито рюкзак." : "Ви повернулись.";
+              }),
+              onPersonTap: () => setState(() {
+                isStatsOpen = !isStatsOpen;
+                isBackpackOpen = false;
+                newsMessage = isStatsOpen
+                    ? "Я майже звичайний хлопець, але у мене є бонуси, природа нагородила мене значним членом і неабияким розумом!"
+                    : "Ви повернулись до гри.";
+              }),
               onRefresh: () => setState(() {}),
               onDebugMenuTap: () => Navigator.pop(context),
-            ),
+
+
+            ), // <-- ТУТ БУЛА ПРОПУЩЕНА КОМА
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -82,13 +80,16 @@ class _MainGameScreenState extends State<MainGameScreen> {
                   Expanded(
                     flex: 70,
                     child: Container(
-                      decoration: BoxDecoration(color: GameTheme.bgDark, borderRadius: BorderRadius.circular(15)),
+                      decoration: BoxDecoration(
+                          color: GameTheme.bgDark,
+                          borderRadius: BorderRadius.circular(15)
+                      ),
                       padding: const EdgeInsets.all(13),
                       child: Column(
                         children: [
                           _buildHeader(),
                           const SizedBox(height: 10),
-                          Expanded(child: _buildMainContent()),
+                          Expanded(child: _buildMainContent()), // Виклик головного контенту
                         ],
                       ),
                     ),
@@ -113,20 +114,37 @@ class _MainGameScreenState extends State<MainGameScreen> {
   Widget _buildHeader() {
     return Row(
       children: [
-        if (isInsideRoom && !isBackpackOpen) IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => setState(() { isInsideRoom = false; currentRoom = "Коридор"; }),
+        if ((isInsideRoom || isStatsOpen || isBackpackOpen)) IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
+          onPressed: () => setState(() {
+            isInsideRoom = false;
+            isStatsOpen = false;
+            isBackpackOpen = false;
+            currentRoom = "Коридор";
+          }),
         ),
         Text(" ${_timeController.formattedDate} | ${_timeController.formattedTime} ",
             style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
         const Spacer(),
-        Text("ДІМ ($currentRoom)", style: const TextStyle(fontSize: 18, color: Colors.white)),
+        Text(isStatsOpen ? "ХАРАКТЕРИСТИКИ" : "ДІМ ($currentRoom)",
+            style: const TextStyle(fontSize: 18, color: Colors.white)),
       ],
     );
   }
 
   Widget _buildMainContent() {
-    if (isBackpackOpen) return BackpackView(inventory: _inventory, onNotify: (msg) => setState(() => newsMessage = msg));
+    // 1. Пріоритет рюкзаку
+    if (isBackpackOpen) {
+      return BackpackView(inventory: _inventory, onNotify: (msg) => setState(() => newsMessage = msg));
+    }
+
+    // 2. Пріоритет характеристикам
+    if (isStatsOpen) {
+      // Тут має бути твій віджет PlayerStatsView, який ми малювали
+      return PlayerStatsView(playerStats: _playerStats);
+    }
+
+    // 3. Локація HOME
     if (currentZone == "HOME") {
       return HomeView(
         currentRoom: currentRoom,
@@ -135,12 +153,17 @@ class _MainGameScreenState extends State<MainGameScreen> {
         onBack: () => setState(() { isInsideRoom = false; currentRoom = "Коридор"; }),
       );
     }
+
     return Center(child: Text("ЛОКАЦІЯ: $currentZone", style: const TextStyle(color: Colors.white)));
   }
 
   List<Widget> _buildNavigationButtons() {
     return [
-      _navBtn("Дім", () => setState(() => currentZone = "HOME")),
+      _navBtn("Дім", () => setState(() {
+        currentZone = "HOME";
+        isStatsOpen = false;
+        isBackpackOpen = false;
+      })),
       _navBtn("В місто", () => setState(() => currentZone = "CITY")),
     ];
   }
@@ -148,8 +171,11 @@ class _MainGameScreenState extends State<MainGameScreen> {
   Widget _navBtn(String text, VoidCallback onTap) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
-      child: SizedBox(width: double.infinity, height: 35,
-          child: ElevatedButton(onPressed: onTap, child: Text(text, style: const TextStyle(fontSize: 12)))),
+      child: SizedBox(
+          width: double.infinity,
+          height: 35,
+          child: ElevatedButton(onPressed: onTap, child: Text(text, style: const TextStyle(fontSize: 12)))
+      ),
     );
   }
 }

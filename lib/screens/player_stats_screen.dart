@@ -1,90 +1,118 @@
 import 'package:flutter/material.dart';
 import '../services/player_stats_controller.dart';
-import '../theme/game_theme.dart';
 
-class PlayerStatsScreen extends StatelessWidget {
-  final PlayerStatsController playerStatsController;
+class PlayerStatsView extends StatelessWidget {
+  final PlayerStatsController playerStats;
 
-  const PlayerStatsScreen({super.key, required this.playerStatsController});
+  const PlayerStatsView({super.key, required this.playerStats});
 
   @override
   Widget build(BuildContext context) {
-    // Використовуємо переданий контролер
-    final playerStats = playerStatsController;
-
-    return Scaffold(
-      backgroundColor: GameTheme.screenBg.withOpacity(0.95),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text('Характеристики персонажа'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
+    return Container(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          const Text(
+            "ХАРАКТЕРИСТИКИ ПЕРСОНАЖА",
+            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Ліва частина: Аватар
-                Expanded(
-                  flex: 2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      'lib/assets/home_gg.jpg', // Шлях до аватара
+                // Аватар
+                Container(
+                  width: 150,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: const DecorationImage(
+                      image: AssetImage('lib/assets/home_gg.jpg'),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
-
-                // Права частина: Статистика
+                const SizedBox(width: 20),
+                // Статистика
                 Expanded(
-                  flex: 3,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: ListView(
                     children: [
-                      _buildStatRow("Збудження", "${playerStats.arousal.toInt()}"),
-                      _buildStatRow("Бадьорість", "${playerStats.vitality}", color: Colors.greenAccent),
-                      const SizedBox(height: 20),
-                      _buildStatRow("Хтивість", "${playerStats.lust} / ${playerStats.maxLust}"),
-                      _buildStatRow("Фіз. форма", "${playerStats.physical_fitness} / ${playerStats.maxPhysical_fitness}"),
-                      _buildStatRow("Бій", "${playerStats.fighting} / ${playerStats.maxFighting}"),
-                      const SizedBox(height: 20),
-                      _buildStatRow("Досвід масажу", "${playerStats.massage_experience} / ${playerStats.maxMassage_experience}"),
-                      _buildStatRow("Успішність", "${playerStats.college_success} / ${playerStats.maxCollege_success}"),
+                      _buildStatLine("Енергія:", playerStats.vitality / 100),
+                      _buildStatLine("Збудження:", playerStats.arousal / 100),
+                      _buildStatLine("Хтивість:", playerStats.lust / playerStats.maxLust),
+                      _buildStatLine("Фіз. форма:", playerStats.physical_fitness / playerStats.maxPhysical_fitness),
+                      _buildStatLine("Бій:", playerStats.fighting / playerStats.maxFighting),
+                      _buildStatLine("Успішність:", playerStats.college_success / playerStats.maxCollege_success),
+                      _buildStatLine("Масаж:", playerStats.massage_experience / playerStats.maxMassage_experience),
+                      _buildStatLine("Програмування:", 0.4), // Заглушка
+                      _buildStatLine("Хакерство:", 0.2),      // Заглушка
+                      _buildStatLine("Взлом замків:", 0.2),
+                      _buildStatLine("Стелс режим:", 0.2),
+                      _buildStatLine("Вплив:", 0.2),
+
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+          ),
+          // Опис внизу
 
-            // Опис персонажа
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: GameTheme.cardDecoration(),
-              child: const Text(
-                "Я майже звичайний хлопець, але у мене є бонуси, природа нагородила мене значним членом і неабияким розумом!",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.white70, fontStyle: FontStyle.italic),
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
 
-  Widget _buildStatRow(String label, String value, {Color? color}) {
+  Widget _buildStatLine(String label, double percent) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("$label:", style: const TextStyle(fontSize: 16, color: Colors.white70)),
-          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color ?? Colors.white)),
+          // Назва зліва - забирає весь вільний простір
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500
+              ),
+            ),
+          ),
+          const SizedBox(width: 50),
+
+          // Фіксований блок для шкали (приблизно 40% ширини центрального вікна)
+          SizedBox(
+            width: 280, // Фіксована ширина для всіх шкал
+            child: Row(
+              children: [
+                Expanded(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      LinearProgressIndicator(
+                        value: percent,
+                        minHeight: 18,
+                        backgroundColor: const Color(0xFF2D353C), // Чистий темний колір без опасіті
+                        color: Colors.green, // Яскравий суцільний колір
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      // Відсотки поверх шкали
+                      Text(
+                        "${(percent * 100).toInt()}%",
+                        style: const TextStyle(
+                          color: Colors.white, // Чорний текст краще читається на світло-зеленому
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

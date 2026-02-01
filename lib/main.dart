@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // Потрібно для kIsWeb
 import 'package:naglec/theme/game_theme.dart';
+import 'package:naglec/widgets/news_panel.dart';
 import 'dart:io'; // Потрібно для Platform
 import 'package:window_manager/window_manager.dart'; // Імпортуємо пакет
 import 'screens/main_game_screen.dart';
@@ -78,7 +79,7 @@ class MainMenuScreen extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: Column(
-                      children: const [
+                      children: [
                         Expanded(flex: 3, child: MainArtCard()),
                         SizedBox(height: 12),
                         Expanded(flex: 1, child: NewsPanel()),
@@ -176,32 +177,4 @@ class MainArtCard extends StatelessWidget {
   }
 }
 
-class NewsPanel extends StatelessWidget {
-  final String customMessage;
 
-  const NewsPanel({
-    super.key,
-    this.customMessage = "Ласкаво просимо до гри 'Наглец'...",
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: GameTheme.bgDark,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Text(
-        customMessage,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/game_theme.dart';
-import '../main.dart'; // Для доступу до NewsPanel, якщо вона там
+import '../main.dart';
+import 'news_panel.dart'; // Для доступу до NewsPanel, якщо вона там
 
 class GameDialogPanel extends StatelessWidget {
   final String message;
