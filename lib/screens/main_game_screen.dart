@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:naglec/services/service_locator.dart';
 import '../data/locations_room_data.dart';
 import '../theme/game_theme.dart';
 import '../left_panel/main_left_sidebar.dart';
 import '../widgets/game_dialog_panel.dart';
-import '../widgets/backpack_view.dart'; // Новий імпорт
-import '../locations/home_view.dart';   // Новий імпорт
+import '../widgets/backpack_view.dart';
+import '../locations/home_view.dart';
 import '../services/game_time_controller.dart';
 import '../services/inventory_controller.dart';
 import '../services/player_stats_controller.dart';
+import 'player_stats_screen.dart'; // <-- Новий імпорт
 
 class MainGameScreen extends StatefulWidget {
   const MainGameScreen({super.key});
@@ -17,9 +19,9 @@ class MainGameScreen extends StatefulWidget {
 }
 
 class _MainGameScreenState extends State<MainGameScreen> {
-  final InventoryController _inventory = InventoryController();
-  final GameTimeController _timeController = GameTimeController();
-  final PlayerStatsController _playerStats = PlayerStatsController();
+  final InventoryController _inventory = sl<InventoryController>();
+  final GameTimeController _timeController = sl<GameTimeController>();
+  final PlayerStatsController _playerStats = sl<PlayerStatsController>();
 
   String currentZone = "HOME";
   String currentRoom = "Коридор";
@@ -27,13 +29,20 @@ class _MainGameScreenState extends State<MainGameScreen> {
   bool isBackpackOpen = false;
   String newsMessage = "Ласкаво просимо...";
 
-  // ЛОГІКА======================================================
-
   void _toggleBackpack() {
     setState(() {
       isBackpackOpen = !isBackpackOpen;
       newsMessage = isBackpackOpen ? "Ви відкрили рюкзак." : "Рюкзак закрито.";
     });
+  }
+
+  void _openPlayerStats() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PlayerStatsScreen(playerStatsController: _playerStats),
+      ),
+    );
   }
 
   void _handleRoomEntry(String name) {
@@ -45,7 +54,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
       }
       currentRoom = name;
       isInsideRoom = true;
-      isBackpackOpen = false; // Закриваємо рюкзак при вході
+      isBackpackOpen = false;
       _timeController.addMinutes(5);
       newsMessage = "Ви увійшли в $name.";
     });
@@ -62,7 +71,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
             MainLeftSidebar(
               playerStats: _playerStats,
               onBackpackTap: _toggleBackpack,
-              onPersonTap: () => setState(() => newsMessage = "Характеристики персонажа"),
+              onPersonTap: _openPlayerStats, // <-- Використовуємо новий метод
               onRefresh: () => setState(() {}),
               onDebugMenuTap: () => Navigator.pop(context),
             ),
@@ -70,7 +79,6 @@ class _MainGameScreenState extends State<MainGameScreen> {
             Expanded(
               child: Column(
                 children: [
-                  // ВЕРХНЯ ЧАСТИНА (ІГРОВЕ ПОЛЕ)
                   Expanded(
                     flex: 70,
                     child: Container(
@@ -78,7 +86,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
                       padding: const EdgeInsets.all(13),
                       child: Column(
                         children: [
-                          _buildHeader(), // Час та назва локації
+                          _buildHeader(),
                           const SizedBox(height: 10),
                           Expanded(child: _buildMainContent()),
                         ],
@@ -86,7 +94,6 @@ class _MainGameScreenState extends State<MainGameScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  // НИЖНЯ ПАНЕЛЬ
                   Expanded(
                     flex: 27,
                     child: GameDialogPanel(
@@ -135,7 +142,6 @@ class _MainGameScreenState extends State<MainGameScreen> {
     return [
       _navBtn("Дім", () => setState(() => currentZone = "HOME")),
       _navBtn("В місто", () => setState(() => currentZone = "CITY")),
-      // Додай інші кнопки сюди
     ];
   }
 

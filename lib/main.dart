@@ -3,10 +3,14 @@ import 'package:flutter/foundation.dart'; // Потрібно для kIsWeb
 import 'package:naglec/theme/game_theme.dart';
 import 'dart:io'; // Потрібно для Platform
 import 'package:window_manager/window_manager.dart'; // Імпортуємо пакет
-import 'locations/home_corridor.dart';
+import 'screens/main_game_screen.dart';
+import 'services/service_locator.dart'; // <-- Новий імпорт
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Налаштування Service Locator
+  setupServiceLocator(); // <-- Ініціалізація
 
   // Перевіряємо: якщо це НЕ браузер і це десктопна ОС
   if (!kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
@@ -143,7 +147,7 @@ class LeftMenuPanel extends StatelessWidget {
             if (text == "Почати гру") {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeCorridor()),
+                MaterialPageRoute(builder: (context) => const MainGameScreen()),
               );
             }
           },
@@ -198,6 +202,6 @@ class NewsPanel extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
       ),
-    ); // Останній крапка з комою методу build
+    );
   }
 }
