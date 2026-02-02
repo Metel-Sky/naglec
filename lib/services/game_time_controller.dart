@@ -7,9 +7,11 @@ class GameTimeController {
     "ПОНЕДІЛОК", "ВІВТОРОК", "СЕРЕДА", "ЧЕТВЕР", "П'ЯТНИЦЯ", "СУБОТА", "НЕДІЛЯ"
   ];
 
-  String get formattedDate => DateFormat('dd.MM.yyyy').format(_dateTime);
+  String get formattedDate => " ${DateFormat('dd.MM.yyyy').format(_dateTime)} | $shortDayName";
   String get formattedTime => DateFormat('HH:mm').format(_dateTime);
   String get dayName => _daysOfWeek[_dateTime.weekday - 1];
+  String get shortDayName => dayName.substring(0, 3);
+
 
   // --- МЕТОДИ ДЛЯ ЧІТІВ ---
 

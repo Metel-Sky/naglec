@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/player_stats_controller.dart';
 
+
 class PlayerStatsView extends StatelessWidget {
   final PlayerStatsController playerStats;
 
@@ -23,17 +24,17 @@ class PlayerStatsView extends StatelessWidget {
               children: [
                 // Аватар
                 Container(
-                  width: 150,
-                  height: 200,
+                  width: 200,
+                  height: 250,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: const DecorationImage(
-                      image: AssetImage('lib/assets/home_gg.jpg'),
+                      image: AssetImage('lib/assets/pers.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 25),
                 // Статистика
                 Expanded(
                   child: ListView(
@@ -59,6 +60,7 @@ class PlayerStatsView extends StatelessWidget {
           ),
           // Опис внизу
 
+
         ],
       ),
     );
@@ -68,9 +70,11 @@ class PlayerStatsView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start, // Притискаємо до лівого краю
         children: [
-          // Назва зліва - забирає весь вільний простір
-          Expanded(
+          // 1. ЛІВА ЧАСТИНА (Назва) - Фіксована ширина
+          SizedBox(
+            width: 170,
             child: Text(
               label,
               style: const TextStyle(
@@ -80,34 +84,29 @@ class PlayerStatsView extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 50),
 
-          // Фіксований блок для шкали (приблизно 40% ширини центрального вікна)
+          // 2. ВІДСТУП (ти поставив 15, але хотів 40? Якщо 40, то змініть тут)
+          const SizedBox(width: 15),
+
+          // 3. ПРАВА ЧАСТИНА (Шкала) - Фіксована ширина
           SizedBox(
-            width: 280, // Фіксована ширина для всіх шкал
-            child: Row(
+            width: 280,
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                Expanded(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      LinearProgressIndicator(
-                        value: percent,
-                        minHeight: 18,
-                        backgroundColor: const Color(0xFF2D353C), // Чистий темний колір без опасіті
-                        color: Colors.green, // Яскравий суцільний колір
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      // Відсотки поверх шкали
-                      Text(
-                        "${(percent * 100).toInt()}%",
-                        style: const TextStyle(
-                          color: Colors.white, // Чорний текст краще читається на світло-зеленому
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                LinearProgressIndicator(
+                  value: percent,
+                  minHeight: 18,
+                  backgroundColor: const Color(0xFF2D353C),
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                Text(
+                  "${(percent * 100).toInt()}%",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],

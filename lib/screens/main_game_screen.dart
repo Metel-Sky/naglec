@@ -114,19 +114,45 @@ class _MainGameScreenState extends State<MainGameScreen> {
   Widget _buildHeader() {
     return Row(
       children: [
-        if ((isInsideRoom || isStatsOpen || isBackpackOpen)) IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
-          onPressed: () => setState(() {
-            isInsideRoom = false;
-            isStatsOpen = false;
-            isBackpackOpen = false;
-            currentRoom = "Коридор";
-          }),
-        ),
+        if (isInsideRoom || isBackpackOpen || isStatsOpen)
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Material(
+              color: Colors.transparent, // Робимо фон Material прозорим
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    isInsideRoom = false;
+                    isBackpackOpen = false;
+                    isStatsOpen = false;
+                    newsMessage = "Ви повернулися до коридору";
+                  });
+                },
+                borderRadius: BorderRadius.circular(50), // Щоб ховер був круглим
+                hoverColor: Colors.white.withOpacity(0.1), // Колір при наведенні мишкою
+                splashColor: Colors.white.withOpacity(0.2), // Колір при кліку (сплеск)
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    //border: Border.all(color: Colors.white10), // Ледь помітна рамка
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         Text(" ${_timeController.formattedDate} | ${_timeController.formattedTime} ",
             style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
         const Spacer(),
-        Text(isStatsOpen ? "ХАРАКТЕРИСТИКИ" : "ДІМ ($currentRoom)",
+        Text(isStatsOpen ? "ХАРАКТЕРИСТИКИ   " : "ДІМ ($currentRoom)",
             style: const TextStyle(fontSize: 18, color: Colors.white)),
       ],
     );

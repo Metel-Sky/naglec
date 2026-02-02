@@ -15,15 +15,6 @@ class StatsBottomMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Кнопка Персонажа (ГГ)
-        Expanded(
-          child: _buildIconButton(
-            icon: Icons.person_outline,
-            onTap: onPersonTap, // 3. Викликаємо передану функцію замість print
-          ),
-        ),
-
-        const SizedBox(width: 8),
 
         // Кнопка Налаштування
         Expanded(
@@ -34,6 +25,42 @@ class StatsBottomMenu extends StatelessWidget {
             },
           ),
         ),
+        const SizedBox(width: 8),
+
+        // Кнопка Персонажа (ГГ)
+        Expanded(
+          child: GestureDetector(
+            onTap: onPersonTap,
+            child: Container(
+              decoration: GameTheme.cardDecoration(radius: 15),
+              child: Center(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    double imageSize = constraints.maxHeight * 0.8; // 80% висоти
+
+                    return Image.asset(
+                      "lib/assets/gg.png", // ШЛЯХ ДО ТВОЄЇ КАРТИНКИ ГГ
+                      height: imageSize,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Якщо картинки немає — покажемо запасну іконку
+                        return Icon(
+                            Icons.person_outline,
+                            size: imageSize,
+                            color: GameTheme.bgDark
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+
+
+
+
       ],
     );
   }
