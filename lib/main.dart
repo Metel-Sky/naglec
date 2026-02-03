@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // Потрібно для kIsWeb
+import 'package:media_kit/media_kit.dart';
 import 'package:naglec/theme/game_theme.dart';
 import 'package:naglec/widgets/news_panel.dart';
 import 'dart:io'; // Потрібно для Platform
@@ -9,6 +10,7 @@ import 'services/service_locator.dart'; // <-- Новий імпорт
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized(); // <--- ЦЕЙ РЯДОК ОБОВ'ЯЗКОВИЙ
 
   // Налаштування Service Locator
   setupServiceLocator(); // <-- Ініціалізація
@@ -18,8 +20,8 @@ void main() async {
     await windowManager.ensureInitialized();
 
     WindowOptions windowOptions = const WindowOptions(
-      size: Size(1280, 720),
-      minimumSize: Size(1024, 600),
+      size: Size(1280, 820),
+      minimumSize: Size(1024, 800),
       maximumSize: Size(2560, 1440),
       center: true,
       title: "Наглец",
@@ -58,7 +60,7 @@ class MainMenuScreen extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(
             minWidth: 1024,
-            minHeight: 600,
+            minHeight: 900,
             maxWidth: 2560,
             maxHeight: 1440,
           ),
@@ -71,7 +73,7 @@ class MainMenuScreen extends StatelessWidget {
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       minWidth: 250, // Не менше 250
-                      maxWidth: 280, // ширина лівої панелі Не більше 350
+                      maxWidth: 300, // ширина лівої панелі Не більше 350
                     ),
                     child: const LeftMenuPanel(),
                   ),

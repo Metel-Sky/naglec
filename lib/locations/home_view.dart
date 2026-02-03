@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import '../theme/game_theme.dart';
 import '../data/locations_room_data.dart';
+import '../services/service_locator.dart';
+import '../services/npc_service.dart';
+import '../models/npc_model.dart';
+import '../services/game_time_controller.dart';
+import '../widgets/video_scene_widget.dart'; // ПЕРЕВІР ЦЕЙ ІМПОРТ
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   final String currentRoom;
   final bool isInsideRoom;
-  final Function(String) onRoomTap; // Повідомляємо "батька" про натискання
-  final VoidCallback onBack;      // Повідомляємо про кнопку "Назад"
+  final Function(String) onRoomTap;
+  final VoidCallback onBack;
+  final GameTimeController timeController;
+  final Function(NPCModel) onNPCTap;
 
   const HomeView({
     super.key,
@@ -14,14 +21,83 @@ class HomeView extends StatelessWidget {
     required this.isInsideRoom,
     required this.onRoomTap,
     required this.onBack,
+    required this.timeController,
+    required this.onNPCTap,
   });
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
   Widget build(BuildContext context) {
-    return isInsideRoom ? _buildRoomImage() : _buildRoomsGrid();
+    // 1. Якщо ми не в кімнаті — малюємо сітку вибору
+    if (!widget.isInsideRoom) return _buildRoomsGrid();
+
+    // 2. Отримуємо список NPC в цій кімнаті
+    final List<NPCModel> npcsInRoom = sl<NPCService>().getNPCsInRoom(
+      widget.currentRoom,
+      widget.timeController.dateTime.hour,
+      widget.timeController.weekdayIndex,
+    );
+
+    // 3. Шукаємо активну "сцену" (відео або фото з NPC)
+    String? specialBackground;
+    NPCModel? activeNPC;
+
+    for (var npc in npcsInRoom) {
+      try {
+        final point = npc.schedule.firstWhere((p) {
+          int h = widget.timeController.dateTime.hour;
+          bool timeMatches = (p.hourStart <= p.hourEnd)
+              ? (h >= p.hourStart && h < p.hourEnd)
+              : (h >= p.hourStart || h < p.hourEnd);
+          return p.location == widget.currentRoom && timeMatches;
+        });
+
+        if (point.spritePath != null) {
+          specialBackground = point.spritePath;
+          activeNPC = npc;
+          break; // Беремо першого знайденого
+        }
+      } catch (_) {}
+    }
+
+    // 4. Визначаємо фінальний шлях до медіа
+    final roomData = LocationsData.homeRooms[widget.currentRoom];
+    final String finalMedia = specialBackground ?? roomData?.imagePath ?? 'lib/assets/home_gg/rooms/default.jpg';
+
+    // 5. Повертаємо контент кімнати
+    return GestureDetector(
+      onTap: () {
+        if (activeNPC != null) widget.onNPCTap(activeNPC);
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: _buildMediaContent(finalMedia),
+      ),
+    );
   }
 
-  // СІТКА КІМНАТ
+  // Метод для вибору між відео-плеєром та картинкою
+  Widget _buildMediaContent(String path) {
+    if (path.endsWith('.mp4') || path.endsWith('.webm')) {
+      return VideoSceneWidget(videoPath: path);
+    }
+    return Image.asset(
+      path,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+      errorBuilder: (context, error, stackTrace) => Container(
+        color: Colors.grey[900],
+        child: const Center(child: Icon(Icons.broken_image, color: Colors.white24, size: 50)),
+      ),
+    );
+  }
+
+  // --- СІТКА КІМНАТ ---
   Widget _buildRoomsGrid() {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -45,12 +121,10 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  // КАРТКА КІМНАТИ
   Widget _roomCard(String name) {
     final roomData = LocationsData.homeRooms[name];
-
     return GestureDetector(
-      onTap: () => onRoomTap(name),
+      onTap: () => widget.onRoomTap(name),
       child: Container(
         decoration: GameTheme.cardDecoration(radius: 10),
         clipBehavior: Clip.antiAlias,
@@ -60,44 +134,17 @@ class HomeView extends StatelessWidget {
             Image.asset(
               roomData?.imagePath ?? 'lib/assets/home_gg/rooms/default.jpg',
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey),
             ),
             Container(color: Colors.black.withOpacity(0.4)),
             Center(
               child: Text(
                 name,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  // ВИГЛЯД ВСЕРЕДИНІ КІМНАТИ
-  Widget _buildRoomImage() {
-    final roomData = LocationsData.homeRooms[currentRoom];
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.asset(
-            roomData?.imagePath ?? 'lib/assets/home_gg/rooms/default.jpg',
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-        ),
-        // Positioned(
-        //   top: 10,
-        //   left: 10,
-        //   child: IconButton(
-        //     icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
-        //     onPressed: onBack,
-        //   ),
-        //),
-      ],
     );
   }
 }

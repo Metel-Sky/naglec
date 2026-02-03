@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:naglec/services/service_locator.dart';
 import '../data/locations_room_data.dart';
+import '../services/npc_service.dart';
 import '../theme/game_theme.dart';
 import '../left_panel/main_left_sidebar.dart';
 import '../widgets/game_dialog_panel.dart';
@@ -72,7 +74,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
               onDebugMenuTap: () => Navigator.pop(context),
 
 
-            ), // <-- ТУТ БУЛА ПРОПУЩЕНА КОМА
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -99,7 +101,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
                     flex: 27,
                     child: GameDialogPanel(
                       message: newsMessage,
-                      navButtons: _buildNavigationButtons(),
+                      navButtons: [_buildActionPanel()],
                     ),
                   ),
                 ],
@@ -114,47 +116,129 @@ class _MainGameScreenState extends State<MainGameScreen> {
   Widget _buildHeader() {
     return Row(
       children: [
+        // Кнопка Назад
         if (isInsideRoom || isBackpackOpen || isStatsOpen)
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: Material(
-              color: Colors.transparent, // Робимо фон Material прозорим
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    isInsideRoom = false;
-                    isBackpackOpen = false;
-                    isStatsOpen = false;
-                    newsMessage = "Ви повернулися до коридору";
-                  });
-                },
-                borderRadius: BorderRadius.circular(50), // Щоб ховер був круглим
-                hoverColor: Colors.white.withOpacity(0.1), // Колір при наведенні мишкою
-                splashColor: Colors.white.withOpacity(0.2), // Колір при кліку (сплеск)
-                child: Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    //border: Border.all(color: Colors.white10), // Ледь помітна рамка
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 22,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          _buildBackButton(),
+
+        // Блок ДНЯ ТИЖНЯ (змінює тільки індекс)
+        _timeControlBlock(
+          label: _timeController.dayName,
+          onPlus: () => setState(() => _timeController.nextDayName()),
+          onMinus: () => setState(() => _timeController.prevDayName()),
+        ),
+
+// Блок ДАТИ (змінює тільки календарне число)
+        _timeControlBlock(
+          label: _timeController.onlyDate,
+          onPlus: () => setState(() => _timeController.addDay()),
+          onMinus: () => setState(() => _timeController.subDay()),
+        ),
+
+
+        // 2. БЛОК ДАТИ (02.02.2026)
+        // _timeControlBlock(
+        //   label: DateFormat('dd.MM.yyyy').format(_timeController.dateTime), // Тільки цифри
+        //   onPlus: () => setState(() => _timeController.addDay()),
+        //   onMinus: () => setState(() => _timeController.subDay()),
+        // ),
+
+        const SizedBox(width: 10),
+
+        // 3. БЛОК ЧАСУ (залишаємо як був, він у тебе гарний)
+        Container(
+          padding: const EdgeInsets.symmetric( vertical: 4),
+          decoration: BoxDecoration(
+
+            borderRadius: BorderRadius.circular(8),
           ),
-        Text(" ${_timeController.formattedDate} | ${_timeController.formattedTime} ",
-            style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
+          child: Row(
+            children: [
+              _miniBtn("--", () => setState(() => _timeController.subHour())),
+              _miniBtn("-", () => setState(() => _timeController.subMinute())),
+              const SizedBox(width: 10),
+              Text(
+                _timeController.formattedTime,
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const SizedBox(width: 10),
+              _miniBtn("+", () => setState(() => _timeController.addMinutes(5))),
+              _miniBtn("++", () => setState(() => _timeController.addHour())),
+            ],
+          ),
+        ),
+
         const Spacer(),
-        Text(isStatsOpen ? "ХАРАКТЕРИСТИКИ   " : "ДІМ ($currentRoom)",
-            style: const TextStyle(fontSize: 18, color: Colors.white)),
+
+        // Назва локації
+        Text(
+          isStatsOpen ? "ХАРАКТЕРИСТИКИ   " : "ДІМ ($currentRoom)",
+          style: const TextStyle(fontSize: 18, color: Colors.white),
+        ),
       ],
+    );
+  }
+  // Допоміжний віджет для блоку з кнопками +/-
+  Widget _timeControlBlock({required String label, required VoidCallback onPlus, required VoidCallback onMinus}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          _miniBtn("-", onMinus),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(label, style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
+          ),
+          _miniBtn("+", onPlus),
+        ],
+      ),
+    );
+  }
+
+  // Маленька стильна кнопка для хедера
+  Widget _miniBtn(String label, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(4),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        margin: const EdgeInsets.symmetric(horizontal: 2),
+        decoration: BoxDecoration(
+          color: Colors.white10,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  // Винесений метод кнопки назад для чистоти коду
+  Widget _buildBackButton() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 12),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => setState(() {
+            isInsideRoom = false;
+            isBackpackOpen = false;
+            isStatsOpen = false;
+            newsMessage = "Ви повернулися до коридору";
+          }),
+          borderRadius: BorderRadius.circular(50),
+          child: const SizedBox(
+            width: 34,
+            height: 34,
+            child: Center(child: Icon(Icons.arrow_back, color: Colors.white, size: 22)),
+          ),
+        ),
+      ),
     );
   }
 
@@ -177,6 +261,12 @@ class _MainGameScreenState extends State<MainGameScreen> {
         isInsideRoom: isInsideRoom,
         onRoomTap: _handleRoomEntry,
         onBack: () => setState(() { isInsideRoom = false; currentRoom = "Коридор"; }),
+        timeController: _timeController, // ПЕРЕДАЄМО
+        onNPCTap: (npc) {
+          setState(() {
+            newsMessage = "Ви натиснули на ${npc.name}. Зараз вона: ${sl<NPCService>().getNPCsInRoom(currentRoom, _timeController.dateTime.hour, _timeController.weekdayIndex).first.schedule.firstWhere((p) => p.location == currentRoom).actionLabel}";
+          });
+        },
       );
     }
 
@@ -195,13 +285,63 @@ class _MainGameScreenState extends State<MainGameScreen> {
   }
 
   Widget _navBtn(String text, VoidCallback onTap) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: SizedBox(
-          width: double.infinity,
-          height: 35,
-          child: ElevatedButton(onPressed: onTap, child: Text(text, style: const TextStyle(fontSize: 12)))
+    return ElevatedButton(
+      style: GameTheme.actionButtonStyle(color: GameTheme.textBlack),
+      onPressed: onTap,
+      child: Text(text), // Жирним він стане автоматично через GameTheme
+    );
+  }
+
+  Widget _buildActionPanel() {
+    final int hour = _timeController.dateTime.hour;
+    final int day = _timeController.weekdayIndex;
+    final npcs = sl<NPCService>().getNPCsInRoom(currentRoom, hour, day);
+
+    List<Widget> actionWidgets = [];
+
+    if (isInsideRoom && npcs.isNotEmpty) {
+      final npc = npcs.first;
+      final actions = npc.getAvailableActions(
+        location: currentRoom,
+        hour: hour,
+        onUpdate: () => setState(() {}),
+      );
+
+      for (var action in actions) {
+        actionWidgets.add(
+          ElevatedButton(
+            style: GameTheme.actionButtonStyle(),
+            onPressed: action.onExecute,
+            child: Text(action.label.toUpperCase(), textAlign: TextAlign.center),
+          ),
+        );
+        actionWidgets.add(const SizedBox(height: 10)); // Відступ між кнопками
+      }
+
+      actionWidgets.add(
+        ElevatedButton(
+          style: GameTheme.actionButtonStyle(color: Colors.redAccent),
+          onPressed: () => setState(() => isInsideRoom = false),
+          child: const Text("← НАЗАД", textAlign: TextAlign.center),
+        ),
+      );
+    } else {
+      actionWidgets = [
+        _navBtn("ДІМ", () => setState(() => currentZone = "HOME")),
+        const SizedBox(height: 10),
+        _navBtn("В МІСТО", () => setState(() => currentZone = "CITY")),
+      ];
+    }
+
+    return Container(
+      // Ось твої 8px від країв панелі
+      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 4), //відступи по краях
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch, // Розтягує на всю ширину
+        children: actionWidgets,
       ),
     );
   }
-}
+  } // КІНЕЦЬ КЛАСУ _MainGameScreenState

@@ -37,6 +37,8 @@ class PlayerStatsController {
   String get energyStatus => energy <= 25 ? "Знесилений" : energy <= 50 ? "Втомлений" : energy <= 75 ? "Нормальний" : "Бадьорий";
   String get arousalStatus => arousal <= 33 ? "Спокійний" : arousal <= 66 ? "Тісно в штанях" : "Стоїть колом";
 
+
+
   // Methods to change player stats
   void changeEnergy(double amount) {
     player.energy = (player.energy + amount).clamp(0, player.maxEnergy);
@@ -49,6 +51,7 @@ class PlayerStatsController {
   void changeMoney(int amount) {
     player.money = (player.money + amount).clamp(0, 9999999);
   }
+
 
   void changeLust(int amount) {
     player.lust = (player.lust + amount).clamp(0, player.maxLust);
@@ -93,4 +96,8 @@ class PlayerStatsController {
   void changeCollegeSuccess(int amount) {
     player.college_success = (player.college_success + amount).clamp(0, player.maxCollege_success);
   }
+
+
+
+
 }
