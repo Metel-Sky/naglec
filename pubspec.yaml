@@ -18,6 +18,8 @@ dependencies:
   intl: any
   cupertino_icons: ^1.0.8
   get_it: ^7.7.0
+  path_provider: ^2.1.2    # Для доступу до пам'яті телефону
+  screenshot: ^3.0.0       # Для створення прев'ю слота
 
 dev_dependencies:
   flutter_test:

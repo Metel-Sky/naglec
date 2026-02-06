@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/settings_screen.dart';
 import '../theme/game_theme.dart';
 
 class StatsBottomMenu extends StatelessWidget {
@@ -21,10 +22,15 @@ class StatsBottomMenu extends StatelessWidget {
           child: _buildIconButton(
             icon: Icons.settings_outlined,
             onTap: () {
-              print("Налаштування натиснуто");
+              // Викликаємо екран налаштувань
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              );
             },
           ),
         ),
+
         const SizedBox(width: 8),
 
         // Кнопка Персонажа (ГГ)

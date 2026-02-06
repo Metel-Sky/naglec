@@ -3,6 +3,7 @@ import 'game_time_controller.dart';
 import 'inventory_controller.dart';
 import 'npc_service.dart';
 import 'player_stats_controller.dart';
+import 'save_service.dart'; // <--- ДОДАНО ІМПОРТ
 
 // Створюємо екземпляр GetIt
 final GetIt sl = GetIt.instance;
@@ -10,7 +11,12 @@ final GetIt sl = GetIt.instance;
 // Функція для налаштування та реєстрації сервісів
 void setupServiceLocator() {
 
-  // Реєструємо NPCService (тільки якщо він ще не зареєстрований)
+  // Реєструємо SaveService (ОБОВ'ЯЗКОВО ДЛЯ ЗБЕРЕЖЕНЬ)
+  if (!sl.isRegistered<SaveService>()) {
+    sl.registerLazySingleton<SaveService>(() => SaveService());
+  }
+
+  // Реєструємо NPCService
   if (!sl.isRegistered<NPCService>()) {
     sl.registerLazySingleton<NPCService>(() => NPCService());
   }

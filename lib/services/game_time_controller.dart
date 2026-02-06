@@ -17,6 +17,10 @@ class GameTimeController with ChangeNotifier {
   String get formattedTime => DateFormat('HH:mm').format(_dateTime);
   String get dayName => _daysOfWeek[_manualWeekdayIndex].substring(0, 3);
 
+  set dateTime(DateTime value) {
+    _dateTime = value;
+  }
+
   // --- ЛОГІКА ЧАСУ ---
 
   void addMinutes(int minutes) {

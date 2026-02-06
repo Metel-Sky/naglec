@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:naglec/services/service_locator.dart';
+import 'package:screenshot/screenshot.dart';
 import '../data/locations_room_data.dart';
 import '../models/npc_model.dart';
 import '../services/npc_service.dart';
+import '../services/save_service.dart';
 import '../theme/game_theme.dart';
 import '../left_panel/main_left_sidebar.dart';
 import '../widgets/game_dialog_panel.dart';
@@ -21,6 +23,8 @@ class MainGameScreen extends StatefulWidget {
 }
 
 class _MainGameScreenState extends State<MainGameScreen> {
+  // 1. Отримай доступ до сервісу
+  final _saveService = sl<SaveService>();
   final InventoryController _inventory = sl<InventoryController>();
   final GameTimeController _timeController = sl<GameTimeController>();
   final PlayerStatsController _playerStats = sl<PlayerStatsController>();
@@ -46,68 +50,78 @@ class _MainGameScreenState extends State<MainGameScreen> {
       _timeController.addMinutes(10);
       newsMessage = "Ви увійшли в $name.";
     });
+    _saveService.saveGame(0);
+  }
+
+  void refreshGame() {
+    setState(() {
+      // Це змусить віджет перемалюватися з новими даними з сервісів
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: GameTheme.screenBg,
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          children: [
-            MainLeftSidebar(
-              playerStats: _playerStats,
-              onBackpackTap: () => setState(() {
-                isBackpackOpen = !isBackpackOpen;
-                isStatsOpen = false;
-                newsMessage = isBackpackOpen ? "Відкрито рюкзак." : "Ви повернулись.";
-              }),
-              onPersonTap: () => setState(() {
-                isStatsOpen = !isStatsOpen;
-                isBackpackOpen = false;
-                newsMessage = isStatsOpen
-                    ? "Я майже звичайний хлопець, але у мене є бонуси, природа нагородила мене значним членом і неабияким розумом!"
-                    : "Ви повернулись до гри.";
-              }),
-              onRefresh: () => setState(() {}),
-              onDebugMenuTap: () => Navigator.pop(context),
+    // Отримуємо доступ до контролера скріншотів із нашого сервісу збереження
+    final screenshotController = sl<SaveService>().screenshotController;
 
-
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 70,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: GameTheme.bgDark,
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        children: [
-                          _buildHeader(),
-                          const SizedBox(height: 10),
-                          Expanded(child: _buildMainContent()), // Виклик головного контенту
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Expanded(
-                    flex: 27,
-                    child: GameDialogPanel(
-                      message: newsMessage,
-                      navButtons: [_buildActionPanel()],
-                    ),
-                  ),
-                ],
+    return Screenshot(
+      controller: screenshotController,
+      child: Scaffold(
+        backgroundColor: GameTheme.screenBg,
+        body: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              MainLeftSidebar(
+                playerStats: _playerStats,
+                onBackpackTap: () => setState(() {
+                  isBackpackOpen = !isBackpackOpen;
+                  isStatsOpen = false;
+                  newsMessage = isBackpackOpen ? "Відкрито рюкзак." : "Ви повернулись.";
+                }),
+                onPersonTap: () => setState(() {
+                  isStatsOpen = !isStatsOpen;
+                  isBackpackOpen = false;
+                  newsMessage = isStatsOpen
+                      ? "Я майже звичайний хлопець, але у мене є бонуси..."
+                      : "Ви повернулись до гри.";
+                }),
+                onRefresh: () => setState(() {}),
+                onDebugMenuTap: () => Navigator.pop(context),
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 70,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: GameTheme.bgDark,
+                            borderRadius: BorderRadius.circular(15)),
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          children: [
+                            _buildHeader(),
+                            const SizedBox(height: 10),
+                            Expanded(child: _buildMainContent()),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Expanded(
+                      flex: 27,
+                      child: GameDialogPanel(
+                        message: newsMessage,
+                        navButtons: [_buildActionPanel()],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
