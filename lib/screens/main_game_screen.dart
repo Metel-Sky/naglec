@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:naglec/services/service_locator.dart';
 import '../data/locations_room_data.dart';
+import '../models/npc_model.dart';
 import '../services/npc_service.dart';
 import '../theme/game_theme.dart';
 import '../left_panel/main_left_sidebar.dart';
@@ -11,7 +11,7 @@ import '../locations/home_view.dart';
 import '../services/game_time_controller.dart';
 import '../services/inventory_controller.dart';
 import '../services/player_stats_controller.dart';
-import 'player_stats_screen.dart'; // Переконайся, що там клас PlayerStatsView (без Scaffold)
+import 'player_stats_screen.dart';
 
 class MainGameScreen extends StatefulWidget {
   const MainGameScreen({super.key});
@@ -43,7 +43,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
       isInsideRoom = true;
       isBackpackOpen = false;
       isStatsOpen = false; // Закриваємо стати при вході в кімнату
-      _timeController.addMinutes(5);
+      _timeController.addMinutes(10);
       newsMessage = "Ви увійшли в $name.";
     });
   }
@@ -86,7 +86,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
                           color: GameTheme.bgDark,
                           borderRadius: BorderRadius.circular(15)
                       ),
-                      padding: const EdgeInsets.all(13),
+                      padding: const EdgeInsets.all(12),
                       child: Column(
                         children: [
                           _buildHeader(),
@@ -127,20 +127,12 @@ class _MainGameScreenState extends State<MainGameScreen> {
           onMinus: () => setState(() => _timeController.prevDayName()),
         ),
 
-// Блок ДАТИ (змінює тільки календарне число)
+        // Блок ДАТИ (змінює тільки календарне число)
         _timeControlBlock(
           label: _timeController.onlyDate,
           onPlus: () => setState(() => _timeController.addDay()),
           onMinus: () => setState(() => _timeController.subDay()),
         ),
-
-
-        // 2. БЛОК ДАТИ (02.02.2026)
-        // _timeControlBlock(
-        //   label: DateFormat('dd.MM.yyyy').format(_timeController.dateTime), // Тільки цифри
-        //   onPlus: () => setState(() => _timeController.addDay()),
-        //   onMinus: () => setState(() => _timeController.subDay()),
-        // ),
 
         const SizedBox(width: 10),
 
@@ -177,6 +169,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
       ],
     );
   }
+
   // Допоміжний віджет для блоку з кнопками +/-
   Widget _timeControlBlock({required String label, required VoidCallback onPlus, required VoidCallback onMinus}) {
     return Container(
@@ -293,14 +286,30 @@ class _MainGameScreenState extends State<MainGameScreen> {
   }
 
   Widget _buildActionPanel() {
+
     final int hour = _timeController.dateTime.hour;
     final int day = _timeController.weekdayIndex;
-    final npcs = sl<NPCService>().getNPCsInRoom(currentRoom, hour, day);
+
+    // 1. Отримуємо список NPC (тепер сервіс має працювати вірно)
+    final List<NPCModel> npcs = sl<NPCService>().getNPCsInRoom(currentRoom, hour, day);
+    print("DEBUG: Room: $currentRoom, Hour: $hour, Found NPCs: ${npcs.length}");
+
+    // 2. ДОДАТКОВА ПЕРЕВІРКА: чи є хоч один NPC, чий актуальний розклад збігається з цією кімнатою
+    // Це відфільтрує ситуації, коли сервіс міг помилково повернути NPC
+    final List<NPCModel> activeNPCs = npcs.where((npc) {
+      return npc.schedule.any((point) {
+        bool timeMatches = (point.hourStart <= point.hourEnd)
+            ? (hour >= point.hourStart && hour < point.hourEnd)
+            : (hour >= point.hourStart || hour < point.hourEnd);
+        return point.location == currentRoom && timeMatches;
+      });
+    }).toList();
 
     List<Widget> actionWidgets = [];
 
-    if (isInsideRoom && npcs.isNotEmpty) {
-      final npc = npcs.first;
+    // ЗМІНЮЄМО УМОВУ: використовуємо activeNPCs замість npcs
+    if (isInsideRoom && activeNPCs.isNotEmpty) {
+      final npc = activeNPCs.first;
       final actions = npc.getAvailableActions(
         location: currentRoom,
         hour: hour,
@@ -315,7 +324,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
             child: Text(action.label.toUpperCase(), textAlign: TextAlign.center),
           ),
         );
-        actionWidgets.add(const SizedBox(height: 10)); // Відступ між кнопками
+        actionWidgets.add(const SizedBox(height: 8));
       }
 
       actionWidgets.add(
@@ -326,20 +335,24 @@ class _MainGameScreenState extends State<MainGameScreen> {
         ),
       );
     } else {
+      // Якщо активних NPC немає — показуємо звичайну навігацію
       actionWidgets = [
-        _navBtn("ДІМ", () => setState(() => currentZone = "HOME")),
-        const SizedBox(height: 10),
+        _navBtn("ДІМ", () => setState(() {
+          currentZone = "HOME";
+          isStatsOpen = false;
+          isBackpackOpen = false;
+        })),
+        const SizedBox(height: 8),
         _navBtn("В МІСТО", () => setState(() => currentZone = "CITY")),
       ];
     }
 
     return Container(
-      // Ось твої 8px від країв панелі
-      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 4), //відступи по краях
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       width: double.infinity,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch, // Розтягує на всю ширину
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: actionWidgets,
       ),
     );

@@ -14,11 +14,11 @@ class GameTheme {
       backgroundColor: mainGrey,
       foregroundColor: color,
       elevation: 2,
-      padding: const EdgeInsets.symmetric(vertical: 15), // Трохи вищі для зручності
+      padding: const EdgeInsets.symmetric(vertical: 14), // Трохи вищі для зручності
       textStyle: const TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 15,
-        letterSpacing: 0.6,
+        letterSpacing: 0.4,
       ),
       // Це забезпечує центрування контенту всередині
       alignment: Alignment.center,
@@ -32,13 +32,13 @@ class GameTheme {
   // --- ДЕКОРАЦІЯ ПАНЕЛЕЙ ---
   static BoxDecoration panelDecoration = BoxDecoration(
     color: bgDark.withOpacity(0.9), // Використовуємо bgDark замість невідомого cardBg
-    borderRadius: BorderRadius.circular(15),
+    borderRadius: BorderRadius.circular(20),
     border: Border.all(color: Colors.white10),
     boxShadow: [
       BoxShadow(
         color: Colors.black.withOpacity(0.3),
         blurRadius: 10,
-        offset: const Offset(0, 4),
+        offset: const Offset(0, 9),
       ),
     ],
   );
