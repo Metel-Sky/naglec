@@ -52,18 +52,15 @@ class _SaveLoadScreenState extends State<SaveLoadScreen> {
             bool fileExists = _appPath != null && File(previewPath).existsSync();
 
             return GestureDetector(
+              // У SaveLoadScreen, де ти натискаєш на слот
               onTap: () async {
                 if (widget.isLoadingMode) {
-                  // 1. Завантажуємо дані
                   await sl<SaveService>().loadGame(slot);
-
-                  // 2. Закриваємо ВСІ меню (і SaveLoad, і Settings), повертаючись до MainGameScreen
                   if (context.mounted) {
-                    // popUntil видаляє екрани з верхівки стека, поки не знайде перший (гру)
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    // Повертаємо true, щоб головний екран знав, що треба оновитися
+                    Navigator.pop(context, true);
                   }
                 } else {
-                  // Код для збереження...
                   await sl<SaveService>().saveGame(slot);
                   setState(() {});
                 }

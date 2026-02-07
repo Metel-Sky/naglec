@@ -29,10 +29,15 @@ class SettingsScreen extends StatelessWidget {
                 ));
               }),
 
-              _menuBtn(context, "ЗАВАНТАЖИТИ ГРУ", () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const SaveLoadScreen(isLoadingMode: true),
-                ));
+              _menuBtn(context, "ЗАВАНТАЖИТИ ГРУ", () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SaveLoadScreen(isLoadingMode: true)),
+                );
+
+                if (result == true && context.mounted) {
+                  Navigator.pop(context, true); // Прокидаємо сигнал оновлення ще вище
+                }
               }),
 
               _menuBtn(context, "ГОЛОВНЕ МЕНЮ", () {

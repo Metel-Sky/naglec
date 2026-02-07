@@ -19,14 +19,25 @@ class StatsBottomMenu extends StatelessWidget {
 
         // Кнопка Налаштування
         Expanded(
-          child: _buildIconButton(
+          child: // Це твоя кнопка налаштувань (шестірня)
+          _buildIconButton(
             icon: Icons.settings_outlined,
-            onTap: () {
-              // Викликаємо екран налаштувань
-              Navigator.push(
+            onTap: () async {
+              // 1. Відкриваємо налаштування і чекаємо результат
+              final bool? needRefresh = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SettingsScreen()),
               );
+
+              // 2. Якщо завантаження пройшло успішно (повернули true)
+              if (needRefresh == true && context.mounted) {
+                // ШУКАЄМО ГОЛОВНИЙ ЕКРАН І ОНОВЛЮЄМО ЙОГО
+                // Це спрацює, навіть якщо ми в Stateless віджеті
+                context.findAncestorStateOfType<State<StatefulWidget>>()?.setState(() {});
+
+                // АБО, якщо ти знаєш точну назву стану (це надійніше):
+                // context.findAncestorStateOfType<any_state_name>()?.setState(() {});
+              }
             },
           ),
         ),

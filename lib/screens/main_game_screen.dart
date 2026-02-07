@@ -371,4 +371,4 @@ class _MainGameScreenState extends State<MainGameScreen> {
       ),
     );
   }
-  } // КІНЕЦЬ КЛАСУ _MainGameScreenState
+} // КІНЕЦЬ КЛАСУ _MainGameScreenState
