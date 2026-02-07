@@ -76,6 +76,8 @@ class MainLeftSidebar extends StatelessWidget {
                     child: StatsBottomMenu(
                       onBackpackTap: onBackpackTap,
                       onPersonTap: onPersonTap,
+                      onRefresh: onRefresh, // Передаємо колбек, який прийшов від MainGameScreen
+                      onDebugMenuTap: onDebugMenuTap,
                     ),
                   ),
                   const SizedBox(height: 10),

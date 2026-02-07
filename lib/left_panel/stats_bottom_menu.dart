@@ -1,49 +1,41 @@
 import 'package:flutter/material.dart';
-import '../screens/settings_screen.dart';
+import '../screens/save_load_screen.dart'; // Додай цей імпорт
 import '../theme/game_theme.dart';
 
 class StatsBottomMenu extends StatelessWidget {
   final VoidCallback onBackpackTap;
-  final VoidCallback onPersonTap; // 1. Додаємо новий параметр для ГГ
+  final VoidCallback onPersonTap;
+  final VoidCallback onRefresh;      // Додано
+  final VoidCallback onDebugMenuTap; // Додано
 
   const StatsBottomMenu({
     super.key,
     required this.onBackpackTap,
-    required this.onPersonTap, // 2. Робимо його обов'язковим
+    required this.onPersonTap,
+    required this.onRefresh,      // Додано
+    required this.onDebugMenuTap,  // Додано
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-
-        // Кнопка Налаштування
+        // Кнопка Налаштування (Шестерня)
         Expanded(
-          child: // Це твоя кнопка налаштувань (шестірня)
-          _buildIconButton(
+          child: _buildIconButton(
             icon: Icons.settings_outlined,
             onTap: () async {
-              // 1. Відкриваємо налаштування і чекаємо результат
-              final bool? needRefresh = await Navigator.push(
+              // Відкриваємо слоти завантаження
+              final bool? loaded = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                MaterialPageRoute(builder: (context) => const SaveLoadScreen(isLoadingMode: true)),
               );
-
-              // 2. Якщо завантаження пройшло успішно (повернули true)
-              if (needRefresh == true && context.mounted) {
-                // ШУКАЄМО ГОЛОВНИЙ ЕКРАН І ОНОВЛЮЄМО ЙОГО
-                // Це спрацює, навіть якщо ми в Stateless віджеті
-                context.findAncestorStateOfType<State<StatefulWidget>>()?.setState(() {});
-
-                // АБО, якщо ти знаєш точну назву стану (це надійніше):
-                // context.findAncestorStateOfType<any_state_name>()?.setState(() {});
-              }
+              // Якщо завантажили гру — сигналізуємо вгору
+              if (loaded == true) onRefresh();
             },
           ),
         ),
-
         const SizedBox(width: 8),
-
         // Кнопка Персонажа (ГГ)
         Expanded(
           child: GestureDetector(
@@ -53,20 +45,16 @@ class StatsBottomMenu extends StatelessWidget {
               child: Center(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    double imageSize = constraints.maxHeight * 0.8; // 80% висоти
-
+                    double imageSize = constraints.maxHeight * 0.8;
                     return Image.asset(
-                      "lib/assets/gg.png", // ШЛЯХ ДО ТВОЄЇ КАРТИНКИ ГГ
+                      "lib/assets/gg.png",
                       height: imageSize,
                       fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        // Якщо картинки немає — покажемо запасну іконку
-                        return Icon(
-                            Icons.person_outline,
-                            size: imageSize,
-                            color: GameTheme.bgDark
-                        );
-                      },
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.person_outline,
+                        size: imageSize,
+                        color: GameTheme.bgDark,
+                      ),
                     );
                   },
                 ),
@@ -74,10 +62,6 @@ class StatsBottomMenu extends StatelessWidget {
             ),
           ),
         ),
-
-
-
-
       ],
     );
   }
@@ -88,11 +72,7 @@ class StatsBottomMenu extends StatelessWidget {
       child: Container(
         decoration: GameTheme.cardDecoration(radius: 15),
         child: Center(
-          child: Icon(
-            icon,
-            size: 40,
-            color: GameTheme.bgDark,
-          ),
+          child: Icon(icon, size: 40, color: GameTheme.bgDark),
         ),
       ),
     );
