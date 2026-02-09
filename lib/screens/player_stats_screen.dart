@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../services/player_stats_controller.dart';
+import 'package:naglec/services/player_stats_controller.dart';
+import '../theme/game_theme.dart';
 
-
+// Перейменовано на PlayerStatsView для відповідності коду
 class PlayerStatsView extends StatelessWidget {
   final PlayerStatsController playerStats;
 
@@ -9,109 +10,71 @@ class PlayerStatsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          const Text(
-            "ХАРАКТЕРИСТИКИ ПЕРСОНАЖА",
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Аватар
-                Container(
-                  width: 200,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                      image: AssetImage('lib/assets/pers.png'),
-                      fit: BoxFit.cover,
-                    ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Ліва частина: Аватар
+              Expanded(
+                flex: 2,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    'lib/assets/home_gg.jpg', // Шлях до аватара
+                    fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(width: 25),
-                // Статистика
-                Expanded(
-                  child: ListView(
-                    children: [
-                      _buildStatLine("Енергія:", playerStats.vitality / 100),
-                      _buildStatLine("Збудження:", playerStats.arousal / 100),
-                      _buildStatLine("Хтивість:", playerStats.lust / playerStats.maxLust),
-                      _buildStatLine("Фіз. форма:", playerStats.physical_fitness / playerStats.maxPhysical_fitness),
-                      _buildStatLine("Бій:", playerStats.fighting / playerStats.maxFighting),
-                      _buildStatLine("Успішність:", playerStats.college_success / playerStats.maxCollege_success),
-                      _buildStatLine("Масаж:", playerStats.massage_experience / playerStats.maxMassage_experience),
-                      _buildStatLine("Програмування:", 0.4), // Заглушка
-                      _buildStatLine("Хакерство:", 0.2),      // Заглушка
-                      _buildStatLine("Взлом замків:", 0.2),
-                      _buildStatLine("Стелс режим:", 0.2),
-                      _buildStatLine("Вплив:", 0.2),
+              ),
+              const SizedBox(width: 16),
 
-                    ],
-                  ),
+              // Права частина: Статистика
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildStatRow("Збудження", "${playerStats.arousal.toInt()}"),
+                    _buildStatRow("Бадьорість", "${playerStats.vitality}", color: Colors.greenAccent),
+                    const SizedBox(height: 20),
+                    _buildStatRow("Хтивість", "${playerStats.lust} / ${playerStats.maxLust}"),
+                    _buildStatRow("Фіз. форма", "${playerStats.physical_fitness} / ${playerStats.maxPhysical_fitness}"),
+                    _buildStatRow("Бій", "${playerStats.fighting} / ${playerStats.maxFighting}"),
+                    const SizedBox(height: 20),
+                    _buildStatRow("Досвід масажу", "${playerStats.massage_experience} / ${playerStats.maxMassage_experience}"),
+                    _buildStatRow("Успішність", "${playerStats.college_success} / ${playerStats.maxCollege_success}"),
+                  ],
                 ),
-              ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // Опис персонажа
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: GameTheme.cardDecoration(),
+            child: const Text(
+              "Я майже звичайний хлопець, але у мене є бонуси, природа нагородила мене значним членом і неабияким розумом!",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.white70, fontStyle: FontStyle.italic),
             ),
           ),
-          // Опис внизу
-
-
         ],
       ),
     );
   }
 
-  Widget _buildStatLine(String label, double percent) {
+  Widget _buildStatRow(String label, String value, {Color? color}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start, // Притискаємо до лівого краю
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 1. ЛІВА ЧАСТИНА (Назва) - Фіксована ширина
-          SizedBox(
-            width: 170,
-            child: Text(
-              label,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500
-              ),
-            ),
-          ),
-
-          // 2. ВІДСТУП (ти поставив 15, але хотів 40? Якщо 40, то змініть тут)
-          const SizedBox(width: 15),
-
-          // 3. ПРАВА ЧАСТИНА (Шкала) - Фіксована ширина
-          SizedBox(
-            width: 280,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                LinearProgressIndicator(
-                  value: percent,
-                  minHeight: 18,
-                  backgroundColor: const Color(0xFF2D353C),
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                Text(
-                  "${(percent * 100).toInt()}%",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          Text("$label:", style: const TextStyle(fontSize: 16, color: Colors.white70)),
+          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color ?? Colors.white)),
         ],
       ),
     );
