@@ -11,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
       backgroundColor: GameTheme.bgDark.withOpacity(0.95),
       body: Center(
         child: Container(
-          width: 400, // Фіксована ширина для гарного вигляду на планшетах/ПК
+          width: 400,
           padding: const EdgeInsets.all(24),
           decoration: GameTheme.panelDecoration,
           child: Column(
@@ -23,25 +23,14 @@ class SettingsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
 
-              _menuBtn(context, "ЗБЕРЕГТИ ГРУ", () {
+              // ТЕПЕР МИ ВИКЛИКАЄМО ОДНЕ УНІВЕРСАЛЬНЕ ВІКНО
+              _menuBtn(context, "ЗБЕРЕЖЕННЯ / ЗАВАНТАЖЕННЯ", () {
                 Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const SaveLoadScreen(isLoadingMode: false),
+                  builder: (context) => const SaveLoadScreen(), // ПАРАМЕТР ВИДАЛЕНО
                 ));
               }),
 
-              _menuBtn(context, "ЗАВАНТАЖИТИ ГРУ", () async {
-                final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SaveLoadScreen(isLoadingMode: true)),
-                );
-
-                if (result == true && context.mounted) {
-                  Navigator.pop(context, true); // Прокидаємо сигнал оновлення ще вище
-                }
-              }),
-
               _menuBtn(context, "ГОЛОВНЕ МЕНЮ", () {
-                // Тут логіка виходу в старт-скрін
                 Navigator.popUntil(context, (route) => route.isFirst);
               }),
 

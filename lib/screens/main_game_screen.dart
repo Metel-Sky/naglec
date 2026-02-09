@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:naglec/screens/save_load_screen.dart';
 import 'package:naglec/services/service_locator.dart';
 import 'package:screenshot/screenshot.dart';
 import '../data/locations_room_data.dart';
@@ -87,7 +88,23 @@ class _MainGameScreenState extends State<MainGameScreen> {
                       : "Ви повернулись до гри.";
                 }),
                 onRefresh: () => setState(() {}),
-                onDebugMenuTap: () => Navigator.pop(context),
+                // Знайди у своєму коді обробник натискання на шестерню (onDebugMenuTap)
+                onDebugMenuTap: () async {
+                  // Чекаємо, поки гравець закриє меню збереження
+                  final bool? loaded = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SaveLoadScreen()),
+                  );
+
+                  // ЯКЩО ПОВЕРНУЛО TRUE (завантаження відбулося)
+                  if (loaded == true) {
+                    print("DEBUG: Отримано сигнал на оновлення UI");
+                    setState(() {
+                      // Цей порожній виклик змушує Flutter ПЕРЕЗІБРАТИ весь екран
+                      // і взяти нові дані з контролерів, які вже оновив SaveService
+                    });
+                  }
+                },
               ),
               const SizedBox(width: 12),
               Expanded(

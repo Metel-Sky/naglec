@@ -139,6 +139,8 @@ class LeftMenuPanel extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         height: 45,
+
+
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white.withAlpha(230),
@@ -146,6 +148,7 @@ class LeftMenuPanel extends StatelessWidget {
             elevation: 0,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
+
           onPressed: () {
             if (text == "Почати гру") {
               Navigator.push(

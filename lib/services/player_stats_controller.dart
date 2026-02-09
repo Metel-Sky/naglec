@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import '../models/player_model.dart';
 
-class PlayerStatsController {
+class PlayerStatsController with ChangeNotifier {
   final PlayerModel player = PlayerModel();
 
   // Getters to access data from the model
@@ -37,67 +38,81 @@ class PlayerStatsController {
   String get energyStatus => energy <= 25 ? "Знесилений" : energy <= 50 ? "Втомлений" : energy <= 75 ? "Нормальний" : "Бадьорий";
   String get arousalStatus => arousal <= 33 ? "Спокійний" : arousal <= 66 ? "Тісно в штанях" : "Стоїть колом";
 
-
+  // --- МЕТОД ДЛЯ ОНОВЛЕННЯ ІНТЕРФЕЙСУ (ВИПРАВЛЕННЯ ПОМИЛКИ) ---
+  void updateUI() {
+    notifyListeners();
+  }
 
   // Methods to change player stats
   void changeEnergy(double amount) {
     player.energy = (player.energy + amount).clamp(0, player.maxEnergy);
+    notifyListeners();
   }
 
   void changeArousal(double amount) {
     player.arousal = (player.arousal + amount).clamp(0, player.maxArousal);
+    notifyListeners();
   }
 
   void changeMoney(int amount) {
     player.money = (player.money + amount).clamp(0, 9999999);
+    notifyListeners();
   }
-
 
   void changeLust(int amount) {
     player.lust = (player.lust + amount).clamp(0, player.maxLust);
+    notifyListeners();
   }
+
+
 
   void changeVitality(int amount) {
     player.vitality = (player.vitality + amount).clamp(0, player.maxVitality);
+    notifyListeners();
   }
 
   void changePhysicalFitness(int amount) {
     player.physical_fitness = (player.physical_fitness + amount).clamp(0, player.maxPhysical_fitness);
+    notifyListeners();
   }
 
   void changeFighting(int amount) {
     player.fighting = (player.fighting + amount).clamp(0, player.maxFighting);
+    notifyListeners();
   }
 
   void changeMassageExperience(int amount) {
     player.massage_experience = (player.massage_experience + amount).clamp(0, player.maxMassage_experience);
+    notifyListeners();
   }
 
   void changeLockpicking(int amount) {
     player.lockpicking = (player.lockpicking + amount).clamp(0, player.maxLockpicking);
+    notifyListeners();
   }
 
   void changeProgramming(int amount) {
     player.programming = (player.programming + amount).clamp(0, player.maxProgramming);
+    notifyListeners();
   }
 
   void changeHacking(int amount) {
     player.hacking = (player.hacking + amount).clamp(0, player.maxHacking);
+    notifyListeners();
   }
 
   void changeStealthMode(int amount) {
     player.stealth_mode = (player.stealth_mode + amount).clamp(0, player.maxStealth_mode);
+    notifyListeners();
   }
 
   void changeInfluence(int amount) {
     player.influence = (player.influence + amount).clamp(0, player.maxInfluence);
+    notifyListeners();
   }
 
   void changeCollegeSuccess(int amount) {
     player.college_success = (player.college_success + amount).clamp(0, player.maxCollege_success);
+    notifyListeners();
   }
-
-
-
-
 }

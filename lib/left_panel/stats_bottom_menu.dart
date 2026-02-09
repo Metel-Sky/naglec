@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import '../screens/save_load_screen.dart'; // Додай цей імпорт
+import '../screens/save_load_screen.dart';
 import '../theme/game_theme.dart';
 
 class StatsBottomMenu extends StatelessWidget {
   final VoidCallback onBackpackTap;
   final VoidCallback onPersonTap;
-  final VoidCallback onRefresh;      // Додано
-  final VoidCallback onDebugMenuTap; // Додано
+  final VoidCallback onRefresh;
+  final VoidCallback onDebugMenuTap;
 
   const StatsBottomMenu({
     super.key,
     required this.onBackpackTap,
     required this.onPersonTap,
-    required this.onRefresh,      // Додано
-    required this.onDebugMenuTap,  // Додано
+    required this.onRefresh,
+    required this.onDebugMenuTap,
   });
 
   @override
@@ -25,13 +25,16 @@ class StatsBottomMenu extends StatelessWidget {
           child: _buildIconButton(
             icon: Icons.settings_outlined,
             onTap: () async {
-              // Відкриваємо слоти завантаження
+              // Відкриваємо наше нове універсальне вікно сейвів
               final bool? loaded = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SaveLoadScreen(isLoadingMode: true)),
+                MaterialPageRoute(builder: (context) => const SaveLoadScreen()),
               );
-              // Якщо завантажили гру — сигналізуємо вгору
-              if (loaded == true) onRefresh();
+
+              // Якщо в меню натиснули завантаження (повернуло true) — оновлюємо гру
+              if (loaded == true) {
+                onRefresh();
+              }
             },
           ),
         ),

@@ -1,59 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../services/service_locator.dart';
+import '../services/save_service.dart';
 
 class GameTimeController with ChangeNotifier {
   DateTime _dateTime = DateTime(2026, 1, 12, 19, 0);
-  int _manualWeekdayIndex = 0; // 0 = ПОНЕДІЛОК
-  int get weekdayIndex => _manualWeekdayIndex;
+  int _manualWeekdayIndex = 0;
 
   final List<String> _daysOfWeek = [
     "ПОНЕДІЛОК", "ВІВТОРОК", "СЕРЕДА", "ЧЕТВЕР", "П'ЯТНИЦЯ", "СУБОТА", "НЕДІЛЯ"
   ];
 
-  // --- ГЕТТЕРИ (ВИРІШУЮТЬ ПОМИЛКУ) ---
-  DateTime get dateTime => _dateTime; // Тепер MainGameScreen бачить дату
-  //String get dayName => _daysOfWeek[_manualWeekdayIndex];
+  DateTime get dateTime => _dateTime;
+  int get weekdayIndex => _manualWeekdayIndex;
   String get onlyDate => DateFormat('dd.MM.yyyy').format(_dateTime);
   String get formattedTime => DateFormat('HH:mm').format(_dateTime);
   String get dayName => _daysOfWeek[_manualWeekdayIndex].substring(0, 3);
 
   set dateTime(DateTime value) {
     _dateTime = value;
+    notifyListeners();
   }
 
-  // --- ЛОГІКА ЧАСУ ---
+  void loadManualWeekday(int index) {
+    _manualWeekdayIndex = index;
+    notifyListeners();
+  }
+
+  void updateUI() {
+    notifyListeners(); // Цей рядок змушує всі віджети, що залежать від часу, оновитися
+  }
 
   void addMinutes(int minutes) {
+    int oldHour = _dateTime.hour;
     int oldDay = _dateTime.day;
+
     _dateTime = _dateTime.add(Duration(minutes: minutes));
 
-    // Якщо при додаванні часу змінилася доба — перемикаємо день тижня
+    // AUTO SAVE о 6 ранку
+    if (oldHour < 6 && _dateTime.hour >= 6) {
+      sl<SaveService>().saveGame(0);
+    }
+
     if (_dateTime.day != oldDay) {
-      _nextDayCycle();
+      _manualWeekdayIndex = (_manualWeekdayIndex + 1) % 7;
     }
     notifyListeners();
   }
 
+  void nextDayName() { _manualWeekdayIndex = (_manualWeekdayIndex + 1) % 7; notifyListeners(); }
+  void prevDayName() { _manualWeekdayIndex = (_manualWeekdayIndex - 1 < 0) ? 6 : _manualWeekdayIndex - 1; notifyListeners(); }
+  void addDay() { _dateTime = _dateTime.add(const Duration(days: 1)); _manualWeekdayIndex = (_manualWeekdayIndex + 1) % 7; notifyListeners(); }
+  void subDay() { _dateTime = _dateTime.subtract(const Duration(days: 1)); _manualWeekdayIndex = (_manualWeekdayIndex - 1 < 0) ? 6 : _manualWeekdayIndex - 1; notifyListeners(); }
   void addHour() => addMinutes(60);
   void subHour() => addMinutes(-60);
-  void subMinute() => addMinutes(-5); // Твої -5 хв
-
-  // --- ЛОГІКА ПЕРЕМИКАННЯ ДНІВ ---
-
-  void _nextDayCycle() {
-    _manualWeekdayIndex = (_manualWeekdayIndex + 1) % 7;
-  }
-
-  void _prevDayCycle() {
-    _manualWeekdayIndex = (_manualWeekdayIndex - 1 < 0) ? 6 : _manualWeekdayIndex - 1;
-  }
-
-  // Методи для кнопок у хедері (Ручне керування)
-  void nextDayName() { _nextDayCycle(); notifyListeners(); }
-  void prevDayName() { _prevDayCycle(); notifyListeners(); }
-
-  void addDay() { _dateTime = _dateTime.add(const Duration(days: 1)); notifyListeners(); }
-  void subDay() { _dateTime = _dateTime.subtract(const Duration(days: 1)); notifyListeners(); }
-
-
+  void subMinute() => addMinutes(-5);
 }

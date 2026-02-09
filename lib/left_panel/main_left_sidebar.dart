@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:naglec/left_panel/stats_bottom_menu.dart';
 import '../theme/game_theme.dart';
 import '../services/player_stats_controller.dart';
 import 'stats_header_card.dart';
 import 'stats_main_menu.dart';
-import 'stats_bottom_menu.dart';
 import 'stats_girls_card.dart';
+
+// 1. ДОДАЙ ЦЕЙ ІМПОРТ (перевір чи правильний шлях до файлу)
+
 
 class MainLeftSidebar extends StatelessWidget {
   final PlayerStatsController playerStats;
   final VoidCallback onBackpackTap;
   final VoidCallback onPersonTap;
   final VoidCallback onRefresh;
-  final VoidCallback onDebugMenuTap; // Додали цей рядок
+  final VoidCallback onDebugMenuTap;
 
   const MainLeftSidebar({
     super.key,
@@ -19,14 +22,14 @@ class MainLeftSidebar extends StatelessWidget {
     required this.onBackpackTap,
     required this.onPersonTap,
     required this.onRefresh,
-    required this.onDebugMenuTap, // І цей рядок
+    required this.onDebugMenuTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: 250, maxWidth: 300),
-      child: Column( // Тепер Column — це єдиний child для ConstrainedBox
+      child: Column(
         children: [
           // КНОПКА ДЕБАГУ
           SizedBox(
@@ -70,14 +73,14 @@ class MainLeftSidebar extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
 
-                  // Нижнє меню (Персонаж/Стати)
+                  // 2. ВИПРАВЛЕНО: ТЕПЕР ПЕРЕДАЄМО ВСІ 4 ПАРАМЕТРИ
                   Expanded(
                     flex: 30,
                     child: StatsBottomMenu(
                       onBackpackTap: onBackpackTap,
                       onPersonTap: onPersonTap,
-                      onRefresh: onRefresh, // Передаємо колбек, який прийшов від MainGameScreen
-                      onDebugMenuTap: onDebugMenuTap,
+                      onRefresh: onRefresh, // Додано
+                      onDebugMenuTap: onDebugMenuTap, // Додано
                     ),
                   ),
                   const SizedBox(height: 10),
