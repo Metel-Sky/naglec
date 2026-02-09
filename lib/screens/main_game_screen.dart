@@ -89,21 +89,9 @@ class _MainGameScreenState extends State<MainGameScreen> {
                 }),
                 onRefresh: () => setState(() {}),
                 // Знайди у своєму коді обробник натискання на шестерню (onDebugMenuTap)
-                onDebugMenuTap: () async {
-                  // Чекаємо, поки гравець закриє меню збереження
-                  final bool? loaded = await Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SaveLoadScreen()),
-                  );
-
-                  // ЯКЩО ПОВЕРНУЛО TRUE (завантаження відбулося)
-                  if (loaded == true) {
-                    print("DEBUG: Отримано сигнал на оновлення UI");
-                    setState(() {
-                      // Цей порожній виклик змушує Flutter ПЕРЕЗІБРАТИ весь екран
-                      // і взяти нові дані з контролерів, які вже оновив SaveService
-                    });
-                  }
+                onDebugMenuTap: () {
+                  // Navigator.popUntil повертає додаток до найпершого маршруту в стеку (StartScreen)
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 },
               ),
               const SizedBox(width: 12),
