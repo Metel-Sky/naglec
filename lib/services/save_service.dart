@@ -6,6 +6,8 @@ import 'package:screenshot/screenshot.dart';
 import 'service_locator.dart';
 import '../services/game_time_controller.dart';
 import '../services/player_stats_controller.dart';
+import '../services/game_world_state.dart';
+import '../services/npc_service.dart';
 
 class SaveService {
   final ScreenshotController screenshotController = ScreenshotController();
@@ -24,12 +26,21 @@ class SaveService {
       // 2. Збір даних (save_N.json)
       final timeCtrl = sl<GameTimeController>();
       final statsCtrl = sl<PlayerStatsController>();
+      final worldState = sl<GameWorldState>();
+      final npcService = sl<NPCService>();
 
       final saveData = {
         'slot': slot,
         'save_date': DateTime.now().toIso8601String(),
+
+        // ЧАС / ДЕНЬ / ДЕНЬ ТИЖНЯ
         'time': timeCtrl.dateTime.toIso8601String(),
         'weekdayIndex': timeCtrl.weekdayIndex,
+
+        // ЛОКАЦІЯ ГГ
+        'world': worldState.toJson(),
+
+        // СТАТИ ГГ
         'stats': {
           'money': statsCtrl.player.money,
           'energy': statsCtrl.player.energy,
@@ -46,6 +57,18 @@ class SaveService {
           'influence': statsCtrl.player.influence,
           'college_success': statsCtrl.player.college_success,
         },
+
+        // СТАТИ УСІХ NPC
+        'npcs': npcService.allNPCs
+            .map((npc) => {
+                  'id': npc.id,
+                  'relationship': npc.relationship,
+                  'lust': npc.lust,
+                  'behavior': npc.behavior,
+                })
+            .toList(),
+
+        // TODO: тут можна буде додати "events", коли зʼявиться система івентів
       };
 
       final jsonPath = '${directory.path}/save_$slot.json';
@@ -70,10 +93,15 @@ class SaveService {
         if (data.containsKey('weekdayIndex')) {
           timeCtrl.loadManualWeekday(data['weekdayIndex']);
         }
-
         timeCtrl.updateUI();
 
-        // 2. Стати
+        // 2. Локація ГГ
+        if (data['world'] != null) {
+          final world = sl<GameWorldState>();
+          world.loadFromJson(Map<String, dynamic>.from(data['world']));
+        }
+
+        // 3. Стати ГГ
         if (data['stats'] != null) {
           final s = data['stats'];
           final p = sl<PlayerStatsController>();
@@ -94,6 +122,26 @@ class SaveService {
           p.player.college_success = s['college_success'] ?? 0;
 
           p.updateUI();
+        }
+
+        // 4. Стати NPC
+        if (data['npcs'] != null) {
+          final npcService = sl<NPCService>();
+          final List<dynamic> npcList = data['npcs'];
+
+          for (final raw in npcList) {
+            final Map<String, dynamic> npcData =
+                Map<String, dynamic>.from(raw as Map);
+            final id = npcData['id'];
+            final npc = npcService.allNPCs.firstWhere(
+              (n) => n.id == id,
+              orElse: () => npcService.allNPCs.first,
+            );
+
+            npc.relationship = (npcData['relationship'] ?? npc.relationship).toDouble();
+            npc.lust = (npcData['lust'] ?? npc.lust).toDouble();
+            npc.behavior = (npcData['behavior'] ?? npc.behavior).toDouble();
+          }
         }
         debugPrint("СИСТЕМА: Слот $slot завантажено");
       }

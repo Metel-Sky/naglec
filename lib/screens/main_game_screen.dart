@@ -14,6 +14,7 @@ import '../locations/home_view.dart';
 import '../services/game_time_controller.dart';
 import '../services/inventory_controller.dart';
 import '../services/player_stats_controller.dart';
+import '../services/game_world_state.dart';
 import 'player_stats_screen.dart';
 
 class MainGameScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
   final InventoryController _inventory = sl<InventoryController>();
   final GameTimeController _timeController = sl<GameTimeController>();
   final PlayerStatsController _playerStats = sl<PlayerStatsController>();
+  final GameWorldState _worldState = sl<GameWorldState>();
 
   String currentZone = "HOME";
   String currentRoom = "Коридор";
@@ -36,6 +38,21 @@ class _MainGameScreenState extends State<MainGameScreen> {
   bool isBackpackOpen = false;
   bool isStatsOpen = false; // <-- ДОДАНО: Змінна стану для характеристик
   String newsMessage = "Ласкаво просимо...";
+
+  @override
+  void initState() {
+    super.initState();
+    // Підтягуємо збережений стан світу (локація гг)
+    currentZone = _worldState.currentZone;
+    currentRoom = _worldState.currentRoom;
+    isInsideRoom = _worldState.isInsideRoom;
+  }
+
+  void _syncWorldState() {
+    _worldState.currentZone = currentZone;
+    _worldState.currentRoom = currentRoom;
+    _worldState.isInsideRoom = isInsideRoom;
+  }
 
   void _handleRoomEntry(String name) {
     final roomData = LocationsData.homeRooms[name];
@@ -51,6 +68,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
       _timeController.addMinutes(10);
       newsMessage = "Ви увійшли в $name.";
     });
+    _syncWorldState();
     _saveService.saveGame(0);
   }
 
@@ -242,6 +260,8 @@ class _MainGameScreenState extends State<MainGameScreen> {
             isBackpackOpen = false;
             isStatsOpen = false;
             newsMessage = "Ви повернулися до коридору";
+            currentRoom = "Коридор";
+            _syncWorldState();
           }),
           borderRadius: BorderRadius.circular(50),
           child: const SizedBox(
@@ -291,8 +311,14 @@ class _MainGameScreenState extends State<MainGameScreen> {
         currentZone = "HOME";
         isStatsOpen = false;
         isBackpackOpen = false;
+        _syncWorldState();
       })),
-      _navBtn("В місто", () => setState(() => currentZone = "CITY")),
+      _navBtn("В місто", () => setState(() {
+        currentZone = "CITY";
+        isStatsOpen = false;
+        isBackpackOpen = false;
+        _syncWorldState();
+      })),
     ];
   }
 
@@ -360,6 +386,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
           currentZone = "HOME";
           isStatsOpen = false;
           isBackpackOpen = false;
+          _syncWorldState();
         })),
         const SizedBox(height: 8),
         _navBtn("В МІСТО", () => setState(() => currentZone = "CITY")),

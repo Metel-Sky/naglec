@@ -4,6 +4,7 @@ import 'inventory_controller.dart';
 import 'npc_service.dart';
 import 'player_stats_controller.dart';
 import 'save_service.dart'; // <--- ДОДАНО ІМПОРТ
+import 'game_world_state.dart';
 
 // Створюємо екземпляр GetIt
 final GetIt sl = GetIt.instance;
@@ -34,5 +35,10 @@ void setupServiceLocator() {
   // Реєструємо InventoryController
   if (!sl.isRegistered<InventoryController>()) {
     sl.registerLazySingleton<InventoryController>(() => InventoryController());
+  }
+
+  // Глобальний стан світу (локація гг тощо)
+  if (!sl.isRegistered<GameWorldState>()) {
+    sl.registerLazySingleton<GameWorldState>(() => GameWorldState());
   }
 }

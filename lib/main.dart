@@ -150,17 +150,25 @@ class LeftMenuPanel extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
 
-          onPressed: () {
+          onPressed: () async {
             if (text == "Почати гру") {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const MainGameScreen()),
               );
             } else if (text == "Продовжити") {
-              Navigator.push(
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SaveLoadScreen()),
               );
+
+              // Якщо зі слоту була завантажена гра – відкриваємо її
+              if (result == true) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MainGameScreen()),
+                );
+              }
             }
           },
           child: Text(text, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
