@@ -1,28 +1,26 @@
-/// Точка входу та головне меню гри "Наглец".
-/// Містить ініціалізацію Flutter, MediaKit, Service Locator та налаштування вікна на десктопі.
-
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // Потрібно для kIsWeb
 import 'package:media_kit/media_kit.dart';
 import 'package:naglec/theme/game_theme.dart';
 import 'package:naglec/widgets/news_panel.dart';
 import 'dart:io'; // Потрібно для Platform
-import 'package:window_manager/window_manager.dart';
+import 'package:window_manager/window_manager.dart'; // Імпортуємо пакет
 import 'screens/main_game_screen.dart';
-import 'services/service_locator.dart';
+import 'screens/save_load_screen.dart';
+import 'services/service_locator.dart'; // <-- Новий імпорт
 
-/// Точка входу в додаток. Ініціалізує біндінги, медіа, сервіси та опційно вікно на десктопі.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized(); // обов'язково для відтворення відео/аудіо
+  MediaKit.ensureInitialized(); // <--- ЦЕЙ РЯДОК ОБОВ'ЯЗКОВИЙ
 
-  setupServiceLocator();
+  // Налаштування Service Locator
+  setupServiceLocator(); // <-- Ініціалізація
 
-  // На десктопі (macOS/Windows/Linux) налаштовуємо розмір і відображення вікна
+  // Перевіряємо: якщо це НЕ браузер і це десктопна ОС
   if (!kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
     await windowManager.ensureInitialized();
 
-    const WindowOptions windowOptions = WindowOptions(
+    WindowOptions windowOptions = const WindowOptions(
       size: Size(1280, 820),
       minimumSize: Size(1024, 800),
       maximumSize: Size(2560, 1440),
@@ -39,7 +37,6 @@ void main() async {
   runApp(const NaglecGame());
 }
 
-/// Кореневий віджет додатку — MaterialApp з темною темою та головним екраном меню.
 class NaglecGame extends StatelessWidget {
   const NaglecGame({super.key});
 
@@ -53,7 +50,6 @@ class NaglecGame extends StatelessWidget {
   }
 }
 
-/// Головний екран меню: ліва панель з кнопками, центральна картка з артом, панель новин знизу.
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
 
@@ -77,8 +73,8 @@ class MainMenuScreen extends StatelessWidget {
                 children: [
                   ConstrainedBox(
                     constraints: const BoxConstraints(
-                      minWidth: 250,
-                      maxWidth: 300,
+                      minWidth: 250, // Не менше 250
+                      maxWidth: 300, // ширина лівої панелі Не більше 350
                     ),
                     child: const LeftMenuPanel(),
                   ),
@@ -88,7 +84,7 @@ class MainMenuScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         Expanded(flex: 3, child: MainArtCard()),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12),
                         Expanded(flex: 1, child: NewsPanel()),
                       ],
                     ),
@@ -103,7 +99,6 @@ class MainMenuScreen extends StatelessWidget {
   }
 }
 
-/// Ліва панель меню: кнопки дій та ряд іконок соцмереж/підтримки.
 class LeftMenuPanel extends StatelessWidget {
   const LeftMenuPanel({super.key});
 
@@ -139,13 +134,14 @@ class LeftMenuPanel extends StatelessWidget {
     );
   }
 
-  /// Повертає кнопку меню з єдиним стилем. "Почати гру" відкриває [MainGameScreen].
-  Widget _buildMenuButton(BuildContext context, String text) {
+  Widget _buildMenuButton(BuildContext context,String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: SizedBox(
         width: double.infinity,
         height: 45,
+
+
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white.withAlpha(230),
@@ -153,11 +149,17 @@ class LeftMenuPanel extends StatelessWidget {
             elevation: 0,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
+
           onPressed: () {
             if (text == "Почати гру") {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const MainGameScreen()),
+              );
+            } else if (text == "Продовжити") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SaveLoadScreen()),
               );
             }
           },
@@ -168,7 +170,6 @@ class LeftMenuPanel extends StatelessWidget {
   }
 }
 
-/// Центральна картка на головному екрані — показує фонове зображення з assets.
 class MainArtCard extends StatelessWidget {
   const MainArtCard({super.key});
 
@@ -186,5 +187,3 @@ class MainArtCard extends StatelessWidget {
     );
   }
 }
-
-
