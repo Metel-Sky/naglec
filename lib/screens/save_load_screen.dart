@@ -181,46 +181,57 @@ class _SaveLoadScreenState extends State<SaveLoadScreen> {
   }
 
   Widget _buildGrid() {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.5),
-      itemCount: 9,
-      itemBuilder: (context, index) {
-        int id = (currentPage - 1) * 9 + index + 1;
-        String imgPath = "$_appPath/preview_$id.png";
-        bool exists = _appPath != null && File('$_appPath/save_$id.json').existsSync();
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double spacing = 10.0;
+        double cellWidth = (constraints.maxWidth - (spacing * 2)) / 3;
+        double cellHeight = (constraints.maxHeight - (spacing * 2)) / 3;
 
-        return GestureDetector(
-          onTap: () async {
-            if (exists) {
-              await sl<SaveService>().loadGame(id);
-              if (mounted) Navigator.pop(context, true);
-            } else {
-              await sl<SaveService>().saveGame(id);
-              setState(() {});
-            }
-          },
-          child: Container(
-            decoration: BoxDecoration(color: const Color(0xFFC4C4C4), borderRadius: BorderRadius.circular(10)),
-            clipBehavior: Clip.antiAlias,
-            child: Stack(
-              children: [
-                if (exists && _appPath != null) Image.file(File(imgPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity),
-                if (!exists) const Center(child: Icon(Icons.add, color: Colors.black12, size: 40)),
-                if (exists)
-                  Positioned(
-                    bottom: 5, right: 5,
-                    child: GestureDetector(
-                      onTap: () {
-                        File('$_appPath/save_$id.json').deleteSync();
-                        File(imgPath).deleteSync();
-                        setState(() {});
-                      },
-                      child: const CircleAvatar(radius: 12, backgroundColor: Colors.black54, child: Icon(Icons.delete, size: 14, color: Colors.white)),
-                    ),
-                  ),
-              ],
-            ),
-          ),
+        return GridView.count(
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 3,
+          mainAxisSpacing: spacing,
+          crossAxisSpacing: spacing,
+          childAspectRatio: cellWidth / cellHeight,
+          children: List.generate(9, (index) {
+            int id = (currentPage - 1) * 9 + index + 1;
+            String imgPath = "$_appPath/preview_$id.png";
+            bool exists = _appPath != null && File('$_appPath/save_$id.json').existsSync();
+
+            return GestureDetector(
+              onTap: () async {
+                if (exists) {
+                  await sl<SaveService>().loadGame(id);
+                  if (mounted) Navigator.pop(context, true);
+                } else {
+                  await sl<SaveService>().saveGame(id);
+                  setState(() {});
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(color: const Color(0xFFC4C4C4), borderRadius: BorderRadius.circular(10)),
+                clipBehavior: Clip.antiAlias,
+                child: Stack(
+                  children: [
+                    if (exists && _appPath != null) Image.file(File(imgPath), fit: BoxFit.cover, width: double.infinity, height: double.infinity),
+                    if (!exists) const Center(child: Icon(Icons.add, color: Colors.black12, size: 40)),
+                    if (exists)
+                      Positioned(
+                        bottom: 5, right: 5,
+                        child: GestureDetector(
+                          onTap: () {
+                            File('$_appPath/save_$id.json').deleteSync();
+                            File(imgPath).deleteSync();
+                            setState(() {});
+                          },
+                          child: const CircleAvatar(radius: 12, backgroundColor: Colors.black54, child: Icon(Icons.delete, size: 14, color: Colors.white)),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
+          }),
         );
       },
     );

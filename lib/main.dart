@@ -156,7 +156,7 @@ class LeftMenuPanel extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => const MainGameScreen()),
               );
-            } else if (text == "Продовжити") {
+            } else if (text == "Завантажити гру") {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const SaveLoadScreen()),
@@ -170,6 +170,7 @@ class LeftMenuPanel extends StatelessWidget {
                 );
               }
             }
+            // Кнопка "Продовжити" залишається без логіки
           },
           child: Text(text, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
         ),
