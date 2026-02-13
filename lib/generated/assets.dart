@@ -49,6 +49,7 @@ class Assets {
   static const String screensSettingsScreen = 'lib/screens/settings_screen.dart';
   static const String servicesCharacterController = 'lib/services/character_controller.dart';
   static const String servicesGameTimeController = 'lib/services/game_time_controller.dart';
+  static const String servicesGameWorldState = 'lib/services/game_world_state.dart';
   static const String servicesInventoryController = 'lib/services/inventory_controller.dart';
   static const String servicesNpcService = 'lib/services/npc_service.dart';
   static const String servicesPlayerStatsController = 'lib/services/player_stats_controller.dart';

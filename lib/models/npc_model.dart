@@ -5,22 +5,23 @@ class SchedulePoint {
   final int hourEnd;
   final String location;
   final String actionLabel;
-  final String? spritePath;
+  final String spritePath;
+  /// Дні тижня (0–6), null = щодня
   final List<int>? days;
 
   SchedulePoint({
     required this.hourStart,
     required this.hourEnd,
     required this.location,
-    this.actionLabel = "Відпочиває",
-    this.spritePath,
+    required this.actionLabel,
+    required this.spritePath,
     this.days,
   });
 }
 
 class NPCAction {
   final String label;
-  final VoidCallback onExecute; // Простіший тип для функцій без контексту
+  final VoidCallback onExecute;
 
   NPCAction({required this.label, required this.onExecute});
 }
@@ -30,93 +31,72 @@ class NPCModel {
   final String name;
   final List<SchedulePoint> schedule;
 
-  // Характеристики
-  double relationship;
-  double lust;
-  double behavior;
+  // Статистика стосунків
+  int trust;
+  int love;
+  int corruption; // Додаємо рівень розпусності, якщо потрібно за сюжетом
+
+  // Квестові змінні персонажа (наприклад: {"has_gift": true, "met_at_night": false})
+  Map<String, dynamic> variables;
 
   NPCModel({
     required this.id,
     required this.name,
     required this.schedule,
-    this.relationship = 50.0,
-    this.lust = 0.0,
-    this.behavior = 0.0,
-  });
+    this.trust = 0,
+    this.love = 0,
+    this.corruption = 0,
+    Map<String, dynamic>? variables,
+  }) : this.variables = variables ?? {};
 
-  // Метод, який вирішує, які кнопки показати
+  // Зручні методи для зміни статів
+  void addTrust(int value) => trust += value;
+  void addLove(int value) => love += value;
+
+  // Метод для перевірки квестових етапів
+  bool getVar(String key) => variables[key] ?? false;
+  void setVar(String key, dynamic value) => variables[key] = value;
+
+  /// Дії, доступні в цій локації та час (для кнопок у грі)
   List<NPCAction> getAvailableActions({
     required String location,
     required int hour,
-    required VoidCallback onUpdate, // Щоб оновити UI після дії
+    required VoidCallback onUpdate,
   }) {
-    List<NPCAction> actions = [];
+    final actions = <NPCAction>[
+      NPCAction(
+        label: "Поговорити",
+        onExecute: () {
+          addTrust(1);
+          onUpdate();
+        },
+      ),
+      NPCAction(
+        label: "Комплімент",
+        onExecute: () {
+          addTrust(1);
+          addLove(1);
+          onUpdate();
+        },
+      ),
+      NPCAction(
+        label: "Пожартувати",
+        onExecute: () {
+          addTrust(1);
+          onUpdate();
+        },
+      ),
+    ];
 
-    // 1. Базова дія для всіх
-    actions.add(NPCAction(
-      label: "Поговорити",
-      onExecute: () {
-        relationship += 1;
-        onUpdate();
-      },
-    ));
-
-    actions.add(NPCAction(
-      label: "Комплімент",
-      onExecute: () {
-        relationship += 1;
-        onUpdate();
-      },
-    ));
-
-    actions.add(NPCAction(
-      label: "Пожартувати",
-      onExecute: () {
-        relationship += 1;
-        onUpdate();
-      },
-    ));
-
-    // 2. Специфічні дії за ID
-    switch (id) {
-      case 'mom':
-        if (location == 'Кухня' && (hour >= 7 && hour < 9)) {
-          actions.add(NPCAction(
-            label: "Обійняти",
-            onExecute: () {
-              relationship += 2;
-              behavior += 1;
-              onUpdate();
-              print("Обійнято");
-            },
-          ));
-        }
-        break;
-
-      case 'mom':
-        if (location == 'Кухня' && (hour >= 7 && hour < 9)) {
-          actions.add(NPCAction(
-            label: "Обійняти",
-            onExecute: () {
-              relationship += 2;
-              behavior += 1;
-              onUpdate();
-            },
-          ));
-        }
-        break;
-
-      case 'kira':
-        if (location == 'Кімната Кіри') {
-          actions.add(NPCAction(
-            label: "Попросити списати",
-            onExecute: () {
-              lust += 0.5; // Наприклад :)
-              onUpdate();
-            },
-          ));
-        }
-        break;
+    if (location == 'Кухня' && hour >= 7 && hour < 9 && id == 'mom') {
+      actions.add(NPCAction(
+        label: "Обійняти",
+        onExecute: () {
+          addTrust(2);
+          addLove(1);
+          onUpdate();
+        },
+      ));
     }
 
     return actions;

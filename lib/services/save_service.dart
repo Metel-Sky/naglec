@@ -15,12 +15,22 @@ class SaveService {
   Future<void> saveGame(int slot) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
+      debugPrint("СИСТЕМА: Початок збереження в слот $slot");
 
       // 1. Скріншот (preview_N.png)
       final image = await screenshotController.capture();
       if (image != null) {
         final imagePath = '${directory.path}/preview_$slot.png';
+        // Перед записом завжди видаляємо старий прев'ю-файл,
+        // щоб точно не підхоплювався застарілий скрін.
+        final imgFile = File(imagePath);
+        if (await imgFile.exists()) {
+          await imgFile.delete();
+        }
         await File(imagePath).writeAsBytes(image);
+        debugPrint("СИСТЕМА: Скріншот збережено: $imagePath");
+      } else {
+        debugPrint("СИСТЕМА: ПОМИЛКА: Скріншот не зроблено!");
       }
 
       // 2. Збір даних (save_N.json)
@@ -62,9 +72,10 @@ class SaveService {
         'npcs': npcService.allNPCs
             .map((npc) => {
                   'id': npc.id,
-                  'relationship': npc.relationship,
-                  'lust': npc.lust,
-                  'behavior': npc.behavior,
+                  'trust': npc.trust,
+                  'love': npc.love,
+                  'corruption': npc.corruption,
+                  'variables': npc.variables,
                 })
             .toList(),
 
@@ -74,6 +85,10 @@ class SaveService {
       final jsonPath = '${directory.path}/save_$slot.json';
       await File(jsonPath).writeAsString(jsonEncode(saveData));
       debugPrint("СИСТЕМА: Сейв у слот $slot успішний");
+      debugPrint("СИСТЕМА: Шлях до файлу: $jsonPath");
+      final stats = saveData['stats'] as Map<String, dynamic>?;
+      final world = saveData['world'] as Map<String, dynamic>?;
+      debugPrint("СИСТЕМА: Збережено гроші: ${stats?['money']}, час: ${saveData['time']}, локація: ${world?['currentRoom']}");
     } catch (e) {
       debugPrint("Помилка збереження: $e");
     }
@@ -83,9 +98,14 @@ class SaveService {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/save_$slot.json');
+      debugPrint("СИСТЕМА: Початок завантаження зі слота $slot");
+      debugPrint("СИСТЕМА: Шлях до файлу: ${file.path}");
 
       if (await file.exists()) {
-        final data = jsonDecode(await file.readAsString());
+        final data = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
+        final stats = data['stats'] as Map<String, dynamic>?;
+        final world = data['world'] as Map<String, dynamic>?;
+        debugPrint("СИСТЕМА: Файл знайдено, slot у файлі: ${data['slot']}, гроші: ${stats?['money']}, час: ${data['time']}, локація: ${world?['currentRoom']}");
 
         // 1. Час
         final timeCtrl = sl<GameTimeController>();
@@ -138,12 +158,18 @@ class SaveService {
               orElse: () => npcService.allNPCs.first,
             );
 
-            npc.relationship = (npcData['relationship'] ?? npc.relationship).toDouble();
-            npc.lust = (npcData['lust'] ?? npc.lust).toDouble();
-            npc.behavior = (npcData['behavior'] ?? npc.behavior).toDouble();
+            npc.trust = npcData['trust'] ?? npc.trust;
+            npc.love = npcData['love'] ?? npc.love;
+            npc.corruption = npcData['corruption'] ?? npc.corruption;
+            if (npcData['variables'] != null) {
+              npc.variables = Map<String, dynamic>.from(npcData['variables'] as Map);
+            }
           }
         }
         debugPrint("СИСТЕМА: Слот $slot завантажено");
+        final loadedStats = data['stats'] as Map<String, dynamic>?;
+        final loadedWorld = data['world'] as Map<String, dynamic>?;
+        debugPrint("СИСТЕМА: Завантажено гроші: ${loadedStats?['money']}, час: ${data['time']}, локація: ${loadedWorld?['currentRoom']}");
       }
     } catch (e) {
       debugPrint("Помилка завантаження: $e");

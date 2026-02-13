@@ -199,13 +199,27 @@ class _SaveLoadScreenState extends State<SaveLoadScreen> {
             bool exists = _appPath != null && File('$_appPath/save_$id.json').existsSync();
 
             return GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () async {
+                print("DEBUG: Натиснуто на слот $id, exists: $exists");
                 if (exists) {
+                  // Завантажуємо гру зі слоту
+                  print("DEBUG: Завантаження гри зі слоту $id");
                   await sl<SaveService>().loadGame(id);
-                  if (mounted) Navigator.pop(context, true);
+                  if (mounted) {
+                    // Закриваємо екран і повертаємо true, щоб оновити гру
+                    print("DEBUG: Закриття екрану після завантаження");
+                    Navigator.pop(context, true);
+                  }
                 } else {
+                  // Зберігаємо гру в порожній слот
+                  print("DEBUG: Збереження гри в слот $id");
                   await sl<SaveService>().saveGame(id);
-                  setState(() {});
+                  if (mounted) {
+                    // Оновлюємо UI, щоб показати новий скріншот
+                    print("DEBUG: Оновлення UI після збереження");
+                    setState(() {});
+                  }
                 }
               },
               child: Container(
@@ -219,7 +233,9 @@ class _SaveLoadScreenState extends State<SaveLoadScreen> {
                       Positioned(
                         bottom: 5, right: 5,
                         child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () {
+                            // Видаляємо збереження
                             File('$_appPath/save_$id.json').deleteSync();
                             File(imgPath).deleteSync();
                             setState(() {});
