@@ -62,11 +62,11 @@ class NPCService {
         // БУДНІ (0,1,2,3,4)
         SchedulePoint(
             hourStart: 7, hourEnd: 8, location: 'Ванна', actionLabel: 'Приймає душ',
-            spritePath: 'lib/assets/npcs/kira/kitchen/kitchen.webm',
+            spritePath: 'lib/assets/npcs/kira/shower/shower.webm',
             days: [0, 1, 2, 3, 4]),
         //#############################################################################
         SchedulePoint(hourStart: 8, hourEnd: 9, location: 'Кухня', actionLabel: 'Снідае',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+            spritePath: 'lib/assets/npcs/kira/kitchen/kitchen.webm',
             days: [0, 1, 2, 3, 4]),
         //#############################################################################
         SchedulePoint(hourStart: 10, hourEnd: 17, location: 'Школа', days: [0, 1, 2, 3, 4], actionLabel: '', spritePath: ''),
@@ -82,9 +82,7 @@ class NPCService {
         SchedulePoint(hourStart: 20, hourEnd: 22, location: 'Кімната Кіри', actionLabel: 'Робить уроки',
             spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
             days: [0, 1, 2, 3, 4]),
-        SchedulePoint(hourStart: 22, hourEnd: 7, location: 'Кімната Кіри', actionLabel: 'Спить',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [0, 1, 2, 3, 4, 5, 6]),
+
 
         //#############################################################################
 
