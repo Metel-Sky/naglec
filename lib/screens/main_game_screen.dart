@@ -4,6 +4,7 @@ import 'package:naglec/services/service_locator.dart';
 import 'package:screenshot/screenshot.dart';
 import '../data/locations_room_data.dart';
 import '../models/npc_model.dart';
+import '../models/room_models.dart';
 import '../services/npc_service.dart';
 import '../services/save_service.dart';
 import '../theme/game_theme.dart';
@@ -37,6 +38,8 @@ class _MainGameScreenState extends State<MainGameScreen> {
   String currentZone = "HOME";
   String currentRoom = LocationsData.corridor;
   bool isInsideRoom = false;
+  /// На вулиці: id будинку (friend_house, aunt_house, …), null = сітка 4 будинків
+  String? currentStreetHouse;
   bool isBackpackOpen = false;
   bool isStatsOpen = false; // <-- ДОДАНО: Змінна стану для характеристик
   String newsMessage = "Ласкаво просимо...";
@@ -48,20 +51,40 @@ class _MainGameScreenState extends State<MainGameScreen> {
     currentZone = _worldState.currentZone;
     currentRoom = _worldState.currentRoom;
     isInsideRoom = _worldState.isInsideRoom;
+    currentStreetHouse = _worldState.currentStreetHouse;
   }
 
   void _syncWorldState() {
     _worldState.currentZone = currentZone;
     _worldState.currentRoom = currentRoom;
     _worldState.isInsideRoom = isInsideRoom;
+    _worldState.currentStreetHouse = currentStreetHouse;
   }
 
   void _handleRoomEntry(String name) {
-    final roomData = currentZone == "COLLEGE"
-        ? LocationsData.collegeRooms[name]
-        : currentZone == "STREET"
-            ? LocationsData.streetRooms[name]
-            : LocationsData.homeRooms[name];
+    // Клік по будинку на вулиці — заходимо в будинок (сітка 9 кімнат, як у домі гг)
+    if (currentZone == "STREET" && LocationsData.streetRoomIds.contains(name)) {
+      final firstRoom = LocationsData.getFirstRoomIdForStreetHouse(name);
+      setState(() {
+        currentStreetHouse = name;
+        currentRoom = firstRoom ?? LocationsData.corridor;
+        isInsideRoom = false;
+        newsMessage = "Ви зайшли в будинок.";
+        _syncWorldState();
+      });
+      _saveService.saveGame(0);
+      return;
+    }
+    RoomData? roomData;
+    if (currentZone == "COLLEGE") {
+      roomData = LocationsData.collegeRooms[name];
+    } else if (currentZone == "STREET" && currentStreetHouse != null) {
+      roomData = LocationsData.getRoomsForStreetHouse(currentStreetHouse)?[name];
+    } else if (currentZone == "STREET") {
+      roomData = LocationsData.streetRooms[name];
+    } else {
+      roomData = LocationsData.homeRooms[name];
+    }
     setState(() {
       if (roomData != null && roomData.isLocked) {
         newsMessage = "Двері в кімнату зачинені. ${roomData.description}";
@@ -160,7 +183,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
     return Row(
       children: [
         // Кнопка Назад
-        if (isInsideRoom || isBackpackOpen || isStatsOpen)
+        if (isInsideRoom || isBackpackOpen || isStatsOpen || (currentZone == "STREET" && currentStreetHouse != null))
           _buildBackButton(),
 
         // Блок ДНЯ ТИЖНЯ (змінює тільки індекс)
@@ -211,7 +234,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
               : (currentZone == "COLLEGE"
                   ? "КОЛЕДЖ (${LocationsData.getRoomDisplayName(currentRoom, isCollege: true)})"
                   : currentZone == "STREET"
-                      ? "ВУЛИЦЯ (${LocationsData.getRoomDisplayName(currentRoom, isStreet: true)})"
+                      ? "ВУЛИЦЯ (${LocationsData.getRoomDisplayName(currentRoom, isStreet: currentStreetHouse == null, streetHouseId: currentStreetHouse)})"
                       : "ДІМ (${LocationsData.getRoomDisplayName(currentRoom, isCollege: false)})"),
           style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
@@ -268,18 +291,31 @@ class _MainGameScreenState extends State<MainGameScreen> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => setState(() {
-            isInsideRoom = false;
             isBackpackOpen = false;
             isStatsOpen = false;
-            if (currentZone == "STREET") {
-              currentRoom = LocationsData.street;
-              newsMessage = "Ви повернулися на вулицю";
-            } else if (currentZone == "COLLEGE") {
-              currentRoom = LocationsData.collegeHall;
-              newsMessage = "Ви повернулися до холу";
+            if (currentZone == "STREET" && currentStreetHouse != null) {
+              if (isInsideRoom) {
+                isInsideRoom = false;
+                currentRoom = LocationsData.getFirstRoomIdForStreetHouse(currentStreetHouse) ?? currentRoom;
+                newsMessage = "Ви повернулися до коридору будинку";
+              } else {
+                currentStreetHouse = null;
+                currentRoom = LocationsData.street;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися на вулицю";
+              }
             } else {
-              currentRoom = LocationsData.corridor;
-              newsMessage = "Ви повернулися до коридору";
+              isInsideRoom = false;
+              if (currentZone == "STREET") {
+                currentRoom = LocationsData.street;
+                newsMessage = "Ви повернулися на вулицю";
+              } else if (currentZone == "COLLEGE") {
+                currentRoom = LocationsData.collegeHall;
+                newsMessage = "Ви повернулися до холу";
+              } else {
+                currentRoom = LocationsData.corridor;
+                newsMessage = "Ви повернулися до коридору";
+              }
             }
             _syncWorldState();
           }),
@@ -342,11 +378,25 @@ class _MainGameScreenState extends State<MainGameScreen> {
         listenable: _timeController,
         builder: (context, _) {
           return StreetView(
-            key: ValueKey("street_${currentRoom}_${_timeController.dateTime.hour}"),
+            key: ValueKey("street_${currentStreetHouse}_${currentRoom}_${_timeController.dateTime.hour}"),
+            currentStreetHouse: currentStreetHouse,
             currentRoom: currentRoom,
             isInsideRoom: isInsideRoom,
             onRoomTap: _handleRoomEntry,
-            onBack: () => setState(() { isInsideRoom = false; currentRoom = LocationsData.street; _syncWorldState(); }),
+            onBack: () => setState(() {
+              if (currentStreetHouse != null && isInsideRoom) {
+                isInsideRoom = false;
+                currentRoom = LocationsData.getFirstRoomIdForStreetHouse(currentStreetHouse) ?? LocationsData.corridor;
+              } else if (currentStreetHouse != null) {
+                currentStreetHouse = null;
+                currentRoom = LocationsData.street;
+                isInsideRoom = false;
+              } else {
+                isInsideRoom = false;
+                currentRoom = LocationsData.street;
+              }
+              _syncWorldState();
+            }),
             timeController: _timeController,
             onNPCTap: (npc) { setState(() {}); },
           );
@@ -380,6 +430,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
     if (currentZone != "STREET") {
       list.add(_navBtn("На вулицю", () => setState(() {
         currentZone = "STREET";
+        currentStreetHouse = null;
         currentRoom = LocationsData.street;
         isInsideRoom = false;
         isStatsOpen = false;
@@ -453,22 +504,41 @@ class _MainGameScreenState extends State<MainGameScreen> {
           actionWidgets.add(
             ElevatedButton(
               style: GameTheme.actionButtonStyle(color: Colors.redAccent),
-              onPressed: () => setState(() => isInsideRoom = false),
+                onPressed: () => setState(() {
+                  isInsideRoom = false;
+                  if (currentZone == "STREET" && currentStreetHouse != null) {
+                    currentRoom = LocationsData.getFirstRoomIdForStreetHouse(currentStreetHouse) ?? LocationsData.corridor;
+                  }
+                  _syncWorldState();
+                }),
               child: const Text("← НАЗАД", textAlign: TextAlign.center),
             ),
           );
         } else {
-          // На вулиці всередині будинку — спочатку кнопка назад на вулицю
-          if (currentZone == "STREET" && isInsideRoom) {
-            actionWidgets.add(ElevatedButton(
-              style: GameTheme.actionButtonStyle(color: Colors.redAccent),
-              onPressed: () => setState(() {
-                isInsideRoom = false;
-                currentRoom = LocationsData.street;
-                _syncWorldState();
-              }),
-              child: const Text("← НАЗАД НА ВУЛИЦЮ", textAlign: TextAlign.center),
-            ));
+          // На вулиці: у будинку — кнопка в коридор або на вулицю
+          if (currentZone == "STREET" && currentStreetHouse != null) {
+            if (isInsideRoom) {
+              actionWidgets.add(ElevatedButton(
+                style: GameTheme.actionButtonStyle(color: Colors.redAccent),
+                onPressed: () => setState(() {
+                  isInsideRoom = false;
+                  currentRoom = LocationsData.getFirstRoomIdForStreetHouse(currentStreetHouse) ?? LocationsData.corridor;
+                  _syncWorldState();
+                }),
+                child: const Text("← НАЗАД", textAlign: TextAlign.center),
+              ));
+            } else {
+              actionWidgets.add(ElevatedButton(
+                style: GameTheme.actionButtonStyle(color: Colors.redAccent),
+                onPressed: () => setState(() {
+                  currentStreetHouse = null;
+                  currentRoom = LocationsData.street;
+                  isInsideRoom = false;
+                  _syncWorldState();
+                }),
+                child: const Text("← НА ВУЛИЦЮ", textAlign: TextAlign.center),
+              ));
+            }
             actionWidgets.add(const SizedBox(height: 8));
           }
           // Звичайна навігація: кнопку поточної локації не показуємо
@@ -495,6 +565,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
           if (currentZone != "STREET") {
             actionWidgets.add(_navBtn("НА ВУЛИЦЮ", () => setState(() {
               currentZone = "STREET";
+              currentStreetHouse = null;
               currentRoom = LocationsData.street;
               isInsideRoom = false;
               isStatsOpen = false;
