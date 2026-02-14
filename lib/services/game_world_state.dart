@@ -25,5 +25,12 @@ class GameWorldState {
     currentRoom = json['currentRoom'] ?? currentRoom;
     isInsideRoom = json['isInsideRoom'] ?? isInsideRoom;
   }
+
+  /// Скидає локацію до початкової для нової гри
+  void reset() {
+    currentZone = "HOME";
+    currentRoom = "Коридор";
+    isInsideRoom = false;
+  }
 }
 

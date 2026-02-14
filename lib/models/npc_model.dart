@@ -101,4 +101,11 @@ class NPCModel {
 
     return actions;
   }
+  // Метод для швидкої перевірки прапорців
+  bool hasMet(String eventId) => variables[eventId] == true;
+
+// Позначити, що подія відбулася
+  void markEvent(String eventId) {
+    variables[eventId] = true;
+  }
 }

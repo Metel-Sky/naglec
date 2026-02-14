@@ -12,6 +12,7 @@ final GetIt sl = GetIt.instance;
 // Функція для налаштування та реєстрації сервісів
 void setupServiceLocator() {
 
+
   // Реєструємо SaveService (ОБОВ'ЯЗКОВО ДЛЯ ЗБЕРЕЖЕНЬ)
   if (!sl.isRegistered<SaveService>()) {
     sl.registerLazySingleton<SaveService>(() => SaveService());
@@ -41,4 +42,13 @@ void setupServiceLocator() {
   if (!sl.isRegistered<GameWorldState>()) {
     sl.registerLazySingleton<GameWorldState>(() => GameWorldState());
   }
+}
+
+/// Скидає весь стан гри для нової гри (стати, час, локація, NPC, інвентар)
+void resetGameState() {
+  sl<PlayerStatsController>().reset();
+  sl<GameTimeController>().reset();
+  sl<GameWorldState>().reset();
+  sl<NPCService>().reset();
+  sl<InventoryController>().reset();
 }

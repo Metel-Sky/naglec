@@ -16,4 +16,9 @@ class InventoryController {
   void removeItem(String id) {
     items.removeWhere((item) => item.id == id);
   }
+
+  /// Очищає рюкзак для нової гри
+  void reset() {
+    items.clear();
+  }
 }

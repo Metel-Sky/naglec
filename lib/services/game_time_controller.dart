@@ -4,7 +4,7 @@ import '../services/service_locator.dart';
 import '../services/save_service.dart';
 
 class GameTimeController with ChangeNotifier {
-  DateTime _dateTime = DateTime(2026, 1, 12, 19, 0);
+  DateTime _dateTime = DateTime(2026, 1, 12, 6, 0);
   int _manualWeekdayIndex = 0;
 
   final List<String> _daysOfWeek = [
@@ -49,6 +49,13 @@ class GameTimeController with ChangeNotifier {
   }
 
   void nextDayName() { _manualWeekdayIndex = (_manualWeekdayIndex + 1) % 7; notifyListeners(); }
+
+  /// Скидає час до початкового для нової гри
+  void reset() {
+    _dateTime = DateTime(2026, 1, 12, 6, 0);
+    _manualWeekdayIndex = 0;
+    notifyListeners();
+  }
   void prevDayName() { _manualWeekdayIndex = (_manualWeekdayIndex - 1 < 0) ? 6 : _manualWeekdayIndex - 1; notifyListeners(); }
   void addDay() { _dateTime = _dateTime.add(const Duration(days: 1)); _manualWeekdayIndex = (_manualWeekdayIndex + 1) % 7; notifyListeners(); }
   void subDay() { _dateTime = _dateTime.subtract(const Duration(days: 1)); _manualWeekdayIndex = (_manualWeekdayIndex - 1 < 0) ? 6 : _manualWeekdayIndex - 1; notifyListeners(); }

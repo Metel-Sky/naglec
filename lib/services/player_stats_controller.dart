@@ -41,4 +41,10 @@ class PlayerStatsController with ChangeNotifier {
   }
 
   void updateUI() => notifyListeners();
+
+  /// Скидає стати гравця для нової гри
+  void reset() {
+    player.reset();
+    notifyListeners();
+  }
 }

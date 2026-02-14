@@ -275,33 +275,34 @@ class _MainGameScreenState extends State<MainGameScreen> {
   }
 
   Widget _buildMainContent() {
-    // 1. Пріоритет рюкзаку
     if (isBackpackOpen) {
       return BackpackView(inventory: _inventory, onNotify: (msg) => setState(() => newsMessage = msg));
     }
 
-    // 2. Пріоритет характеристикам
     if (isStatsOpen) {
-      // Тут має бути твій віджет PlayerStatsView, який ми малювали
       return PlayerStatsView(playerStats: _playerStats);
     }
 
-    // 3. Локація HOME
     if (currentZone == "HOME") {
-      return HomeView(
-        currentRoom: currentRoom,
-        isInsideRoom: isInsideRoom,
-        onRoomTap: _handleRoomEntry,
-        onBack: () => setState(() { isInsideRoom = false; currentRoom = "Коридор"; }),
-        timeController: _timeController, // ПЕРЕДАЄМО
-        onNPCTap: (npc) {
-          setState(() {
-            newsMessage = "Ви натиснули на ${npc.name}. Зараз вона: ${sl<NPCService>().getNPCsInRoom(currentRoom, _timeController.dateTime.hour, _timeController.weekdayIndex).first.schedule.firstWhere((p) => p.location == currentRoom).actionLabel}";
-          });
+      // ДОДАЄМО СЛУХАЧА ЧАСУ ТУТ
+      return ListenableBuilder(
+        listenable: _timeController,
+        builder: (context, _) {
+          return HomeView(
+            // Додаємо Key, щоб Flutter "скидав" стан відео при зміні години
+            key: ValueKey("${currentRoom}_${_timeController.dateTime.hour}"),
+            currentRoom: currentRoom,
+            isInsideRoom: isInsideRoom,
+            onRoomTap: _handleRoomEntry,
+            onBack: () => setState(() { isInsideRoom = false; currentRoom = "Коридор"; }),
+            timeController: _timeController,
+            onNPCTap: (npc) {
+              // Логіка кліку
+            },
+          );
         },
       );
     }
-
     return Center(child: Text("ЛОКАЦІЯ: $currentZone", style: const TextStyle(color: Colors.white)));
   }
 
@@ -319,6 +320,18 @@ class _MainGameScreenState extends State<MainGameScreen> {
         isBackpackOpen = false;
         _syncWorldState();
       })),
+      _navBtn("На вулицю", () => setState(() {
+        currentZone = "STREET";
+        isStatsOpen = false;
+        isBackpackOpen = false;
+        _syncWorldState();
+      })),
+      _navBtn("Коледж", () => setState(() {
+        currentZone = "COLLEGE";
+        isStatsOpen = false;
+        isBackpackOpen = false;
+        _syncWorldState();
+      })),
     ];
   }
 
@@ -331,76 +344,98 @@ class _MainGameScreenState extends State<MainGameScreen> {
   }
 
   Widget _buildActionPanel() {
+    return ListenableBuilder(
+      listenable: _timeController,
+      builder: (context, _) {
+        final int hour = _timeController.dateTime.hour;
+        final int day = _timeController.weekdayIndex;
 
-    final int hour = _timeController.dateTime.hour;
-    final int day = _timeController.weekdayIndex;
+        // 1. Отримуємо список NPC з сервісу
+        final List<NPCModel> npcs = sl<NPCService>().getNPCsInRoom(currentRoom, hour, day);
 
-    // 1. Отримуємо список NPC (тепер сервіс має працювати вірно)
-    final List<NPCModel> npcs = sl<NPCService>().getNPCsInRoom(currentRoom, hour, day);
-    print("DEBUG: Room: $currentRoom, Hour: $hour, Found NPCs: ${npcs.length}");
+        // 2. Фільтруємо активних для поточної кімнати та часу
+        final List<NPCModel> activeNPCs = npcs.where((npc) {
+          return npc.schedule.any((point) {
+            bool timeMatches = (point.hourStart <= point.hourEnd)
+                ? (hour >= point.hourStart && hour < point.hourEnd)
+                : (hour >= point.hourStart || hour < point.hourEnd);
+            return point.location == currentRoom && timeMatches;
+          });
+        }).toList();
 
-    // 2. ДОДАТКОВА ПЕРЕВІРКА: чи є хоч один NPC, чий актуальний розклад збігається з цією кімнатою
-    // Це відфільтрує ситуації, коли сервіс міг помилково повернути NPC
-    final List<NPCModel> activeNPCs = npcs.where((npc) {
-      return npc.schedule.any((point) {
-        bool timeMatches = (point.hourStart <= point.hourEnd)
-            ? (hour >= point.hourStart && hour < point.hourEnd)
-            : (hour >= point.hourStart || hour < point.hourEnd);
-        return point.location == currentRoom && timeMatches;
-      });
-    }).toList();
+        // 3. Створюємо список віджетів всередині білдера
+        List<Widget> actionWidgets = [];
 
-    List<Widget> actionWidgets = [];
+        if (isInsideRoom && activeNPCs.isNotEmpty) {
+          final npc = activeNPCs.first;
+          final actions = npc.getAvailableActions(
+            location: currentRoom,
+            hour: hour,
+            onUpdate: () => setState(() {}),
+          );
 
-    // ЗМІНЮЄМО УМОВУ: використовуємо activeNPCs замість npcs
-    if (isInsideRoom && activeNPCs.isNotEmpty) {
-      final npc = activeNPCs.first;
-      final actions = npc.getAvailableActions(
-        location: currentRoom,
-        hour: hour,
-        onUpdate: () => setState(() {}),
-      );
+          for (var action in actions) {
+            actionWidgets.add(
+              ElevatedButton(
+                style: GameTheme.actionButtonStyle(),
+                onPressed: action.onExecute,
+                child: Text(action.label.toUpperCase(), textAlign: TextAlign.center),
+              ),
+            );
+            actionWidgets.add(const SizedBox(height: 8));
+          }
 
-      for (var action in actions) {
-        actionWidgets.add(
-          ElevatedButton(
-            style: GameTheme.actionButtonStyle(),
-            onPressed: action.onExecute,
-            child: Text(action.label.toUpperCase(), textAlign: TextAlign.center),
+          actionWidgets.add(
+            ElevatedButton(
+              style: GameTheme.actionButtonStyle(color: Colors.redAccent),
+              onPressed: () => setState(() => isInsideRoom = false),
+              child: const Text("← НАЗАД", textAlign: TextAlign.center),
+            ),
+          );
+        } else {
+          // Якщо NPC немає — звичайна навігація
+          actionWidgets = [
+            _navBtn("ДІМ", () => setState(() {
+              currentZone = "HOME";
+              isStatsOpen = false;
+              isBackpackOpen = false;
+              _syncWorldState();
+            })),
+            const SizedBox(height: 8),
+            _navBtn("В МІСТО", () => setState(() {
+              currentZone = "CITY";
+              isStatsOpen = false;
+              isBackpackOpen = false;
+              _syncWorldState();
+            })),
+            const SizedBox(height: 8),
+            _navBtn("НА ВУЛИЦЮ", () => setState(() {
+              currentZone = "STREET";
+              isStatsOpen = false;
+              isBackpackOpen = false;
+              _syncWorldState();
+            })),
+            const SizedBox(height: 8),
+            _navBtn("КОЛЕДЖ", () => setState(() {
+              currentZone = "COLLEGE";
+              isStatsOpen = false;
+              isBackpackOpen = false;
+              _syncWorldState();
+            })),
+          ];
+        }
+
+        // 4. Повертаємо контейнер зі списком, який тепер бачить actionWidgets
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: actionWidgets,
           ),
         );
-        actionWidgets.add(const SizedBox(height: 8));
-      }
-
-      actionWidgets.add(
-        ElevatedButton(
-          style: GameTheme.actionButtonStyle(color: Colors.redAccent),
-          onPressed: () => setState(() => isInsideRoom = false),
-          child: const Text("← НАЗАД", textAlign: TextAlign.center),
-        ),
-      );
-    } else {
-      // Якщо активних NPC немає — показуємо звичайну навігацію
-      actionWidgets = [
-        _navBtn("ДІМ", () => setState(() {
-          currentZone = "HOME";
-          isStatsOpen = false;
-          isBackpackOpen = false;
-          _syncWorldState();
-        })),
-        const SizedBox(height: 8),
-        _navBtn("В МІСТО", () => setState(() => currentZone = "CITY")),
-      ];
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      width: double.infinity,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: actionWidgets,
-      ),
+      },
     );
   }
 } // КІНЕЦЬ КЛАСУ _MainGameScreenState

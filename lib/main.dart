@@ -152,6 +152,7 @@ class LeftMenuPanel extends StatelessWidget {
 
           onPressed: () async {
             if (text == "Почати гру") {
+              resetGameState();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const MainGameScreen()),

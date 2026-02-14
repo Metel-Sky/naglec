@@ -32,7 +32,7 @@ class LocationsData {
       name: "Кімната Кіри",
       imagePath: "lib/assets/home_gg/rooms/kira_room.jpg",
       description: "Кімната Кіри, тут нікого немає.",
-      isLocked: true, // Тепер ми знаємо, що він закритий
+      isLocked: false, // Тепер ми знаємо, що він закритий
     ),
     "Кімната Ріти": const RoomData(
       name: "Кімната Ріти",

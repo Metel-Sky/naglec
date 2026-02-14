@@ -142,4 +142,14 @@ class NPCService {
       });
     }).toList(); // <--- .toList() має бути тут, після закриття .where
   }
+
+  /// Скидає стати та змінні всіх NPC для нової гри
+  void reset() {
+    for (final npc in allNPCs) {
+      npc.trust = 0;
+      npc.love = 0;
+      npc.corruption = 0;
+      npc.variables.clear();
+    }
+  }
 }

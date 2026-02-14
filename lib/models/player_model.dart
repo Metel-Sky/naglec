@@ -19,6 +19,26 @@ class PlayerModel {
 
   PlayerModel();
 
+  /// Скидає всі стати до початкових значень (нова гра)
+  void reset() {
+    money = 0;
+    energy = 100.0;
+    maxEnergy = 100.0;
+    arousal = 0.0;
+    maxArousal = 100.0;
+    lust = 0;
+    vitality = 100;
+    physical_fitness = 0;
+    fighting = 0;
+    programming = 0;
+    hacking = 0;
+    lockpicking = 0;
+    stealth_mode = 0;
+    massage_experience = 0;
+    influence = 0;
+    college_success = 0;
+  }
+
   // Додаємо методи, щоб SaveService став чистішим
   Map<String, dynamic> toJson() => {
     'money': money,
