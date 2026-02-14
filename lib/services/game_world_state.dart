@@ -1,16 +1,18 @@
+import '../data/locations_room_data.dart';
+
 class GameWorldState {
-  /// Поточна глобальна зона (наприклад: HOME, CITY і т.д.)
+  /// Поточна глобальна зона (HOME, CITY, COLLEGE, etc.)
   String currentZone;
 
-  /// Поточна кімната всередині зони (наприклад: Коридор, Кухня і т.д.)
+  /// Id кімнати (English key: corridor, kitchen, college_hall, etc.)
   String currentRoom;
 
-  /// Чи знаходиться гг всередині кімнати (true) або у "загальній" зоні (false)
+  /// Чи знаходиться гг всередині кімнати
   bool isInsideRoom;
 
   GameWorldState({
     this.currentZone = "HOME",
-    this.currentRoom = "Коридор",
+    this.currentRoom = LocationsData.corridor,
     this.isInsideRoom = false,
   });
 
@@ -29,7 +31,7 @@ class GameWorldState {
   /// Скидає локацію до початкової для нової гри
   void reset() {
     currentZone = "HOME";
-    currentRoom = "Коридор";
+    currentRoom = LocationsData.corridor;
     isInsideRoom = false;
   }
 }

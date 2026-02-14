@@ -25,6 +25,7 @@ class Assets {
   static const String libAssetsGG = 'lib/assets/GG.png';
   static const String libAssetsHomeGg = 'lib/assets/home_gg.jpg';
   static const String libMain = 'lib/main.dart';
+  static const String locationsCollegeView = 'lib/locations/college_view.dart';
   static const String locationsHomeView = 'lib/locations/home_view.dart';
   static const String locationsRoomTemplate = 'lib/locations/room_template.dart';
   static const String modelsCharacterModel = 'lib/models/character_model.dart';

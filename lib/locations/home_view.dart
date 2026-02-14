@@ -111,20 +111,17 @@ class _HomeViewState extends State<HomeView> {
           mainAxisSpacing: spacing,
           crossAxisSpacing: spacing,
           childAspectRatio: cellWidth / cellHeight,
-          children: [
-            _roomCard("Кімната гг"), _roomCard("Кухня"), _roomCard("Ванна"),
-            _roomCard("Кімната мами"), _roomCard("Кімната Кіри"), _roomCard("Кімната Ріти"),
-            _roomCard("Зал"), _roomCard("Подвірʼя"), _roomCard("Підвал"),
-          ],
+          children: LocationsData.homeRoomIds.map((roomId) => _roomCard(roomId)).toList(),
         );
       },
     );
   }
 
-  Widget _roomCard(String name) {
-    final roomData = LocationsData.homeRooms[name];
+  Widget _roomCard(String roomId) {
+    final roomData = LocationsData.homeRooms[roomId];
+    final displayName = roomData?.displayName ?? roomId;
     return GestureDetector(
-      onTap: () => widget.onRoomTap(name),
+      onTap: () => widget.onRoomTap(roomId),
       child: Container(
         decoration: GameTheme.cardDecoration(radius: 10),
         clipBehavior: Clip.antiAlias,
@@ -138,7 +135,7 @@ class _HomeViewState extends State<HomeView> {
             Container(color: Colors.black.withOpacity(0.4)),
             Center(
               child: Text(
-                name,
+                displayName,
                 style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),

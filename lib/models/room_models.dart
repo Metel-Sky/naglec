@@ -1,12 +1,12 @@
 class RoomData {
-  final String name;
+  /// Назва для відображення в слотах кімнат та в UI (наприклад українською)
+  final String displayName;
   final String imagePath;
   final String description;
   final bool isLocked;
 
-  // Обов'язково const перед RoomData
   const RoomData({
-    required this.name,
+    required this.displayName,
     required this.imagePath,
     required this.description,
     this.isLocked = false,

@@ -11,6 +11,8 @@ import '../left_panel/main_left_sidebar.dart';
 import '../widgets/game_dialog_panel.dart';
 import '../widgets/backpack_view.dart';
 import '../locations/home_view.dart';
+import '../locations/college_view.dart';
+import '../locations/street_view.dart';
 import '../services/game_time_controller.dart';
 import '../services/inventory_controller.dart';
 import '../services/player_stats_controller.dart';
@@ -33,7 +35,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
   final GameWorldState _worldState = sl<GameWorldState>();
 
   String currentZone = "HOME";
-  String currentRoom = "Коридор";
+  String currentRoom = LocationsData.corridor;
   bool isInsideRoom = false;
   bool isBackpackOpen = false;
   bool isStatsOpen = false; // <-- ДОДАНО: Змінна стану для характеристик
@@ -55,7 +57,11 @@ class _MainGameScreenState extends State<MainGameScreen> {
   }
 
   void _handleRoomEntry(String name) {
-    final roomData = LocationsData.homeRooms[name];
+    final roomData = currentZone == "COLLEGE"
+        ? LocationsData.collegeRooms[name]
+        : currentZone == "STREET"
+            ? LocationsData.streetRooms[name]
+            : LocationsData.homeRooms[name];
     setState(() {
       if (roomData != null && roomData.isLocked) {
         newsMessage = "Двері в кімнату зачинені. ${roomData.description}";
@@ -64,7 +70,7 @@ class _MainGameScreenState extends State<MainGameScreen> {
       currentRoom = name;
       isInsideRoom = true;
       isBackpackOpen = false;
-      isStatsOpen = false; // Закриваємо стати при вході в кімнату
+      isStatsOpen = false;
       _timeController.addMinutes(10);
       newsMessage = "Ви увійшли в $name.";
     });
@@ -200,7 +206,13 @@ class _MainGameScreenState extends State<MainGameScreen> {
 
         // Назва локації
         Text(
-          isStatsOpen ? "ХАРАКТЕРИСТИКИ   " : "ДІМ ($currentRoom)",
+          isStatsOpen
+              ? "ХАРАКТЕРИСТИКИ   "
+              : (currentZone == "COLLEGE"
+                  ? "КОЛЕДЖ (${LocationsData.getRoomDisplayName(currentRoom, isCollege: true)})"
+                  : currentZone == "STREET"
+                      ? "ВУЛИЦЯ (${LocationsData.getRoomDisplayName(currentRoom, isStreet: true)})"
+                      : "ДІМ (${LocationsData.getRoomDisplayName(currentRoom, isCollege: false)})"),
           style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
       ],
@@ -259,8 +271,16 @@ class _MainGameScreenState extends State<MainGameScreen> {
             isInsideRoom = false;
             isBackpackOpen = false;
             isStatsOpen = false;
-            newsMessage = "Ви повернулися до коридору";
-            currentRoom = "Коридор";
+            if (currentZone == "STREET") {
+              currentRoom = LocationsData.street;
+              newsMessage = "Ви повернулися на вулицю";
+            } else if (currentZone == "COLLEGE") {
+              currentRoom = LocationsData.collegeHall;
+              newsMessage = "Ви повернулися до холу";
+            } else {
+              currentRoom = LocationsData.corridor;
+              newsMessage = "Ви повернулися до коридору";
+            }
             _syncWorldState();
           }),
           borderRadius: BorderRadius.circular(50),
@@ -284,55 +304,100 @@ class _MainGameScreenState extends State<MainGameScreen> {
     }
 
     if (currentZone == "HOME") {
-      // ДОДАЄМО СЛУХАЧА ЧАСУ ТУТ
       return ListenableBuilder(
         listenable: _timeController,
         builder: (context, _) {
           return HomeView(
-            // Додаємо Key, щоб Flutter "скидав" стан відео при зміні години
-            key: ValueKey("${currentRoom}_${_timeController.dateTime.hour}"),
+            key: ValueKey("home_${currentRoom}_${_timeController.dateTime.hour}"),
             currentRoom: currentRoom,
             isInsideRoom: isInsideRoom,
             onRoomTap: _handleRoomEntry,
-            onBack: () => setState(() { isInsideRoom = false; currentRoom = "Коридор"; }),
+            onBack: () => setState(() { isInsideRoom = false; currentRoom = LocationsData.corridor; _syncWorldState(); }),
             timeController: _timeController,
-            onNPCTap: (npc) {
-              // Логіка кліку
-            },
+            onNPCTap: (npc) { setState(() {}); },
           );
         },
       );
     }
+
+    if (currentZone == "COLLEGE") {
+      return ListenableBuilder(
+        listenable: _timeController,
+        builder: (context, _) {
+          return CollegeView(
+            key: ValueKey("college_${currentRoom}_${_timeController.dateTime.hour}"),
+            currentRoom: currentRoom,
+            isInsideRoom: isInsideRoom,
+            onRoomTap: _handleRoomEntry,
+            onBack: () => setState(() { isInsideRoom = false; currentRoom = LocationsData.collegeHall; _syncWorldState(); }),
+            timeController: _timeController,
+            onNPCTap: (npc) { setState(() {}); },
+          );
+        },
+      );
+    }
+
+    if (currentZone == "STREET") {
+      return ListenableBuilder(
+        listenable: _timeController,
+        builder: (context, _) {
+          return StreetView(
+            key: ValueKey("street_${currentRoom}_${_timeController.dateTime.hour}"),
+            currentRoom: currentRoom,
+            isInsideRoom: isInsideRoom,
+            onRoomTap: _handleRoomEntry,
+            onBack: () => setState(() { isInsideRoom = false; currentRoom = LocationsData.street; _syncWorldState(); }),
+            timeController: _timeController,
+            onNPCTap: (npc) { setState(() {}); },
+          );
+        },
+      );
+    }
+
     return Center(child: Text("ЛОКАЦІЯ: $currentZone", style: const TextStyle(color: Colors.white)));
   }
 
   List<Widget> _buildNavigationButtons() {
-    return [
-      _navBtn("Дім", () => setState(() {
+    final list = <Widget>[];
+    if (currentZone != "HOME") {
+      list.add(_navBtn("Дім", () => setState(() {
         currentZone = "HOME";
+        currentRoom = LocationsData.corridor;
+        isInsideRoom = false;
         isStatsOpen = false;
         isBackpackOpen = false;
         _syncWorldState();
-      })),
-      _navBtn("В місто", () => setState(() {
+      })));
+    }
+    if (currentZone != "CITY") {
+      list.add(_navBtn("В місто", () => setState(() {
         currentZone = "CITY";
         isStatsOpen = false;
         isBackpackOpen = false;
         _syncWorldState();
-      })),
-      _navBtn("На вулицю", () => setState(() {
+      })));
+    }
+    if (currentZone != "STREET") {
+      list.add(_navBtn("На вулицю", () => setState(() {
         currentZone = "STREET";
+        currentRoom = LocationsData.street;
+        isInsideRoom = false;
         isStatsOpen = false;
         isBackpackOpen = false;
         _syncWorldState();
-      })),
-      _navBtn("Коледж", () => setState(() {
+      })));
+    }
+    if (currentZone != "COLLEGE") {
+      list.add(_navBtn("Коледж", () => setState(() {
         currentZone = "COLLEGE";
+        currentRoom = LocationsData.collegeHall;
+        isInsideRoom = false;
         isStatsOpen = false;
         isBackpackOpen = false;
         _syncWorldState();
-      })),
-    ];
+      })));
+    }
+    return list;
   }
 
   Widget _navBtn(String text, VoidCallback onTap) {
@@ -393,36 +458,61 @@ class _MainGameScreenState extends State<MainGameScreen> {
             ),
           );
         } else {
-          // Якщо NPC немає — звичайна навігація
-          actionWidgets = [
-            _navBtn("ДІМ", () => setState(() {
+          // На вулиці всередині будинку — спочатку кнопка назад на вулицю
+          if (currentZone == "STREET" && isInsideRoom) {
+            actionWidgets.add(ElevatedButton(
+              style: GameTheme.actionButtonStyle(color: Colors.redAccent),
+              onPressed: () => setState(() {
+                isInsideRoom = false;
+                currentRoom = LocationsData.street;
+                _syncWorldState();
+              }),
+              child: const Text("← НАЗАД НА ВУЛИЦЮ", textAlign: TextAlign.center),
+            ));
+            actionWidgets.add(const SizedBox(height: 8));
+          }
+          // Звичайна навігація: кнопку поточної локації не показуємо
+          if (currentZone != "HOME") {
+            actionWidgets.add(_navBtn("ДІМ", () => setState(() {
               currentZone = "HOME";
+              currentRoom = LocationsData.corridor;
+              isInsideRoom = false;
               isStatsOpen = false;
               isBackpackOpen = false;
               _syncWorldState();
-            })),
-            const SizedBox(height: 8),
-            _navBtn("В МІСТО", () => setState(() {
+            })));
+            actionWidgets.add(const SizedBox(height: 8));
+          }
+          if (currentZone != "CITY") {
+            actionWidgets.add(_navBtn("В МІСТО", () => setState(() {
               currentZone = "CITY";
               isStatsOpen = false;
               isBackpackOpen = false;
               _syncWorldState();
-            })),
-            const SizedBox(height: 8),
-            _navBtn("НА ВУЛИЦЮ", () => setState(() {
+            })));
+            actionWidgets.add(const SizedBox(height: 8));
+          }
+          if (currentZone != "STREET") {
+            actionWidgets.add(_navBtn("НА ВУЛИЦЮ", () => setState(() {
               currentZone = "STREET";
+              currentRoom = LocationsData.street;
+              isInsideRoom = false;
               isStatsOpen = false;
               isBackpackOpen = false;
               _syncWorldState();
-            })),
-            const SizedBox(height: 8),
-            _navBtn("КОЛЕДЖ", () => setState(() {
+            })));
+            actionWidgets.add(const SizedBox(height: 8));
+          }
+          if (currentZone != "COLLEGE") {
+            actionWidgets.add(_navBtn("КОЛЕДЖ", () => setState(() {
               currentZone = "COLLEGE";
+              currentRoom = LocationsData.collegeHall;
+              isInsideRoom = false;
               isStatsOpen = false;
               isBackpackOpen = false;
               _syncWorldState();
-            })),
-          ];
+            })));
+          }
         }
 
         // 4. Повертаємо контейнер зі списком, який тепер бачить actionWidgets

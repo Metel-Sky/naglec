@@ -88,7 +88,7 @@ class NPCModel {
       ),
     ];
 
-    if (location == 'Кухня' && hour >= 7 && hour < 9 && id == 'mom') {
+    if (location == 'kitchen' && hour >= 7 && hour < 9 && id == 'mom') {
       actions.add(NPCAction(
         label: "Обійняти",
         onExecute: () {
