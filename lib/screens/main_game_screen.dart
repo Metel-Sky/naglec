@@ -14,6 +14,11 @@ import '../widgets/backpack_view.dart';
 import '../locations/home_view.dart';
 import '../locations/college_view.dart';
 import '../locations/street_view.dart';
+import '../locations/city_view.dart';
+import '../locations/poor_district_view.dart';
+import '../locations/poor_village_view.dart';
+import '../locations/out_of_town_view.dart';
+import '../widgets/phone_view.dart';
 import '../services/game_time_controller.dart';
 import '../services/inventory_controller.dart';
 import '../services/player_stats_controller.dart';
@@ -41,7 +46,8 @@ class _MainGameScreenState extends State<MainGameScreen> {
   /// На вулиці: id будинку (friend_house, aunt_house, …), null = сітка 4 будинків
   String? currentStreetHouse;
   bool isBackpackOpen = false;
-  bool isStatsOpen = false; // <-- ДОДАНО: Змінна стану для характеристик
+  bool isStatsOpen = false;
+  bool isPhoneOpen = false;
   String newsMessage = "Ласкаво просимо...";
 
   @override
@@ -75,9 +81,57 @@ class _MainGameScreenState extends State<MainGameScreen> {
       _saveService.saveGame(0);
       return;
     }
+    if (currentZone == "CITY" && name == LocationsData.cityBusinessCenter) {
+      setState(() {
+        currentRoom = LocationsData.cityBusinessCenter;
+        isInsideRoom = false;
+        newsMessage = "Ви зайшли в бізнес-центр.";
+        _syncWorldState();
+      });
+      _saveService.saveGame(0);
+      return;
+    }
+    if (currentZone == "CITY" && name == LocationsData.cityMall) {
+      setState(() {
+        currentRoom = LocationsData.cityMall;
+        isInsideRoom = false;
+        newsMessage = "Ви зайшли в ТРЦ.";
+        _syncWorldState();
+      });
+      _saveService.saveGame(0);
+      return;
+    }
+    if (currentZone == "CITY" && name == LocationsData.cityEliteResidential) {
+      setState(() {
+        currentRoom = LocationsData.cityEliteResidential;
+        isInsideRoom = false;
+        newsMessage = "Ви зайшли в єлітний ЖК.";
+        _syncWorldState();
+      });
+      _saveService.saveGame(0);
+      return;
+    }
+    if (currentZone == "CITY" && name == LocationsData.cityVipGym) {
+      setState(() {
+        currentRoom = LocationsData.cityVipGym;
+        isInsideRoom = false;
+        newsMessage = "Ви зайшли в VIP тренажерний зал.";
+        _syncWorldState();
+      });
+      _saveService.saveGame(0);
+      return;
+    }
     RoomData? roomData;
     if (currentZone == "COLLEGE") {
       roomData = LocationsData.collegeRooms[name];
+    } else if (currentZone == "CITY") {
+      roomData = LocationsData.cityRooms[name];
+    } else if (currentZone == "POOR_DISTRICT") {
+      roomData = LocationsData.poorDistrictRooms[name];
+    } else if (currentZone == "POOR_VILLAGE") {
+      roomData = LocationsData.poorVillageRooms[name];
+    } else if (currentZone == "OUT_OF_TOWN") {
+      roomData = LocationsData.outOfTownRooms[name];
     } else if (currentZone == "STREET" && currentStreetHouse != null) {
       roomData = LocationsData.getRoomsForStreetHouse(currentStreetHouse)?[name];
     } else if (currentZone == "STREET") {
@@ -120,55 +174,87 @@ class _MainGameScreenState extends State<MainGameScreen> {
           padding: const EdgeInsets.all(12.0),
           child: Row(
             children: [
-              MainLeftSidebar(
-                playerStats: _playerStats,
-                onBackpackTap: () => setState(() {
-                  isBackpackOpen = !isBackpackOpen;
-                  isStatsOpen = false;
-                  newsMessage = isBackpackOpen ? "Відкрито рюкзак." : "Ви повернулись.";
-                }),
-                onPersonTap: () => setState(() {
-                  isStatsOpen = !isStatsOpen;
-                  isBackpackOpen = false;
-                  newsMessage = isStatsOpen
-                      ? "Я майже звичайний хлопець, але у мене є бонуси..."
-                      : "Ви повернулись до гри.";
-                }),
-                onRefresh: () => setState(() {}),
-                // Знайди у своєму коді обробник натискання на шестерню (onDebugMenuTap)
-                onDebugMenuTap: () {
-                  // Navigator.popUntil повертає додаток до найпершого маршруту в стеку (StartScreen)
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                },
+              ListenableBuilder(
+                listenable: _playerStats,
+                builder: (context, _) => MainLeftSidebar(
+                  playerStats: _playerStats,
+                  onBackpackTap: () => setState(() {
+                    isBackpackOpen = !isBackpackOpen;
+                    isStatsOpen = false;
+                    isPhoneOpen = false;
+                    newsMessage = isBackpackOpen ? "Відкрито рюкзак." : "Ви повернулись.";
+                  }),
+                  onPhoneTap: () => setState(() {
+                    isPhoneOpen = true;
+                    isBackpackOpen = false;
+                    isStatsOpen = false;
+                  }),
+                  onPersonTap: () => setState(() {
+                    isStatsOpen = !isStatsOpen;
+                    isBackpackOpen = false;
+                    isPhoneOpen = false;
+                    newsMessage = isStatsOpen
+                        ? "Я майже звичайний хлопець, але у мене є бонуси..."
+                        : "Ви повернулись до гри.";
+                  }),
+                  onRefresh: () => setState(() {}),
+                  // Знайди у своєму коді обробник натискання на шестерню (onDebugMenuTap)
+                  onDebugMenuTap: () {
+                    // Navigator.popUntil повертає додаток до найпершого маршруту в стеку (StartScreen)
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  },
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
+                child: Stack(
                   children: [
-                    Expanded(
-                      flex: 70,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: GameTheme.bgDark,
-                            borderRadius: BorderRadius.circular(15)),
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          children: [
-                            _buildHeader(),
-                            const SizedBox(height: 10),
-                            Expanded(child: _buildMainContent()),
-                          ],
+                    Column(
+                      children: [
+                        Expanded(
+                          flex: 70,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: GameTheme.bgDark,
+                                borderRadius: BorderRadius.circular(15)),
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              children: [
+                                _buildHeader(),
+                                const SizedBox(height: 10),
+                                Expanded(child: _buildMainContent()),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Expanded(
+                          flex: 27,
+                          child: GameDialogPanel(
+                            message: newsMessage,
+                            navButtons: [_buildActionPanel()],
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (isPhoneOpen) ...[
+                      Positioned.fill(
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => setState(() => isPhoneOpen = false),
+                          child: Container(color: Colors.black54),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    Expanded(
-                      flex: 27,
-                      child: GameDialogPanel(
-                        message: newsMessage,
-                        navButtons: [_buildActionPanel()],
+                      Center(
+                        child: ListenableBuilder(
+                          listenable: _timeController,
+                          builder: (context, _) => PhoneView(
+                            onClose: () => setState(() => isPhoneOpen = false),
+                            timeController: _timeController,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
@@ -183,7 +269,11 @@ class _MainGameScreenState extends State<MainGameScreen> {
     return Row(
       children: [
         // Кнопка Назад
-        if (isInsideRoom || isBackpackOpen || isStatsOpen || (currentZone == "STREET" && currentStreetHouse != null))
+        if (isInsideRoom || isBackpackOpen || isStatsOpen ||
+            (currentZone == "STREET" && currentStreetHouse != null) ||
+            (currentZone == "CITY" && (currentRoom == LocationsData.cityBusinessCenter || currentRoom == LocationsData.cityMall || currentRoom == LocationsData.cityEliteResidential || currentRoom == LocationsData.cityVipGym)) ||
+            (currentZone == "POOR_DISTRICT") ||
+            currentZone == "POOR_DISTRICT" || currentZone == "POOR_VILLAGE" || currentZone == "OUT_OF_TOWN")
           _buildBackButton(),
 
         // Блок ДНЯ ТИЖНЯ (змінює тільки індекс)
@@ -233,9 +323,17 @@ class _MainGameScreenState extends State<MainGameScreen> {
               ? "ХАРАКТЕРИСТИКИ   "
               : (currentZone == "COLLEGE"
                   ? "КОЛЕДЖ (${LocationsData.getRoomDisplayName(currentRoom, isCollege: true)})"
-                  : currentZone == "STREET"
-                      ? "ВУЛИЦЯ (${LocationsData.getRoomDisplayName(currentRoom, isStreet: currentStreetHouse == null, streetHouseId: currentStreetHouse)})"
-                      : "ДІМ (${LocationsData.getRoomDisplayName(currentRoom, isCollege: false)})"),
+                  : currentZone == "CITY"
+                      ? "МІСТО (${LocationsData.getRoomDisplayName(currentRoom, isCity: true)})"
+                      : currentZone == "STREET"
+                          ? "ВУЛИЦЯ (${LocationsData.getRoomDisplayName(currentRoom, isStreet: currentStreetHouse == null, streetHouseId: currentStreetHouse)})"
+                          : currentZone == "POOR_DISTRICT"
+                              ? "БІДНИЙ Р-Н (${LocationsData.getRoomDisplayName(currentRoom, isPoorDistrict: true)})"
+                              : currentZone == "POOR_VILLAGE"
+                                  ? "СЕЛО БІДНИХ ЛЮДЕЙ (${LocationsData.getRoomDisplayName(currentRoom, isPoorVillage: true)})"
+                                  : currentZone == "OUT_OF_TOWN"
+                                      ? "НА МОРЕ (${LocationsData.getRoomDisplayName(currentRoom, isOutOfTown: true)})"
+                                      : "ДІМ (${LocationsData.getRoomDisplayName(currentRoom, isCollege: false)})"),
           style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
       ],
@@ -304,6 +402,69 @@ class _MainGameScreenState extends State<MainGameScreen> {
                 isInsideRoom = false;
                 newsMessage = "Ви повернулися на вулицю";
               }
+            } else if (currentZone == "CITY") {
+              if (currentRoom == LocationsData.cityBusinessCenter || currentRoom == LocationsData.cityMall || currentRoom == LocationsData.cityEliteResidential || currentRoom == LocationsData.cityVipGym) {
+                currentRoom = LocationsData.cityOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в місто";
+              } else if (isInsideRoom &&
+                  LocationsData.cityBusinessCenterRoomIds.contains(currentRoom)) {
+                currentRoom = LocationsData.cityBusinessCenter;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в бізнес-центр";
+              } else if (isInsideRoom &&
+                  LocationsData.cityMallRoomIds.contains(currentRoom)) {
+                currentRoom = LocationsData.cityMall;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в ТРЦ";
+              } else if (isInsideRoom &&
+                  LocationsData.cityEliteResidentialRoomIds.contains(currentRoom)) {
+                currentRoom = LocationsData.cityEliteResidential;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в єлітний ЖК";
+              } else if (isInsideRoom &&
+                  LocationsData.cityVipGymRoomIds.contains(currentRoom)) {
+                currentRoom = LocationsData.cityVipGym;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в VIP тренажерний зал";
+              } else {
+                isInsideRoom = false;
+                currentRoom = LocationsData.cityOverview;
+                newsMessage = "Ви повернулися в місто";
+              }
+            } else if (currentZone == "POOR_DISTRICT") {
+              if (isInsideRoom) {
+                currentRoom = LocationsData.poorDistrictOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в бідний р-н";
+              } else {
+                currentZone = "CITY";
+                currentRoom = LocationsData.cityOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в місто";
+              }
+            } else if (currentZone == "POOR_VILLAGE") {
+              if (isInsideRoom) {
+                currentRoom = LocationsData.poorVillageOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в село бідних людей";
+              } else {
+                currentZone = "CITY";
+                currentRoom = LocationsData.cityOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в місто";
+              }
+            } else if (currentZone == "OUT_OF_TOWN") {
+              if (isInsideRoom) {
+                currentRoom = LocationsData.outOfTownOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися на море";
+              } else {
+                currentZone = "CITY";
+                currentRoom = LocationsData.cityOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в місто";
+              }
             } else {
               isInsideRoom = false;
               if (currentZone == "STREET") {
@@ -336,7 +497,10 @@ class _MainGameScreenState extends State<MainGameScreen> {
     }
 
     if (isStatsOpen) {
-      return PlayerStatsView(playerStats: _playerStats);
+      return ListenableBuilder(
+        listenable: _playerStats,
+        builder: (context, _) => PlayerStatsView(playerStats: _playerStats),
+      );
     }
 
     if (currentZone == "HOME") {
@@ -366,6 +530,133 @@ class _MainGameScreenState extends State<MainGameScreen> {
             isInsideRoom: isInsideRoom,
             onRoomTap: _handleRoomEntry,
             onBack: () => setState(() { isInsideRoom = false; currentRoom = LocationsData.collegeHall; _syncWorldState(); }),
+            timeController: _timeController,
+            onNPCTap: (npc) { setState(() {}); },
+          );
+        },
+      );
+    }
+
+    if (currentZone == "CITY") {
+      return ListenableBuilder(
+        listenable: _timeController,
+        builder: (context, _) {
+          return CityView(
+            key: ValueKey("city_${currentRoom}_${_timeController.dateTime.hour}"),
+            currentRoom: currentRoom,
+            isInsideRoom: isInsideRoom,
+            onRoomTap: _handleRoomEntry,
+            onBack: () => setState(() {
+              if (currentRoom == LocationsData.cityBusinessCenter || currentRoom == LocationsData.cityMall || currentRoom == LocationsData.cityEliteResidential || currentRoom == LocationsData.cityVipGym) {
+                currentRoom = LocationsData.cityOverview;
+                isInsideRoom = false;
+              } else if (isInsideRoom &&
+                  LocationsData.cityBusinessCenterRoomIds.contains(currentRoom)) {
+                currentRoom = LocationsData.cityBusinessCenter;
+                isInsideRoom = false;
+              } else if (isInsideRoom &&
+                  LocationsData.cityMallRoomIds.contains(currentRoom)) {
+                currentRoom = LocationsData.cityMall;
+                isInsideRoom = false;
+              } else if (isInsideRoom &&
+                  LocationsData.cityEliteResidentialRoomIds.contains(currentRoom)) {
+                currentRoom = LocationsData.cityEliteResidential;
+                isInsideRoom = false;
+              } else if (isInsideRoom &&
+                  LocationsData.cityVipGymRoomIds.contains(currentRoom)) {
+                currentRoom = LocationsData.cityVipGym;
+                isInsideRoom = false;
+              } else {
+                isInsideRoom = false;
+                currentRoom = LocationsData.cityOverview;
+              }
+              _syncWorldState();
+            }),
+            timeController: _timeController,
+            onNPCTap: (npc) { setState(() {}); },
+          );
+        },
+      );
+    }
+
+    if (currentZone == "POOR_DISTRICT") {
+      return ListenableBuilder(
+        listenable: _timeController,
+        builder: (context, _) {
+          return PoorDistrictView(
+            key: ValueKey("poor_${currentRoom}_${_timeController.dateTime.hour}"),
+            currentRoom: currentRoom,
+            isInsideRoom: isInsideRoom,
+            onRoomTap: _handleRoomEntry,
+            onBack: () => setState(() {
+              if (isInsideRoom) {
+                currentRoom = LocationsData.poorDistrictOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в бідний р-н";
+              } else {
+                currentZone = "CITY";
+                currentRoom = LocationsData.cityOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в місто";
+              }
+              _syncWorldState();
+            }),
+            timeController: _timeController,
+            onNPCTap: (npc) { setState(() {}); },
+          );
+        },
+      );
+    }
+    if (currentZone == "POOR_VILLAGE") {
+      return ListenableBuilder(
+        listenable: _timeController,
+        builder: (context, _) {
+          return PoorVillageView(
+            key: ValueKey("poor_village_${currentRoom}_${_timeController.dateTime.hour}"),
+            currentRoom: currentRoom,
+            isInsideRoom: isInsideRoom,
+            onRoomTap: _handleRoomEntry,
+            onBack: () => setState(() {
+              if (isInsideRoom) {
+                currentRoom = LocationsData.poorVillageOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в село бідних людей";
+              } else {
+                currentZone = "CITY";
+                currentRoom = LocationsData.cityOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в місто";
+              }
+              _syncWorldState();
+            }),
+            timeController: _timeController,
+            onNPCTap: (npc) { setState(() {}); },
+          );
+        },
+      );
+    }
+    if (currentZone == "OUT_OF_TOWN") {
+      return ListenableBuilder(
+        listenable: _timeController,
+        builder: (context, _) {
+          return OutOfTownView(
+            key: ValueKey("out_of_town_${currentRoom}_${_timeController.dateTime.hour}"),
+            currentRoom: currentRoom,
+            isInsideRoom: isInsideRoom,
+            onRoomTap: _handleRoomEntry,
+            onBack: () => setState(() {
+              if (isInsideRoom) {
+                currentRoom = LocationsData.outOfTownOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися на море";
+              } else {
+                currentZone = "CITY";
+                currentRoom = LocationsData.cityOverview;
+                isInsideRoom = false;
+                newsMessage = "Ви повернулися в місто";
+              }
+              _syncWorldState();
+            }),
             timeController: _timeController,
             onNPCTap: (npc) { setState(() {}); },
           );
@@ -407,6 +698,23 @@ class _MainGameScreenState extends State<MainGameScreen> {
     return Center(child: Text("ЛОКАЦІЯ: $currentZone", style: const TextStyle(color: Colors.white)));
   }
 
+  Widget _buildSimpleZonePlaceholder(String title) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.grey[900],
+        child: Center(
+          child: Text(
+            title,
+            style: const TextStyle(color: Colors.white70, fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
+
   List<Widget> _buildNavigationButtons() {
     final list = <Widget>[];
     if (currentZone != "HOME") {
@@ -419,16 +727,8 @@ class _MainGameScreenState extends State<MainGameScreen> {
         _syncWorldState();
       })));
     }
-    if (currentZone != "CITY") {
-      list.add(_navBtn("В місто", () => setState(() {
-        currentZone = "CITY";
-        isStatsOpen = false;
-        isBackpackOpen = false;
-        _syncWorldState();
-      })));
-    }
     if (currentZone != "STREET") {
-      list.add(_navBtn("На вулицю", () => setState(() {
+      list.add(_navBtn("Вул. Шевченка", () => setState(() {
         currentZone = "STREET";
         currentStreetHouse = null;
         currentRoom = LocationsData.street;
@@ -442,6 +742,16 @@ class _MainGameScreenState extends State<MainGameScreen> {
       list.add(_navBtn("Коледж", () => setState(() {
         currentZone = "COLLEGE";
         currentRoom = LocationsData.collegeHall;
+        isInsideRoom = false;
+        isStatsOpen = false;
+        isBackpackOpen = false;
+        _syncWorldState();
+      })));
+    }
+    if (currentZone != "CITY") {
+      list.add(_navBtn("В місто", () => setState(() {
+        currentZone = "CITY";
+        currentRoom = LocationsData.cityOverview;
         isInsideRoom = false;
         isStatsOpen = false;
         isBackpackOpen = false;
@@ -494,54 +804,18 @@ class _MainGameScreenState extends State<MainGameScreen> {
             actionWidgets.add(
               ElevatedButton(
                 style: GameTheme.actionButtonStyle(),
-                onPressed: action.onExecute,
+                onPressed: () {
+                  action.onExecute();
+                  npc.setVar('phone_unlocked', true); // Розблоковка в телефоні після першого контакту
+                  setState(() {});
+                },
                 child: Text(action.label.toUpperCase(), textAlign: TextAlign.center),
               ),
             );
             actionWidgets.add(const SizedBox(height: 8));
           }
-
-          actionWidgets.add(
-            ElevatedButton(
-              style: GameTheme.actionButtonStyle(color: Colors.redAccent),
-                onPressed: () => setState(() {
-                  isInsideRoom = false;
-                  if (currentZone == "STREET" && currentStreetHouse != null) {
-                    currentRoom = LocationsData.getFirstRoomIdForStreetHouse(currentStreetHouse) ?? LocationsData.corridor;
-                  }
-                  _syncWorldState();
-                }),
-              child: const Text("← НАЗАД", textAlign: TextAlign.center),
-            ),
-          );
         } else {
-          // На вулиці: у будинку — кнопка в коридор або на вулицю
-          if (currentZone == "STREET" && currentStreetHouse != null) {
-            if (isInsideRoom) {
-              actionWidgets.add(ElevatedButton(
-                style: GameTheme.actionButtonStyle(color: Colors.redAccent),
-                onPressed: () => setState(() {
-                  isInsideRoom = false;
-                  currentRoom = LocationsData.getFirstRoomIdForStreetHouse(currentStreetHouse) ?? LocationsData.corridor;
-                  _syncWorldState();
-                }),
-                child: const Text("← НАЗАД", textAlign: TextAlign.center),
-              ));
-            } else {
-              actionWidgets.add(ElevatedButton(
-                style: GameTheme.actionButtonStyle(color: Colors.redAccent),
-                onPressed: () => setState(() {
-                  currentStreetHouse = null;
-                  currentRoom = LocationsData.street;
-                  isInsideRoom = false;
-                  _syncWorldState();
-                }),
-                child: const Text("← НА ВУЛИЦЮ", textAlign: TextAlign.center),
-              ));
-            }
-            actionWidgets.add(const SizedBox(height: 8));
-          }
-          // Звичайна навігація: кнопку поточної локації не показуємо
+          // Порядок: Дім, Вул. Шевченка, Коледж, (В МІСТО або Бідний р-н / Село / За місто)
           if (currentZone != "HOME") {
             actionWidgets.add(_navBtn("ДІМ", () => setState(() {
               currentZone = "HOME";
@@ -553,17 +827,8 @@ class _MainGameScreenState extends State<MainGameScreen> {
             })));
             actionWidgets.add(const SizedBox(height: 8));
           }
-          if (currentZone != "CITY") {
-            actionWidgets.add(_navBtn("В МІСТО", () => setState(() {
-              currentZone = "CITY";
-              isStatsOpen = false;
-              isBackpackOpen = false;
-              _syncWorldState();
-            })));
-            actionWidgets.add(const SizedBox(height: 8));
-          }
           if (currentZone != "STREET") {
-            actionWidgets.add(_navBtn("НА ВУЛИЦЮ", () => setState(() {
+            actionWidgets.add(_navBtn("ВУЛ. ШЕВЧЕНКА", () => setState(() {
               currentZone = "STREET";
               currentStreetHouse = null;
               currentRoom = LocationsData.street;
@@ -583,6 +848,59 @@ class _MainGameScreenState extends State<MainGameScreen> {
               isBackpackOpen = false;
               _syncWorldState();
             })));
+            actionWidgets.add(const SizedBox(height: 8));
+          }
+          if (currentZone != "CITY") {
+            actionWidgets.add(_navBtn("В МІСТО", () => setState(() {
+              currentZone = "CITY";
+              currentRoom = LocationsData.cityOverview;
+              isInsideRoom = false;
+              isStatsOpen = false;
+              isBackpackOpen = false;
+              _syncWorldState();
+            })));
+            actionWidgets.add(const SizedBox(height: 8));
+          }
+          if ((currentZone == "CITY" ||
+              currentZone == "POOR_VILLAGE" ||
+              currentZone == "OUT_OF_TOWN") &&
+              currentZone != "POOR_DISTRICT") {
+            actionWidgets.add(_navBtn("Бідний р-н", () => setState(() {
+              currentZone = "POOR_DISTRICT";
+              currentRoom = LocationsData.poorDistrictOverview;
+              isInsideRoom = false;
+              isStatsOpen = false;
+              isBackpackOpen = false;
+              _syncWorldState();
+            })));
+            actionWidgets.add(const SizedBox(height: 8));
+          }
+          if ((currentZone == "CITY" ||
+              currentZone == "POOR_DISTRICT" ||
+              currentZone == "OUT_OF_TOWN") &&
+              currentZone != "POOR_VILLAGE") {
+            actionWidgets.add(_navBtn("Село бідних людей", () => setState(() {
+              currentZone = "POOR_VILLAGE";
+              currentRoom = LocationsData.poorVillageOverview;
+              isInsideRoom = false;
+              isStatsOpen = false;
+              isBackpackOpen = false;
+              _syncWorldState();
+            })));
+            actionWidgets.add(const SizedBox(height: 8));
+          }
+          if (currentZone == "CITY" ||
+              currentZone == "POOR_DISTRICT" ||
+              currentZone == "POOR_VILLAGE") {
+            actionWidgets.add(_navBtn("На море", () => setState(() {
+              currentZone = "OUT_OF_TOWN";
+              currentRoom = LocationsData.outOfTownOverview;
+              isInsideRoom = false;
+              isStatsOpen = false;
+              isBackpackOpen = false;
+              _syncWorldState();
+            })));
+            actionWidgets.add(const SizedBox(height: 8));
           }
         }
 

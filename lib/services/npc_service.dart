@@ -7,41 +7,85 @@ class NPCService {
     NPCModel(
       id: 'mom',
       name: 'Мати',
+      fullName: 'Євгенія Бандерко',
+      age: 37,
+      avatarPath: 'lib/assets/npcs/mom/mom_koffe.jpg',
       schedule: [
         // БУДНІ (0,1,2,3,4)
         SchedulePoint(
-            hourStart: 7, hourEnd: 8, location: 'kitchen', actionLabel: 'Готує сніданок',
-            spritePath: 'lib/assets/npcs/mom/video/zavtrak.webm',
-            days: [0, 1, 2, 3, 4]),
+          hourStart: 7,
+          hourEnd: 8,
+          location: 'kitchen',
+          actionLabel: 'Готує сніданок',
+          spritePath: 'lib/assets/npcs/mom/video/zavtrak.webm',
+          days: [0, 1, 2, 3, 4],
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 8, hourEnd: 9, location: 'bathroom', actionLabel: 'Миється',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [0, 1, 2, 3, 4]),
+        SchedulePoint(
+          hourStart: 8,
+          hourEnd: 9,
+          location: 'bathroom',
+          actionLabel: 'Миється',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [0, 1, 2, 3, 4],
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 10, hourEnd: 18, location: 'work', days: [0, 1, 2, 3, 4], actionLabel: '', spritePath: ''),
+        SchedulePoint(
+          hourStart: 10,
+          hourEnd: 18,
+          location: 'work',
+          days: [0, 1, 2, 3, 4],
+          actionLabel: '',
+          spritePath: '',
+        ),
         //#############################################################################
-        SchedulePoint(//19-20 кімната перевдягаеться
-            hourStart: 19, hourEnd: 20, location: 'mom_room', actionLabel: 'Перевдягається',
-            spritePath: 'lib/assets/npcs/mom/video/zavtrak.webm',
-            days: [0, 1, 2, 3, 4]),
+        SchedulePoint(
+          //19-20 кімната перевдягаеться
+          hourStart: 19,
+          hourEnd: 20,
+          location: 'mom_room',
+          actionLabel: 'Перевдягається',
+          spritePath: 'lib/assets/npcs/mom/video/zavtrak.webm',
+          days: [0, 1, 2, 3, 4],
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 20, hourEnd: 21, location: 'kitchen', actionLabel: 'Готує вечерю',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [0, 1, 2, 3, 4]),
+        SchedulePoint(
+          hourStart: 20,
+          hourEnd: 21,
+          location: 'kitchen',
+          actionLabel: 'Готує вечерю',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [0, 1, 2, 3, 4],
+        ),
         //#############################################################################
 
         // СУБОТА (5)
-        SchedulePoint(hourStart: 9, hourEnd: 10, location: 'bathroom',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [5], actionLabel: ''),
+        SchedulePoint(
+          hourStart: 9,
+          hourEnd: 10,
+          location: 'bathroom',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [5],
+          actionLabel: '',
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 10, hourEnd: 12, location: 'kitchen',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [5], actionLabel: ''),
+        SchedulePoint(
+          hourStart: 10,
+          hourEnd: 12,
+          location: 'kitchen',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [5],
+          actionLabel: '',
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 21, hourEnd: 23, location: 'hall', actionLabel: 'Дивиться ТВ',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [5]),
+        SchedulePoint(
+          hourStart: 21,
+          hourEnd: 23,
+          location: 'hall',
+          actionLabel: 'Дивиться ТВ',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [5],
+        ),
         //#############################################################################
 
         // СПІЛЬНЕ (СОН)
@@ -57,47 +101,95 @@ class NPCService {
     //##############################--MOM--########################################
     NPCModel(
       id: 'yong_sister',
-      name: 'Kira',
+      name: 'Кіра',
+      fullName: 'Кіра',
+      age: 17,
+      avatarPath: 'lib/assets/npcs/kira/kira_ava.jpg',
       schedule: [
         // БУДНІ (0,1,2,3,4)
         SchedulePoint(
-            hourStart: 7, hourEnd: 8, location: 'bathroom', actionLabel: 'Приймає душ',
-            spritePath: 'lib/assets/npcs/kira/shower/shower.webm',
-            days: [0, 1, 2, 3, 4]),
+          hourStart: 7,
+          hourEnd: 8,
+          location: 'bathroom',
+          actionLabel: 'Приймає душ',
+          spritePath: 'lib/assets/npcs/kira/shower/shower.webm',
+          days: [0, 1, 2, 3, 4],
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 8, hourEnd: 9, location: 'kitchen', actionLabel: 'Снідае',
-            spritePath: 'lib/assets/npcs/kira/kitchen/kitchen.webm',
-            days: [0, 1, 2, 3, 4]),
+        SchedulePoint(
+          hourStart: 8,
+          hourEnd: 9,
+          location: 'kitchen',
+          actionLabel: 'Снідае',
+          spritePath: 'lib/assets/npcs/kira/kitchen/kitchen.webm',
+          days: [0, 1, 2, 3, 4],
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 10, hourEnd: 17, location: 'school', days: [0, 1, 2, 3, 4], actionLabel: '', spritePath: ''),
+        SchedulePoint(
+          hourStart: 10,
+          hourEnd: 17,
+          location: 'school',
+          days: [0, 1, 2, 3, 4],
+          actionLabel: '',
+          spritePath: '',
+        ),
         //#############################################################################
-        SchedulePoint(//19-20 кімната перевдягаеться
-            hourStart: 17, hourEnd: 19, location: 'kira_room', actionLabel: 'Перевдягається',
-            spritePath: 'lib/assets/npcs/mom/video/zavtrak.webm',
-            days: [0, 1, 2, 3, 4]),
+        SchedulePoint(
+          //19-20 кімната перевдягаеться
+          hourStart: 17,
+          hourEnd: 19,
+          location: 'kira_room',
+          actionLabel: 'Перевдягається',
+          spritePath: 'lib/assets/npcs/mom/video/zavtrak.webm',
+          days: [0, 1, 2, 3, 4],
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 19, hourEnd: 20, location: 'hall', actionLabel: 'Дивиться телевізор',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [0, 1, 2, 3, 4]),
-        SchedulePoint(hourStart: 20, hourEnd: 22, location: 'kira_room', actionLabel: 'Робить уроки',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [0, 1, 2, 3, 4]),
-
+        SchedulePoint(
+          hourStart: 19,
+          hourEnd: 20,
+          location: 'hall',
+          actionLabel: 'Дивиться телевізор',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [0, 1, 2, 3, 4],
+        ),
+        SchedulePoint(
+          hourStart: 20,
+          hourEnd: 22,
+          location: 'kira_room',
+          actionLabel: 'Робить уроки',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [0, 1, 2, 3, 4],
+        ),
 
         //#############################################################################
 
         // СУБОТА (5)
-        SchedulePoint(hourStart: 9, hourEnd: 10, location: 'bathroom',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [5], actionLabel: ''),
+        SchedulePoint(
+          hourStart: 9,
+          hourEnd: 10,
+          location: 'bathroom',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [5],
+          actionLabel: '',
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 10, hourEnd: 12, location: 'kitchen',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [5], actionLabel: ''),
+        SchedulePoint(
+          hourStart: 10,
+          hourEnd: 12,
+          location: 'kitchen',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [5],
+          actionLabel: '',
+        ),
         //#############################################################################
-        SchedulePoint(hourStart: 21, hourEnd: 23, location: 'hall', actionLabel: 'Дивиться ТВ',
-            spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
-            days: [5]),
+        SchedulePoint(
+          hourStart: 21,
+          hourEnd: 23,
+          location: 'hall',
+          actionLabel: 'Дивиться ТВ',
+          spritePath: 'lib/assets/npcs/mom/mom_relax.jpg',
+          days: [5],
+        ),
         //#############################################################################
 
         // СПІЛЬНЕ (СОН)
@@ -110,7 +202,42 @@ class NPCService {
         ),
       ],
     ),
+    //##############################--RITA--########################################
+    NPCModel(
+      id: 'rita',
+      name: 'Ріта',
+      fullName: 'Ріта',
+      age: 20,
+      avatarPath: 'lib/assets/npcs/rita/img/rita_ava.jpg',
+      schedule: [
+        SchedulePoint(
+          hourStart: 0,
+          hourEnd: 24,
+          location: 'rita_room',
+          actionLabel: 'У кімнаті',
+          spritePath: 'lib/assets/home_gg/rooms/rita_room.jpg',
+        ),
+      ],
+    ),
   ];
+
+  /// ID контактів, які завжди у телефоні (мама, Кіра, Ріта).
+  static const List<String> defaultContactIds = ['mom', 'yong_sister', 'rita'];
+
+  /// Поточна локація NPC за розкладом (год і день тижня).
+  String? getCurrentLocationId(NPCModel npc, int hour, int day) {
+    for (final point in npc.schedule) {
+      if (point.days != null && !point.days!.contains(day)) continue;
+      bool timeMatches;
+      if (point.hourStart <= point.hourEnd) {
+        timeMatches = hour >= point.hourStart && hour < point.hourEnd;
+      } else {
+        timeMatches = hour >= point.hourStart || hour < point.hourEnd;
+      }
+      if (timeMatches) return point.location;
+    }
+    return null;
+  }
 
   // Логіка: знайти, хто зараз у кімнаті
   List<NPCModel> getNPCsInRoom(String roomName, int hour, int day) {
@@ -143,12 +270,15 @@ class NPCService {
     }).toList(); // <--- .toList() має бути тут, після закриття .where
   }
 
-  /// Скидає стати та змінні всіх NPC для нової гри
+  /// Скидає стати та змінні всіх NPC для нової гри: хтивість 0, відношення 200, поведінка 0, збудження 0, вплив 0
   void reset() {
     for (final npc in allNPCs) {
       npc.trust = 0;
-      npc.love = 0;
+      npc.love = 40;
       npc.corruption = 0;
+      npc.lust = 0;
+      npc.behavior = 0;
+      npc.arousal = 0;
       npc.variables.clear();
     }
   }

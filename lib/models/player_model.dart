@@ -1,5 +1,5 @@
 class PlayerModel {
-  int money = 0;
+  int money = 2000;
   double energy = 100.0;
   double maxEnergy = 100.0;
   double arousal = 0.0;
@@ -21,7 +21,7 @@ class PlayerModel {
 
   /// Скидає всі стати до початкових значень (нова гра)
   void reset() {
-    money = 0;
+    money = 2000;
     energy = 100.0;
     maxEnergy = 100.0;
     arousal = 0.0;

@@ -72,9 +72,14 @@ class SaveService {
         'npcs': npcService.allNPCs
             .map((npc) => {
                   'id': npc.id,
+                  'fullName': npc.fullName,
+                  'age': npc.age,
                   'trust': npc.trust,
                   'love': npc.love,
                   'corruption': npc.corruption,
+                  'lust': npc.lust,
+                  'behavior': npc.behavior,
+                  'arousal': npc.arousal,
                   'variables': npc.variables,
                 })
             .toList(),
@@ -158,9 +163,14 @@ class SaveService {
               orElse: () => npcService.allNPCs.first,
             );
 
+            npc.fullName = npcData['fullName'] ?? npc.fullName;
+            npc.age = npcData['age'] ?? npc.age;
             npc.trust = npcData['trust'] ?? npc.trust;
             npc.love = npcData['love'] ?? npc.love;
             npc.corruption = npcData['corruption'] ?? npc.corruption;
+            npc.lust = npcData['lust'] ?? npc.lust;
+            npc.behavior = npcData['behavior'] ?? npc.behavior;
+            npc.arousal = npcData['arousal'] ?? npc.arousal;
             if (npcData['variables'] != null) {
               npc.variables = Map<String, dynamic>.from(npcData['variables'] as Map);
             }

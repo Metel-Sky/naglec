@@ -36,7 +36,62 @@ class PlayerStatsController with ChangeNotifier {
   }
 
   void changeMoney(int amount) {
-    player.money += amount;
+    player.money = (player.money + amount).clamp(0, 999999);
+    notifyListeners();
+  }
+
+  void changeVitality(int amount) {
+    player.vitality = (player.vitality + amount).clamp(0, 999);
+    notifyListeners();
+  }
+
+  void changeLust(int amount) {
+    player.lust = (player.lust + amount).clamp(0, maxLust);
+    notifyListeners();
+  }
+
+  void changePhysicalFitness(int amount) {
+    player.physical_fitness = (player.physical_fitness + amount).clamp(0, maxPhysical_fitness);
+    notifyListeners();
+  }
+
+  void changeFighting(int amount) {
+    player.fighting = (player.fighting + amount).clamp(0, maxFighting);
+    notifyListeners();
+  }
+
+  void changeProgramming(int amount) {
+    player.programming = (player.programming + amount).clamp(0, 100);
+    notifyListeners();
+  }
+
+  void changeHacking(int amount) {
+    player.hacking = (player.hacking + amount).clamp(0, 100);
+    notifyListeners();
+  }
+
+  void changeLockpicking(int amount) {
+    player.lockpicking = (player.lockpicking + amount).clamp(0, 100);
+    notifyListeners();
+  }
+
+  void changeStealthMode(int amount) {
+    player.stealth_mode = (player.stealth_mode + amount).clamp(0, 100);
+    notifyListeners();
+  }
+
+  void changeInfluence(int amount) {
+    player.influence = (player.influence + amount).clamp(0, 100);
+    notifyListeners();
+  }
+
+  void changeMassageExperience(int amount) {
+    player.massage_experience = (player.massage_experience + amount).clamp(0, maxMassage_experience);
+    notifyListeners();
+  }
+
+  void changeCollegeSuccess(int amount) {
+    player.college_success = (player.college_success + amount).clamp(0, maxCollege_success);
     notifyListeners();
   }
 

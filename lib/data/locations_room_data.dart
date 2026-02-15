@@ -347,12 +347,6 @@ class LocationsData {
         description: "Гостьова кімната.",
         isLocked: false,
       ),
-      auntNephewRoom: RoomData(
-        displayName: "Кімната племінника",
-        imagePath: "lib/assets/houses/aunt_home.jpg",
-        description: "Кімната племінника.",
-        isLocked: false,
-      ),
       auntNieceRoom: RoomData(
         displayName: "Кімната племінниці",
         imagePath: "lib/assets/houses/aunt_home.jpg",
@@ -364,18 +358,6 @@ class LocationsData {
         imagePath: "lib/assets/houses/aunt_home.jpg",
         description: "Зал.",
         isLocked: false,
-      ),
-      auntYard: RoomData(
-        displayName: "Подвір'я",
-        imagePath: "lib/assets/houses/aunt_home.jpg",
-        description: "Подвір'я.",
-        isLocked: false,
-      ),
-      auntBasement: RoomData(
-        displayName: "Підвал",
-        imagePath: "lib/assets/houses/aunt_home.jpg",
-        description: "Підвал.",
-        isLocked: true,
       ),
     },
     ///---------------------Будинок сусідки----------------------------------------
@@ -390,12 +372,6 @@ class LocationsData {
         displayName: "Кухня",
         imagePath: "lib/assets/houses/neighbor.jpg",
         description: "Кухня у сусідів.",
-        isLocked: false,
-      ),
-      neighborRoom: RoomData(
-        displayName: "Кімната сусіда",
-        imagePath: "lib/assets/houses/neighbor.jpg",
-        description: "Кімната сусіда.",
         isLocked: false,
       ),
       neighborBathroom: RoomData(
@@ -427,18 +403,6 @@ class LocationsData {
         imagePath: "lib/assets/houses/neighbor.jpg",
         description: "Зал.",
         isLocked: false,
-      ),
-      neighborYard: RoomData(
-        displayName: "Подвір'я",
-        imagePath: "lib/assets/houses/neighbor.jpg",
-        description: "Подвір'я.",
-        isLocked: false,
-      ),
-      neighborBasement: RoomData(
-        displayName: "Підвал",
-        imagePath: "lib/assets/houses/neighbor.jpg",
-        description: "Підвал.",
-        isLocked: true,
       ),
     },
     ///---------------------Будинок однокласниці----------------------------------------
@@ -473,12 +437,6 @@ class LocationsData {
         description: "Кімната батьків.",
         isLocked: false,
       ),
-      classmateBrotherRoom: RoomData(
-        displayName: "Кімната брата",
-        imagePath: "lib/assets/houses/classmate_home.jpg",
-        description: "Кімната брата.",
-        isLocked: false,
-      ),
       classmateSisterRoom: RoomData(
         displayName: "Кімната сестри",
         imagePath: "lib/assets/houses/classmate_home.jpg",
@@ -490,18 +448,6 @@ class LocationsData {
         imagePath: "lib/assets/houses/classmate_home.jpg",
         description: "Зал.",
         isLocked: false,
-      ),
-      classmateYard: RoomData(
-        displayName: "Подвір'я",
-        imagePath: "lib/assets/houses/classmate_home.jpg",
-        description: "Подвір'я.",
-        isLocked: false,
-      ),
-      classmateBasement: RoomData(
-        displayName: "Підвал",
-        imagePath: "lib/assets/houses/classmate_home.jpg",
-        description: "Підвал.",
-        isLocked: true,
       ),
     },
   };
@@ -524,24 +470,18 @@ class LocationsData {
         auntRoom,
         auntBathroom,
         auntGuestRoom,
-        auntNephewRoom,
         auntNieceRoom,
         auntHall,
-        auntYard,
-        auntBasement,
       ];
     }
     if (houseId == neighborHouse) {
       return [
         neighborKitchen,
-        neighborRoom,
         neighborBathroom,
         neighborParentsRoom,
         neighborChild1,
         neighborChild2,
         neighborHall,
-        neighborYard,
-        neighborBasement,
       ];
     }
     if (houseId == classmateHouse) {
@@ -550,11 +490,8 @@ class LocationsData {
         classmateRoom,
         classmateBathroom,
         classmateParentsRoom,
-        classmateBrotherRoom,
         classmateSisterRoom,
         classmateHall,
-        classmateYard,
-        classmateBasement,
       ];
     }
     return [];
@@ -575,12 +512,442 @@ class LocationsData {
     return streetHouseRooms[houseId];
   }
 
+  // --- City (місто): 6 слотів ---
+  static const String cityOverview = 'city';
+  static const String cityBusinessCenter = 'city_business_center';
+  static const String cityBcLogistics = 'city_bc_logistics';
+  static const String cityBcConstruction = 'city_bc_construction';
+  static const String cityBcCallCenter = 'city_bc_call_center';
+  static const String cityBcRockefellerOffice = 'city_bc_rockefeller_office';
+  static const String cityMall = 'city_mall';
+  static const String cityCarDealership = 'city_car_dealership';
+  static const String cityPark = 'city_park';
+  static const String cityEliteResidential = 'city_elite_residential';
+  static const String cityVipGym = 'city_vip_gym';
+  static const String cityVipGymReception = 'city_vip_gym_reception';
+  static const String cityVipGymHall = 'city_vip_gym_hall';
+  static const String cityVipGymWrestling = 'city_vip_gym_wrestling';
+  static const String cityVipGymSpa = 'city_vip_gym_spa';
+  static const String cityVipGymSauna = 'city_vip_gym_sauna';
+  static const String cityVipGymMassage = 'city_vip_gym_massage';
+
+  static const List<String> cityVipGymRoomIds = [
+    cityVipGymReception,
+    cityVipGymHall,
+    cityVipGymWrestling,
+    cityVipGymSpa,
+    cityVipGymSauna,
+    cityVipGymMassage,
+  ];
+
+  // --- Бідний район ---
+  static const String poorDistrictOverview = 'poor_district_overview';
+  static const String poorDistrictGym = 'poor_district_gym';
+  static const String poorDistrictShop = 'poor_district_shop';
+  static const String poorDistrictStripBar = 'poor_district_strip_bar';
+  static const String poorDistrictDarkAlley = 'poor_district_dark_alley';
+  static const String poorDistrictResidential = 'poor_district_residential';
+  static const String poorDistrictHotel = 'poor_district_hotel';
+
+  static const List<String> poorDistrictRoomIds = [
+    poorDistrictGym,
+    poorDistrictShop,
+    poorDistrictStripBar,
+    poorDistrictDarkAlley,
+    poorDistrictResidential,
+    poorDistrictHotel,
+  ];
+
+  // --- Село бідних людей ---
+  static const String poorVillageOverview = 'poor_village_overview';
+  static const String poorVillageHouseHeadTeacher = 'poor_village_house_head_teacher';
+  static const String poorVillageHouseKaty = 'poor_village_house_katy';
+  static const String poorVillageHouseEnglishwoman = 'poor_village_house_englishwoman';
+  static const String poorVillageHouseLogisticsBoss = 'poor_village_house_logistics_boss';
+  static const String poorVillageHouseFlowerOwner = 'poor_village_house_flower_owner';
+  static const String poorVillageHouseCallCenterBoss = 'poor_village_house_call_center_boss';
+
+  static const List<String> poorVillageRoomIds = [
+    poorVillageHouseHeadTeacher,
+    poorVillageHouseKaty,
+    poorVillageHouseEnglishwoman,
+    poorVillageHouseLogisticsBoss,
+    poorVillageHouseFlowerOwner,
+    poorVillageHouseCallCenterBoss,
+  ];
+
+  // --- На море (за місто) ---
+  static const String outOfTownOverview = 'out_of_town_overview';
+  static const String outOfTownPromenade = 'out_of_town_promenade';
+  static const String outOfTownBeach = 'out_of_town_beach';
+  static const String outOfTownClub = 'out_of_town_club';
+  static const String outOfTownPier = 'out_of_town_pier';
+
+  static const List<String> outOfTownRoomIds = [
+    outOfTownPromenade,
+    outOfTownBeach,
+    outOfTownClub,
+    outOfTownPier,
+  ];
+
+  static const List<String> cityBusinessCenterRoomIds = [
+    cityBcLogistics,
+    cityBcConstruction,
+    cityBcCallCenter,
+    cityBcRockefellerOffice,
+  ];
+
+  static const String cityMallShop = 'city_mall_shop';
+  static const String cityMallPharmacy = 'city_mall_pharmacy';
+  static const String cityMallFlowerShop = 'city_mall_flower_shop';
+  static const String cityMallSexShop = 'city_mall_sex_shop';
+  static const String cityMallElectronics = 'city_mall_electronics';
+  static const String cityMallCinema = 'city_mall_cinema';
+
+  static const List<String> cityMallRoomIds = [
+    cityMallShop,
+    cityMallPharmacy,
+    cityMallFlowerShop,
+    cityMallSexShop,
+    cityMallElectronics,
+    cityMallCinema,
+  ];
+
+  static const String cityEliteApartment1 = 'city_elite_apt_1';
+  static const String cityEliteApartment2 = 'city_elite_apt_2';
+  static const String cityEliteApartment3 = 'city_elite_apt_3';
+  static const String cityEliteApartment4 = 'city_elite_apt_4';
+  static const String cityEliteApartment5 = 'city_elite_apt_5';
+  static const String cityEliteApartment6 = 'city_elite_apt_6';
+
+  static const List<String> cityEliteResidentialRoomIds = [
+    cityEliteApartment1,
+    cityEliteApartment2,
+    cityEliteApartment3,
+    cityEliteApartment4,
+    cityEliteApartment5,
+    cityEliteApartment6,
+  ];
+
+  static const Map<String, RoomData> cityRooms = {
+    cityOverview: RoomData(
+      displayName: "Місто",
+      imagePath: "lib/assets/home_gg/rooms/default.jpg",
+      description: "Центр міста.",
+      isLocked: false,
+    ),
+    cityBusinessCenter: RoomData(
+      displayName: "Бізнес-центр",
+      imagePath: "lib/assets/houses/biznes_centr.jpg",
+      description: "Бізнес-центр.",
+      isLocked: false,
+    ),
+    cityBcLogistics: RoomData(
+      displayName: "ЛОГІСТИЧНА КОМПАНІЯ",
+      imagePath: "lib/assets/houses/company/logistic.png",
+      description: "Логістична компанія.",
+      isLocked: false,
+    ),
+    cityBcConstruction: RoomData(
+      displayName: "БУДІВЕЛЬНА КОМПАНІЯ",
+      imagePath: "lib/assets/houses/company/bud_sam.png",
+      description: "Будівельна компанія.",
+      isLocked: false,
+    ),
+    cityBcCallCenter: RoomData(
+      displayName: "КОЛЛ-ЦЕНТР",
+      imagePath: "lib/assets/houses/company/coll-centr.png",
+      description: "Колл-центр.",
+      isLocked: false,
+    ),
+    cityBcRockefellerOffice: RoomData(
+      displayName: "ОФІС РОКФЕЛЕРА",
+      imagePath: "lib/assets/houses/company/rockfeller.png",
+      description: "Офіс Рокфелера.",
+      isLocked: false,
+    ),
+    cityMall: RoomData(
+      displayName: "ТРЦ",
+      imagePath: "lib/assets/houses/trc.jpg",
+      description: "Торгово-розважальний центр.",
+      isLocked: false,
+    ),
+    cityMallShop: RoomData(
+      displayName: "МАГАЗИН",
+      imagePath: "lib/assets/houses/trc.jpg",
+      description: "Магазин.",
+      isLocked: false,
+    ),
+    cityMallPharmacy: RoomData(
+      displayName: "АПТЕКА",
+      imagePath: "lib/assets/houses/trc.jpg",
+      description: "Аптека.",
+      isLocked: false,
+    ),
+    cityMallFlowerShop: RoomData(
+      displayName: "КВІТКОВИЙ МАГАЗИН",
+      imagePath: "lib/assets/houses/trc.jpg",
+      description: "Квітковий магазин.",
+      isLocked: false,
+    ),
+    cityMallSexShop: RoomData(
+      displayName: "СЕКС-ШОП",
+      imagePath: "lib/assets/houses/trc.jpg",
+      description: "Секс-шоп.",
+      isLocked: false,
+    ),
+    cityMallElectronics: RoomData(
+      displayName: "МАГАЗИН ЕЛЕКТРОНІКИ",
+      imagePath: "lib/assets/houses/trc.jpg",
+      description: "Магазин електроніки.",
+      isLocked: false,
+    ),
+    cityMallCinema: RoomData(
+      displayName: "КІНОТЕАТР",
+      imagePath: "lib/assets/houses/trc.jpg",
+      description: "Кінотеатр.",
+      isLocked: false,
+    ),
+    cityCarDealership: RoomData(
+      displayName: "Автосалон",
+      imagePath: "lib/assets/houses/auto_centr.jpeg",
+      description: "Автосалон.",
+      isLocked: false,
+    ),
+    cityPark: RoomData(
+      displayName: "Парк",
+      imagePath: "lib/assets/houses/park.jpg",
+      description: "Міський парк.",
+      isLocked: false,
+    ),
+    cityEliteResidential: RoomData(
+      displayName: "Єлітний ЖК",
+      imagePath: "lib/assets/houses/elit_gk.jpg",
+      description: "Єлітний житловий комплекс.",
+      isLocked: false,
+    ),
+    cityEliteApartment1: RoomData(
+      displayName: "Квартира 1",
+      imagePath: "lib/assets/houses/elit_gk.jpg",
+      description: "Квартира 1.",
+      isLocked: false,
+    ),
+    cityEliteApartment2: RoomData(
+      displayName: "Квартира 2",
+      imagePath: "lib/assets/houses/elit_gk.jpg",
+      description: "Квартира 2.",
+      isLocked: false,
+    ),
+    cityEliteApartment3: RoomData(
+      displayName: "Квартира 3",
+      imagePath: "lib/assets/houses/elit_gk.jpg",
+      description: "Квартира 3.",
+      isLocked: false,
+    ),
+    cityEliteApartment4: RoomData(
+      displayName: "Квартира 4",
+      imagePath: "lib/assets/houses/elit_gk.jpg",
+      description: "Квартира 4.",
+      isLocked: false,
+    ),
+    cityEliteApartment5: RoomData(
+      displayName: "Квартира 5",
+      imagePath: "lib/assets/houses/elit_gk.jpg",
+      description: "Квартира 5.",
+      isLocked: false,
+    ),
+    cityEliteApartment6: RoomData(
+      displayName: "Квартира 6",
+      imagePath: "lib/assets/houses/elit_gk.jpg",
+      description: "Квартира 6.",
+      isLocked: false,
+    ),
+    cityVipGym: RoomData(
+      displayName: "VIP тренажерний зал",
+      imagePath: "lib/assets/houses/gym.jpg",
+      description: "VIP тренажерний зал.",
+      isLocked: false,
+    ),
+    cityVipGymReception: RoomData(
+      displayName: "Рецепція",
+      imagePath: "lib/assets/houses/gym.jpg",
+      description: "Рецепція VIP тренажерного залу.",
+      isLocked: false,
+    ),
+    cityVipGymHall: RoomData(
+      displayName: "Зал",
+      imagePath: "lib/assets/houses/gym.jpg",
+      description: "Зал.",
+      isLocked: false,
+    ),
+    cityVipGymWrestling: RoomData(
+      displayName: "Секція боротьби",
+      imagePath: "lib/assets/houses/gym.jpg",
+      description: "Секція боротьби.",
+      isLocked: false,
+    ),
+    cityVipGymSpa: RoomData(
+      displayName: "Спа",
+      imagePath: "lib/assets/houses/gym.jpg",
+      description: "Спа.",
+      isLocked: false,
+    ),
+    cityVipGymSauna: RoomData(
+      displayName: "Сауна",
+      imagePath: "lib/assets/houses/gym.jpg",
+      description: "Сауна.",
+      isLocked: false,
+    ),
+    cityVipGymMassage: RoomData(
+      displayName: "Массажний кабінет",
+      imagePath: "lib/assets/houses/gym.jpg",
+      description: "Массажний кабінет.",
+      isLocked: false,
+    ),
+  };
+
+  static const Map<String, RoomData> poorDistrictRooms = {
+    poorDistrictOverview: RoomData(
+      displayName: "Бідний р-н",
+      imagePath: "lib/assets/home_gg/rooms/default.jpg",
+      description: "Бідний район.",
+      isLocked: false,
+    ),
+    poorDistrictGym: RoomData(
+      displayName: "Качалка",
+      imagePath: "lib/assets/houses/old_gym.jpg",
+      description: "Качалка.",
+      isLocked: false,
+    ),
+    poorDistrictShop: RoomData(
+      displayName: "Магазин",
+      imagePath: "lib/assets/houses/store.jpg",
+      description: "Магазин.",
+      isLocked: false,
+    ),
+    poorDistrictStripBar: RoomData(
+      displayName: "Стріп бар",
+      imagePath: "lib/assets/houses/strip_bar.jpg",
+      description: "Стріп бар.",
+      isLocked: false,
+    ),
+    poorDistrictDarkAlley: RoomData(
+      displayName: "Темний провулок",
+      imagePath: "lib/assets/houses/dark_alley.jpg",
+      description: "Темний провулок.",
+      isLocked: false,
+    ),
+    poorDistrictResidential: RoomData(
+      displayName: "Спальні будинки",
+      imagePath: "lib/assets/houses/hrushchevki-spb.jpg",
+      description: "Спальні будинки.",
+      isLocked: false,
+    ),
+    poorDistrictHotel: RoomData(
+      displayName: "Готель",
+      imagePath: "lib/assets/houses/hotel.jpg",
+      description: "Готель.",
+      isLocked: false,
+    ),
+  };
+
+  static const Map<String, RoomData> poorVillageRooms = {
+    poorVillageOverview: RoomData(
+      displayName: "Село бідних людей",
+      imagePath: "lib/assets/home_gg/rooms/default.jpg",
+      description: "Село бідних людей.",
+      isLocked: false,
+    ),
+    poorVillageHouseHeadTeacher: RoomData(
+      displayName: "ДІМ ЗАВУЧА",
+      imagePath: "lib/assets/houses/zavuch.webp",
+      description: "Дім завуча.",
+      isLocked: false,
+    ),
+    poorVillageHouseKaty: RoomData(
+      displayName: "ДІМ КАТІ",
+      imagePath: "lib/assets/houses/home_katia.jpg",
+      description: "Дім Каті.",
+      isLocked: false,
+    ),
+    poorVillageHouseEnglishwoman: RoomData(
+      displayName: "ДІМ АНГЛІЧАНКИ",
+      imagePath: "lib/assets/houses/english_teach.jpg",
+      description: "Дім англічанки.",
+      isLocked: false,
+    ),
+    poorVillageHouseLogisticsBoss: RoomData(
+      displayName: "ДІМ НАЧАЛЬНИКА ЛОГІСТИЧНОЇ КОМПАНІЇ",
+      imagePath: "lib/assets/houses/chef_logist.webp",
+      description: "Дім начальника логістичної компанії.",
+      isLocked: false,
+    ),
+    poorVillageHouseFlowerOwner: RoomData(
+      displayName: "ДІМ ВЛАСНИЦІ КВІТКОВОГО МАГАЗИНУ",
+      imagePath: "lib/assets/houses/flowers_chef.jpeg",
+      description: "Дім власниці квіткового магазину.",
+      isLocked: false,
+    ),
+    poorVillageHouseCallCenterBoss: RoomData(
+      displayName: "ДІМ ШЕФА КОЛЛ-ЦЕНТРУ",
+      imagePath: "lib/assets/houses/loft5.jpg",
+      description: "Дім шефа колл-центру.",
+      isLocked: false,
+    ),
+  };
+
+  static const Map<String, RoomData> outOfTownRooms = {
+    outOfTownOverview: RoomData(
+      displayName: "На море",
+      imagePath: "lib/assets/home_gg/rooms/default.jpg",
+      description: "На море.",
+      isLocked: false,
+    ),
+    outOfTownPromenade: RoomData(
+      displayName: "Набережна",
+      imagePath: "lib/assets/houses/naberezhna-alikante.jpeg",
+      description: "Набережна.",
+      isLocked: false,
+    ),
+    outOfTownBeach: RoomData(
+      displayName: "Пляж",
+      imagePath: "lib/assets/houses/plyagh.jpg",
+      description: "Пляж.",
+      isLocked: false,
+    ),
+    outOfTownClub: RoomData(
+      displayName: "Клуб",
+      imagePath: "lib/assets/houses/club.jpg",
+      description: "Клуб.",
+      isLocked: false,
+    ),
+    outOfTownPier: RoomData(
+      displayName: "Пристань",
+      imagePath: "lib/assets/houses/titulnaja.jpg",
+      description: "Пристань.",
+      isLocked: false,
+    ),
+  };
+
+  static const List<String> cityRoomIds = [
+    cityBusinessCenter,
+    cityMall,
+    cityCarDealership,
+    cityPark,
+    cityEliteResidential,
+    cityVipGym,
+  ];
+
   /// Назва кімнати для відображення в слотах та заголовку.
   /// Якщо [streetHouseId] задано, пошук у кімнатах цього будинку (friend_kitchen тощо).
   static String getRoomDisplayName(
     String roomId, {
     bool isCollege = false,
     bool isStreet = false,
+    bool isCity = false,
+    bool isPoorDistrict = false,
+    bool isPoorVillage = false,
+    bool isOutOfTown = false,
     String? streetHouseId,
   }) {
     if (isCollege) return collegeRooms[roomId]?.displayName ?? roomId;
@@ -589,7 +956,59 @@ class LocationsData {
       if (name != null) return name;
     }
     if (isStreet) return streetRooms[roomId]?.displayName ?? roomId;
+    if (isCity) return cityRooms[roomId]?.displayName ?? roomId;
+    if (isPoorDistrict) return poorDistrictRooms[roomId]?.displayName ?? roomId;
+    if (isPoorVillage) return poorVillageRooms[roomId]?.displayName ?? roomId;
+    if (isOutOfTown) return outOfTownRooms[roomId]?.displayName ?? roomId;
     return homeRooms[roomId]?.displayName ?? roomId;
+  }
+
+  /// Назва локації за roomId для будь-якої зони (телефон, логи тощо).
+  static String getLocationDisplayName(String roomId) {
+    final fromHome = homeRooms[roomId]?.displayName;
+    if (fromHome != null) return fromHome;
+    final fromCollege = collegeRooms[roomId]?.displayName;
+    if (fromCollege != null) return fromCollege;
+    final fromCity = cityRooms[roomId]?.displayName;
+    if (fromCity != null) return fromCity;
+    final fromPoorDistrict = poorDistrictRooms[roomId]?.displayName;
+    if (fromPoorDistrict != null) return fromPoorDistrict;
+    final fromPoorVillage = poorVillageRooms[roomId]?.displayName;
+    if (fromPoorVillage != null) return fromPoorVillage;
+    final fromOutOfTown = outOfTownRooms[roomId]?.displayName;
+    if (fromOutOfTown != null) return fromOutOfTown;
+    final fromStreet = streetRooms[roomId]?.displayName;
+    if (fromStreet != null) return fromStreet;
+    for (final houseRooms in streetHouseRooms.values) {
+      final name = houseRooms[roomId]?.displayName;
+      if (name != null) return name;
+    }
+    final fromOffice = officeRooms[roomId]?.displayName;
+    if (fromOffice != null) return fromOffice;
+    return roomId;
+  }
+
+  /// Загальна локація для телефону: Дім, Коледж, ТРЦ тощо (без конкретної кімнати).
+  static String getGeneralLocationName(String roomId) {
+    if (homeRooms.containsKey(roomId)) return 'Дім';
+    if (collegeRooms.containsKey(roomId)) return 'Коледж';
+    if (streetRooms.containsKey(roomId)) return 'Вулиця';
+    for (final houseRooms in streetHouseRooms.values) {
+      if (houseRooms.containsKey(roomId)) return 'Вулиця';
+    }
+    if (roomId == cityOverview) return 'Місто';
+    if (roomId == cityBusinessCenter || cityBusinessCenterRoomIds.contains(roomId)) return 'Бізнес-центр';
+    if (roomId == cityMall || cityMallRoomIds.contains(roomId)) return 'ТРЦ';
+    if (roomId == cityPark) return 'Парк';
+    if (roomId == cityCarDealership) return 'Автосалон';
+    if (roomId == cityEliteResidential || cityEliteResidentialRoomIds.contains(roomId)) return 'Єлітний ЖК';
+    if (roomId == cityVipGym || cityVipGymRoomIds.contains(roomId)) return 'VIP зал';
+    if (cityRooms.containsKey(roomId)) return 'Місто';
+    if (poorDistrictRooms.containsKey(roomId)) return 'Бідний р-н';
+    if (poorVillageRooms.containsKey(roomId)) return 'Село';
+    if (outOfTownRooms.containsKey(roomId)) return 'На море';
+    if (officeRooms.containsKey(roomId)) return 'Офіс';
+    return roomId;
   }
 
   static const Map<String, RoomData> officeRooms = {

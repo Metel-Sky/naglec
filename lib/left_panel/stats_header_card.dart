@@ -23,7 +23,7 @@ class StatsHeaderCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildStatWithCheats(
-            "Стан:",
+            "Енергія:",
             stats.energyStatus,
                 () => stats.changeEnergy(-25),
                 () => stats.changeEnergy(25),
@@ -40,7 +40,7 @@ class StatsHeaderCard extends StatelessWidget {
     );
   }
 
-  // Чіти для СТАНУ та ЗБУДЖЕННЯ
+  // Чіти для ЕНЕРГІЇ та ЗБУДЖЕННЯ
   Widget _buildStatWithCheats(String label, String value, VoidCallback onSub, VoidCallback onAdd) {
     return Row(
       children: [

@@ -12,6 +12,7 @@ import 'stats_girls_card.dart';
 class MainLeftSidebar extends StatelessWidget {
   final PlayerStatsController playerStats;
   final VoidCallback onBackpackTap;
+  final VoidCallback onPhoneTap;
   final VoidCallback onPersonTap;
   final VoidCallback onRefresh;
   final VoidCallback onDebugMenuTap;
@@ -20,6 +21,7 @@ class MainLeftSidebar extends StatelessWidget {
     super.key,
     required this.playerStats,
     required this.onBackpackTap,
+    required this.onPhoneTap,
     required this.onPersonTap,
     required this.onRefresh,
     required this.onDebugMenuTap,
@@ -64,11 +66,12 @@ class MainLeftSidebar extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
 
-                  // Головне меню (Рюкзак)
+                  // Головне меню (Рюкзак, Телефон)
                   Expanded(
                     flex: 30,
                     child: StatsMainMenu(
                       onBackpackTap: onBackpackTap,
+                      onPhoneTap: onPhoneTap,
                     ),
                   ),
                   const SizedBox(height: 10),

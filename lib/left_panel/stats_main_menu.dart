@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../theme/game_theme.dart';
 
 class StatsMainMenu extends StatelessWidget {
-  // Цей рядок МАЄ бути тут
   final VoidCallback onBackpackTap;
+  final VoidCallback onPhoneTap;
 
-  // Конструктор МАЄ приймати цей параметр
   const StatsMainMenu({
     super.key,
     required this.onBackpackTap,
+    required this.onPhoneTap,
   });
 
   @override
@@ -48,10 +48,13 @@ class StatsMainMenu extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Expanded(
-          child: Container(
-            decoration: GameTheme.cardDecoration(radius: 15),
-            child: const Center(
-              child: Icon(Icons.phone_iphone, size: 45, color: GameTheme.bgDark),
+          child: GestureDetector(
+            onTap: onPhoneTap,
+            child: Container(
+              decoration: GameTheme.cardDecoration(radius: 15),
+              child: const Center(
+                child: Icon(Icons.phone_iphone, size: 45, color: GameTheme.bgDark),
+              ),
             ),
           ),
         ),
