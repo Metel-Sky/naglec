@@ -1,0 +1,12 @@
+lib/assets/npcs/mom/video/mom_kitch_1.webm
+lib/assets/npcs/mom/video/mom_kitch_red_1.webm
+lib/assets/npcs/mom/video/shower_25_use_1.webm
+lib/assets/npcs/mom/video/pereodevaetsa.mp4
+lib/assets/npcs/mom/video/pereodevaetsa_1.mp4
+lib/assets/npcs/mom/video/mom_sleep_1.webm
+lib/assets/npcs/mom/video/mom_sleep_2.webm
+lib/assets/npcs/mom/video/sleep_gola_1.webm
+lib/assets/npcs/mom/video/mom_work_place.jpg
+lib/assets/npcs/mom/video/work_01.webm
+lib/assets/npcs/mom/video/work_02.webm
+lib/assets/npcs/mom/video/work_03.webm

@@ -1,0 +1,51 @@
+---
+description: Нові NPC — папка асетів, pubspec, портрет галереї vs аватар
+globs: lib/npcs/**/*.dart
+alwaysApply: false
+---
+
+# Новий NPC: асети та pubspec
+
+При додаванні нового NPC (`lib/npcs/<id>/<id>_npc.dart`):
+
+1. **Папка** `lib/assets/npcs/<id>/` (мінімум два файли — див. нижче).
+2. **`pubspec.yaml`**: рядок `- lib/assets/npcs/<id>/` у `assets:` (за алфавітом серед інших `lib/assets/npcs/...`).
+3. У коді — шляхи `lib/assets/npcs/<id>/...`.
+
+Не покладатися лише на `lib/assets/npcs/` без підпапки: підкаталоги NPC перелічені явно.
+
+## Два зображення (як у Дена)
+
+У **[NPCModel](lib/models/npc_model.dart)** завжди задавати обидва поля (константи в `<id>_npc.dart`):
+
+| Поле | Файл (узгоджено з `<id>`) | Де використовується |
+|------|---------------------------|---------------------|
+| **`galleryPortraitPath`** | Великий портрет, зазвичай **`<id>.jpg`** (або `.png`, якщо так зручніше) | Лише сітка **«Персонажі»** (`NpcGalleryView`) |
+| **`avatarPath`** | **`<id>_ava.jpg`** або **`<id>_ava.png`** | Телефон, профіль, смуга NPC, оверлеї в коледжі тощо |
+
+- У **`schedule`** для `spritePath` у типових випадках використовуй **`avatarPath`** (той самий файл, що й для UI), якщо окремо не потрібен кадр сцени / відео.
+- Якщо `galleryPortraitPath` не задати — у галереї підставиться `avatarPath` (краще завжди задати обидва).
+
+### Шаблон констант і моделі
+
+```dart
+const String kMyNpcGalleryPortraitPath = 'lib/assets/npcs/my_npc/my_npc.jpg';
+const String kMyNpcAvatarPath = 'lib/assets/npcs/my_npc/my_npc_ava.png';
+
+NPCModel createMyNpcNpc() {
+  return NPCModel(
+    id: 'my_npc',
+    // ...
+    galleryPortraitPath: kMyNpcGalleryPortraitPath,
+    avatarPath: kMyNpcAvatarPath,
+    schedule: [
+      SchedulePoint(
+        // ...
+        spritePath: kMyNpcAvatarPath,
+      ),
+    ],
+  );
+}
+```
+
+Галерея бере зображення так: `npc.galleryPortraitPath ?? npc.avatarPath` — додаткових винятків у `NpcGalleryView` не потрібно.

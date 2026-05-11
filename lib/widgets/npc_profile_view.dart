@@ -1,0 +1,890 @@
+import 'package:flutter/material.dart';
+import '../cheats/npc_quest_cheats.dart';
+import '../data/npc_profile_quests_registry.dart';
+import '../npcs/cherie/cherie_quests.dart';
+import '../models/npc_model.dart';
+import '../models/npc_secondary.dart';
+import '../services/game_time_controller.dart';
+import '../services/game_world_state.dart';
+import '../services/locale_controller.dart';
+import '../services/npc_finance_service.dart';
+import '../services/npc_service.dart';
+import '../services/player_stats_controller.dart';
+import '../services/save_service.dart';
+import '../services/settings_controller.dart';
+import '../services/service_locator.dart';
+import '../theme/game_theme.dart';
+import '../utils/npc_portrait_paths.dart';
+
+/// Профіль NPC у стилі аркуша персонажа: властивості, зовнішність, біографія, слабкості, чекпоінти, компромат.
+class NpcProfileView extends StatelessWidget {
+  final NPCModel npc;
+  /// Якщо разом із [npcService] задано — велике фото враховує поточний розклад (офіціантка в кафе тощо).
+  final GameTimeController? timeController;
+  final NPCService? npcService;
+  /// Для розділу «Квести»: статуси з [GameWorldState] та [npc].
+  final GameWorldState? gameWorld;
+
+  const NpcProfileView({
+    super.key,
+    required this.npc,
+    this.timeController,
+    this.npcService,
+    this.gameWorld,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    npcService?.ensureNpcItemsFresh();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Верхній ряд: фото пропорційно 175*250 зліва, заголовок і властивості справа
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Фото NPC у верхньому лівому куті (пропорція 70:100, висота 250)
+                SizedBox(
+                  width: 175,
+                  height: 250,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: _ProfilePortraitPhoto(
+                      npc: npc,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        npc.status ?? npc.name,
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _propertyRow('Ім\'я', npc.fullName),
+                      if (isSecondaryNpc(npc)) ...[
+                        const Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Text(
+                            'Категорія: другорядний персонаж. Стати не ведуться.',
+                            style: TextStyle(color: Colors.white54, fontSize: 14, height: 1.35),
+                          ),
+                        ),
+                      ] else if (isRelationshipInfluenceOnlyNpc(npc)) ...[
+                        const Padding(
+                          padding: EdgeInsets.only(top: 4, bottom: 8),
+                          child: Text(
+                            'Категорія: чоловічий персонаж. У статах лише відносини та вплив ГГ.',
+                            style: TextStyle(color: Colors.white54, fontSize: 14, height: 1.35),
+                          ),
+                        ),
+                        _propertyRow('Відносини', '${npc.relationship.toInt()} / 1000'),
+                        _propertyRow('Гроші', '\$${npc.money}'),
+                        _propertyRow('Вплив ГГ', '${npc.influenceFromGg} / 100'),
+                        _propertyRow(
+                          sl<LocaleController>().t('npc_card_debt_npc_owes_gg'),
+                          gameWorld != null
+                              ? '\$${NpcFinanceService.npcOwesGg(gameWorld!, npc.id)}'
+                              : '\$0',
+                        ),
+                        _propertyRow(
+                          sl<LocaleController>().t('npc_card_debt_gg_owes_npc'),
+                          gameWorld != null
+                              ? '\$${NpcFinanceService.ggOwesNpc(gameWorld!, npc.id)}'
+                              : '\$0',
+                        ),
+                      ] else ...[
+                        _propertyRow('Хтивість', '${npc.lust.toInt()} / 1000'),
+                        _propertyRow('Відносини', '${npc.relationship.toInt()} / 1000'),
+                        _propertyRow('Поведінка', '${npc.behavior.toInt()} / 1000'),
+                        _propertyRow('Збудження', '${npc.arousal} / 100'),
+                        _propertyRow('Гроші', '\$${npc.money}'),
+                        _propertyRow('Вплив ГГ', '${npc.influenceFromGg} / 100'),
+                        _propertyRow(
+                          sl<LocaleController>().t('npc_card_debt_npc_owes_gg'),
+                          gameWorld != null
+                              ? '\$${NpcFinanceService.npcOwesGg(gameWorld!, npc.id)}'
+                              : '\$0',
+                        ),
+                        _propertyRow(
+                          sl<LocaleController>().t('npc_card_debt_gg_owes_npc'),
+                          gameWorld != null
+                              ? '\$${NpcFinanceService.ggOwesNpc(gameWorld!, npc.id)}'
+                              : '\$0',
+                        ),
+                      ],
+                      if (npc.status != null || npc.subStatus != null) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (npc.status != null)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: Colors.deepOrange.shade700.withValues(alpha: 0.8),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  npc.status!,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            if (npc.status != null && npc.subStatus != null)
+                              const SizedBox(width: 5),
+                            if (npc.subStatus != null)
+                              Container(
+                                constraints: const BoxConstraints(maxWidth: 220),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: GameTheme.textGreen,
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.35),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  npc.subStatus!,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Body (зовнішність)
+            if (npc.bodyDescription != null && npc.bodyDescription!.isNotEmpty) ...[
+              _sectionLabel('≡ Body:'),
+              const SizedBox(height: 4),
+              Text(
+                npc.bodyDescription!,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
+              ),
+              const SizedBox(height: 20),
+            ],
+
+            // Біографія та Характер
+            if ((npc.biographyType != null && npc.biographyType!.isNotEmpty) ||
+                (npc.biographyAppearance != null && npc.biographyAppearance!.isNotEmpty)) ...[
+              _sectionLabel('Біографія та Характер', highlight: true),
+              const SizedBox(height: 8),
+              if (npc.biographyType != null && npc.biographyType!.isNotEmpty)
+                _bioLine('Типаж:', npc.biographyType!),
+              if (npc.biographyAppearance != null && npc.biographyAppearance!.isNotEmpty)
+                _bioLine('Зовнішність:', npc.biographyAppearance!),
+              const SizedBox(height: 16),
+            ],
+
+            if (gameWorld != null) ...[
+              _collapsibleSection(
+                context,
+                title: sl<LocaleController>().t('profile_quests_section'),
+                children: [
+                  _NpcProfileQuestsList(
+                    npc: npc,
+                    world: gameWorld!,
+                    npcService: npcService,
+                  ),
+                ],
+              ),
+            ],
+
+            _collapsibleSection(
+              context,
+              title: 'Особисті речі',
+              children: npc.items.isNotEmpty
+                  ? <Widget>[
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (final item in npc.items) _npcItemIcon(item.imagePath),
+                          ],
+                        ),
+                      ),
+                    ]
+                  : const <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 6),
+                        child: Text(
+                          '—',
+                          style: TextStyle(color: Colors.white54, fontSize: 14),
+                        ),
+                      ),
+                    ],
+            ),
+
+            // Чекпоінти
+            if (npc.checkpoints != null && npc.checkpoints!.isNotEmpty)
+              _collapsibleSection(
+                context,
+                title: 'Чекпоінти',
+                children: npc.checkpoints!
+                    .map((s) => Padding(
+                          padding: const EdgeInsets.only(bottom: 6),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                s,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.35),
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              ),
+
+            // Компромат (Proofs)
+            _collapsibleSection(
+              context,
+              title: 'Компромат (Proofs)',
+              children: npc.proofs != null && npc.proofs!.isNotEmpty
+                  ? npc.proofs!
+                      .map((s) => Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Text(s, style: const TextStyle(color: Colors.white70, fontSize: 14)),
+                          ))
+                      .toList()
+                  : [const Padding(padding: EdgeInsets.only(bottom: 6), child: Text('—', style: TextStyle(color: Colors.white54, fontSize: 14)))],
+            ),
+
+            // Слабкості (Fetishes/Hooks)
+            if (npc.weaknesses != null && npc.weaknesses!.isNotEmpty)
+              _collapsibleSection(
+                context,
+                title: 'Слабкості (Fetishes/Hooks)',
+                children: npc.weaknesses!
+                    .map((s) => Padding(
+                          padding: const EdgeInsets.only(bottom: 6),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('• ', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                              Expanded(child: Text(s, style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.35))),
+                            ],
+                          ),
+                        ))
+                    .toList(),
+              ),
+
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _propertyRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          SizedBox(
+            width: 140,
+            child: Text('$label:', style: const TextStyle(fontSize: 14, color: Colors.white70)),
+          ),
+          const SizedBox(width: 8),
+          Text(value, style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500)),
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionLabel(String text, {bool highlight = false}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+      decoration: BoxDecoration(
+        color: highlight ? Colors.amber.shade900.withValues(alpha: 0.35) : null,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: highlight ? Colors.amber.shade200 : Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget _bioLine(String label, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: RichText(
+        text: TextSpan(
+          style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
+          children: [
+            TextSpan(text: '$label ', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.9))),
+            TextSpan(text: text),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _collapsibleSection(BuildContext context, {required String title, required List<Widget> children}) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        controlAffinity: ListTileControlAffinity.leading,
+        initiallyExpanded: false,
+        tilePadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+        childrenPadding: const EdgeInsets.only(left: 0, bottom: 0, top: 0),
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            title,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
+            textAlign: TextAlign.left,
+          ),
+        ),
+        children: children,
+      ),
+    );
+  }
+
+  Widget _npcItemIcon(String? path) {
+    const size = 60.0;
+    if (path == null || path.isEmpty) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: Colors.white12,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: const Icon(Icons.inventory_2_outlined, color: Colors.white54, size: 18),
+      );
+    }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: Image.asset(
+        path,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => Container(
+          width: size,
+          height: size,
+          color: Colors.white12,
+          child: const Icon(Icons.broken_image, color: Colors.white54, size: 18),
+        ),
+      ),
+    );
+  }
+}
+
+class _NpcProfileQuestsList extends StatefulWidget {
+  const _NpcProfileQuestsList({
+    required this.npc,
+    required this.world,
+    this.npcService,
+  });
+
+  final NPCModel npc;
+  final GameWorldState world;
+  final NPCService? npcService;
+
+  @override
+  State<_NpcProfileQuestsList> createState() => _NpcProfileQuestsListState();
+}
+
+class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
+  static const String _kCherieAnimatorCounterKey =
+      'profile_cherie_animator_shifts_count';
+  static const String _kCherieMasseurCounterKey =
+      'profile_cherie_masseur_counter';
+  static const String _kCherieQuest005ActorKey =
+      'profile_cherie_quest005_actor';
+  static const String _kCherieQuest005LizunKey =
+      'profile_cherie_quest005_lizun';
+
+  void _nudgeGiftShopAnimatorShifts(int delta) {
+    final v = widget.world.giftShopAnimatorShiftsCompleted + delta;
+    widget.world.giftShopAnimatorShiftsCompleted = v < 0 ? 0 : v;
+    sl<SaveService>().autosave();
+    setState(() {});
+  }
+
+  Widget _cherieAnimatorShiftsStepper(
+    String Function(String) t, {
+    required bool questOneDone,
+  }) {
+    final n = widget.world.giftShopAnimatorShiftsCompleted;
+    final active = questOneDone;
+    final lineStyle = TextStyle(
+      color: active ? Colors.white54 : Colors.white30,
+      fontSize: 12,
+      height: 1.35,
+    );
+    final digitColor = active ? Colors.white : Colors.white38;
+    final iconAccent = Colors.white70;
+    final iconDisabled = Colors.white24;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Text(
+            '${t('profile_cherie_animator_shifts_label')} — ',
+            style: lineStyle,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          onPressed: active && n > 0
+              ? () => _nudgeGiftShopAnimatorShifts(-1)
+              : null,
+          icon: Icon(
+            Icons.remove_circle_outline,
+            color: active && n > 0 ? iconAccent : iconDisabled,
+            size: 22,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2),
+          child: Text(
+            '$n',
+            style: TextStyle(
+              color: digitColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              height: 1.2,
+            ),
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          onPressed: active ? () => _nudgeGiftShopAnimatorShifts(1) : null,
+          icon: Icon(
+            Icons.add_circle_outline,
+            color: active ? iconAccent : iconDisabled,
+            size: 22,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _nudgeCherieMasseurCounter(int delta) {
+    if (widget.npc.id != 'cherie') return;
+    final next = CherieQuest004.readMasseur(widget.npc) + delta;
+    widget.npc.setVar(
+      CherieQuest004.npcVarMasseur,
+      next < 0 ? 0 : next,
+    );
+    sl<SaveService>().autosave();
+    setState(() {});
+  }
+
+  Widget _cherieMasseurStepper(
+    String Function(String) t, {
+    required bool massageTherapistUnlocked,
+  }) {
+    final n = CherieQuest004.readMasseur(widget.npc);
+    final active = massageTherapistUnlocked;
+    final lineStyle = TextStyle(
+      color: active ? Colors.white54 : Colors.white30,
+      fontSize: 12,
+      height: 1.35,
+    );
+    final digitColor = active ? Colors.white : Colors.white38;
+    final iconAccent = Colors.white70;
+    final iconDisabled = Colors.white24;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Text(
+            '${t('profile_cherie_masseur_label')} — ',
+            style: lineStyle,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          onPressed: active && n > 0
+              ? () => _nudgeCherieMasseurCounter(-1)
+              : null,
+          icon: Icon(
+            Icons.remove_circle_outline,
+            color: active && n > 0 ? iconAccent : iconDisabled,
+            size: 22,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2),
+          child: Text(
+            '$n',
+            style: TextStyle(
+              color: digitColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              height: 1.2,
+            ),
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          onPressed: active ? () => _nudgeCherieMasseurCounter(1) : null,
+          icon: Icon(
+            Icons.add_circle_outline,
+            color: active ? iconAccent : iconDisabled,
+            size: 22,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _nudgeCherieQuest005Actor(int delta) {
+    final next = (widget.world.cherieQuest005Actor + delta).clamp(0, 99);
+    widget.world.cherieQuest005Actor = next;
+    widget.world.cherieQuest005Complete =
+        widget.world.cherieQuest005Actor >=
+            CherieQuest005.completeActorThreshold;
+    sl<SaveService>().autosave();
+    setState(() {});
+  }
+
+  void _nudgeCherieQuest005Lizun(int delta) {
+    final next = (widget.world.cherieQuest005Lizun + delta).clamp(0, 3);
+    widget.world.cherieQuest005Lizun = next;
+    sl<SaveService>().autosave();
+    setState(() {});
+  }
+
+  Widget _cherieQuest005StepperSegment(
+    String Function(String) t, {
+    required String labelKey,
+    required int value,
+    required int min,
+    required int max,
+    required bool active,
+    required void Function(int delta) onDelta,
+  }) {
+    final lineStyle = TextStyle(
+      color: active ? Colors.white54 : Colors.white30,
+      fontSize: 12,
+      height: 1.35,
+    );
+    final digitColor = active ? Colors.white : Colors.white38;
+    final iconAccent = Colors.white70;
+    final iconDisabled = Colors.white24;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          flex: 2,
+          child: Text(
+            t(labelKey),
+            style: lineStyle,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+          onPressed: active && value > min
+              ? () => onDelta(-1)
+              : null,
+          icon: Icon(
+            Icons.remove_circle_outline,
+            color: active && value > min ? iconAccent : iconDisabled,
+            size: 20,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2),
+          child: Text(
+            '$value',
+            style: TextStyle(
+              color: digitColor,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              height: 1.2,
+            ),
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+          onPressed: active && value < max ? () => onDelta(1) : null,
+          icon: Icon(
+            Icons.add_circle_outline,
+            color: active && value < max ? iconAccent : iconDisabled,
+            size: 20,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _cherieQuest005CountersRow(
+    String Function(String) t, {
+    required bool active,
+  }) {
+    final actor = widget.world.cherieQuest005Actor;
+    final lizun = widget.world.cherieQuest005Lizun;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: _cherieQuest005StepperSegment(
+            t,
+            labelKey: 'profile_cherie_quest005_actor_label',
+            value: actor,
+            min: 0,
+            max: 99,
+            active: active,
+            onDelta: _nudgeCherieQuest005Actor,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: _cherieQuest005StepperSegment(
+            t,
+            labelKey: 'profile_cherie_quest005_lizun_label',
+            value: lizun,
+            min: 0,
+            max: 3,
+            active: active,
+            onDelta: _nudgeCherieQuest005Lizun,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = sl<LocaleController>();
+    final t = loc.t;
+    final lines = npcProfileQuestLinesFor(widget.npc.id);
+    if (lines.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.only(bottom: 6),
+        child: Text(
+          '—',
+          style: TextStyle(color: Colors.white54, fontSize: 14),
+        ),
+      );
+    }
+
+    final settings = sl<SettingsController>();
+    final stats = sl<PlayerStatsController>();
+    final npcSvc = widget.npcService ?? sl<NPCService>();
+
+    return ListenableBuilder(
+      listenable: settings,
+      builder: (context, _) {
+        final cheatsOn = settings.cheatsEnabled;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: lines.map((q) {
+            final done = q.isDone(widget.world, widget.npc);
+            final canToggle = cheatsOn && q.cheatId != null;
+            final statusStyle = TextStyle(
+              color: done ? GameTheme.textGreen : Colors.orange.shade200,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            );
+            final counterKey = q.counterLineKey;
+            final counterFn = q.counterValue;
+            final secondaryCounterKey = q.secondaryCounterLineKey;
+            final secondaryCounterFn = q.secondaryCounterValue;
+            final isCherieQuest005DualCounters = counterKey ==
+                    _kCherieQuest005ActorKey &&
+                secondaryCounterKey == _kCherieQuest005LizunKey;
+            final counterText = counterKey != null &&
+                    counterFn != null &&
+                    counterKey != _kCherieAnimatorCounterKey &&
+                    counterKey != _kCherieMasseurCounterKey &&
+                    !isCherieQuest005DualCounters
+                ? t(counterKey).replaceAll('%s', () {
+                    final raw = counterFn(widget.world, widget.npc);
+                    return '$raw';
+                  }())
+                : '';
+            final secondaryCounterText = secondaryCounterKey != null &&
+                    secondaryCounterFn != null &&
+                    !isCherieQuest005DualCounters
+                ? t(secondaryCounterKey).replaceAll('%s', () {
+                    final raw = secondaryCounterFn(widget.world, widget.npc);
+                    return '$raw';
+                  }())
+                : '';
+            return SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              dense: true,
+              title: Text(
+                t(q.titleKey),
+                style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.35),
+              ),
+              subtitle: counterKey != null && counterFn != null
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          done ? t('quest_status_done') : t('quest_status_pending'),
+                          style: statusStyle,
+                        ),
+                        const SizedBox(height: 4),
+                        if (counterKey == _kCherieAnimatorCounterKey)
+                          _cherieAnimatorShiftsStepper(
+                            t,
+                            questOneDone: done,
+                          )
+                        else if (counterKey == _kCherieMasseurCounterKey)
+                          _cherieMasseurStepper(
+                            t,
+                            massageTherapistUnlocked:
+                                CherieQuest003.isUnlocked(widget.npc),
+                          )
+                        else if (isCherieQuest005DualCounters)
+                          _cherieQuest005CountersRow(
+                            t,
+                            active: cheatsOn ||
+                                CherieQuest004.isLingerieContractDone(
+                                  widget.npc,
+                                ),
+                          )
+                        else ...[
+                          if (counterText.isNotEmpty)
+                            Text(
+                              counterText,
+                              style: const TextStyle(
+                                color: Colors.white54,
+                                fontSize: 12,
+                                height: 1.35,
+                              ),
+                            ),
+                          if (secondaryCounterText.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              secondaryCounterText,
+                              style: const TextStyle(
+                                color: Colors.white54,
+                                fontSize: 12,
+                                height: 1.35,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ],
+                    )
+                  : Text(
+                      done ? t('quest_status_done') : t('quest_status_pending'),
+                      style: statusStyle,
+                    ),
+              value: done,
+              activeThumbColor: GameTheme.textGreen,
+              onChanged: canToggle
+                  ? (v) {
+                      NpcQuestCheats.setQuestCompleted(
+                        q.cheatId!,
+                        v,
+                        widget.world,
+                        stats,
+                        npcSvc,
+                        widget.npc,
+                      );
+                      sl<SaveService>().autosave();
+                      setState(() {});
+                    }
+                  : null,
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+}
+
+Widget _profilePhotoPlaceholder() {
+  return Container(
+    width: 175,
+    height: 250,
+    color: Colors.white12,
+    child: const Icon(Icons.person, color: Colors.white38, size: 36),
+  );
+}
+
+class _ProfilePortraitPhoto extends StatelessWidget {
+  const _ProfilePortraitPhoto({
+    required this.npc,
+  });
+
+  final NPCModel npc;
+
+  @override
+  Widget build(BuildContext context) {
+    // У картці NPC завжди показуємо той самий портрет, що і в галереї персонажів.
+    final paths = npcGalleryPortraitCandidates(npc);
+    if (paths.isEmpty) return _profilePhotoPlaceholder();
+    return _ChainedProfileImage(paths: paths);
+  }
+}
+
+class _ChainedProfileImage extends StatelessWidget {
+  const _ChainedProfileImage({required this.paths});
+
+  final List<String> paths;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      paths.first,
+      width: 175,
+      height: 250,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) {
+        if (paths.length <= 1) return _profilePhotoPlaceholder();
+        return _ChainedProfileImage(paths: paths.sublist(1));
+      },
+    );
+  }
+}

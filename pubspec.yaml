@@ -1,0 +1,91 @@
+name: naglec
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.7
+
+# Залежності додатку
+dependencies:
+  media_kit: ^1.1.10
+  media_kit_video: ^1.3.1
+  media_kit_libs_video: ^1.0.7
+  video_player: ^2.8.1
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  cupertino_icons: ^1.0.8
+  get_it: ^7.7.0
+  path_provider: ^2.1.2    # Для доступу до пам'яті телефону
+  screenshot: ^3.0.0       # Для створення прев'ю слота
+  window_manager: ^0.4.3   # Розмір вікна на десктопі
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Усі папки з lib/assets (адреси кожной папки).
+  assets:
+    - assets/data/location.json
+    - assets/data/shop_products.json
+    - assets/data/location_display_en.json
+    - lib/assets/gg/
+    - lib/assets/items/
+    - lib/assets/left_panel/
+    - lib/assets/location/
+    - lib/assets/location/biznes_centr/
+    - lib/assets/location/biznes_centr/logistic/
+    - lib/assets/location/college/
+    - lib/assets/location/college/rooms/
+    - lib/assets/location/home_gg/
+    - lib/assets/location/home_gg/rooms/
+    - lib/assets/location/houses/
+    # Явно (нові файли інколи не підхоплюються до повного rebuild):
+    - lib/assets/location/houses/
+    - lib/assets/location/houses/company/
+    - lib/assets/location/poor_district/
+    - lib/assets/location/trc/
+    # Явно: після перейменування flower_shop → gift_shop інколи не потрапляє в bundle до clean build.
+    - lib/assets/location/trc/gift_shop.jpg
+    - lib/assets/laptop/
+    - lib/assets/laptop/study/
+    - lib/assets/laptop/study/massage/
+    - lib/assets/laptop/porn/
+    - lib/assets/npcs/
+    - lib/assets/npcs/amia/
+    - lib/assets/npcs/piper/
+    - lib/assets/npcs/piper/video/
+    - lib/assets/npcs/luda/
+    - lib/assets/npcs/lisa/
+    - lib/assets/npcs/mom/
+    - lib/assets/npcs/mom/video/
+    - lib/assets/npcs/elsa/
+    - lib/assets/npcs/den/
+    - lib/assets/npcs/dekan/
+    - lib/assets/npcs/rockefeller/
+    - lib/assets/npcs/danielle/
+    - lib/assets/npcs/korish_father/
+    - lib/assets/npcs/nicole/
+    - lib/assets/npcs/nicole/img/
+    - lib/assets/npcs/loh/
+    - lib/assets/npcs/sasha/
+    - lib/assets/npcs/sasha/sash_video/
+    - lib/assets/npcs/sem/
+    - lib/assets/npcs/cherie/
+    # Явно: новий webm інколи не потрапляє в bundle до clean build.
+    - lib/assets/npcs/anya/
+    - lib/assets/npcs/ariana/
+    - lib/assets/npcs/emily/
+    - lib/assets/npcs/faye/
+    - lib/assets/npcs/india/
+    - lib/assets/npcs/jessa/
+    - lib/assets/npcs/rita/
+    - lib/assets/npcs/rita/img/

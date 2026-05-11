@@ -1,0 +1,34 @@
+---
+description: Один файл квестів та один файл івентів на NPC; нумерація всередині
+alwaysApply: true
+---
+
+# Квести та івенти NPC: файли та нумерація
+
+## Розміщення
+
+- Усе в **`lib/npcs/<npc_id>/`** (не розкидати окремі квести по різних іменах файлів для одного NPC).
+- **Рівно один файл квестів:** **`<npc_id>_quests.dart`**  
+  Приклад: `lib/npcs/cherie/cherie_quests.dart`.
+- **Рівно один файл івентів:** **`<npc_id>_events.dart`**  
+  Приклад: `lib/npcs/cherie/cherie_events.dart` (може бути мінімальним, поки івентів немає).
+
+## Нумерація всередині файлу
+
+- Кожен квест у `<npc_id>_quests.dart` виділяти **пронумерованим блоком** і стабільним id **`cherie_quest_001`**, **`cherie_quest_002`**, … (для іншого NPC — `<id>_quest_001` тощо), узгоджено з `.cursor/rules/event-numbering.mdc` для NPC-контенту.
+- У коді бажано мати константу на кшталт `static const String questId = 'cherie_quest_001';` у відповідному класі/просторі імен квесту.
+- Кожен івент у `<npc_id>_events.dart` — **`cherie_event_001`**, … з маркером коментаря `// EVENT: cherie_event_001`.
+
+## Розділення з UI
+
+- У файлах квестів/івентів: умови, етапи, змінні, ключі l10n (рядки), зміни світу/NPC — **без** віджетів і **без** `BuildContext`.
+- Екрани гри лише **викликають** API з цих файлів.
+
+## Екранний флоу (main game)
+
+- Місток UI + події кімнати/панелі для NPC — у **`lib/npcs/<npc_id>/`** (mixin як `part` бібліотеки `main_game_screen.dart`, реалізує **`NpcScreenFlow`**). Приклад: `lib/npcs/cherie/cherie_game_flow.dart` → `CherieGameFlow`.
+- Контракт: `lib/npcs/npc_screen_flow.dart`, id: `lib/npcs/npc_screen_flow_ids.dart`.
+
+## Імпорти асетів
+
+- Шляхи до асетів NPC — `lib/assets/npcs/<id>/...` (див. `npc-assets.mdc`).

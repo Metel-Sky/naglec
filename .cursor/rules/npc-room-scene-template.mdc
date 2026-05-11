@@ -1,0 +1,20 @@
+---
+description: Шаблон кімнати з NPC (фон + оверлей 90% висоти, як у коледжі)
+globs: lib/locations/**/*.dart, lib/widgets/room_npc_scene_template.dart
+---
+
+# Сцена кімнати з NPC
+
+Для локацій, де NPC показується **поверх картинки кімнати** (не повноекранне відео персонажа):
+
+- Використовуй **`RoomNpcSceneTemplate`** та **`NpcRoomScenePicker`** з `lib/widgets/room_npc_scene_template.dart`.
+- Фон: `NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath)`.
+- Кого показувати: `NpcRoomScenePicker.pickDisplayedNpc(..., selectedNpcIdInRoom: ...)`.
+- Растр персонажа: `NpcRoomScenePicker.npcRasterOverlayPath(npc, point)` (відео в оверлеї не йдуть).
+- Віджет: `RoomNpcSceneTemplate.clippedRoomWithNpcOverlay(...)`.
+
+**Не** застосовуй цей шаблон там, де саме медіа NPC має бути на весь екран (наприклад кухня мами з відео) — там залишай окрему логіку в `HomeView` / івентах.
+
+Константа частки висоти: `RoomNpcSceneTemplate.npcOverlayHeightFraction` (0.9), збігається з `CollegeView`.
+
+У **місті** той самий шаблон уже підключений у `CityView` для автосалону та для `cityParkRoomIds` (кафе й кав'ярня в парку).

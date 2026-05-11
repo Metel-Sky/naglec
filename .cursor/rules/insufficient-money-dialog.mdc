@@ -1,0 +1,17 @@
+---
+description: Модальне вікно при нестачі грошей у ГГ
+alwaysApply: true
+---
+
+# Нестача грошей у головного героя
+
+Якщо дія вимагає грошей і у ГГ **не вистачає** суми:
+
+1. **Не** списувати гроші й **не** виконувати платну дію.
+2. Показати **модальне вікно** (`showDialog` / `AlertDialog`), не SnackBar.
+3. Текст повідомлення — з локалізації ключ `not_enough_money_dialog_message` (українською: «У вас не вистачає грошей»).
+4. Кнопка закриття — з ключем `dialog_close` (українською: «Закрити»), виклик `Navigator.pop`.
+
+Спільна реалізація: `showInsufficientMoneyDialog(context)` у `lib/widgets/insufficient_money_dialog.dart`.
+
+При нових платних діях перевіряй `PlayerStatsController.money` **перед** `changeMoney(-…)` і викликай цей діалог.

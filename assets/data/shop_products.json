@@ -1,0 +1,543 @@
+{
+  "version": 1,
+  "shops": {
+    "laptop": {
+      "title": "ІНТЕРНЕТ-МАГАЗИН",
+      "items": [
+        {
+          "id": "spy_camera",
+          "name": "Mini camera",
+          "price": 750,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/spy_camera.jpg"
+        },
+        {
+          "id": "usd_flesh",
+          "name": "USB 3.0",
+          "price": 250,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/usb.png"
+        },
+        {
+          "id": "dictaphone",
+          "name": "Діктофон",
+          "price": 450,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/dictaphone.jpg"
+        },
+        {
+          "id": "iphone",
+          "name": "Iphone 16pro max",
+          "price": 1300,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/iphone.jpg"
+        },
+        {
+          "id": "oil",
+          "name": "Массажне арома масло",
+          "price": 200,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/maslo.jpg"
+        },
+        {
+          "id": "otmichka",
+          "name": "Відмичка",
+          "price": 700,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/otmichka.png"
+        },
+        {
+          "id": "poker_cards",
+          "name": "Карти дя покеру",
+          "price": 10,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/poker_cards.jpg"
+        },
+        {
+          "id": "marked_cards",
+          "name": "Мічені карти",
+          "price": 300,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/marked_cards.jpg"
+        },
+        {
+          "id": "school_uniform",
+          "name": "Сексуальна шкільна форма",
+          "price": 300,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/sex_student.jpg"
+        },
+        {
+          "id": "ab_fitness",
+          "name": "Абонемент в VIP тренажерний зал",
+          "price": 500,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/ab_fitness.jpg"
+        },
+        {
+          "id": "ganteli",
+          "name": "Гантелі",
+          "price": 200,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/ganteli.png"
+        },
+        {
+          "id": "girya",
+          "name": "Гиря",
+          "price": 350,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/girya.png"
+        },
+        {
+          "id": "hypnotic",
+          "name": "Сондокс",
+          "price": 300,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/hypnotic.jpg"
+        },
+        {
+          "id": "clonidine",
+          "name": "Клонідин/Клофелин",
+          "price": 400,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/clonidine.jpg"
+        },
+        {
+          "id": "ero_book",
+          "name": "Еротичний роман",
+          "price": 100,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/ero_book.jpg"
+        },
+        {
+          "id": "roman_lite",
+          "name": "Збірка єротичних розповідей",
+          "price": 150,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/roman_lite.png"
+        },
+        {
+          "id": "roman_hard",
+          "name": "Збірка порно розповідей",
+          "price": 250,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/roman_hard.png"
+        },
+        {
+          "id": "maid_suit",
+          "name": "Сексуальний наряд покоївки",
+          "price": 250,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/maid_suit.webp"
+        }
+      ]
+    },
+    "city_mall_shop": {
+      "title": "МАГАЗИН",
+      "items": [
+        {
+          "id": "eda",
+          "name": "Повний кошик їжі",
+          "price": 100,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/eda.jpg"
+        },
+        {
+          "id": "energy",
+          "name": "Енергетик",
+          "price": 10,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/energy.jpg"
+        },
+        {
+          "id": "snickers",
+          "name": "Снікерс",
+          "price": 10,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/snickers.png"
+        },
+        {
+          "id": "chocolate",
+          "name": "Шоколад",
+          "price": 20,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/chocolate.jpg"
+        },
+        {
+          "id": "ice_cream",
+          "name": "Морозиво",
+          "price": 30,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/ice_cream.jpg"
+        },
+        {
+          "id": "beer",
+          "name": "Пиво",
+          "price": 15,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/beer.png"
+        },
+        {
+          "id": "wine",
+          "name": "Вино",
+          "price": 80,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/wine.jpg"
+        },
+        {
+          "id": "champagne",
+          "name": "Шампанське",
+          "price": 110,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/champagne.jpg"
+        },
+        {
+          "id": "brandy",
+          "name": "Бренді",
+          "price": 150,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/brandy.jpg"
+        },
+        {
+          "id": "tequila",
+          "name": "Текіла",
+          "price": 180,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/tequila.jpg"
+        },
+        {
+          "id": "hennessey",
+          "name": "Коньяк Hennessey",
+          "price": 800,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/hennessy.png"
+        },
+        {
+          "id": "sport_g",
+          "name": "Спортивна форма",
+          "price": 300,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/sport_g.png"
+        },
+        {
+          "id": "oil",
+          "name": "Массажне арома масло",
+          "price": 200,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/maslo.jpg"
+        },
+        {
+          "id": "table",
+          "name": "Массажний стіл",
+          "price": 1500,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/table.jpg"
+        }
+      ]
+    },
+    "city_mall_pharmacy": {
+      "title": "АПТЕКА",
+      "items": [
+        {
+          "id": "analgel",
+          "name": "Анальний лубрикант",
+          "price": 50,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/analgel.png"
+        },
+        {
+          "id": "venus",
+          "name": "Бритва для ніг",
+          "price": 50,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/venus.png"
+        },
+        {
+          "id": "fpf_sun",
+          "name": "Крем від загару",
+          "price": 25,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/sun.jpg"
+        },
+        {
+          "id": "finasteride",
+          "name": "Збудник хтивості",
+          "price": 200,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/finasteride.jpg"
+        },
+        {
+          "id": "hypnotic",
+          "name": "Сондокс",
+          "price": 300,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/hypnotic.jpg"
+        },
+        {
+          "id": "notcumtabs",
+          "name": "Некончин",
+          "price": 500,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/notCumTabs.png"
+        }
+      ]
+    },
+    "city_mall_gift_shop": {
+      "title": "МАГАЗИН ПОДАРУНКІВ",
+      "items": [
+        {
+          "id": "roses",
+          "name": "Букет троянд",
+          "price": 80,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/roses.jpg"
+        },
+        {
+          "id": "buket1",
+          "name": "Букет 1",
+          "price": 50,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/buket_1.png"
+        },
+        {
+          "id": "gvozdika",
+          "name": "Гвоздики",
+          "price": 20,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/gvozdika.png"
+        },
+        {
+          "id": "dar_konfet",
+          "name": "Цукерки в подарунок",
+          "price": 25,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/dar_konfet.png"
+        },
+        {
+          "id": "dar_duhi",
+          "name": "Парфуми в подарунок",
+          "price": 150,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/dar_duhi.png"
+        },
+        {
+          "id": "kenzo",
+          "name": "Парфуми Kenzo",
+          "price": 300,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/kenzo.png"
+        },
+        {
+          "id": "chanel",
+          "name": "Chanel №5",
+          "price": 500,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/chanel.jpg"
+        },
+        {
+          "id": "dar_kosmetic",
+          "name": "Подарунок косметика",
+          "price": 150,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/dar_kosmetik.png"
+        },
+        {
+          "id": "swimsuit",
+          "name": "Купальник фіолетовий",
+          "price": 600,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/swimsuit.jpg"
+        },
+        {
+          "id": "swimsuit_y",
+          "name": "Купальник жовтий",
+          "price": 500,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/kupalnik.png"
+        },
+        {
+          "id": "handbag",
+          "name": "Сумочка",
+          "price": 1500,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/handbag.jpg"
+        },
+        {
+          "id": "bluedress",
+          "name": "Синя сукня",
+          "price": 1700,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/bluedress.jpg"
+        }
+      ]
+    },
+    "city_mall_sex_shop": {
+      "title": "СЕКС-ШОП",
+      "items": [
+        {
+          "id": "lube",
+          "name": "Бананова змазка",
+          "price": 45,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/lubrication_banana.jpg"
+        },
+        {
+          "id": "anal_lube",
+          "name": "Анальна змазка",
+          "price": 55,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/anal_lubricant.jpg"
+        },
+        {
+          "id": "dildo",
+          "name": "Ділдо маленький",
+          "price": 100,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/dildo.jpg"
+        },
+        {
+          "id": "dildo1",
+          "name": "Ділдо великий",
+          "price": 200,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/dildo.png"
+        },
+        {
+          "id": "anal_dildo",
+          "name": "Анальна пробка",
+          "price": 300,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/anal_plug.jpg"
+        },
+        {
+          "id": "pink_strapon",
+          "name": "Страпон рожевий",
+          "price": 400,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/pink_strapon.jpg"
+        },
+        {
+          "id": "playboy",
+          "name": "Playboy journal",
+          "price": 30,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/porn_jur.png"
+        },
+        {
+          "id": "lesbo_jur",
+          "name": "Lesbo journal",
+          "price": 30,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/lesbo_jur.png"
+        },
+        {
+          "id": "lesbo_disk",
+          "name": "Lesbo movies",
+          "price": 50,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/lesbi_disk.jpg"
+        },
+        {
+          "id": "maid_suit",
+          "name": "Костюм покоївки",
+          "price": 250,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/maid_costume.jpg"
+        },
+        {
+          "id": "bdsm",
+          "name": "Набір BDSM",
+          "price": 2600,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/bdsm.jpg"
+        },
+        {
+          "id": "bdsm_suit",
+          "name": "BDSM костюм",
+          "price": 400,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/bdsm_suit.jpg"
+        },
+        {
+          "id": "massage",
+          "name": "Массажне масло",
+          "price": 40,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/maslo.jpg"
+        }
+      ]
+    },
+    "city_mall_electronics": {
+      "title": "МАГАЗИН ЕЛЕКТРОНІКИ",
+      "items": [
+        {
+          "id": "iphone",
+          "name": "iPhone 16 Pro Max",
+          "price": 1300,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/iphone.jpg"
+        },
+        {
+          "id": "usd_flesh",
+          "name": "USB 3.0",
+          "price": 50,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/usb.png"
+        },
+        {
+          "id": "dictaphone",
+          "name": "Диктофон",
+          "price": 450,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/dictaphone.jpg"
+        },
+        {
+          "id": "teleskop",
+          "name": "Телескоп",
+          "price": 750,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/teleskop.jpg"
+        },
+        {
+          "id": "camera",
+          "name": "Canon EOS 7D",
+          "price": 5000,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/canon.jpg"
+        },
+        {
+          "id": "spy_camera",
+          "name": "Міні-камера",
+          "price": 750,
+          "purchasableOnce": false,
+          "imagePath": "lib/assets/items/spy_camera.jpg"
+        },
+        {
+          "id": "webcam",
+          "name": "Веб-камера",
+          "price": 350,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/webcam.png"
+        },
+        {
+          "id": "mac",
+          "name": "Macbook Pro",
+          "price": 2350,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/mac.png"
+        },
+        {
+          "id": "svet",
+          "name": "Набір для фотостудії",
+          "price": 1350,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/cvet.jpg"
+        }
+      ]
+    },
+    "city_mall_cinema": {
+      "title": "РЕСТОРАН",
+      "items": []
+    }
+  }
+}
