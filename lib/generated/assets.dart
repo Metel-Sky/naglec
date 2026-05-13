@@ -901,15 +901,10 @@ class $AssetsPiperGen {
 class $AssetsPiperVideoGen {
   const $AssetsPiperVideoGen();
 
-  final String shavesArmpits =
-      'lib/assets/npcs/piper/video/shaves_armpits.webm';
-  final String shavesAss = 'lib/assets/npcs/piper/video/shaves_ass.webm';
   final String shavesPussy = 'lib/assets/npcs/piper/video/shaves_pussy.webm';
   final String shavesPussy1 = 'lib/assets/npcs/piper/video/shaves_pussy1.webm';
   final String shower = 'lib/assets/npcs/piper/video/shower.webm';
-  final String shower1 = 'lib/assets/npcs/piper/video/shower1.webm';
   final String shower2 = 'lib/assets/npcs/piper/video/shower2.webm';
-  final String showerWipes = 'lib/assets/npcs/piper/video/shower_wipes.webm';
 }
 
 class $AssetsLudaGen {
@@ -985,11 +980,40 @@ class $AssetsMomGen {
   final AssetGenImage workSpace = const AssetGenImage(
     'lib/assets/npcs/mom/work_space.jpg',
   );
+  final AssetGenImage zalBook = const AssetGenImage(
+    'lib/assets/npcs/mom/zal_book.png',
+  );
 }
 
 class $AssetsMomVideoGen {
   const $AssetsMomVideoGen();
 
+  final String beach02Pereodevalka =
+      'lib/assets/npcs/mom/video/Beach_02_pereodevalka.webm';
+  final String beach06Pereodevalka03 =
+      'lib/assets/npcs/mom/video/Beach_06_pereodevalka_03.webm';
+  final String beach07Finish = 'lib/assets/npcs/mom/video/Beach_07_finish.webm';
+  final String beach01PriglosNaPlyazh =
+      'lib/assets/npcs/mom/video/beach_01_priglos_na_plyazh.webm';
+  final String beach03Pereodevalka1 =
+      'lib/assets/npcs/mom/video/beach_03_pereodevalka_1.mp4';
+  final String beach03Pereodevalka2 =
+      'lib/assets/npcs/mom/video/beach_03_pereodevalka_2.mp4';
+  final String beach04Pereodevalka1 =
+      'lib/assets/npcs/mom/video/beach_04_pereodevalka_1.mp4';
+  final String beach04Pereodevalka2 =
+      'lib/assets/npcs/mom/video/beach_04_pereodevalka_2.mp4';
+  final String beach05Pereodevalka1 =
+      'lib/assets/npcs/mom/video/beach_05_pereodevalka_1.mp4';
+  final String beach05Pereodevalka2 =
+      'lib/assets/npcs/mom/video/beach_05_pereodevalka_2.mp4';
+  final String beach06Pereodevalka01 =
+      'lib/assets/npcs/mom/video/beach_06_pereodevalka_01.mp4';
+  final String beach06Pereodevalka02 =
+      'lib/assets/npcs/mom/video/beach_06_pereodevalka_02.mp4';
+  final String beach0Prolog = 'lib/assets/npcs/mom/video/beach_0_prolog.webm';
+  final String beach0Prolog1 =
+      'lib/assets/npcs/mom/video/beach_0_prolog_1.webm';
   final String momKitch1 = 'lib/assets/npcs/mom/video/mom_kitch_1.mp4';
   final String momKitchRed1 = 'lib/assets/npcs/mom/video/mom_kitch_red_1.mp4';
   final String momSleep1 = 'lib/assets/npcs/mom/video/mom_sleep_1.mp4';
