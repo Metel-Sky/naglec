@@ -180,6 +180,9 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   /// Останній крок cherie_event_004 після [_applyCherieMassageFunEventPatch].
   int? _cherieMassageFunEventPresentationSyncedStep;
 
+  /// Останній крок mom_quest_001 після [_applyMomQuest001Patch].
+  int? _momQuest001PresentationSyncedStep;
+
   /// Кнопка «Назад» у верхній панелі ([MainGameHeader]).
   bool get _headerShowsBackButton =>
       isLaptopOpen ||

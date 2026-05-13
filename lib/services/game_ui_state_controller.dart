@@ -25,6 +25,16 @@ class GameUiStateController extends ChangeNotifier {
   bool _isLaptopOpen = false;
   bool get isLaptopOpen => _isLaptopOpen;
 
+  /// Якщо задано — «Назад» у локації спочатку викликає цей обробник (внутрішня навігація ноутбука).
+  bool Function()? _laptopNavigateBackHandler;
+
+  void setLaptopNavigateBackHandler(bool Function()? handler) {
+    _laptopNavigateBackHandler = handler;
+  }
+
+  /// Повертає `true`, якщо ноутбук обробив «Назад» без закриття (залишаємось у кімнаті з ноутом).
+  bool tryLaptopNavigateBack() => _laptopNavigateBackHandler?.call() ?? false;
+
   bool _isWatchingPornInLaptop = false;
   bool get isWatchingPornInLaptop => _isWatchingPornInLaptop;
 
@@ -148,7 +158,11 @@ class GameUiStateController extends ChangeNotifier {
   void setSelectedNpcForProfile(NPCModel? val) { _selectedNpcForProfile = val; notifyListeners(); }
   void setSelectedNpcIdInRoom(String? val) { _selectedNpcIdInRoom = val; notifyListeners(); }
   void setPhoneOpen(bool val) { _isPhoneOpen = val; notifyListeners(); }
-  void setLaptopOpen(bool val) { _isLaptopOpen = val; notifyListeners(); }
+  void setLaptopOpen(bool val) {
+    _isLaptopOpen = val;
+    if (!val) _laptopNavigateBackHandler = null;
+    notifyListeners();
+  }
   void setWatchingPornInLaptop(bool val) { _isWatchingPornInLaptop = val; notifyListeners(); }
   void setShowMasturbateVideo(bool val) { _showMasturbateVideo = val; notifyListeners(); }
   void setWatchingElsaVideoInLaptop(bool val) { _isWatchingElsaVideoInLaptop = val; notifyListeners(); }
@@ -322,6 +336,7 @@ class GameUiStateController extends ChangeNotifier {
     _isNpcGalleryOpen = false;
     _selectedNpcForProfile = null;
     _isPhoneOpen = false;
+    _laptopNavigateBackHandler = null;
     _isLaptopOpen = false;
     _isWatchingPornInLaptop = false;
     _showMasturbateVideo = false;

@@ -1,6 +1,6 @@
 part of '../main_game_screen.dart';
 
-mixin MainGameTimeTickHandler on MainGameScreenStateBase, MainGameQuestFlows {
+mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, MainGameQuestFlows {
   void _onTimeChanged() {
     setState(() {
       NpcEconomyService.syncWithGameClock(
@@ -338,6 +338,11 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MainGameQuestFlows {
         _tryStartCherieGiftShopOfficeAnimatorQuestIfNeeded(room);
         _tryStartCherieAnimatorShiftIntroIfNeeded(room);
         _resumeCherieAnimatorIntroIfInProgress(room);
+        if (currentZone == 'HOME' &&
+            LocationsData.migrateLegacyRoomId(room) == LocationsData.hall) {
+          _tryStartMomQuest001HallIfNeeded(room);
+          _maybeResumeMomQuest001AfterLoad();
+        }
       }
       _maybeAbortCherieQuest002WrongLocation();
       _maybeAbortCherieQuest003WrongLocation();
@@ -345,6 +350,7 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MainGameQuestFlows {
       _maybeAbortCherieQuest005WrongLocation();
       _maybeAbortCherieQuest006WrongLocation();
       _maybeAbortCherieMassageFunEventWrongLocation();
+      _maybeAbortMomQuest001WrongLocation();
       _ensureCherieQuest002HomeHallUiCoherent();
     });
   }

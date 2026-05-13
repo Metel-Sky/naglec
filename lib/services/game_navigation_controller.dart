@@ -335,6 +335,9 @@ class GameNavigationController extends ChangeNotifier {
     if (name == LocationsData.kitchen) {
       _worldState.kitchenVisitSeed = Random().nextInt(0x7FFFFFFF);
     }
+    if (name == LocationsData.bathroom) {
+      _worldState.piperBathroomVisitSeed = Random().nextInt(0x7FFFFFFF);
+    }
     if (name == LocationsData.momRoom &&
         momRoomDynamicEveningMediaHour(_timeController.dateTime.hour)) {
       _worldState.momRoomNightVisitSeed = Random().nextInt(0x7FFFFFFF);
@@ -394,6 +397,10 @@ class GameNavigationController extends ChangeNotifier {
       return;
     }
     if (_uiStateController.isLaptopOpen) {
+      if (_uiStateController.tryLaptopNavigateBack()) {
+        notifyListeners();
+        return;
+      }
       _uiStateController.setLaptopOpen(false);
       _uiStateController.setWatchingPornInLaptop(false);
       _uiStateController.setWatchingElsaVideoInLaptop(false);

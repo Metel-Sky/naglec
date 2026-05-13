@@ -1,6 +1,7 @@
 import '../models/npc_model.dart';
 import '../services/game_world_state.dart';
 import '../npcs/cherie/cherie_quests.dart';
+import '../npcs/mom/mom_quest001.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/sem/sem_events.dart';
 
@@ -18,6 +19,7 @@ abstract final class NpcProfileQuestCheatId {
   static const cherieAd005 = 'cherie_ad_005';
   static const cherieRelationship006 = 'cherie_relationship_006';
   static const denHooligan = 'den_hooligan';
+  static const momQuest001Beach = 'mom_quest_001_beach';
 }
 
 /// Рядок «квест у картці NPC»: заголовок l10n [titleKey] і перевірка виконання.
@@ -140,7 +142,16 @@ List<NpcProfileQuestLine> npcProfileQuestLinesFor(String npcId) {
         ),
       ];
     case 'mom':
-      return const [];
+      return [
+        NpcProfileQuestLine(
+          titleKey: 'npc_quest_mom_beach_001',
+          isDone: (_, npc) =>
+              npc.id == 'mom' && MomQuest001.isComplete(npc),
+          cheatId: NpcProfileQuestCheatId.momQuest001Beach,
+          counterLineKey: 'profile_mom_quest001_beach',
+          counterValue: (w, _) => w.momQuest001Beach,
+        ),
+      ];
     default:
       return const [];
   }

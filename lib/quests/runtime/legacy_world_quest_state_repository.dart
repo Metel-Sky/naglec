@@ -28,6 +28,8 @@ class LegacyWorldQuestStateRepository implements QuestStateRepository {
         return _world.cherieMassageFunEventStep;
       case 'rockefeller_quest_001':
         return _world.rockefellerNikeOfficeStep;
+      case 'mom_quest_001':
+        return _world.momQuest001Step;
       default:
         return (_ephemeral[_k(questId, 'step')] as int?) ?? 0;
     }
@@ -56,6 +58,9 @@ class LegacyWorldQuestStateRepository implements QuestStateRepository {
         return;
       case 'rockefeller_quest_001':
         _world.rockefellerNikeOfficeStep = step;
+        return;
+      case 'mom_quest_001':
+        _world.momQuest001Step = step;
         return;
       default:
         _ephemeral[_k(questId, 'step')] = step;
@@ -159,6 +164,9 @@ class LegacyWorldQuestStateRepository implements QuestStateRepository {
     if (questId == 'rockefeller_quest_001' && counterKey == 'shootingDays') {
       return _world.rockefellerNikeShootingDays;
     }
+    if (questId == 'mom_quest_001' && counterKey == 'beach') {
+      return _world.momQuest001Beach;
+    }
     return (_ephemeral[_k(questId, 'counter:$counterKey')] as int?) ?? fallback;
   }
 
@@ -186,6 +194,10 @@ class LegacyWorldQuestStateRepository implements QuestStateRepository {
     }
     if (questId == 'rockefeller_quest_001' && counterKey == 'shootingDays') {
       _world.rockefellerNikeShootingDays = value;
+      return;
+    }
+    if (questId == 'mom_quest_001' && counterKey == 'beach') {
+      _world.momQuest001Beach = value;
       return;
     }
     _ephemeral[_k(questId, 'counter:$counterKey')] = value;

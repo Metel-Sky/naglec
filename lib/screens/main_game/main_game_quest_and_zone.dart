@@ -1,7 +1,7 @@
 part of '../main_game_screen.dart';
 
 /// Квести й час, контент зон, права панель дій і навігація по зонах.
-mixin MainGameQuestFlows on MainGameScreenStateBase, CherieGameFlow, MainGameNpcFinance {
+mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow, MainGameNpcFinance {
   bool get _useQuestRuntimeV2 => sl<SettingsController>().useQuestRuntimeV2;
 
   bool get _questRuntimeMirrorMode =>
@@ -19,6 +19,8 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, CherieGameFlow, MainGameNpc
         return _worldState.cherieQuest005Step;
       case 'cherie_quest_006':
         return _worldState.cherieQuest006Step;
+      case 'mom_quest_001':
+        return _worldState.momQuest001Step;
       default:
         return 0;
     }
@@ -402,6 +404,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, CherieGameFlow, MainGameNpc
       _maybeAbortCherieQuest005WrongLocation();
       _maybeAbortCherieQuest006WrongLocation();
       _maybeAbortCherieMassageFunEventWrongLocation();
+      _tryStartMomQuest001HallIfNeeded(name);
       _ensureCherieQuest002HomeHallUiCoherent();
     });
   }
@@ -2498,6 +2501,9 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, CherieGameFlow, MainGameNpc
             ),
           );
         }
+
+        final momQ001Priority = _momQuest001PriorityActionPanelIfAny();
+        if (momQ001Priority != null) return momQ001Priority;
 
         final cherieMfPriority = _cherieMassageFunPriorityActionPanelIfAny();
         if (cherieMfPriority != null) return cherieMfPriority;

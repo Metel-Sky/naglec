@@ -31,6 +31,15 @@ String momKitchenMorning() => _pickRandom(_momKitchenMorningVideos);
 /// Детермінований вибір за [seed]: однаковий seed = той самий ролик (щоб перебудова не міняла відео).
 String momKitchenMorningSeeded(int seed) => _pickSeeded(_momKitchenMorningVideos, seed);
 
+/// Вечір на кухні (готує вечерю) — **окремі** ролики від mom_room / pereodevaetsa.
+/// Список можна замінити на окремі файли «вечеря», поки використовуємо ті самі кадри, що й ранкова кухня.
+const List<String> _momKitchenEveningVideos = [
+  "lib/assets/npcs/mom/video/mom_kitch_1.mp4",
+  "lib/assets/npcs/mom/video/mom_kitch_red_1.mp4",
+];
+
+String momKitchenEveningSeeded(int seed) => _pickSeeded(_momKitchenEveningVideos, seed);
+
 ///==========================================================================================
 
 /// Відео для мами у ванній вранці (8:00–9:00). Порожній = заглушка.
@@ -63,7 +72,7 @@ String momRoomEveningVideoList() => _pickRandom(_momRoomEveningVideoList);
 
 String momRoomEveningVideoListSeeded(int seed) => _pickSeeded(_momRoomEveningVideoList, seed);
 
-/// Мама на кухні ввечері (готує вечерю) — ті самі ролики, що й «перевдягається» в кімнаті.
+/// Legacy / випадковий вибір з того ж пулу, що «перевдягання» в кімнаті (якщо десь викликають напряму).
 String momRoomMomEveningKitchenList() => _pickRandom(_momPereodevaetsaVideos);
 
 String momRoomMomEveningKitchenListSeeded(int seed) => _pickSeeded(_momPereodevaetsaVideos, seed);

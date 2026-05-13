@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../services/game_ui_state_controller.dart';
+import '../services/service_locator.dart';
 import 'laptop/compromat/laptop_compromat_mixin.dart';
 import 'laptop/hidden_cameras/laptop_hidden_cameras_mixin.dart';
 import 'laptop/laptop_screen_state_base.dart';
@@ -43,4 +45,20 @@ class _LaptopScreenState extends LaptopScreenStateBase
         LaptopStudyMixin,
         LaptopShopMixin,
         LaptopSurfMixin,
-        LaptopHiddenCamerasMixin {}
+        LaptopHiddenCamerasMixin {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      sl<GameUiStateController>()
+          .setLaptopNavigateBackHandler(tryPopLaptopHierarchy);
+    });
+  }
+
+  @override
+  void dispose() {
+    sl<GameUiStateController>().setLaptopNavigateBackHandler(null);
+    super.dispose();
+  }
+}

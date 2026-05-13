@@ -27,7 +27,8 @@ class RoomNpcSceneTemplate {
 
   /// Фон локації: відео або зображення на весь простір (`BoxFit.cover`).
   static Widget layerBackground(String path) {
-    if (path.endsWith('.mp4') || path.endsWith('.webm')) {
+    final lower = path.toLowerCase();
+    if (lower.endsWith('.mp4') || lower.endsWith('.webm')) {
       return VideoSceneWidget(videoPath: path);
     }
     return Image.asset(

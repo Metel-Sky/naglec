@@ -63,6 +63,7 @@ import '../npcs/danielle/danielle_spy_caught_quest.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/sasha/sasha_events.dart';
 import '../npcs/cherie/cherie_quests.dart';
+import '../npcs/mom/mom_quest001.dart';
 import '../npcs/cherie/cherie_events.dart';
 import '../npcs/cherie/cherie_massage_fun_event.dart';
 import '../npcs/rockefeller/rockefeller_quests.dart';
@@ -76,6 +77,7 @@ import '../npcs/npc_screen_flow.dart';
 import '../npcs/npc_screen_flow_ids.dart';
 
 part 'main_game/main_game_screen_state_base.dart';
+part '../npcs/mom/mom_game_flow.dart';
 part '../npcs/cherie/cherie_game_flow.dart';
 part 'main_game/main_game_quest_and_zone.dart';
 part 'main_game/main_game_time_tick_handler.dart';

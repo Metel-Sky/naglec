@@ -130,6 +130,18 @@ class GameWorldState {
   /// EVENT cherie_event_004: 0 — не активний; 1 офіс … 8 спальня.
   int cherieMassageFunEventStep = 0;
 
+  /// mom_quest_001 (пляж): 0 — немає активної сцени; 1…27 кроки сценарію.
+  int momQuest001Step = 0;
+
+  /// Лічильник прогресу «пляж» (0…4). Після фіналу кроку 27 лишається 4.
+  int momQuest001Beach = 0;
+
+  /// Після «Погодитись» у залі (крок 1): суб/нд 12–14 мама в залі замість старих слотів.
+  bool momQuest001InvitationAccepted = false;
+
+  /// Останній тиждень (ключ понеділка `yyyy-MM-dd`), коли завершено поїздку на пляж (mom_quest_001); раз на тиждень.
+  String? momQuest001LastBeachTripWeekKey;
+
   /// Скільки разів завершено івент (фінал кроку 6 «Піти» або кроку 8 «Піти»).
   int cherieMassageFunCompletions = 0;
 
@@ -184,6 +196,8 @@ class GameWorldState {
   int? kitchenVisitSeed;
   /// Seed для нічних sleep-відео в кімнаті мами (22–6): новий при кожному вході.
   int? momRoomNightVisitSeed;
+  /// Seed для відео Пайпер у ванні (душ): новий при кожному заході в bathroom.
+  int? piperBathroomVisitSeed;
   /// Квест Danielle / Sem: підглядання біля кімнати батьків (spyOnSemParents) вже відіграно.
   bool spyOnSemParentsDone = false;
 
@@ -271,6 +285,10 @@ class GameWorldState {
         'cherieQuest006Complete': cherieQuest006Complete,
         'cherieRelationshipNewStage': cherieRelationshipNewStage,
         'cherieMassageFunEventStep': cherieMassageFunEventStep,
+        'momQuest001Step': momQuest001Step,
+        'momQuest001Beach': momQuest001Beach,
+        'momQuest001InvitationAccepted': momQuest001InvitationAccepted,
+        'momQuest001LastBeachTripWeekKey': momQuest001LastBeachTripWeekKey,
         'cherieMassageFunCompletions': cherieMassageFunCompletions,
         'rockefellerNikeOfficeStep': rockefellerNikeOfficeStep,
         'rockefellerNikeWorkStarted': rockefellerNikeWorkStarted,
@@ -297,6 +315,7 @@ class GameWorldState {
         'friendHouseSashaDoorOpenWeekday': friendHouseSashaDoorOpenWeekday,
         'kitchenVisitSeed': kitchenVisitSeed,
         'momRoomNightVisitSeed': momRoomNightVisitSeed,
+        'piperBathroomVisitSeed': piperBathroomVisitSeed,
         'compromatNpcIds': compromatNpcIds,
         'vipGymCardPurchasedAtIso': vipGymCardPurchasedAtIso,
         'spyOnSemParentsDone': spyOnSemParentsDone,
@@ -412,6 +431,14 @@ class GameWorldState {
     cherieRelationshipNewStage = json['cherieRelationshipNewStage'] == true;
     cherieMassageFunEventStep =
         ((json['cherieMassageFunEventStep'] as num?)?.toInt() ?? 0).clamp(0, 20);
+    momQuest001Step =
+        ((json['momQuest001Step'] as num?)?.toInt() ?? 0).clamp(0, 27);
+    momQuest001Beach =
+        ((json['momQuest001Beach'] as num?)?.toInt() ?? 0).clamp(0, 4);
+    momQuest001InvitationAccepted =
+        json['momQuest001InvitationAccepted'] == true;
+    momQuest001LastBeachTripWeekKey =
+        json['momQuest001LastBeachTripWeekKey'] as String?;
     cherieMassageFunCompletions =
         ((json['cherieMassageFunCompletions'] as num?)?.toInt() ?? 0).clamp(0, 9999);
     rockefellerNikeOfficeStep =
@@ -473,6 +500,7 @@ class GameWorldState {
         (json['danielleSpyCaughtConfrontationCount'] as num?)?.toInt() ?? 0;
     kitchenVisitSeed = (json['kitchenVisitSeed'] as num?)?.toInt();
     momRoomNightVisitSeed = (json['momRoomNightVisitSeed'] as num?)?.toInt();
+    piperBathroomVisitSeed = (json['piperBathroomVisitSeed'] as num?)?.toInt();
     lastNpcEconomyProcessedDateKey =
         json['lastNpcEconomyProcessedDateKey'] as String?;
     lastNpcLotteryMonthKey = json['lastNpcLotteryMonthKey'] as String?;
@@ -544,6 +572,10 @@ class GameWorldState {
     cherieQuest006Complete = false;
     cherieRelationshipNewStage = false;
     cherieMassageFunEventStep = 0;
+    momQuest001Step = 0;
+    momQuest001Beach = 0;
+    momQuest001InvitationAccepted = false;
+    momQuest001LastBeachTripWeekKey = null;
     cherieMassageFunCompletions = 0;
     rockefellerNikeOfficeStep = 0;
     rockefellerNikeWorkStarted = false;
@@ -565,6 +597,7 @@ class GameWorldState {
     friendHouseSashaDoorOpenWeekday = null;
     kitchenVisitSeed = null;
     momRoomNightVisitSeed = null;
+    piperBathroomVisitSeed = null;
     compromatNpcIds = [];
     vipGymCardPurchasedAtIso = null;
     spyOnSemParentsDone = false;

@@ -1,7 +1,7 @@
 part of '../main_game_screen.dart';
 
 class MainGameScreenState extends MainGameScreenStateBase
-    with CherieGameFlow, MainGameNpcFinance, MainGameQuestFlows, MainGameTimeTickHandler {
+    with MomGameFlow, CherieGameFlow, MainGameNpcFinance, MainGameQuestFlows, MainGameTimeTickHandler {
   @override
   void initState() {
     super.initState();
@@ -27,6 +27,7 @@ class MainGameScreenState extends MainGameScreenStateBase
         _maybeResumeCherieQuest004AfterLoad();
         _maybeResumeCherieQuest005AfterLoad();
         _maybeResumeCherieQuest006AfterLoad();
+        _maybeResumeMomQuest001AfterLoad();
         _maybeResumeCherieMassageFunEventAfterLoad();
         _maybeStartDanielleSpyCaughtAutoInRoom();
         _tryAutoStartSashaHallComunicateVideo();
@@ -605,6 +606,13 @@ class MainGameScreenState extends MainGameScreenStateBase
                                 );
                               }
                               if (_isCherieQuest006ScriptedDialogActive()) {
+                                return GameDialogPanel(
+                                  message: newsMessage,
+                                  highlightNames: const [],
+                                  navButtons: [_buildActionPanel()],
+                                );
+                              }
+                              if (_isMomQuest001ScriptedDialogActive()) {
                                 return GameDialogPanel(
                                   message: newsMessage,
                                   highlightNames: const [],

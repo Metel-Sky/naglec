@@ -12,6 +12,7 @@ import '../services/game_time_controller.dart';
 import '../widgets/room_npc_scene_template.dart';
 import '../npcs/mom/mom_room_hours.dart';
 import '../npcs/mom/mom_video_func.dart' as mom_vf;
+import '../npcs/piper/piper_shower_videos.dart';
 import '../services/locale_controller.dart';
 
 class HomeView extends StatefulWidget {
@@ -86,6 +87,7 @@ class _HomeViewState extends State<HomeView> {
     final int h = widget.timeController.dateTime.hour;
     final dt = widget.timeController.dateTime;
     final world = sl<GameWorldState>();
+    final momNpc = npcService.npcById('mom');
     final List<({NPCModel npc, SchedulePoint point})> candidates = [];
 
     for (var npc in npcsInRoom) {
@@ -115,7 +117,15 @@ class _HomeViewState extends State<HomeView> {
           widget.currentRoom == LocationsData.momRoom &&
           momRoomDynamicEveningMediaHour(h) &&
           point.spritePath.trim().isEmpty;
-      if (point.spritePath.isNotEmpty || useDynamicEvening) {
+      final useKitchenEveningVideo = npc.id == 'mom' &&
+          widget.currentRoom == LocationsData.kitchen &&
+          h == 21 &&
+          point.spritePath.trim().isEmpty &&
+          npcService.getCurrentLocationId(npc, h, day) ==
+              LocationsData.kitchen;
+      if (point.spritePath.isNotEmpty ||
+          useDynamicEvening ||
+          useKitchenEveningVideo) {
         candidates.add((npc: npc, point: point));
       }
     }
@@ -142,18 +152,23 @@ class _HomeViewState extends State<HomeView> {
 
     // Seed для медіа: один раз на добу для цієї кімнати (календарний день гри).
     final mediaSeed = _dailySeed(dt, widget.currentRoom) + 9999;
-    // Мама на кухні: ранок (7) — відео сніданку.
-    // Вечірні відео на кухні вимкнено (використовується статичний фон кімнати).
-    if (activeNPC?.id == 'mom' &&
-        widget.currentRoom == 'kitchen') {
+    // Мама на кухні: 7 — сніданок; 21 — вечеря (окремий набір від mom_room / pereodevaetsa).
+    if (momNpc != null &&
+        widget.currentRoom == LocationsData.kitchen &&
+        npcService.getCurrentLocationId(momNpc, h, day) ==
+            LocationsData.kitchen) {
       if (h == 7) {
         final kitchenSeed = world.kitchenVisitSeed ?? mediaSeed;
         specialBackground = mom_vf.momKitchenMorningSeeded(kitchenSeed);
+        activeNPC ??= momNpc;
+      } else if (h == 21) {
+        final kitchenSeed = world.kitchenVisitSeed ?? mediaSeed;
+        specialBackground = mom_vf.momKitchenEveningSeeded(kitchenSeed);
+        activeNPC ??= momNpc;
       }
     }
     // Мама у кімнаті: 23–6 — три sleep; 22–23 і 6–7 — два pereodevaetsa.
     // Зв’язку з activeNPC недостатньо: representativeSchedulePoint інколи null → тоді беремо розклад напряму.
-    final momNpc = npcService.npcById('mom');
     final momNightVideoHere = momNpc != null &&
         widget.currentRoom == LocationsData.momRoom &&
         momRoomDynamicEveningMediaHour(h) &&
@@ -171,6 +186,18 @@ class _HomeViewState extends State<HomeView> {
       if (h >= 8 && h < 9) {
         specialBackground = mom_vf.momShowerMorningVideosSeeded(mediaSeed);
       }
+    }
+    // Пайпер у душі: один з чотирьох роликів (після мами — щоб перекрити рідкі колізії розкладу).
+    final piperNpc = npcService.npcById('piper');
+    final piperShowerHere = piperNpc != null &&
+        widget.currentRoom == LocationsData.bathroom &&
+        npcService.getCurrentLocationId(piperNpc, h, day) ==
+            LocationsData.bathroom &&
+        piperShowerScheduleHour(h, day);
+    if (piperShowerHere) {
+      final showerSeed = world.piperBathroomVisitSeed ?? mediaSeed;
+      specialBackground = piperShowerVideoSeeded(showerSeed);
+      activeNPC ??= piperNpc;
     }
     // 4. Визначаємо фінальний шлях до медіа
     final roomData = LocationsData.homeRooms[widget.currentRoom];

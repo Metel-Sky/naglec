@@ -39,9 +39,15 @@ class _VideoSceneWidgetState extends State<VideoSceneWidget> {
   }
 
   Future<void> _openVideo(String path) async {
-    await player.open(Media('asset:///$path'));
-    await player.setPlaylistMode(PlaylistMode.single);
-    await player.play();
+    try {
+      await player.open(Media('asset:///$path'));
+      final lower = path.toLowerCase();
+      final autoLoop = lower.contains('lib/assets/npcs/mom/video/') ||
+          lower.contains('lib/assets/npcs/piper/video/');
+      final loop = widget.loop ?? autoLoop;
+      await player.setPlaylistMode(loop ? PlaylistMode.loop : PlaylistMode.single);
+      await player.play();
+    } catch (_) {}
   }
 
   @override

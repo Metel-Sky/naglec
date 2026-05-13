@@ -11,8 +11,10 @@ final List<String> laptopPornVideoPaths = [
   '$laptopPornAssetPath/porn_5.webm',
 ];
 
-/// Для 5-го посилання — випадково одне з двох відео.
+/// Для 5-го посилання — випадково одне з чотирьох відео (асети з [laptopPornAssetPath]).
 const List<String> laptopPorn5VideoPaths = [
-  '$laptopPornAssetPath/porn_7.webm',
+  '$laptopPornAssetPath/porn_5.webm',
   '$laptopPornAssetPath/porn_6.webm',
+  '$laptopPornAssetPath/porn_7.webm',
+  '$laptopPornAssetPath/elsa_kompromat_1.webm',
 ];

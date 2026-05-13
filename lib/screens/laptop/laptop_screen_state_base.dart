@@ -313,4 +313,97 @@ abstract class LaptopScreenStateBase extends State<LaptopScreen> {
       ),
     );
   }
+
+  /// Один крок «назад» усередині ноутбука (порядок як у [buildContent]).
+  /// Повертає `false` на робочому столі — тоді зовнішня «Назад» закриє ноут і винесе в коридор.
+  bool tryPopLaptopHierarchy() {
+    if (!mounted) return false;
+
+    if (showUsbCompromatSubmenu) {
+      if (watchingCompromatVideo) {
+        setState(() => watchingCompromatVideo = false);
+        return true;
+      }
+      setState(() => showUsbCompromatSubmenu = false);
+      return true;
+    }
+    if (showSurfSubmenu) {
+      if (showJobVacancies) {
+        setState(() => showJobVacancies = false);
+        return true;
+      }
+      setState(() => showSurfSubmenu = false);
+      return true;
+    }
+    if (showShopSubmenu) {
+      setState(() => showShopSubmenu = false);
+      return true;
+    }
+    if (showPornSubmenu) {
+      if (watchingPornVideo) {
+        setState(() {
+          watchingPornVideo = false;
+          selectedPornIndex = null;
+          currentPorn5VideoPath = null;
+        });
+        widget.onElsaVideoWatchingChanged?.call(false);
+        widget.onWatchingPornChanged?.call(false);
+        return true;
+      }
+      setState(() => showPornSubmenu = false);
+      return true;
+    }
+    if (showHiddenCamerasSubmenu) {
+      if (watchingHiddenCameraRoom != null) {
+        setState(() => watchingHiddenCameraRoom = null);
+        return true;
+      }
+      setState(() => showHiddenCamerasSubmenu = false);
+      return true;
+    }
+    if (showCompromatSubmenu) {
+      if (watchingCompromatVideo) {
+        setState(() => watchingCompromatVideo = false);
+        return true;
+      }
+      setState(() => showCompromatSubmenu = false);
+      return true;
+    }
+    if (showStudySubmenu) {
+      if (watchingSubject != null && watchingLessonIndex != null) {
+        setState(() {
+          watchingSubject = null;
+          watchingLessonIndex = null;
+        });
+        return true;
+      }
+      if (showProgrammingLessons) {
+        setState(() => showProgrammingLessons = false);
+        return true;
+      }
+      if (showLockpickLessons) {
+        setState(() => showLockpickLessons = false);
+        return true;
+      }
+      if (showStealthLessons) {
+        setState(() => showStealthLessons = false);
+        return true;
+      }
+      if (showPasswordLessons) {
+        setState(() => showPasswordLessons = false);
+        return true;
+      }
+      if (showPhoneLessons) {
+        setState(() => showPhoneLessons = false);
+        return true;
+      }
+      if (showMassageLessons) {
+        setState(() => showMassageLessons = false);
+        return true;
+      }
+      setState(() => showStudySubmenu = false);
+      return true;
+    }
+    return false;
+  }
 }

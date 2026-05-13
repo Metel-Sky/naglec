@@ -9,6 +9,7 @@ import 'cherie_quest004_location_pin.dart';
 import 'cherie_quest005_location_pin.dart';
 import 'cherie_quest006_location_pin.dart';
 import 'cherie_massage_fun_location_pin.dart';
+import 'mom_quest001_location_pin.dart';
 import 'game_time_controller.dart';
 import 'game_world_state.dart';
 import 'inventory_controller.dart';
@@ -274,6 +275,11 @@ class NPCService {
       if (cherieQ5Room != null) return cherieQ5Room;
       final cherieQ4Room = cherieQuest004OverrideCherieRoomId(npc, world);
       if (cherieQ4Room != null) return cherieQ4Room;
+    }
+    if (npc.id == _momNpcId) {
+      final world = sl<GameWorldState>();
+      final hallPin = momQuest001OverrideMomHall(npc, world, effectiveDay, hour);
+      if (hallPin != null) return hallPin;
     }
     if (npc.id == 'rockefeller') {
       const wd = [0, 1, 2, 3, 4];
@@ -616,6 +622,24 @@ class NPCService {
           (p) => p.spritePath.isNotEmpty && p.location == ownAuditorium,
         );
       } catch (_) {}
+    }
+
+    // Мама в домашньому залі за піном квесту «001 пляж» (суб/нд 12–14): у розкладі цей слот —
+    // cityOverview без спрайту, тож стандартний пошук по location не дає точки.
+    if (npc.id == _momNpcId && normRoom == LocationsData.hall) {
+      final world = sl<GameWorldState>();
+      if (momQuest001OverrideMomHall(npc, world, effectiveDay, hour) != null) {
+        final av = npc.avatarPath;
+        if (av != null && av.isNotEmpty) {
+          return SchedulePoint(
+            hourStart: 12,
+            hourEnd: 14,
+            location: LocationsData.hall,
+            actionLabel: '',
+            spritePath: av,
+          );
+        }
+      }
     }
     return null;
   }

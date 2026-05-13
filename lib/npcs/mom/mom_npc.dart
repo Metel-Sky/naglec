@@ -131,7 +131,8 @@ NPCModel createMomNpc() {
         hourEnd: 21,
         location: 'kitchen',
         actionLabel: 'Готує вечерю',
-        spritePath: momRoomMomEveningKitchenList(),
+        // Фон-відео задає HomeView — momKitchenEveningSeeded (ролики кухні, не mom_room).
+        spritePath: '',
         days: [0, 1, 2, 3, 4],
       ),
       SchedulePoint(

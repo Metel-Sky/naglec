@@ -1,5 +1,6 @@
 import '../data/npc_profile_quests_registry.dart';
 import '../npcs/cherie/cherie_quests.dart';
+import '../npcs/mom/mom_quest001.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/danielle/danielle_spy_parents_quest.dart';
 import '../npcs/sem/sem_events.dart';
@@ -290,6 +291,22 @@ abstract final class NpcQuestCheats {
           profileNpc.setVar(DenEventVars.secondChainDone, false);
           profileNpc.setVar(DenEventVars.thirdMeeting, false);
           profileNpc.setVar(DenEventVars.hooligan, false);
+        }
+        break;
+      case NpcProfileQuestCheatId.momQuest001Beach:
+        if (profileNpc.id != 'mom') break;
+        if (completed) {
+          profileNpc.setVar(MomQuest001.npcVarComplete, true);
+          world.momQuest001InvitationAccepted = true;
+          world.momQuest001Beach = 4;
+          world.momQuest001Step = 0;
+          world.momQuest001LastBeachTripWeekKey = null;
+        } else {
+          profileNpc.setVar(MomQuest001.npcVarComplete, false);
+          world.momQuest001InvitationAccepted = false;
+          world.momQuest001Beach = 0;
+          world.momQuest001Step = 0;
+          world.momQuest001LastBeachTripWeekKey = null;
         }
         break;
     }

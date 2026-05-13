@@ -36,9 +36,37 @@ class EventInteractionOverlay extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    // Порядок важливий: спочатку фон (картинка), зверху — відео. Інакше Image перекриває
+    // MasturbateVideoOverlay (наприклад перехід з кроку з image на крок з відео в одному кадрі).
     return Stack(
       fit: StackFit.expand,
       children: [
+        if (eventVideoPath == null && eventVideoPendingButton != null)
+          Positioned.fill(
+            child: Container(color: Colors.black),
+          ),
+        if (eventImagePath != null)
+          Positioned.fill(
+            child: Image.asset(
+              eventImagePath!,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                color: Colors.black45,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  sl<LocaleController>()
+                      .t('asset_load_failed_short')
+                      .replaceAll('%s', eventImagePath!),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
+          ),
         if (eventVideoPath != null)
           Positioned.fill(
             child: MasturbateVideoOverlay(
@@ -57,12 +85,6 @@ class EventInteractionOverlay extends StatelessWidget {
               fit: eventVideoFullScreen ? BoxFit.cover : BoxFit.contain,
             ),
           ),
-        
-        if (eventVideoPath == null && eventVideoPendingButton != null)
-          Positioned.fill(
-            child: Container(color: Colors.black),
-          ),
-          
         if (eventVideoPendingButton != null)
           Center(
             child: SizedBox(
@@ -76,29 +98,6 @@ class EventInteractionOverlay extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          
-        if (eventImagePath != null)
-          Positioned.fill(
-            child: Image.asset(
-              eventImagePath!,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                color: Colors.black45,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(12),
-                child: Text(
-                  sl<LocaleController>()
-                      .t('asset_load_failed_short')
-                      .replaceAll('%s', eventImagePath!),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
                   ),
                 ),
               ),
