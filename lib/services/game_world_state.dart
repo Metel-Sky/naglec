@@ -142,6 +142,9 @@ class GameWorldState {
   /// Останній тиждень (ключ понеділка `yyyy-MM-dd`), коли завершено поїздку на пляж (mom_quest_001); раз на тиждень.
   String? momQuest001LastBeachTripWeekKey;
 
+  /// gg_event_001_stojak: дата останнього скидання прапорів мами/сестер о 6:00 (`yyyy-M-d`).
+  String? ggEvent001StojakLastResetDayKey;
+
   /// Скільки разів завершено івент (фінал кроку 6 «Піти» або кроку 8 «Піти»).
   int cherieMassageFunCompletions = 0;
 
@@ -289,6 +292,7 @@ class GameWorldState {
         'momQuest001Beach': momQuest001Beach,
         'momQuest001InvitationAccepted': momQuest001InvitationAccepted,
         'momQuest001LastBeachTripWeekKey': momQuest001LastBeachTripWeekKey,
+        'ggEvent001StojakLastResetDayKey': ggEvent001StojakLastResetDayKey,
         'cherieMassageFunCompletions': cherieMassageFunCompletions,
         'rockefellerNikeOfficeStep': rockefellerNikeOfficeStep,
         'rockefellerNikeWorkStarted': rockefellerNikeWorkStarted,
@@ -439,6 +443,8 @@ class GameWorldState {
         json['momQuest001InvitationAccepted'] == true;
     momQuest001LastBeachTripWeekKey =
         json['momQuest001LastBeachTripWeekKey'] as String?;
+    ggEvent001StojakLastResetDayKey =
+        json['ggEvent001StojakLastResetDayKey'] as String?;
     cherieMassageFunCompletions =
         ((json['cherieMassageFunCompletions'] as num?)?.toInt() ?? 0).clamp(0, 9999);
     rockefellerNikeOfficeStep =
@@ -576,6 +582,7 @@ class GameWorldState {
     momQuest001Beach = 0;
     momQuest001InvitationAccepted = false;
     momQuest001LastBeachTripWeekKey = null;
+    ggEvent001StojakLastResetDayKey = null;
     cherieMassageFunCompletions = 0;
     rockefellerNikeOfficeStep = 0;
     rockefellerNikeWorkStarted = false;

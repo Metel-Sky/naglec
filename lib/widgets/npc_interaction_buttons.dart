@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../models/npc_model.dart';
 import '../models/npc_secondary.dart';
+import '../npcs/gg/gg_event_001_stojak.dart';
 import '../services/game_time_controller.dart';
 import '../services/locale_controller.dart';
+import '../services/player_stats_controller.dart';
+import '../services/save_service.dart';
 import '../services/service_locator.dart';
 import '../theme/game_theme.dart';
 
@@ -86,6 +89,40 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
   bool _financeMode = false;
   bool _talkMode = false;
   bool _momAskMoneyMode = false;
+
+  void _applyGgEvent001StojakSideEffects() {
+    final stats = sl<PlayerStatsController>();
+    final a = stats.arousal;
+    final m = stats.player.maxArousal;
+    final stojak = GgEvent001Stojak.stojakDialogApplies(widget.npc, a, m);
+    final neutral = GgEvent001Stojak.shouldRecordNeutralMeet(widget.npc, a, m);
+    if (stojak) {
+      GgEvent001Stojak.onStojakPanelFirstBuild(widget.npc);
+    } else if (neutral) {
+      GgEvent001Stojak.onNeutralPanelOpen(widget.npc, a, m);
+    }
+    if (stojak || neutral) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        widget.onUpdate();
+        sl<SaveService>().autosave();
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _applyGgEvent001StojakSideEffects();
+  }
+
+  @override
+  void didUpdateWidget(covariant NpcInteractionButtons oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.npc.id != widget.npc.id) {
+      _applyGgEvent001StojakSideEffects();
+    }
+  }
 
   bool get _financeAvailable => !isSecondaryNpc(widget.npc);
 
@@ -238,6 +275,22 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
   @override
   Widget build(BuildContext context) {
     final t = sl<LocaleController>().t;
+    final stats = sl<PlayerStatsController>();
+    final playerArousal = stats.arousal;
+    final playerMaxArousal = stats.player.maxArousal;
+    if (GgEvent001Stojak.stojakDialogApplies(
+      widget.npc,
+      playerArousal,
+      playerMaxArousal,
+    )) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (widget.onBack != null) _closePanelButton(),
+        ],
+      );
+    }
 
     if (_financeMode && _financeAvailable) {
       final isMom = widget.npc.id == 'mom';

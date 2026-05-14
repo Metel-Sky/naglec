@@ -541,6 +541,8 @@ final Map<String, String> stringsEn = {
   'npc_finance_mom_ask_100': r'$100',
   'npc_finance_mom_no_money': "Sorry, I don't have any money right now",
   'npc_finance_back_actions': 'Back',
+  'gg_event_001_stojak_body':
+      "Aren't you ashamed?\n\nNo, no. Why?\n\nWell, something's about to burst out of your pants.",
   'npc_finance_pick_amount': 'Choose amount',
   'npc_finance_npc_no_money': 'This character does not have enough money right now.',
   'npc_finance_you_gifted': r'You gave the character %s $.',

@@ -26,6 +26,11 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, MainGameQ
           NpcFinanceService.tryMaleAutoRepay(_worldState, npc, _playerStats);
         }
       }
+      GgEvent001Stojak.resetFamilyDailyIfNeeded(
+        _worldState,
+        npcService,
+        _timeController.dateTime,
+      );
       final hour = _timeController.dateTime.hour;
       final day = _timeController.weekdayIndex;
       final animatorSlotKey = CherieQuest001.giftShopAnimatorShiftSlotKey(

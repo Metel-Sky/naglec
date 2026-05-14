@@ -785,12 +785,59 @@ class MainGameScreenState extends MainGameScreenStateBase
                                 if (callCenterMessage != null) callCenterMessage,
                               ];
                               var combinedMessage = messages.isNotEmpty ? messages.join(' ') : newsMessage;
+                              List<String> dialogueHighlightNames;
+                              Widget? stojakAvatarTrailing;
+                              final locPanel = sl<LocaleController>();
                               if (messages.isEmpty) {
-                                combinedMessage = _messageWithSelectedNpcStripLine(combinedMessage);
+                                NPCModel? selNpc;
+                                final sid = _selectedNpcIdInRoom;
+                                if (sid != null) {
+                                  try {
+                                    selNpc = sl<NPCService>().allNPCs.firstWhere((n) => n.id == sid);
+                                  } catch (_) {
+                                    selNpc = null;
+                                  }
+                                }
+                                final maxA = _playerStats.player.maxArousal;
+                                final sn = selNpc;
+                                final stojakHere = sn != null &&
+                                    GgEvent001Stojak.stojakDialogApplies(
+                                      sn,
+                                      _playerStats.arousal,
+                                      maxA,
+                                    );
+                                if (stojakHere) {
+                                  combinedMessage = locPanel.t('gg_event_001_stojak_body');
+                                  dialogueHighlightNames = const [];
+                                  final p = sn.avatarPath;
+                                  if (p != null && p.isNotEmpty) {
+                                    stojakAvatarTrailing = Padding(
+                                      padding: const EdgeInsets.only(top: 12),
+                                      child: Center(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Image.asset(
+                                            p,
+                                            height: 140,
+                                            fit: BoxFit.contain,
+                                            errorBuilder: (ctx, _, __) =>
+                                                const SizedBox.shrink(),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  combinedMessage =
+                                      _messageWithSelectedNpcStripLine(combinedMessage);
+                                  dialogueHighlightNames = _dialogueHighlightNames(
+                                    dt.hour,
+                                    _timeController.weekdayIndex,
+                                  );
+                                }
+                              } else {
+                                dialogueHighlightNames = const [];
                               }
-                              final dialogueHighlightNames = messages.isNotEmpty
-                                  ? const <String>[]
-                                  : _dialogueHighlightNames(dt.hour, _timeController.weekdayIndex);
                               // Дві окремі кнопки: флаєри та будівництво (коли обидві вакансії прийняті — обидві кнопки в місті).
                               final List<Widget> jobButtons = [];
                               if (showFlyersOffer && inJobTimeWindow && canDoFlyersToday) {
@@ -825,16 +872,22 @@ class MainGameScreenState extends MainGameScreenStateBase
                               }
                               final galleryOrProfileOpen =
                                   isNpcGalleryOpen || _selectedNpcForProfile != null;
+                              Widget? panelMessageTrailing;
+                              if (!galleryOrProfileOpen) {
+                                if (jobButtons.isNotEmpty) {
+                                  panelMessageTrailing = Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: jobButtons,
+                                  );
+                                } else if (stojakAvatarTrailing != null) {
+                                  panelMessageTrailing = stojakAvatarTrailing;
+                                }
+                              }
                               return GameDialogPanel(
                                 message: combinedMessage,
                                 highlightNames: dialogueHighlightNames,
-                                messageTrailing: galleryOrProfileOpen || jobButtons.isEmpty
-                                    ? null
-                                    : Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: jobButtons,
-                                      ),
+                                messageTrailing: panelMessageTrailing,
                                 navButtons: galleryOrProfileOpen
                                     ? const <Widget>[]
                                     : [_buildActionPanel()],
