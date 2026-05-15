@@ -94,20 +94,13 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
     final stats = sl<PlayerStatsController>();
     final a = stats.arousal;
     final m = stats.player.maxArousal;
-    final stojak = GgEvent001Stojak.stojakDialogApplies(widget.npc, a, m);
-    final neutral = GgEvent001Stojak.shouldRecordNeutralMeet(widget.npc, a, m);
-    if (stojak) {
-      GgEvent001Stojak.onStojakPanelFirstBuild(widget.npc);
-    } else if (neutral) {
-      GgEvent001Stojak.onNeutralPanelOpen(widget.npc, a, m);
-    }
-    if (stojak || neutral) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        widget.onUpdate();
-        sl<SaveService>().autosave();
-      });
-    }
+    if (!GgEvent001Stojak.stojakDialogApplies(widget.npc, a, m)) return;
+    GgEvent001Stojak.onStojakPanelFirstBuild(widget.npc);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      widget.onUpdate();
+      sl<SaveService>().autosave();
+    });
   }
 
   @override

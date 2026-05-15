@@ -26,7 +26,7 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, MainGameQ
           NpcFinanceService.tryMaleAutoRepay(_worldState, npc, _playerStats);
         }
       }
-      GgEvent001Stojak.resetFamilyDailyIfNeeded(
+      GgEvent001Stojak.resetDailyAtSixIfNeeded(
         _worldState,
         npcService,
         _timeController.dateTime,
