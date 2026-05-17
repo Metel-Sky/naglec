@@ -45,7 +45,7 @@ void main() async {
     ]);
   }
 
-  // На мобільних ховаємо верхній системний статус-бар, щоб ігрове поле
+  // На мобільних ховаємолгрл верхній системний статус-бар, щоб ігрове поле
   // починалось з самого верху екрана (на Android-планшетах без зайвої смуги).
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     await SystemChrome.setEnabledSystemUIMode(
