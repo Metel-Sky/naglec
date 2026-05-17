@@ -7,6 +7,7 @@ import '../services/npc_service.dart';
 import '../services/inventory_controller.dart';
 import '../services/game_world_state.dart';
 import '../services/save_service.dart';
+import '../services/player_stats_controller.dart';
 import '../models/npc_model.dart';
 import '../services/game_time_controller.dart';
 import '../widgets/room_npc_scene_template.dart';
@@ -88,6 +89,9 @@ class _HomeViewState extends State<HomeView> {
     final dt = widget.timeController.dateTime;
     final world = sl<GameWorldState>();
     final momNpc = npcService.npcById('mom');
+    final playerStats = sl<PlayerStatsController>();
+    final isGgFullyAroused =
+        playerStats.arousal >= playerStats.player.maxArousal;
     final List<({NPCModel npc, SchedulePoint point})> candidates = [];
 
     for (var npc in npcsInRoom) {
@@ -142,7 +146,13 @@ class _HomeViewState extends State<HomeView> {
               return candidates[Random(pickSeed).nextInt(candidates.length)];
             }();
       final sp = chosen.point.spritePath.trim();
-      if (sp.isNotEmpty && NpcRoomScenePicker.isVideoAssetPath(sp)) {
+      final suppressMomKitchenMorningVideo = isGgFullyAroused &&
+          chosen.npc.id == 'mom' &&
+          widget.currentRoom == LocationsData.kitchen &&
+          h == 7;
+      if (suppressMomKitchenMorningVideo) {
+        npcRasterOverlay = chosen.npc.avatarPath;
+      } else if (sp.isNotEmpty && NpcRoomScenePicker.isVideoAssetPath(sp)) {
         specialBackground = sp;
       } else if (sp.isNotEmpty) {
         npcRasterOverlay = NpcRoomScenePicker.npcRasterOverlayPath(chosen.npc, chosen.point);
@@ -157,10 +167,14 @@ class _HomeViewState extends State<HomeView> {
         widget.currentRoom == LocationsData.kitchen &&
         npcService.getCurrentLocationId(momNpc, h, day) ==
             LocationsData.kitchen) {
-      if (h == 7) {
+      if (h == 7 && !isGgFullyAroused) {
         final kitchenSeed = world.kitchenVisitSeed ?? mediaSeed;
         specialBackground = mom_vf.momKitchenMorningSeeded(kitchenSeed);
         activeNPC ??= momNpc;
+      } else if (h == 7 && isGgFullyAroused) {
+        specialBackground = null;
+        npcRasterOverlay = momNpc.avatarPath;
+        activeNPC = momNpc;
       } else if (h == 21) {
         final kitchenSeed = world.kitchenVisitSeed ?? mediaSeed;
         specialBackground = mom_vf.momKitchenEveningSeeded(kitchenSeed);

@@ -545,7 +545,7 @@ final Map<String, String> stringsUk = {
   'npc_finance_mom_no_money': 'Вибач, але в мене зараз немає грошей',
   'npc_finance_back_actions': 'Назад',
   'gg_event_001_stojak_body':
-      'А тобі не соромно?\n\nНі, ні. А що?\n\nНу, в тебе зараз з штанів щось вирветься.',
+      'А тобі не соромно?\nНі, ні. А що?\nНу, в тебе зараз з штанів щось вирветься.',
   'npc_finance_pick_amount': 'Обери суму',
   'npc_finance_npc_no_money': 'У цього персонажа наразі замало грошей.',
   'npc_finance_you_gifted': r'Ти передав персонажу %s $.',

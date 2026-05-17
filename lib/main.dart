@@ -218,7 +218,7 @@ class _NaglecGameState extends State<NaglecGame>
           initialRoute: '/',
           routes: {
             '/': (context) => const LoadingScreen(),
-            '/menu': (context) {    ;/X 
+            '/menu': (context) {
               final resume = ModalRoute.of(context)?.settings.arguments == _kMainMenuArgAutoResume;
               return MainMenuScreen(openGameOnFirstFrame: resume);
             },

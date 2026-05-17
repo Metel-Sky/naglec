@@ -786,7 +786,6 @@ class MainGameScreenState extends MainGameScreenStateBase
                               ];
                               var combinedMessage = messages.isNotEmpty ? messages.join(' ') : newsMessage;
                               List<String> dialogueHighlightNames;
-                              Widget? stojakAvatarTrailing;
                               final locPanel = sl<LocaleController>();
                               if (messages.isEmpty) {
                                 NPCModel? selNpc;
@@ -796,6 +795,24 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     selNpc = sl<NPCService>().allNPCs.firstWhere((n) => n.id == sid);
                                   } catch (_) {
                                     selNpc = null;
+                                  }
+                                }
+                                if (selNpc == null &&
+                                    currentZone == 'HOME' &&
+                                    isInsideRoom &&
+                                    LocationsData.migrateLegacyRoomId(currentRoom) ==
+                                        LocationsData.kitchen &&
+                                    dt.hour == 7) {
+                                  final npcService = sl<NPCService>();
+                                  final mom = npcService.npcById('mom');
+                                  if (mom != null &&
+                                      npcService.getCurrentLocationId(
+                                            mom,
+                                            dt.hour,
+                                            _timeController.weekdayIndex,
+                                          ) ==
+                                          LocationsData.kitchen) {
+                                    selNpc = mom;
                                   }
                                 }
                                 final maxA = _playerStats.player.maxArousal;
@@ -809,24 +826,6 @@ class MainGameScreenState extends MainGameScreenStateBase
                                 if (stojakHere) {
                                   combinedMessage = locPanel.t('gg_event_001_stojak_body');
                                   dialogueHighlightNames = const [];
-                                  final p = sn.avatarPath;
-                                  if (p != null && p.isNotEmpty) {
-                                    stojakAvatarTrailing = Padding(
-                                      padding: const EdgeInsets.only(top: 12),
-                                      child: Center(
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(8),
-                                          child: Image.asset(
-                                            p,
-                                            height: 140,
-                                            fit: BoxFit.contain,
-                                            errorBuilder: (ctx, _, __) =>
-                                                const SizedBox.shrink(),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }
                                 } else {
                                   combinedMessage =
                                       _messageWithSelectedNpcStripLine(combinedMessage);
@@ -880,8 +879,6 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     mainAxisSize: MainAxisSize.min,
                                     children: jobButtons,
                                   );
-                                } else if (stojakAvatarTrailing != null) {
-                                  panelMessageTrailing = stojakAvatarTrailing;
                                 }
                               }
                               return GameDialogPanel(
