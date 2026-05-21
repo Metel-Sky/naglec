@@ -2736,6 +2736,24 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           );
           actionWidgets.add(const SizedBox(height: 8));
         }
+        final showSisterSleepingPillButton = currentZone == 'HOME' &&
+            isInsideRoom &&
+            (currentRoomNorm == LocationsData.elsaRoom ||
+                currentRoomNorm == LocationsData.piperRoom) &&
+            day >= 0 &&
+            day <= 4 &&
+            hour >= 10 &&
+            hour <= 16;
+        if (showSisterSleepingPillButton) {
+          actionWidgets.add(
+            _navBtn('Підсипати снодійне', () {
+              setState(() {
+                newsMessage = 'Поки що нічого не відбувається.';
+              });
+            }),
+          );
+          actionWidgets.add(const SizedBox(height: 8));
+        }
 
         // Як розклад туалету (sem/den/loshok): будні 12:30–12:59.
         final bool collegeToiletGuysBreak = currentZone == 'COLLEGE' &&
