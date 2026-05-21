@@ -523,7 +523,7 @@ final Map<String, String> stringsEn = {
   'laptop_surf_sold_software': 'You sold software. +500 money.',
   'laptop_surf_sold_virus': 'You sold virus. +1000 money.',
   'laptop_shop': 'Online shop',
-  'shop_confirm_purchase': 'Confirm purchase?',
+  'shop_confirm_purchase': 'Buy?',
   'shop_yes': 'Yes',
   'shop_no': 'No',
   'shop_bought': 'Purchased.',

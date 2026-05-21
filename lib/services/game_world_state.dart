@@ -172,6 +172,13 @@ class GameWorldState {
   /// (ключ [GameTimeController.onlyDate], dd.MM.yyyy) — не частіше разу на добу.
   String? homeHallKettlebellWorkoutLastDateKey;
 
+  /// Дата, коли за продаж білизни в туалеті коледжу вже «спалила» одна власниця
+  /// (ключ [GameTimeController.onlyDate], dd.MM.yyyy) — не більше одного викриття на добу.
+  String? underwearSaleExposureDayKey;
+
+  /// Id власниці, яка дізналась про продаж у цей [underwearSaleExposureDayKey].
+  String? underwearSaleExposedOwnerId;
+
   /// Ключ тижня (понеділок "yyyy-MM-dd"), для якого задано дні відкритих дверей
   String? lastDoorWeekKey;
   /// День тижня (0–6), коли двері мами «відчинені» цього тижня (рандомно кожен понеділок)
@@ -307,6 +314,8 @@ class GameWorldState {
             homeHallDumbbellsWorkoutLastDateKey,
         'homeHallKettlebellWorkoutLastDateKey':
             homeHallKettlebellWorkoutLastDateKey,
+        'underwearSaleExposureDayKey': underwearSaleExposureDayKey,
+        'underwearSaleExposedOwnerId': underwearSaleExposedOwnerId,
         'lastDoorWeekKey': lastDoorWeekKey,
         'momDoorOpenWeekday': momDoorOpenWeekday,
         'elsaDoorOpenWeekday': elsaDoorOpenWeekday,
@@ -464,6 +473,10 @@ class GameWorldState {
         json['homeHallDumbbellsWorkoutLastDateKey'] as String?;
     homeHallKettlebellWorkoutLastDateKey =
         json['homeHallKettlebellWorkoutLastDateKey'] as String?;
+    underwearSaleExposureDayKey =
+        json['underwearSaleExposureDayKey'] as String?;
+    underwearSaleExposedOwnerId =
+        json['underwearSaleExposedOwnerId'] as String?;
     // Колишній крок «ноги» був step 5; тепер step 4 + [cherieQuest004LegsMassagePhase].
     if (cherieQuest004Step == 5) {
       cherieQuest004Step = 4;
@@ -593,6 +606,8 @@ class GameWorldState {
     rockefellerCherie005IncompleteAskLastDateKey = null;
     homeHallDumbbellsWorkoutLastDateKey = null;
     homeHallKettlebellWorkoutLastDateKey = null;
+    underwearSaleExposureDayKey = null;
+    underwearSaleExposedOwnerId = null;
     lastDoorWeekKey = null;
     momDoorOpenWeekday = null;
     elsaDoorOpenWeekday = null;

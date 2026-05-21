@@ -31,8 +31,14 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, MainGameQ
         npcService,
         _timeController.dateTime,
       );
+      npcService.resetSondoxTriggersAtMorning(_timeController.dateTime);
+      if (_collegeToiletUnderwearSaleActive &&
+          !_isCollegeToiletGuysBreakWindow()) {
+        _resetCollegeToiletUnderwearSaleUi();
+      }
       final hour = _timeController.dateTime.hour;
       final day = _timeController.weekdayIndex;
+      _showCollegeLessonStartDialogIfNeeded();
       final animatorSlotKey = CherieQuest001.giftShopAnimatorShiftSlotKey(
         _timeController.dateTime,
         _timeController.weekdayIndex,

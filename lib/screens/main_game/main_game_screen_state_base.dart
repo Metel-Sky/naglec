@@ -177,11 +177,20 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   /// Останній крок cherie_quest_006, для якого викликано [_applyCherieQuest006Patch].
   int? _cherieQuest006PresentationSyncedStep;
 
+  /// Режим продажу білизни в туалеті коледжу (12:30–12:59).
+  bool _collegeToiletUnderwearSaleActive = false;
+
+  /// Id предмета, обраного для підтвердження продажу в туалеті коледжу.
+  String? _collegeToiletUnderwearSalePendingItemId;
+
   /// Останній крок cherie_event_004 після [_applyCherieMassageFunEventPatch].
   int? _cherieMassageFunEventPresentationSyncedStep;
 
   /// Останній крок mom_quest_001 після [_applyMomQuest001Patch].
   int? _momQuest001PresentationSyncedStep;
+
+  /// Останній показаний діалог старту пари, щоб не дублювати AlertDialog на кожен rebuild/tick.
+  String? _collegeLessonPromptKey;
 
   /// Кнопка «Назад» у верхній панелі ([MainGameHeader]).
   bool get _headerShowsBackButton =>

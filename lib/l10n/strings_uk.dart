@@ -525,7 +525,7 @@ final Map<String, String> stringsUk = {
   'laptop_surf_sold_software': 'Ви продали софт. +500 грошей.',
   'laptop_surf_sold_virus': 'Ви продали вірус. +1000 грошей.',
   'laptop_shop': 'Інтернет магазин',
-  'shop_confirm_purchase': 'Підтверджуєте купівлю?',
+  'shop_confirm_purchase': 'Купити?',
   'shop_yes': 'Так',
   'shop_no': 'Ні',
   'shop_bought': 'Куплено.',

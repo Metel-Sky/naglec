@@ -248,6 +248,7 @@ class SaveService {
                   'name': it.name,
                   'description': it.description,
                   'imagePath': it.imagePath,
+                  'usesLeft': it.usesLeft,
                 })
             .toList(),
       };
@@ -429,6 +430,7 @@ class SaveService {
               name: itemName,
               description: desc,
               imagePath: m['imagePath'] as String?,
+              usesLeft: (m['usesLeft'] as num?)?.toInt(),
             ));
           }
         } else {

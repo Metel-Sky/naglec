@@ -307,8 +307,16 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   }
 
   void _handleRoomEntry(String name) {
+    if (_isCollegeAuditorium(name) &&
+        _isCollegeLessonLateWindow(_timeController.dateTime)) {
+      _showCollegeLateDialog();
+      return;
+    }
     _nav.handleRoomEntry(name);
     setState(() {
+      if (LocationsData.migrateLegacyRoomId(name) != LocationsData.toilet) {
+        _resetCollegeToiletUnderwearSaleUi();
+      }
       if (name == LocationsData.cityMallGiftShop ||
           name == LocationsData.cityMallGiftShopOffice ||
           name == LocationsData.cityMallGiftShopWarehouse) {
@@ -407,6 +415,295 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _tryStartMomQuest001HallIfNeeded(name);
       _ensureCherieQuest002HomeHallUiCoherent();
     });
+  }
+
+  bool _isCollegeAuditorium(String room) {
+    final norm = LocationsData.migrateLegacyRoomId(room);
+    return norm == LocationsData.auditorium1 ||
+        norm == LocationsData.auditorium2 ||
+        norm == LocationsData.auditorium3;
+  }
+
+  int? _collegeLessonStartHour(DateTime dt) {
+    if (!collegeWeekdayIndices.contains(_timeController.weekdayIndex)) {
+      return null;
+    }
+    if (dt.hour == 10 || dt.hour == 11) return 10;
+    if (dt.hour == 13 || dt.hour == 14) return 13;
+    if (dt.hour == 16 || dt.hour == 17) return 16;
+    return null;
+  }
+
+  bool _isCollegeLessonStartWindow(DateTime dt) {
+    final start = _collegeLessonStartHour(dt);
+    return start != null && dt.hour == start && dt.minute <= 15;
+  }
+
+  bool _isCollegeLessonLateWindow(DateTime dt) {
+    final start = _collegeLessonStartHour(dt);
+    if (start == null) return false;
+    if (dt.hour == start) return dt.minute > 15;
+    return dt.hour == start + 1;
+  }
+
+  int? _collegeLessonEndHour(DateTime dt) {
+    final start = _collegeLessonStartHour(dt);
+    if (start == null) return null;
+    return start + 2;
+  }
+
+  String? _collegeTeacherIdForAuditorium(String room) {
+    final norm = LocationsData.migrateLegacyRoomId(room);
+    if (norm == LocationsData.auditorium1) return 'amia';
+    if (norm == LocationsData.auditorium2) return 'lisa';
+    if (norm == LocationsData.auditorium3) return 'nicole';
+    return null;
+  }
+
+  void _showCollegeLateDialog() {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: GameTheme.bgDark,
+        content: const Text(
+          'Ти запізнився на пару',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _attendCollegeLesson() {
+    final endHour = _collegeLessonEndHour(_timeController.dateTime);
+    if (endHour == null) return;
+    final teacherId = _collegeTeacherIdForAuditorium(currentRoom);
+    final teacher =
+        teacherId == null ? null : sl<NPCService>().npcById(teacherId);
+    teacher?.addRelationship(3);
+    _playerStats.changeCollegeSuccess(1);
+    final dt = _timeController.dateTime;
+    _timeController.dateTime = DateTime(dt.year, dt.month, dt.day, endHour, 0);
+    newsMessage = 'Пара закінчилась.';
+    _collegeLessonPromptKey = null;
+    _saveService.autosave();
+  }
+
+  void _showCollegeLessonStartDialogIfNeeded() {
+    final dt = _timeController.dateTime;
+    if (currentZone != 'COLLEGE' ||
+        !isInsideRoom ||
+        !_isCollegeAuditorium(currentRoom) ||
+        !_isCollegeLessonStartWindow(dt)) {
+      return;
+    }
+    final key =
+        '${dt.year}-${dt.month}-${dt.day}-${_timeController.weekdayIndex}-${dt.hour}-$currentRoom';
+    if (_collegeLessonPromptKey == key) return;
+    _collegeLessonPromptKey = key;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _collegeLessonPromptKey != key) return;
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) => AlertDialog(
+          backgroundColor: GameTheme.bgDark,
+          content: const Text(
+            'Пара починається.',
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                _collegeLessonPromptKey = null;
+                _handleBackTap();
+              },
+              child: const Text('Вийти'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                setState(_attendCollegeLesson);
+              },
+              child: const Text('Йти на пару'),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  void _resetCollegeToiletUnderwearSaleUi() {
+    _collegeToiletUnderwearSaleActive = false;
+    _collegeToiletUnderwearSalePendingItemId = null;
+  }
+
+  bool _isCollegeToiletGuysBreakWindow() {
+    final day = _timeController.weekdayIndex;
+    final hour = _timeController.dateTime.hour;
+    final minute = _timeController.dateTime.minute;
+    return currentZone == 'COLLEGE' &&
+        isInsideRoom &&
+        LocationsData.migrateLegacyRoomId(currentRoom) == LocationsData.toilet &&
+        collegeWeekdayIndices.contains(day) &&
+        hour == 12 &&
+        minute >= 30 &&
+        minute <= 59;
+  }
+
+  void _openCollegeToiletUnderwearSale() {
+    _ui.setEventImagePath(null);
+    final sellable =
+        CollegeToiletUnderwearSaleService.sellableItems(_inventory.items);
+    if (sellable.isEmpty) {
+      newsMessage = 'Тобі поки що нічого продавати.';
+      return;
+    }
+    _collegeToiletUnderwearSaleActive = true;
+    _collegeToiletUnderwearSalePendingItemId = null;
+    newsMessage = 'Пацани готові переглянути речі. Обери, що продати.';
+  }
+
+  GameItem? _collegeToiletUnderwearSaleItemById(String itemId) {
+    for (final item in _inventory.items) {
+      if (item.id == itemId) return item;
+    }
+    return null;
+  }
+
+  void _selectCollegeToiletUnderwearSaleItem(String itemId) {
+    final item = _collegeToiletUnderwearSaleItemById(itemId);
+    if (item == null ||
+        !CollegeToiletUnderwearSaleService.isSellableItem(item)) {
+      return;
+    }
+    final price = CollegeToiletUnderwearSaleService.priceForItem(
+      item,
+      _timeController.onlyDate,
+    );
+    _collegeToiletUnderwearSalePendingItemId = itemId;
+    if (CollegeToiletUnderwearSaleService.canTriggerExposure(item)) {
+      final risk = CollegeToiletUnderwearSaleService.riskLabel(price);
+      newsMessage =
+          'Пацани оживились, коли побачили річ.\n'
+          'За це готові дати \$$price.\n'
+          'Ризик: $risk.';
+    } else {
+      newsMessage =
+          'Пацани оживились, коли побачили річ.\n'
+          'За це готові дати \$$price.';
+    }
+  }
+
+  void _confirmCollegeToiletUnderwearSale() {
+    final itemId = _collegeToiletUnderwearSalePendingItemId;
+    if (itemId == null) return;
+    final item = _collegeToiletUnderwearSaleItemById(itemId);
+    if (item == null ||
+        !CollegeToiletUnderwearSaleService.isSellableItem(item)) {
+      _collegeToiletUnderwearSalePendingItemId = null;
+      return;
+    }
+
+    final price = CollegeToiletUnderwearSaleService.priceForItem(
+      item,
+      _timeController.onlyDate,
+    );
+    _inventory.removeItem(item.id);
+    _playerStats.changeMoney(price);
+
+    final todayKey = _timeController.onlyDate;
+    final ownerId =
+        CollegeToiletUnderwearSaleService.ownerIdFromItemId(item.id);
+    var message =
+        'Ти продав ${item.name} за \$$price.\n'
+        'Пацани швидко сховали покупку.';
+
+    final canExposeToday =
+        _worldState.underwearSaleExposureDayKey != todayKey;
+    if (canExposeToday &&
+        CollegeToiletUnderwearSaleService.canTriggerExposure(item) &&
+        CollegeToiletUnderwearSaleService.rollExposure(
+          price,
+          Random(),
+        )) {
+      final exposedOwnerId = ownerId!;
+      final npc = sl<NPCService>().npcById(exposedOwnerId);
+      if (npc != null) {
+        npc.addRelationship(-35);
+        npc.changeBehavior(-15);
+        _worldState.underwearSaleExposureDayKey = todayKey;
+        _worldState.underwearSaleExposedOwnerId = exposedOwnerId;
+        final ownerName =
+            CollegeToiletUnderwearSaleService.ownerDisplayName(exposedOwnerId);
+        message +=
+            '\n\nПогана новина: хтось занадто багато базікав.\n'
+            '$ownerName дізналась, що її річ продали.';
+      }
+    }
+
+    _collegeToiletUnderwearSalePendingItemId = null;
+    final remaining =
+        CollegeToiletUnderwearSaleService.sellableItems(_inventory.items);
+    if (remaining.isEmpty) {
+      _resetCollegeToiletUnderwearSaleUi();
+      message += '\n\nБільше нічого продавати.';
+    }
+    newsMessage = message;
+    _saveService.autosave();
+  }
+
+  List<Widget> _buildCollegeToiletUnderwearSaleActions() {
+    final pendingId = _collegeToiletUnderwearSalePendingItemId;
+    if (pendingId != null) {
+      return [
+        _navBtn('Продати', () {
+          setState(_confirmCollegeToiletUnderwearSale);
+        }),
+        const SizedBox(height: 8),
+        _navBtn('Назад', () {
+          setState(() {
+            _collegeToiletUnderwearSalePendingItemId = null;
+            newsMessage = 'Обери, що продати.';
+          });
+        }),
+      ];
+    }
+
+    final dateKey = _timeController.onlyDate;
+    final sellable =
+        CollegeToiletUnderwearSaleService.sellableItems(_inventory.items);
+    if (sellable.isEmpty) {
+      return [
+        _navBtn('Назад', () {
+          setState(_resetCollegeToiletUnderwearSaleUi);
+        }),
+      ];
+    }
+
+    final widgets = <Widget>[];
+    for (final item in sellable) {
+      final price =
+          CollegeToiletUnderwearSaleService.priceForItem(item, dateKey);
+      widgets.add(
+        _navBtn('${item.name} — \$$price', () {
+          setState(() => _selectCollegeToiletUnderwearSaleItem(item.id));
+        }),
+      );
+      widgets.add(const SizedBox(height: 8));
+    }
+    widgets.add(
+      _navBtn('Назад', () {
+        setState(_resetCollegeToiletUnderwearSaleUi);
+      }),
+    );
+    return widgets;
   }
 
   /// Якщо крок 5–9 у залі, а прапорець сесії зник — відновлюємо діалог / відео.
@@ -1257,6 +1554,16 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _exitSashaCommunicateInHallToCorridor();
       return;
     }
+    if (_collegeToiletUnderwearSaleActive) {
+      setState(() {
+        if (_collegeToiletUnderwearSalePendingItemId != null) {
+          _collegeToiletUnderwearSalePendingItemId = null;
+        } else {
+          _resetCollegeToiletUnderwearSaleUi();
+        }
+      });
+      return;
+    }
     if (currentZone == 'STREET' &&
         currentStreetHouse == null &&
         !isInsideRoom &&
@@ -1271,6 +1578,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     }
     _nav.handleBackTap();
     setState(() {
+      _resetCollegeToiletUnderwearSaleUi();
       _maybeAbortCherieQuest002WrongLocation();
       _maybeAbortCherieQuest003WrongLocation();
       _maybeAbortCherieQuest004WrongLocation();
@@ -2640,7 +2948,6 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           );
         }
 
-        // Sasha morning run (event №2): кнопки мають бути видимі навіть поза кімнатами.
         if (_sashaMorningRunUiActive &&
             currentZone == 'STREET' &&
             currentStreetHouse == null &&
@@ -2661,6 +2968,18 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: eventButtons,
+            ),
+          );
+        }
+
+        if (_collegeToiletUnderwearSaleActive && _isCollegeToiletGuysBreakWindow()) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: _buildCollegeToiletUnderwearSaleActions(),
             ),
           );
         }
@@ -2698,6 +3017,15 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
 
         // 3. Створюємо список віджетів всередині білдера
         List<Widget> actionWidgets = [];
+        void showSondoxPlaceholder() {
+          const path = 'lib/assets/items/hypnotic.jpg';
+          _ui.setEventImagePath(path);
+          Future<void>.delayed(const Duration(seconds: 2), () {
+            if (!mounted || _eventImagePath != path) return;
+            _ui.setEventImagePath(null);
+          });
+        }
+
         final roomIdLower = currentRoom.toLowerCase();
         final roomDisplayNameLower = LocationsData.getLocationDisplayName(currentRoom).toLowerCase();
         final isUtilityRoom = roomIdLower.contains('kitchen') ||
@@ -2719,9 +3047,21 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             !isUtilityRoom;
 
         final int minute = _timeController.dateTime.minute;
+        final hasSondox = _inventory.hasUsableSondox;
+        final momForSondox = npcService.npcById('mom');
+        final sisterForSondoxId = currentRoomNorm == LocationsData.elsaRoom
+            ? 'elsa'
+            : currentRoomNorm == LocationsData.piperRoom
+                ? 'piper'
+                : null;
+        final sisterForSondox = sisterForSondoxId == null
+            ? null
+            : npcService.npcById(sisterForSondoxId);
         final showMomSleepingPillButton = currentZone == 'HOME' &&
             isInsideRoom &&
             currentRoomNorm == LocationsData.kitchen &&
+            hasSondox &&
+            momForSondox?.getVar('sondox') != true &&
             day >= 0 &&
             day <= 4 &&
             hour >= 10 &&
@@ -2729,8 +3069,14 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         if (showMomSleepingPillButton) {
           actionWidgets.add(
             _navBtn('Підсипати в мамин стакан снодійне', () {
+              if (momForSondox == null || !_inventory.consumeSondoxUse()) {
+                return;
+              }
+              momForSondox.setVar('sondox', true);
+              _saveService.autosave();
               setState(() {
-                newsMessage = 'Поки що нічого не відбувається.';
+                showSondoxPlaceholder();
+                newsMessage = 'Ти підсипав снодійне. Сондокс подіє ближче до ночі.';
               });
             }),
           );
@@ -2740,20 +3086,12 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             isInsideRoom &&
             (currentRoomNorm == LocationsData.elsaRoom ||
                 currentRoomNorm == LocationsData.piperRoom) &&
+            hasSondox &&
+            sisterForSondox?.getVar('sondox') != true &&
             day >= 0 &&
             day <= 4 &&
             hour >= 10 &&
             hour <= 16;
-        if (showSisterSleepingPillButton) {
-          actionWidgets.add(
-            _navBtn('Підсипати снодійне', () {
-              setState(() {
-                newsMessage = 'Поки що нічого не відбувається.';
-              });
-            }),
-          );
-          actionWidgets.add(const SizedBox(height: 8));
-        }
 
         // Як розклад туалету (sem/den/loshok): будні 12:30–12:59.
         final bool collegeToiletGuysBreak = currentZone == 'COLLEGE' &&
@@ -2763,6 +3101,18 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             hour == 12 &&
             minute >= 30 &&
             minute <= 59;
+        final bool showAttendCollegeLessonButton = currentZone == 'COLLEGE' &&
+            isInsideRoom &&
+            _isCollegeAuditorium(currentRoomNorm) &&
+            _isCollegeLessonStartWindow(_timeController.dateTime);
+        if (showAttendCollegeLessonButton) {
+          actionWidgets.add(
+            _navBtn('Піти на пару', () {
+              setState(_attendCollegeLesson);
+            }),
+          );
+          actionWidgets.add(const SizedBox(height: 8));
+        }
         if (collegeToiletGuysBreak) {
           actionWidgets.add(
             _navBtn('Поговорити з пацанами', () {
@@ -2778,13 +3128,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           actionWidgets.add(const SizedBox(height: 8));
           actionWidgets.add(
             _navBtn('Продати шмотки', () {
-              setState(() {
-                _ui.setEventImagePath(null);
-                newsMessage = '''
-Ти викладаєш речі на унітазну кришку (акуратно).
-Пацани переглядають: «О, нічо так. Цінник — як домовимось. Зараз грошей мало, завтра на базарі кинемо.»
-Поки що лишаєш собі все — але контакт є.''';
-              });
+              setState(_openCollegeToiletUnderwearSale);
             }),
           );
           actionWidgets.add(const SizedBox(height: 8));
@@ -3544,6 +3888,27 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         // то interaction-кнопки не додаються — показуємо навігацію по зонам.
         if (actionWidgets.isEmpty) {
           _appendStandardWorldTravelButtons(actionWidgets);
+        }
+
+        if (showSisterSleepingPillButton) {
+          final insertIndex = actionWidgets.isNotEmpty
+              ? actionWidgets.length - 1
+              : actionWidgets.length;
+          actionWidgets.insert(
+            insertIndex,
+            _navBtn('Підсипати снодійне', () {
+              if (sisterForSondox == null || !_inventory.consumeSondoxUse()) {
+                return;
+              }
+              sisterForSondox.setVar('sondox', true);
+              _saveService.autosave();
+              setState(() {
+                showSondoxPlaceholder();
+                newsMessage = 'Ти підсипав снодійне. Сондокс подіє ближче до ночі.';
+              });
+            }),
+          );
+          actionWidgets.insert(insertIndex + 1, const SizedBox(height: 8));
         }
 
         // 4. Повертаємо контейнер зі списком, який тепер бачить actionWidgets

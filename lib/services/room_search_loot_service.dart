@@ -14,6 +14,7 @@ class RoomSearchLootService {
   static const List<LootOption> _baseLoot = [
     LootOption(money: 10, weight: 50),
     LootOption(item: GameItems.journalWomen, weight: 20),
+    LootOption(item: GameItems.playboyMagazine, weight: 20),
     LootOption(item: GameItems.panties1, weight: 10),
     LootOption(item: GameItems.panties2, weight: 10),
     LootOption(item: GameItems.braBlack, weight: 10),
@@ -77,7 +78,38 @@ class RoomSearchLootService {
     // «Нічого не знайдено»: 50% проти суми всіх інших варіантів у цьому пулі.
     final sumOtherWeights = pool.fold<double>(0, (s, o) => s + o.weight);
     pool.add(LootOption(weight: sumOtherWeights));
-    return _rollWeighted(pool, rng);
+    final rolled = _rollWeighted(pool, rng);
+    final ownedItem = _markOwnerIfUnderwear(rolled.item, roomId);
+    if (ownedItem == null || identical(ownedItem, rolled.item)) {
+      return rolled;
+    }
+    return LootOption(item: ownedItem, money: rolled.money, weight: rolled.weight);
+  }
+
+  static GameItem? _markOwnerIfUnderwear(GameItem? item, String roomId) {
+    if (item == null) return null;
+    final owner = switch (roomId) {
+      LocationsData.elsaRoom => (id: 'elsa', genitive: 'Ельзи'),
+      LocationsData.piperRoom => (id: 'piper', genitive: 'Пайпер'),
+      LocationsData.momRoom => (id: 'mom', genitive: 'мами'),
+      _ => null,
+    };
+    if (owner == null) return item;
+
+    final isPanties = item.id == 'panties' ||
+        item.id == 'panties_1' ||
+        item.id == 'panties_2';
+    final isBra = item.id == 'bra' || item.id == 'bra_black';
+    if (!isPanties && !isBra) return item;
+
+    final itemKind = isPanties ? 'Труси' : 'Ліфчик';
+    return GameItem(
+      id: '${item.id}_${owner.id}',
+      name: '$itemKind ${owner.genitive}',
+      description: '${item.description} Власниця: ${owner.genitive}.',
+      imagePath: item.imagePath,
+      usesLeft: item.usesLeft,
+    );
   }
 
   static LootOption _rollWeighted(List<LootOption> pool, Random rng) {

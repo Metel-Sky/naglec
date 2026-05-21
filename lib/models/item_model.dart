@@ -4,12 +4,15 @@ class GameItem {
   final String description;
   /// Шлях до картинки предмета (наприклад lib/assets/items/canon.jpg). Якщо null — у рюкзаку показується іконка.
   final String? imagePath;
+  /// Для витратних предметів: скільки разів ще можна використати одну одиницю.
+  final int? usesLeft;
 
   const GameItem({
     required this.id,
     required this.name,
     required this.description,
     this.imagePath,
+    this.usesLeft,
   });
 }
 
@@ -136,6 +139,13 @@ class GameItems {
     imagePath: 'lib/assets/items/journal_wom.jpg',
   );
 
+  static const GameItem playboyMagazine = GameItem(
+    id: 'playboy',
+    name: 'Журнал Playboy',
+    description: 'Глянцевий журнал Playboy.',
+    imagePath: 'lib/assets/items/playboy.png',
+  );
+
   static const GameItem eroBook = GameItem(
     id: 'ero_book',
     name: 'Еротичний роман',
@@ -198,6 +208,14 @@ class GameItems {
     name: 'Массажне арома масло',
     description: 'Ароматичне масло для масажу.',
     imagePath: 'lib/assets/items/maslo.jpg',
+  );
+
+  static const GameItem sondox = GameItem(
+    id: 'hypnotic',
+    name: 'Сондокс',
+    description: 'Снодійне.',
+    imagePath: 'lib/assets/items/hypnotic.jpg',
+    usesLeft: 10,
   );
 }
 

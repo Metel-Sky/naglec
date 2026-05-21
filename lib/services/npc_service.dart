@@ -256,6 +256,35 @@ class NPCService {
     return hour >= p.hourStart || hour <= p.hourEnd;
   }
 
+  static const String sondoxVar = 'sondox';
+
+  static bool _isSondoxSleepPoint(SchedulePoint p) {
+    if (p.hourStart <= p.hourEnd) return false;
+    final action = p.actionLabel.toLowerCase();
+    return action.contains('sleep') || action.contains('спить');
+  }
+
+  static SchedulePoint? _sondoxSleepPoint(NPCModel npc, int hour) {
+    if (npc.getVar(sondoxVar) != true) return null;
+    for (final point in npc.schedule) {
+      if (!_isSondoxSleepPoint(point)) continue;
+      final earlyStart = (point.hourStart + 23) % 24;
+      if (hour >= earlyStart || hour <= point.hourEnd) {
+        return point;
+      }
+    }
+    return null;
+  }
+
+  void resetSondoxTriggersAtMorning(DateTime gameNow) {
+    if (gameNow.hour < 6 || gameNow.hour >= 10) return;
+    for (final npc in allNPCs) {
+      if (npc.getVar(sondoxVar) == true) {
+        npc.setVar(sondoxVar, false);
+      }
+    }
+  }
+
   /// Поточна локація NPC за розкладом (год і день тижня).
   /// Час включно: слот 9–9 = 9:00–9:59, слот 10–17 = 10:00–17:59; через північ 22–6 = 22:00–6:59.
   /// При кількох збігах беремо слот з найбільшим hourStart.
@@ -280,6 +309,10 @@ class NPCService {
       final world = sl<GameWorldState>();
       final hallPin = momQuest001OverrideMomHall(npc, world, effectiveDay, hour);
       if (hallPin != null) return hallPin;
+    }
+    final sondoxSleepPoint = _sondoxSleepPoint(npc, hour);
+    if (sondoxSleepPoint != null) {
+      return sondoxSleepPoint.location;
     }
     if (npc.id == 'rockefeller') {
       const wd = [0, 1, 2, 3, 4];
@@ -426,6 +459,11 @@ class NPCService {
         spritePath: npc.avatarPath ?? '',
         days: collegeWeekdayIndices,
       );
+    }
+
+    final sondoxSleepPoint = _sondoxSleepPoint(npc, hour);
+    if (sondoxSleepPoint != null && sondoxSleepPoint.location == normRoom) {
+      return sondoxSleepPoint;
     }
 
     if (npc.id == 'nicole') {

@@ -297,6 +297,8 @@ class GameNavigationController extends ChangeNotifier {
       return;
     }
     
+    final isCollegeAuditoriumEntry =
+        _currentZone == "COLLEGE" && _isCollegeAuditorium(name);
     spendMoveEnergy();
     _currentRoom = name;
     _isInsideRoom = true;
@@ -305,7 +307,9 @@ class GameNavigationController extends ChangeNotifier {
     _uiStateController.setDenSecondUiPhase(DenSecondUiPhase.initial);
     _uiStateController.setDenThirdUiPhase(DenThirdUiPhase.initial);
     _uiStateController.closeAllPanels();
-    _timeController.addMinutes(5);
+    if (!isCollegeAuditoriumEntry) {
+      _timeController.addMinutes(5);
+    }
     _uiStateController.setNewsMessage(LocationsData.getLocationDisplayName(name));
     
     // College den auto-select
@@ -358,6 +362,12 @@ class GameNavigationController extends ChangeNotifier {
     final now = _timeController.dateTime;
     final ageDays = now.difference(purchasedAt).inDays;
     return ageDays <= 30;
+  }
+
+  bool _isCollegeAuditorium(String room) {
+    return room == LocationsData.auditorium1 ||
+        room == LocationsData.auditorium2 ||
+        room == LocationsData.auditorium3;
   }
   
   void handleBackTap() {
@@ -415,8 +425,14 @@ class GameNavigationController extends ChangeNotifier {
     _uiStateController.setBackpackOpen(false);
     _uiStateController.setStatsOpen(false);
     _uiStateController.setNpcGalleryOpen(false);
+
+    final skipBackTime = _currentZone == "COLLEGE" &&
+        _isInsideRoom &&
+        _isCollegeAuditorium(_currentRoom);
     
-    if (_currentZone == "STREET" && _currentStreetHouse != null) {
+    if (skipBackTime) {
+      // Вхід/вихід з аудиторій не списує час: час іде лише на саму пару.
+    } else if (_currentZone == "STREET" && _currentStreetHouse != null) {
       _timeController.addMinutes(5);
     } else if (_currentZone == "CITY") {
       _timeController.addMinutes(5);

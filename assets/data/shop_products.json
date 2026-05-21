@@ -54,6 +54,13 @@
           "imagePath": "lib/assets/items/poker_cards.jpg"
         },
         {
+          "id": "erotic_card",
+          "name": "Еротичні гральні карти",
+          "price": 50,
+          "purchasableOnce": true,
+          "imagePath": "lib/assets/items/erotic_card.jpg"
+        },
+        {
           "id": "marked_cards",
           "name": "Мічені карти",
           "price": 300,
@@ -274,11 +281,11 @@
           "imagePath": "lib/assets/items/hypnotic.jpg"
         },
         {
-          "id": "notcumtabs",
-          "name": "Некончин",
+          "id": "viagra",
+          "name": "Viagra",
           "price": 500,
           "purchasableOnce": false,
-          "imagePath": "lib/assets/items/notCumTabs.png"
+          "imagePath": "lib/assets/items/viagra.jpg"
         }
       ]
     },

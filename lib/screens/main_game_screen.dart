@@ -40,6 +40,7 @@ import '../services/game_ui_state_controller.dart';
 import '../services/game_navigation_controller.dart';
 import '../services/door_lock_service.dart';
 import '../services/room_search_loot_service.dart';
+import '../services/college_toilet_underwear_sale_service.dart';
 import '../quests/runtime/quest_runtime.dart';
 import '../quests/runtime/quest_state_repository.dart';
 import '../quests/runtime/sasha_event_runtime.dart';
