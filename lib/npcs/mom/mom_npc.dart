@@ -147,6 +147,14 @@ NPCModel createMomNpc() {
 
       ///#######################################################################
       SchedulePoint(
+        hourStart: 9,
+        hourEnd: 9,
+        location: 'bathroom',
+        actionLabel: 'Миється',
+        spritePath: momShowerMorningVideos(),
+        days: [5, 6],
+      ),
+      SchedulePoint(
         hourStart: 10,
         hourEnd: 11,
         location: 'kitchen',

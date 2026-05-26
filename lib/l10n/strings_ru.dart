@@ -346,10 +346,10 @@ final Map<String, String> stringsRu = {
       'Мама ругает Пайпер в её комнате:\n— Будет наказание. Телефон сейчас отдаёшь.',
   'piper_quest_001_step05_crisis1_news':
       '— Телефон мне. До воскресенья не увидишь.',
-  'piper_quest_001_step07_news': 'Кризис с оценками закрыт — ждём следующий.',
-  'piper_quest_001_step07_success_news':
+  'piper_quest_001_step06_news': 'Кризис с оценками закрыт — ждём следующий.',
+  'piper_quest_001_step06_success_news':
       'Договорились — в этот раз обошлось без мамы.',
-  'piper_quest_001_step07_after_punish_news':
+  'piper_quest_001_step06_after_punish_news':
       'Кризис закрыт. Следующая двойка — новая история.',
   'piper_quest_001_snitch_news':
       '— Знаешь, Пайпер сегодня снова получила двойку. Если что, я тебе об этом не говорил.\n\n'
@@ -371,14 +371,12 @@ final Map<String, String> stringsRu = {
   'piper_quest_001_btn_cover_20': 'За \$20 прикрою перед мамой',
   'piper_quest_001_btn_refuse': 'Сама разбирайся',
   'piper_quest_001_btn_snitch_mom': 'Рассказать об оценках Пайпер',
-  'piper_quest_001_btn_ask_mom_owed':
-      'Мам, а помнишь, ты говорила, что должна мне?',
-  'piper_quest_001_btn_gg_punish_piper': 'Позволь мне наказать Пайпер',
+  'piper_quest_001_btn_step7a_command_piper':
+      'Пусть я буду наказывать Пайпер вместо тебя',
   'piper_quest_001_btn_tell_piper_punishment': 'Сказать о наказании',
-  'piper_quest_001_gg_punish_tell_piper_news':
-      'Мама сказала, что теперь я буду тебя наказывать за плохие оценки.',
-  'piper_quest_001_gg_punish_mom_remembers_news': '— Да, помню.',
-  'piper_quest_001_gg_punish_mom_grants_news':
+  'piper_quest_001_step7b_tell_piper_news':
+      '— Мама устала тебя командовать и хочет, чтобы это теперь делал я.',
+  'piper_quest_001_step7a_mom_grants_news':
       '— Хорошо, только в разумных пределах.',
   'piper_quest_001_btn_leave': 'Уйти',
   'npc_quest_piper_bad_grades_001': '001 плохие оценки',

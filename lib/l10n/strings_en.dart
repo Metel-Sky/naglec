@@ -346,10 +346,10 @@ final Map<String, String> stringsEn = {
       'Mom is scolding Piper in her room:\n— There will be punishment. Hand over your phone now.',
   'piper_quest_001_step05_crisis1_news':
       '— Give me the phone. No phone until Sunday.',
-  'piper_quest_001_step07_news': 'Grade crisis closed — waiting for the next one.',
-  'piper_quest_001_step07_success_news':
+  'piper_quest_001_step06_news': 'Grade crisis closed — waiting for the next one.',
+  'piper_quest_001_step06_success_news':
       'You worked it out — Mom didn\'t find out this time.',
-  'piper_quest_001_step07_after_punish_news':
+  'piper_quest_001_step06_after_punish_news':
       'Crisis over. The next bad grade starts a new story.',
   'piper_quest_001_snitch_news':
       '— You know, Piper got another F today. If she asks, I didn\'t tell you.\n\n'
@@ -371,14 +371,12 @@ final Map<String, String> stringsEn = {
   'piper_quest_001_btn_cover_20': 'Cover for me for \$20',
   'piper_quest_001_btn_refuse': 'Figure it out yourself',
   'piper_quest_001_btn_snitch_mom': 'Tell Mom about Piper\'s grades',
-  'piper_quest_001_btn_ask_mom_owed':
-      'Mom, remember you said you owed me?',
-  'piper_quest_001_btn_gg_punish_piper': 'Let me punish Piper',
+  'piper_quest_001_btn_step7a_command_piper':
+      'Let me command Piper instead of you',
   'piper_quest_001_btn_tell_piper_punishment': 'Tell about punishment',
-  'piper_quest_001_gg_punish_tell_piper_news':
-      'Mom said I\'m going to punish you for bad grades from now on.',
-  'piper_quest_001_gg_punish_mom_remembers_news': '— Yes, I remember.',
-  'piper_quest_001_gg_punish_mom_grants_news':
+  'piper_quest_001_step7b_tell_piper_news':
+      '— Mom is tired of ordering you around and wants me to do it now.',
+  'piper_quest_001_step7a_mom_grants_news':
       '— All right — but keep it reasonable.',
   'piper_quest_001_btn_leave': 'Leave',
   'npc_quest_piper_bad_grades_001': '001 bad grades',

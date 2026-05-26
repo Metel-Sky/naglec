@@ -21,6 +21,10 @@ final class PiperQuest001Patch {
 }
 
 /// QUEST: piper_quest_001 — «погані оцінки» (перший прохід + хвіст TBD).
+///
+/// Нумерація кроків (Notion `001_piper_погані_оцінки`):
+/// 1 — бібліотека; 2 — просьба; 3 — дзвінок; 4 — сварка; 5 — покарання;
+/// 6 — фінал проходу; 7A/7B/7C — unlock ГG (окремі прапори, не [piperQuest001Step]).
 abstract final class PiperQuest001 {
   PiperQuest001._();
 
@@ -66,10 +70,10 @@ abstract final class PiperQuest001 {
     quest001Punishment3Video,
   ];
 
-  /// Перше відео-покарання — з 3-ї кризи (1 — телефон, 2 — раніше спати).
-  static const int firstPunishmentVideoCrisisN = 3;
+  /// Перше відео-покарання — з 1-ї кризи (Notion MVP: spanked_piper_1/2/3).
+  static const int firstPunishmentVideoCrisisN = 1;
 
-  /// Кроки 6A/6B/6C (майбутні гілки): багато роликів — шляхи додавати окремо.
+  /// Крок 7C (колишні 6A/6B/6C): меню наказу — TBD.
   static const int coverPaymentAmount = 20;
   static const int teacherCallWorkdays = 4;
   static const double badGradeChance = 0.08;
@@ -138,7 +142,7 @@ abstract final class PiperQuest001 {
 
   static bool isActiveMidFlow(GameWorldState world) {
     final s = world.piperQuest001Step;
-    return s >= 1 && s <= 7;
+    return s >= 1 && s <= 6;
   }
 
   static bool blocksStandardPiperInteractions(GameWorldState world) =>
@@ -240,16 +244,14 @@ abstract final class PiperQuest001 {
     world.piperApproachSlot2Done = false;
     world.piperPunishmentPending = false;
     world.piperUnderPunishment = false;
+    world.piperGgPunishmentThisCrisis =
+        world.piperGgPunishmentGranted && world.piperGgPunishmentAnnouncedToPiper;
     world.piperQuest001Step = 0;
     world.piperQuest001Step2VideoSeen = false;
     world.piperQuest001Step3CallOverheard = false;
     world.piperQuest001Step4ScoldingOverheard = false;
     world.piperQuest001Step4EarliestDayKey = null;
     world.piperQuest001SnitchAckPending = false;
-    world.piperQuest001GgPunishTalkPhase = 0;
-    world.piperGgPunishmentGranted = false;
-    world.piperGgPunishmentAnnouncedToPiper = false;
-    world.piperPunishmentBranch = '';
     world.piperBadGradeWeekKey = weekKey(gameDate);
   }
 
@@ -373,8 +375,13 @@ abstract final class PiperQuest001 {
     }
   }
 
-  static bool isStep2ApproachRoom(String currentRoom) =>
-      LocationsData.migrateLegacyRoomId(currentRoom) == LocationsData.piperRoom;
+  static bool isStep2ApproachRoom(String currentRoom) {
+    final room = LocationsData.migrateLegacyRoomId(currentRoom);
+    return room == LocationsData.piperRoom ||
+        room == LocationsData.corridor ||
+        room == LocationsData.kitchen ||
+        room == LocationsData.roomGg;
+  }
 
   static bool canStartStep2Approach({
     required GameWorldState world,
@@ -396,8 +403,12 @@ abstract final class PiperQuest001 {
     if (currentZone != 'HOME' || !isInsideRoom) return false;
     if (!isStep2ApproachRoom(currentRoom)) return false;
     if (piper == null || piper.id != 'piper') return false;
-    if (npcService.getCurrentLocationId(piper, hour, weekdayIndex) !=
-        LocationsData.piperRoom) {
+    if (!isPiperAtHome(
+      npcService: npcService,
+      piper: piper,
+      hour: hour,
+      weekdayIndex: weekdayIndex,
+    )) {
       return false;
     }
     return isApproachSlotActive(
@@ -471,7 +482,8 @@ abstract final class PiperQuest001 {
     return world.piperPunishmentPending && world.piperQuest001Step < 5;
   }
 
-  static bool canAskMomOwedForGgPunishOnKitchen({
+  /// Крок 7A: домовленість з мамою на кухні (`piper_punishment_crisis_n ≥ 5`, мама «винна»).
+  static bool canRequestGgCommandPiperOnKitchen({
     required GameWorldState world,
     required NPCService npcService,
     required NPCModel? mom,
@@ -481,13 +493,9 @@ abstract final class PiperQuest001 {
     required bool isInsideRoom,
     required String currentRoom,
   }) {
-    if (world.piperQuest001GgPunishTalkPhase != 0) return false;
     if (world.piperGgPunishmentGranted) return false;
+    if (world.piperPunishmentCrisisN < 5) return false;
     if (world.momOwesGgCount <= 0) return false;
-    if (!world.piperGradeCrisisActive || world.piperCrisisResolved) {
-      return false;
-    }
-    if (!world.piperMomTalkingAboutGrades) return false;
     if (currentZone != 'HOME' || !isInsideRoom) return false;
     if (LocationsData.migrateLegacyRoomId(currentRoom) !=
         LocationsData.kitchen) {
@@ -498,42 +506,15 @@ abstract final class PiperQuest001 {
         LocationsData.kitchen;
   }
 
-  static bool canRequestGgPunishOnKitchen({
-    required GameWorldState world,
-    required NPCService npcService,
-    required NPCModel? mom,
-    required int hour,
-    required int weekdayIndex,
-    required String currentZone,
-    required bool isInsideRoom,
-    required String currentRoom,
-  }) {
-    if (world.piperQuest001GgPunishTalkPhase != 1) return false;
-    if (world.piperGgPunishmentGranted) return false;
-    if (currentZone != 'HOME' || !isInsideRoom) return false;
-    if (LocationsData.migrateLegacyRoomId(currentRoom) !=
-        LocationsData.kitchen) {
-      return false;
-    }
-    if (mom == null || mom.id != 'mom') return false;
-    return npcService.getCurrentLocationId(mom, hour, weekdayIndex) ==
-        LocationsData.kitchen;
-  }
-
-  static void applyMomRemembersOwed(GameWorldState world) {
-    world.piperQuest001GgPunishTalkPhase = 1;
-  }
-
-  static void applyMomGrantsGgPunish(GameWorldState world) {
-    world.piperQuest001GgPunishTalkPhase = 2;
+  static void applyGgCommandsPiperInsteadOfMom(GameWorldState world) {
     world.piperGgPunishmentGranted = true;
-    world.piperGgPunishmentAnnouncedToPiper = false;
     world.piperPunishmentBranch = punishmentBranchGgPunisher;
     if (world.momOwesGgCount > 0) {
       world.momOwesGgCount--;
     }
   }
 
+  /// Крок 7B: сказати Пайпер у `piper_room` (діє з наступної кризи).
   static bool canTellPiperAboutGgPunishmentInRoom({
     required GameWorldState world,
     required NPCService npcService,
@@ -546,9 +527,6 @@ abstract final class PiperQuest001 {
   }) {
     if (!world.piperGgPunishmentGranted) return false;
     if (world.piperGgPunishmentAnnouncedToPiper) return false;
-    if (!world.piperGradeCrisisActive || world.piperCrisisResolved) {
-      return false;
-    }
     if (currentZone != 'HOME' || !isInsideRoom) return false;
     if (!isStep5PunishmentRoom(currentRoom)) return false;
     if (piper == null || piper.id != 'piper') return false;
@@ -566,8 +544,7 @@ abstract final class PiperQuest001 {
     required bool isInsideRoom,
     required String currentRoom,
   }) {
-    if (!world.piperGgPunishmentGranted) return false;
-    if (!world.piperGgPunishmentAnnouncedToPiper) return false;
+    if (!world.piperGgPunishmentThisCrisis) return false;
     if (currentZone != 'HOME' || !isInsideRoom) return false;
     return isStep5PunishmentRoom(currentRoom);
   }
@@ -632,7 +609,7 @@ abstract final class PiperQuest001 {
     }
     if (s == 5) {
       if (currentZone != 'HOME' || !isInsideRoom) return false;
-      if (world.piperGgPunishmentGranted) {
+      if (world.piperGgPunishmentThisCrisis) {
         return isGgPunishmentSceneActive(
           world: world,
           currentZone: currentZone,
@@ -642,7 +619,7 @@ abstract final class PiperQuest001 {
       }
       return true;
     }
-    if (s == 7) {
+    if (s == 6) {
       return currentZone == 'HOME' && isInsideRoom;
     }
     return false;
@@ -689,9 +666,9 @@ abstract final class PiperQuest001 {
         );
       case 5:
         return patchForPunishmentCrisis(1);
-      case 7:
+      case 6:
         return const PiperQuest001Patch(
-          newsL10nKey: 'piper_quest_001_step07_news',
+          newsL10nKey: 'piper_quest_001_step06_news',
         );
       default:
         return const PiperQuest001Patch(
@@ -710,52 +687,55 @@ abstract final class PiperQuest001 {
   static bool isStep5PunishmentRoom(String currentRoom) =>
       LocationsData.migrateLegacyRoomId(currentRoom) == LocationsData.piperRoom;
 
-  static int punishmentLevelFromBadGradesCount(int badGradesCount) {
-    if (badGradesCount <= 1) return 1;
-    if (badGradesCount == 2) return 2;
+  static int punishmentLevelFromCrisisN(int crisisN) {
+    if (crisisN <= 1) return 1;
+    if (crisisN == 2) return 2;
     return 3;
   }
 
-  static int punishmentLevelForWorld(GameWorldState world) =>
-      punishmentLevelFromBadGradesCount(world.piperBadGradesCount);
+  static int nextPunishmentLevel(GameWorldState world) =>
+      punishmentLevelFromCrisisN(world.piperPunishmentCrisisN + 1);
 
-  static String? ggPunishmentVideoForLevel(int level) {
-    if (level < 3) return null;
-    final index = (level - 3).clamp(0, quest001GgPunishmentVideos.length - 1);
-    return quest001GgPunishmentVideos[index];
-  }
-
-  static String? momPunishmentVideoForLevel(int level) {
-    if (level < 3) return null;
-    final index = (level - 3).clamp(0, quest001PunishmentVideos.length - 1);
+  static String? momPunishmentVideoForCrisisN(int crisisN) {
+    if (crisisN < firstPunishmentVideoCrisisN) return null;
+    final index =
+        (crisisN - firstPunishmentVideoCrisisN).clamp(0, quest001PunishmentVideos.length - 1);
     return quest001PunishmentVideos[index];
   }
 
-  static PiperQuest001Patch patchForStep5(GameWorldState world) {
-    if (world.piperGgPunishmentGranted) {
+  static String? ggPunishmentVideoForCrisisN(int crisisN) {
+    if (crisisN < 3) return null;
+    final index = (crisisN - 3).clamp(0, quest001GgPunishmentVideos.length - 1);
+    return quest001GgPunishmentVideos[index];
+  }
+
+  static PiperQuest001Patch patchForStep5(GameWorldState world, int crisisN) {
+    if (world.piperGgPunishmentThisCrisis) {
       return patchForGgPunishmentLevel(
-        punishmentLevelForWorld(world),
+        punishmentLevelFromCrisisN(crisisN),
       );
     }
     return patchForMomPunishmentLevel(
-      punishmentLevelForWorld(world),
+      punishmentLevelFromCrisisN(crisisN),
     );
   }
 
   static PiperQuest001Patch patchForMomPunishmentLevel(int level) {
     switch (level) {
       case 1:
-        return const PiperQuest001Patch(
+        return PiperQuest001Patch(
           newsL10nKey: 'piper_quest_001_step05_crisis1_news',
+          videoPath: momPunishmentVideoForCrisisN(1),
         );
       case 2:
-        return const PiperQuest001Patch(
+        return PiperQuest001Patch(
           newsL10nKey: 'piper_quest_001_step05_crisis2_news',
+          videoPath: momPunishmentVideoForCrisisN(2),
         );
       default:
         return PiperQuest001Patch(
           newsL10nKey: 'piper_quest_001_step05_crisis3_news',
-          videoPath: momPunishmentVideoForLevel(level),
+          videoPath: momPunishmentVideoForCrisisN(level),
         );
     }
   }
@@ -773,7 +753,7 @@ abstract final class PiperQuest001 {
       default:
         return PiperQuest001Patch(
           newsL10nKey: 'piper_quest_001_step05_gg_level3_news',
-          videoPath: ggPunishmentVideoForLevel(level),
+          videoPath: ggPunishmentVideoForCrisisN(level),
         );
     }
   }
@@ -782,12 +762,14 @@ abstract final class PiperQuest001 {
   static PiperQuest001Patch patchForPunishmentCrisis(int crisisN) {
     switch (crisisN) {
       case 1:
-        return const PiperQuest001Patch(
+        return PiperQuest001Patch(
           newsL10nKey: 'piper_quest_001_step05_crisis1_news',
+          videoPath: momPunishmentVideoForCrisisN(1),
         );
       case 2:
-        return const PiperQuest001Patch(
+        return PiperQuest001Patch(
           newsL10nKey: 'piper_quest_001_step05_crisis2_news',
+          videoPath: momPunishmentVideoForCrisisN(2),
         );
       default:
         return PiperQuest001Patch(
@@ -798,12 +780,13 @@ abstract final class PiperQuest001 {
   }
 
   static void closeCrisisPass(GameWorldState world) {
-    world.piperQuest001Step = 7;
+    world.piperQuest001Step = 6;
     world.piperGradeCrisisActive = false;
     world.piperBadGradeToday = false;
     world.teacherCallPending = false;
     world.piperPunishmentPending = false;
     world.piperHelpRequested = false;
+    world.piperGgPunishmentThisCrisis = false;
   }
 
   /// Чит: активна криза з поганою оцінкою сьогодні.
@@ -864,9 +847,9 @@ abstract final class PiperQuest001 {
     world.piperQuest001Step4ScoldingOverheard = false;
     world.piperQuest001Step4EarliestDayKey = null;
     world.piperQuest001SnitchAckPending = false;
-    world.piperQuest001GgPunishTalkPhase = 0;
     world.piperGgPunishmentGranted = false;
     world.piperGgPunishmentAnnouncedToPiper = false;
+    world.piperGgPunishmentThisCrisis = false;
     world.piperPunishmentBranch = '';
     world.piperBadGradesCount = 0;
     world.piperGradeCrisisActive = false;

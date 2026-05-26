@@ -176,7 +176,8 @@ class GameWorldState {
   /// Чит змінив стан mom_event_002 — перезапустити перевірку на кухні.
   bool momEvent002PendingKitchenRecheck = false;
 
-  /// piper_quest_001: 0 — фон; 1 підслухати; 2 просьба; 3 дзвінок; 4 сварка; 5 покарання; 7 фінал.
+  /// piper_quest_001: 0 — фон; 1–5 — основний флоу; 6 — фінал проходу кризи.
+  /// Крок 7 (7A/7B/7C) — unlock ГG, окремі прапори, не [piperQuest001Step].
   int piperQuest001Step = 0;
   /// piper_quest_001 крок 2: ролик «просить не здавати» уже відтворено (не перезапускати).
   bool piperQuest001Step2VideoSeen = false;
@@ -189,13 +190,13 @@ class GameWorldState {
 
   /// piper_quest_001: після здачі мамі — короткий діалог «Ти розповів…» + «Назад».
   bool piperQuest001SnitchAckPending = false;
-  /// piper_quest_001: 0 — не питали; 1 — мама підтвердила «винна»; 2 — дозволила покарання ГG.
-  int piperQuest001GgPunishTalkPhase = 0;
-  /// piper_quest_001: мама дозволила ГG покарати Пайпер у цій кризі.
+  /// piper_quest_001 крок 7A: мама дозволила ГG наказувати Пайпер замість неї.
   bool piperGgPunishmentGranted = false;
-  /// piper_quest_001: ГG сказав Пайпер про покарання в `piper_room`.
+  /// piper_quest_001 крок 7B: ГG сказав Пайпер у `piper_room` (діє з **наступної** кризи).
   bool piperGgPunishmentAnnouncedToPiper = false;
-  /// piper_quest_001: `gg_punisher` / `gg_cover` / `homework_deal` (крок 6).
+  /// piper_quest_001: чи ГG карає в **поточній** кризі (встановлюється при старті нової двійки).
+  bool piperGgPunishmentThisCrisis = false;
+  /// piper_quest_001 крок 7C: `gg_punisher` / `gg_cover` / `homework_deal`.
   String piperPunishmentBranch = '';
   int piperBadGradesCount = 0;
   bool piperGradeCrisisActive = false;
@@ -405,9 +406,9 @@ class GameWorldState {
         'piperSnitchedToMom': piperSnitchedToMom,
         'piperMomTalkingAboutGrades': piperMomTalkingAboutGrades,
         'piperQuest001SnitchAckPending': piperQuest001SnitchAckPending,
-        'piperQuest001GgPunishTalkPhase': piperQuest001GgPunishTalkPhase,
         'piperGgPunishmentGranted': piperGgPunishmentGranted,
         'piperGgPunishmentAnnouncedToPiper': piperGgPunishmentAnnouncedToPiper,
+        'piperGgPunishmentThisCrisis': piperGgPunishmentThisCrisis,
         'piperPunishmentBranch': piperPunishmentBranch,
         'teacherCallPending': teacherCallPending,
         'teacherCalledMom': teacherCalledMom,
@@ -597,8 +598,9 @@ class GameWorldState {
         json['momPoolPayOrDebtChoiceUnlocked'] == true;
     momEvent002PendingKitchenRecheck =
         json['momEvent002PendingKitchenRecheck'] == true;
+    final legacyStep = (json['piperQuest001Step'] as num?)?.toInt();
     piperQuest001Step =
-        ((json['piperQuest001Step'] as num?)?.toInt() ?? 0).clamp(0, 8);
+        (legacyStep == 7 ? 6 : (legacyStep ?? 0)).clamp(0, 6);
     piperQuest001Step2VideoSeen =
         json['piperQuest001Step2VideoSeen'] == true;
     piperQuest001Step3CallOverheard =
@@ -617,12 +619,10 @@ class GameWorldState {
     piperMomTalkingAboutGrades = json['piperMomTalkingAboutGrades'] == true;
     piperQuest001SnitchAckPending =
         json['piperQuest001SnitchAckPending'] == true;
-    piperQuest001GgPunishTalkPhase =
-        ((json['piperQuest001GgPunishTalkPhase'] as num?)?.toInt() ?? 0)
-            .clamp(0, 2);
     piperGgPunishmentGranted = json['piperGgPunishmentGranted'] == true;
     piperGgPunishmentAnnouncedToPiper =
         json['piperGgPunishmentAnnouncedToPiper'] == true;
+    piperGgPunishmentThisCrisis = json['piperGgPunishmentThisCrisis'] == true;
     piperPunishmentBranch = json['piperPunishmentBranch'] as String? ?? '';
     teacherCallPending = json['teacherCallPending'] == true;
     teacherCalledMom = json['teacherCalledMom'] == true;

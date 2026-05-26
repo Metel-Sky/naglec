@@ -347,10 +347,10 @@ final Map<String, String> stringsUk = {
       'Мама сварить Пайпер у її кімнаті:\n— Буде покарання. Телефон зараз віддаєш.',
   'piper_quest_001_step05_crisis1_news':
       '— Телефон мені. До неділі не побачиш.',
-  'piper_quest_001_step07_news': 'Криза з оцінками закрита — чекаємо наступну.',
-  'piper_quest_001_step07_success_news':
+  'piper_quest_001_step06_news': 'Криза з оцінками закрита — чекаємо наступну.',
+  'piper_quest_001_step06_success_news':
       'Домовились — цього разу обійшлось без мами.',
-  'piper_quest_001_step07_after_punish_news':
+  'piper_quest_001_step06_after_punish_news':
       'Криза закрита. Наступна двійка — нова історія.',
   'piper_quest_001_snitch_news':
       '— А знаєш, Пайпер сьогодні знову отримала двійку. Якщо що, я тобі про це не казав.\n\n'
@@ -372,14 +372,12 @@ final Map<String, String> stringsUk = {
   'piper_quest_001_btn_cover_20': 'За \$20 прикрию перед мамою',
   'piper_quest_001_btn_refuse': 'Сама розбирайся',
   'piper_quest_001_btn_snitch_mom': 'Розповісти про оцінки Пайпер',
-  'piper_quest_001_btn_ask_mom_owed':
-      'Мам, а пам\'ятаєш, що ти казала, що ти мені винна?',
-  'piper_quest_001_btn_gg_punish_piper': 'Дозволь мені наказати Пайпер',
+  'piper_quest_001_btn_step7a_command_piper':
+      'Нехай я наказую Пайпер замість тебе',
   'piper_quest_001_btn_tell_piper_punishment': 'Сказати про покарання',
-  'piper_quest_001_gg_punish_tell_piper_news':
-      'Мама сказала, що тепер я буду тебе карати за погані оцінки.',
-  'piper_quest_001_gg_punish_mom_remembers_news': '— Так, пам\'ятаю.',
-  'piper_quest_001_gg_punish_mom_grants_news':
+  'piper_quest_001_step7b_tell_piper_news':
+      '— Мама втомилась тебе наказувати і хоче, щоб це тепер робив я.',
+  'piper_quest_001_step7a_mom_grants_news':
       '— Добре, тільки в межах розумного.',
   'piper_quest_001_btn_leave': 'Піти',
   'npc_quest_piper_bad_grades_001': '001 погані оцінки',

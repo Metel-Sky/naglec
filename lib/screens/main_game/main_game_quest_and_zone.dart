@@ -3629,8 +3629,8 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                         });
                       }
                     : null,
-                onTalkMomOwedAsk: npc.id == 'mom' &&
-                        PiperQuest001.canAskMomOwedForGgPunishOnKitchen(
+                onTalkGgCommandPiper: npc.id == 'mom' &&
+                        PiperQuest001.canRequestGgCommandPiperOnKitchen(
                           world: _worldState,
                           npcService: sl<NPCService>(),
                           mom: npc,
@@ -3642,24 +3642,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                         )
                     ? () {
                         setState(() {
-                          _piperQuest001AskMomOwedForGgPunish();
-                        });
-                      }
-                    : null,
-                onTalkGgPunishPiper: npc.id == 'mom' &&
-                        PiperQuest001.canRequestGgPunishOnKitchen(
-                          world: _worldState,
-                          npcService: sl<NPCService>(),
-                          mom: npc,
-                          hour: hour,
-                          weekdayIndex: day,
-                          currentZone: currentZone,
-                          isInsideRoom: isInsideRoom,
-                          currentRoom: currentRoom,
-                        )
-                    ? () {
-                        setState(() {
-                          _piperQuest001RequestGgPunishFromMom();
+                          _piperQuest001RequestGgCommandPiperFromMom();
                         });
                       }
                     : null,

@@ -249,7 +249,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   void _ensurePiperQuest001Step5PunishmentUiCoherent() {
     if (_worldState.piperQuest001Step != 5) return;
     if (currentZone != 'HOME' || !isInsideRoom) return;
-    if (_worldState.piperGgPunishmentGranted &&
+    if (_worldState.piperGgPunishmentThisCrisis &&
         !PiperQuest001.isGgPunishmentSceneActive(
           world: _worldState,
           currentZone: currentZone,
@@ -264,7 +264,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   bool _isPiperQuest001Step5Scene() {
     if (_worldState.piperQuest001Step != 5) return false;
     if (currentZone != 'HOME' || !isInsideRoom) return false;
-    if (_worldState.piperGgPunishmentGranted) {
+    if (_worldState.piperGgPunishmentThisCrisis) {
       return PiperQuest001.isGgPunishmentSceneActive(
         world: _worldState,
         currentZone: currentZone,
@@ -296,13 +296,16 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
       _clearPiperQuest001Step5VideoIfShowing();
       return;
     }
-    if (_worldState.piperGgPunishmentGranted &&
+    if (_worldState.piperGgPunishmentThisCrisis &&
         !PiperQuest001.isStep5PunishmentRoom(currentRoom)) {
       _clearPiperQuest001Step5VideoIfShowing();
       return;
     }
-    if (!_worldState.piperGgPunishmentGranted &&
-        PiperQuest001.punishmentLevelForWorld(_worldState) >= 3 &&
+    if (!_worldState.piperGgPunishmentThisCrisis &&
+        PiperQuest001.punishmentLevelFromCrisisN(
+              _worldState.piperPunishmentCrisisN,
+            ) >=
+            3 &&
         !PiperQuest001.isStep5PunishmentRoom(currentRoom)) {
       _clearPiperQuest001Step5VideoIfShowing();
       return;
@@ -320,7 +323,10 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
 
   void _applyPiperQuest001Step5Patch() {
     _ui.clearEventSubState();
-    final patch = PiperQuest001.patchForStep5(_worldState);
+    final patch = PiperQuest001.patchForStep5(
+      _worldState,
+      _worldState.piperPunishmentCrisisN,
+    );
     final loc = sl<LocaleController>();
     newsMessage = _resolvePiperQuest001News(patch.newsL10nKey, loc);
     if (patch.imagePath != null) {
@@ -445,14 +451,16 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   void _tryStartPiperQuest001Step5IfNeeded() {
     if (_worldState.piperQuest001Step >= 5) return;
     if (!PiperQuest001.canStartStep5Punishment(world: _worldState)) return;
-    final level = PiperQuest001.punishmentLevelForWorld(_worldState);
-    _worldState.piperPunishmentCrisisN = level;
+    _worldState.piperPunishmentCrisisN++;
+    final level = PiperQuest001.punishmentLevelFromCrisisN(
+      _worldState.piperPunishmentCrisisN,
+    );
     _worldState.piperQuest001Step = 5;
     _worldState.piperNoPhone = level >= 1;
     _worldState.piperUnderPunishment = true;
     _worldState.piperPunishmentPending = false;
     _piperQuest001PresentationSyncedStep = null;
-    if (_worldState.piperGgPunishmentGranted &&
+    if (_worldState.piperGgPunishmentThisCrisis &&
         level >= 3 &&
         PiperQuest001.isStep5PunishmentRoom(currentRoom)) {
       _selectedNpcIdInRoom = 'piper';
@@ -497,7 +505,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _worldState.piperDebtType = 'homework_and_clean_gg_room';
     PiperQuest001.closeCrisisPass(_worldState);
     _resetPiperQuest001PresentationSession();
-    newsMessage = sl<LocaleController>().t('piper_quest_001_step07_success_news');
+    newsMessage = sl<LocaleController>().t('piper_quest_001_step06_success_news');
     _saveService.autosave();
   }
 
@@ -517,7 +525,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _worldState.piperDebtType = 'cover_for_20';
     PiperQuest001.closeCrisisPass(_worldState);
     _resetPiperQuest001PresentationSession();
-    newsMessage = sl<LocaleController>().t('piper_quest_001_step07_success_news');
+    newsMessage = sl<LocaleController>().t('piper_quest_001_step06_success_news');
     _saveService.autosave();
   }
 
@@ -535,18 +543,10 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _saveService.autosave();
   }
 
-  void _piperQuest001AskMomOwedForGgPunish() {
-    PiperQuest001.applyMomRemembersOwed(_worldState);
+  void _piperQuest001RequestGgCommandPiperFromMom() {
+    PiperQuest001.applyGgCommandsPiperInsteadOfMom(_worldState);
     newsMessage = sl<LocaleController>().t(
-      'piper_quest_001_gg_punish_mom_remembers_news',
-    );
-    _saveService.autosave();
-  }
-
-  void _piperQuest001RequestGgPunishFromMom() {
-    PiperQuest001.applyMomGrantsGgPunish(_worldState);
-    newsMessage = sl<LocaleController>().t(
-      'piper_quest_001_gg_punish_mom_grants_news',
+      'piper_quest_001_step7a_mom_grants_news',
     );
     _saveService.autosave();
   }
@@ -554,7 +554,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   void _piperQuest001TellPiperAboutGgPunishment() {
     PiperQuest001.applyGgPunishmentAnnouncedToPiper(_worldState);
     newsMessage = sl<LocaleController>().t(
-      'piper_quest_001_gg_punish_tell_piper_news',
+      'piper_quest_001_step7b_tell_piper_news',
     );
     if (_worldState.piperQuest001Step == 5) {
       _applyPiperQuest001Step5Patch();
@@ -627,7 +627,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     if (_worldState.piperQuest001Step != 5) return;
     PiperQuest001.closeCrisisPass(_worldState);
     _resetPiperQuest001PresentationSession();
-    newsMessage = sl<LocaleController>().t('piper_quest_001_step07_after_punish_news');
+    newsMessage = sl<LocaleController>().t('piper_quest_001_step06_after_punish_news');
     _saveService.autosave();
   }
 

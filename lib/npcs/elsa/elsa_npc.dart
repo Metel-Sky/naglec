@@ -6,8 +6,8 @@ const String kElsaGalleryPortraitPath = 'lib/assets/npcs/elsa/elsa_ava.jpg';
 const String kElsaAvatarPath = 'lib/assets/npcs/elsa/elsa.png';
 const List<int> _weekdays = [0, 1, 2, 3, 4];
 const List<int> _weekend = [5, 6];
-/// Будні без середи — слот 18:00 у кімнаті (у середу 18–19 місто).
-const List<int> _weekdaysElsaRoomAt18 = [0, 1, 3, 4];
+/// Будні без вівторня та середи — слот 18:00 у кімнаті (вів 18–19 Emily; сер 18–19 місто).
+const List<int> _weekdaysElsaRoomAt18 = [0, 3, 4];
 
 /// Особисті речі Elsa, які можуть дуже рідко випадати при обшуку її кімнати.
 const List<LootOption> elsaPersonalLoot = [
@@ -77,6 +77,14 @@ NPCModel createElsaNpc() {
       SchedulePoint(
         hourStart: 18,
         hourEnd: 19,
+        location: LocationsData.poorVillageCallCenterBossRoom2,
+        actionLabel: 'У гостях у Emily',
+        spritePath: kElsaAvatarPath,
+        days: [1],
+      ),
+      SchedulePoint(
+        hourStart: 18,
+        hourEnd: 19,
         location: LocationsData.cityOverview,
         actionLabel: 'Гуляє по місту',
         spritePath: '',
@@ -107,6 +115,14 @@ NPCModel createElsaNpc() {
         actionLabel: 'Приймає душ',
       ),
       SchedulePoint(
+        hourStart: 9,
+        hourEnd: 9,
+        location: LocationsData.kitchen,
+        actionLabel: 'Снідає',
+        spritePath: kElsaAvatarPath,
+        days: _weekend,
+      ),
+      SchedulePoint(
         hourStart: 10,
         hourEnd: 12,
         location: LocationsData.kitchen,
@@ -125,10 +141,18 @@ NPCModel createElsaNpc() {
       SchedulePoint(
         hourStart: 16,
         hourEnd: 20,
+        location: LocationsData.poorVillageCallCenterBossRoom2,
+        actionLabel: 'У гостях у Emily',
+        spritePath: kElsaAvatarPath,
+        days: [5],
+      ),
+      SchedulePoint(
+        hourStart: 16,
+        hourEnd: 20,
         location: LocationsData.cityOverview,
         actionLabel: 'Гуляє по місту',
         spritePath: '',
-        days: _weekend,
+        days: [6],
       ),
       SchedulePoint(
         hourStart: 21,

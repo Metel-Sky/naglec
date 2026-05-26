@@ -49,13 +49,10 @@ class NpcInteractionButtons extends StatefulWidget {
   /// Piper quest: «Розповісти про оцінки» у підменю «Поговорити» з мамою (null — не показувати).
   final VoidCallback? onTalkPiperSnitch;
 
-  /// Piper quest: крок 1 — нагадати мамі, що вона «винна».
-  final VoidCallback? onTalkMomOwedAsk;
+  /// Piper quest: крок 7A — попросити маму дозволити наказувати Пайпер (кухня).
+  final VoidCallback? onTalkGgCommandPiper;
 
-  /// Piper quest: крок 2 — попросити дозволу покарати Пайпер (кухня, мама).
-  final VoidCallback? onTalkGgPunishPiper;
-
-  /// Piper quest: крок 1 — сказати Пайпер про покарання в `piper_room`.
+  /// Piper quest: крок 7B — сказати Пайпер про покарання в `piper_room`.
   final VoidCallback? onTalkTellPiperAboutPunishment;
 
   const NpcInteractionButtons({
@@ -74,8 +71,7 @@ class NpcInteractionButtons extends StatefulWidget {
     this.onFinanceOfferAlternatives,
     this.onFinanceRepayGgDebt,
     this.onTalkPiperSnitch,
-    this.onTalkMomOwedAsk,
-    this.onTalkGgPunishPiper,
+    this.onTalkGgCommandPiper,
     this.onTalkTellPiperAboutPunishment,
   });
 
@@ -394,18 +390,11 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
               setState(() => _talkMode = false);
             },
           ),
-        if (widget.onTalkMomOwedAsk != null)
+        if (widget.onTalkGgCommandPiper != null)
           _elevated(
-            t('piper_quest_001_btn_ask_mom_owed'),
+            t('piper_quest_001_btn_step7a_command_piper'),
             () {
-              widget.onTalkMomOwedAsk!();
-            },
-          ),
-        if (widget.onTalkGgPunishPiper != null)
-          _elevated(
-            t('piper_quest_001_btn_gg_punish_piper'),
-            () {
-              widget.onTalkGgPunishPiper!();
+              widget.onTalkGgCommandPiper!();
             },
           ),
         if (talkAction != null && _talkActionAvailable(_talkLabel))
