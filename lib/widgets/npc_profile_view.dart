@@ -727,6 +727,9 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
           children: lines.map((q) {
             final done = q.isDone(widget.world, widget.npc);
             final canToggle = cheatsOn && q.cheatId != null;
+            final statusLabel = done
+                ? t(q.statusDoneKey ?? 'quest_status_done')
+                : t(q.statusPendingKey ?? 'quest_status_pending');
             final statusStyle = TextStyle(
               color: done ? GameTheme.textGreen : Colors.orange.shade200,
               fontSize: 12,
@@ -757,19 +760,26 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
                     return '$raw';
                   }())
                 : '';
-            return SwitchListTile(
+            return ListTile(
               contentPadding: EdgeInsets.zero,
               dense: true,
+              visualDensity: q.compactSwitch
+                  ? const VisualDensity(horizontal: 0, vertical: -3)
+                  : VisualDensity.standard,
               title: Text(
                 t(q.titleKey),
-                style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.35),
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: q.compactSwitch ? 13 : 14,
+                  height: 1.35,
+                ),
               ),
               subtitle: counterKey != null && counterFn != null
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          done ? t('quest_status_done') : t('quest_status_pending'),
+                          statusLabel,
                           style: statusStyle,
                         ),
                         const SizedBox(height: 4),
@@ -817,25 +827,32 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
                       ],
                     )
                   : Text(
-                      done ? t('quest_status_done') : t('quest_status_pending'),
+                      statusLabel,
                       style: statusStyle,
                     ),
-              value: done,
-              activeThumbColor: GameTheme.textGreen,
-              onChanged: canToggle
-                  ? (v) {
-                      NpcQuestCheats.setQuestCompleted(
-                        q.cheatId!,
-                        v,
-                        widget.world,
-                        stats,
-                        npcSvc,
-                        widget.npc,
-                      );
-                      sl<SaveService>().autosave();
-                      setState(() {});
-                    }
-                  : null,
+              trailing: Transform.scale(
+                scale: q.compactSwitch ? 0.78 : 0.92,
+                alignment: Alignment.centerRight,
+                child: Switch(
+                  value: done,
+                  activeThumbColor: GameTheme.textGreen,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  onChanged: canToggle
+                      ? (v) {
+                          NpcQuestCheats.setQuestCompleted(
+                            q.cheatId!,
+                            v,
+                            widget.world,
+                            stats,
+                            npcSvc,
+                            widget.npc,
+                          );
+                          sl<SaveService>().autosave();
+                          setState(() {});
+                        }
+                      : null,
+                ),
+              ),
             );
           }).toList(),
         );

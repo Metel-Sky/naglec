@@ -1,5 +1,6 @@
 import '../data/locations_room_data.dart';
 import '../data/npc_finance_state.dart';
+import '../npcs/piper/piper_quests.dart';
 
 class GameWorldState {
   /// Поточна глобальна зона (HOME, CITY, COLLEGE, etc.)
@@ -141,6 +142,86 @@ class GameWorldState {
 
   /// Останній тиждень (ключ понеділка `yyyy-MM-dd`), коли завершено поїздку на пляж (mom_quest_001); раз на тиждень.
   String? momQuest001LastBeachTripWeekKey;
+
+  /// EVENT mom_event_002: 0 — не активний; 1 пропозиція (кухня); 2 чистка (двір); 3 оплата (кухня).
+  int momEvent002Step = 0;
+
+  /// ГG прийняв пропозицію почистити басейн у поточному слоті (Пн/Чт).
+  bool momPoolEventActive = false;
+
+  /// День тижня слоту (0 = Пн, 3 = Чт), коли прийняли пропозицію; −1 — немає.
+  int momPoolEventSlotWeekday = -1;
+
+  /// Ключ понеділка тижня слоту (`yyyy-MM-dd`), коли прийняли пропозицію.
+  String? momPoolEventSlotWeekKey;
+
+  /// ГG почистив басейн і чекає розмови з мамою на кухні.
+  bool momPoolCleanPendingPay = false;
+
+  /// Останній тиждень понеділкового слоту mom_event_002 (ключ понеділка `yyyy-MM-dd`).
+  String? momPoolMonWeekKey;
+
+  /// Останній тиждень четвергового слоту mom_event_002 (ключ понеділка `yyyy-MM-dd`).
+  String? momPoolThuWeekKey;
+
+  /// Скільки разів мама заплатила \$50 за чистку басейну.
+  int momPoolCleanPaidCount = 0;
+
+  /// Скільки разів мама «винна» ГG після mom_event_002.
+  int momOwesGgCount = 0;
+
+  /// Після 5 оплат \$50 — вибір «\$50» або «будеш винна».
+  bool momPoolPayOrDebtChoiceUnlocked = false;
+
+  /// Чит змінив стан mom_event_002 — перезапустити перевірку на кухні.
+  bool momEvent002PendingKitchenRecheck = false;
+
+  /// piper_quest_001: 0 — фон; 1 підслухати; 2 просьба; 3 дзвінок; 4 сварка; 5 покарання; 7 фінал.
+  int piperQuest001Step = 0;
+  /// piper_quest_001 крок 2: ролик «просить не здавати» уже відтворено (не перезапускати).
+  bool piperQuest001Step2VideoSeen = false;
+  /// piper_quest_001 крок 3: ГГ уже натиснув «Підслухати» (лише «Піти»).
+  bool piperQuest001Step3CallOverheard = false;
+  /// piper_quest_001 крок 4: ГГ підслухав сварку (опційно; без відео).
+  bool piperQuest001Step4ScoldingOverheard = false;
+  /// piper_quest_001 крок 4: найраніша дата (`yyyy-M-d`) вечірнього старту в коридорі.
+  String? piperQuest001Step4EarliestDayKey;
+
+  /// piper_quest_001: після здачі мамі — короткий діалог «Ти розповів…» + «Назад».
+  bool piperQuest001SnitchAckPending = false;
+  /// piper_quest_001: 0 — не питали; 1 — мама підтвердила «винна»; 2 — дозволила покарання ГG.
+  int piperQuest001GgPunishTalkPhase = 0;
+  /// piper_quest_001: мама дозволила ГG покарати Пайпер у цій кризі.
+  bool piperGgPunishmentGranted = false;
+  /// piper_quest_001: ГG сказав Пайпер про покарання в `piper_room`.
+  bool piperGgPunishmentAnnouncedToPiper = false;
+  /// piper_quest_001: `gg_punisher` / `gg_cover` / `homework_deal` (крок 6).
+  String piperPunishmentBranch = '';
+  int piperBadGradesCount = 0;
+  bool piperGradeCrisisActive = false;
+  bool piperGradeSecretKnown = false;
+  bool piperHelpRequested = false;
+  bool piperCrisisResolved = false;
+  bool piperSnitchedToMom = false;
+  bool piperMomTalkingAboutGrades = false;
+  bool teacherCallPending = false;
+  bool teacherCalledMom = false;
+  String? piperBadGradeDayKey;
+  int piperWorkdaysSinceBadGrade = 0;
+  String? teacherCallDayKey;
+  bool piperApproachSlot1Done = false;
+  bool piperApproachSlot2Done = false;
+  String piperBadGradeSubject = '';
+  String piperBadGradeTeacherId = '';
+  bool piperBadGradeToday = false;
+  String? piperBadGradeWeekKey;
+  String? piperBadGradeLastRollDayKey;
+  bool piperPunishmentPending = false;
+  int piperPunishmentCrisisN = 0;
+  bool piperUnderPunishment = false;
+  bool teacherDealHookOpen = false;
+  bool piperNoPhone = false;
+  String piperDebtType = '';
 
   /// gg_event_001_stojak: дата останнього скидання прапорів мами/сестер о 6:00 (`yyyy-M-d`).
   String? ggEvent001StojakLastResetDayKey;
@@ -299,6 +380,53 @@ class GameWorldState {
         'momQuest001Beach': momQuest001Beach,
         'momQuest001InvitationAccepted': momQuest001InvitationAccepted,
         'momQuest001LastBeachTripWeekKey': momQuest001LastBeachTripWeekKey,
+        'momEvent002Step': momEvent002Step,
+        'momPoolEventActive': momPoolEventActive,
+        'momPoolEventSlotWeekday': momPoolEventSlotWeekday,
+        'momPoolEventSlotWeekKey': momPoolEventSlotWeekKey,
+        'momPoolCleanPendingPay': momPoolCleanPendingPay,
+        'momPoolMonWeekKey': momPoolMonWeekKey,
+        'momPoolThuWeekKey': momPoolThuWeekKey,
+        'momPoolCleanPaidCount': momPoolCleanPaidCount,
+        'momOwesGgCount': momOwesGgCount,
+        'momPoolPayOrDebtChoiceUnlocked': momPoolPayOrDebtChoiceUnlocked,
+        'momEvent002PendingKitchenRecheck': momEvent002PendingKitchenRecheck,
+        'piperQuest001Step': piperQuest001Step,
+        'piperQuest001Step2VideoSeen': piperQuest001Step2VideoSeen,
+        'piperQuest001Step3CallOverheard': piperQuest001Step3CallOverheard,
+        'piperQuest001Step4ScoldingOverheard':
+            piperQuest001Step4ScoldingOverheard,
+        'piperQuest001Step4EarliestDayKey': piperQuest001Step4EarliestDayKey,
+        'piperBadGradesCount': piperBadGradesCount,
+        'piperGradeCrisisActive': piperGradeCrisisActive,
+        'piperGradeSecretKnown': piperGradeSecretKnown,
+        'piperHelpRequested': piperHelpRequested,
+        'piperCrisisResolved': piperCrisisResolved,
+        'piperSnitchedToMom': piperSnitchedToMom,
+        'piperMomTalkingAboutGrades': piperMomTalkingAboutGrades,
+        'piperQuest001SnitchAckPending': piperQuest001SnitchAckPending,
+        'piperQuest001GgPunishTalkPhase': piperQuest001GgPunishTalkPhase,
+        'piperGgPunishmentGranted': piperGgPunishmentGranted,
+        'piperGgPunishmentAnnouncedToPiper': piperGgPunishmentAnnouncedToPiper,
+        'piperPunishmentBranch': piperPunishmentBranch,
+        'teacherCallPending': teacherCallPending,
+        'teacherCalledMom': teacherCalledMom,
+        'piperBadGradeDayKey': piperBadGradeDayKey,
+        'piperWorkdaysSinceBadGrade': piperWorkdaysSinceBadGrade,
+        'teacherCallDayKey': teacherCallDayKey,
+        'piperApproachSlot1Done': piperApproachSlot1Done,
+        'piperApproachSlot2Done': piperApproachSlot2Done,
+        'piperBadGradeSubject': piperBadGradeSubject,
+        'piperBadGradeTeacherId': piperBadGradeTeacherId,
+        'piperBadGradeToday': piperBadGradeToday,
+        'piperBadGradeWeekKey': piperBadGradeWeekKey,
+        'piperBadGradeLastRollDayKey': piperBadGradeLastRollDayKey,
+        'piperPunishmentPending': piperPunishmentPending,
+        'piperPunishmentCrisisN': piperPunishmentCrisisN,
+        'piperUnderPunishment': piperUnderPunishment,
+        'teacherDealHookOpen': teacherDealHookOpen,
+        'piperNoPhone': piperNoPhone,
+        'piperDebtType': piperDebtType,
         'ggEvent001StojakLastResetDayKey': ggEvent001StojakLastResetDayKey,
         'cherieMassageFunCompletions': cherieMassageFunCompletions,
         'rockefellerNikeOfficeStep': rockefellerNikeOfficeStep,
@@ -452,6 +580,72 @@ class GameWorldState {
         json['momQuest001InvitationAccepted'] == true;
     momQuest001LastBeachTripWeekKey =
         json['momQuest001LastBeachTripWeekKey'] as String?;
+    momEvent002Step =
+        ((json['momEvent002Step'] as num?)?.toInt() ?? 0).clamp(0, 3);
+    momPoolEventActive = json['momPoolEventActive'] == true;
+    momPoolEventSlotWeekday =
+        ((json['momPoolEventSlotWeekday'] as num?)?.toInt() ?? -1).clamp(-1, 6);
+    momPoolEventSlotWeekKey = json['momPoolEventSlotWeekKey'] as String?;
+    momPoolCleanPendingPay = json['momPoolCleanPendingPay'] == true;
+    momPoolMonWeekKey = json['momPoolMonWeekKey'] as String?;
+    momPoolThuWeekKey = json['momPoolThuWeekKey'] as String?;
+    momPoolCleanPaidCount =
+        ((json['momPoolCleanPaidCount'] as num?)?.toInt() ?? 0).clamp(0, 9999);
+    momOwesGgCount =
+        ((json['momOwesGgCount'] as num?)?.toInt() ?? 0).clamp(0, 9999);
+    momPoolPayOrDebtChoiceUnlocked =
+        json['momPoolPayOrDebtChoiceUnlocked'] == true;
+    momEvent002PendingKitchenRecheck =
+        json['momEvent002PendingKitchenRecheck'] == true;
+    piperQuest001Step =
+        ((json['piperQuest001Step'] as num?)?.toInt() ?? 0).clamp(0, 8);
+    piperQuest001Step2VideoSeen =
+        json['piperQuest001Step2VideoSeen'] == true;
+    piperQuest001Step3CallOverheard =
+        json['piperQuest001Step3CallOverheard'] == true;
+    piperQuest001Step4ScoldingOverheard =
+        json['piperQuest001Step4ScoldingOverheard'] == true;
+    piperQuest001Step4EarliestDayKey =
+        json['piperQuest001Step4EarliestDayKey'] as String?;
+    piperBadGradesCount =
+        ((json['piperBadGradesCount'] as num?)?.toInt() ?? 0).clamp(0, 9999);
+    piperGradeCrisisActive = json['piperGradeCrisisActive'] == true;
+    piperGradeSecretKnown = json['piperGradeSecretKnown'] == true;
+    piperHelpRequested = json['piperHelpRequested'] == true;
+    piperCrisisResolved = json['piperCrisisResolved'] == true;
+    piperSnitchedToMom = json['piperSnitchedToMom'] == true;
+    piperMomTalkingAboutGrades = json['piperMomTalkingAboutGrades'] == true;
+    piperQuest001SnitchAckPending =
+        json['piperQuest001SnitchAckPending'] == true;
+    piperQuest001GgPunishTalkPhase =
+        ((json['piperQuest001GgPunishTalkPhase'] as num?)?.toInt() ?? 0)
+            .clamp(0, 2);
+    piperGgPunishmentGranted = json['piperGgPunishmentGranted'] == true;
+    piperGgPunishmentAnnouncedToPiper =
+        json['piperGgPunishmentAnnouncedToPiper'] == true;
+    piperPunishmentBranch = json['piperPunishmentBranch'] as String? ?? '';
+    teacherCallPending = json['teacherCallPending'] == true;
+    teacherCalledMom = json['teacherCalledMom'] == true;
+    piperBadGradeDayKey = json['piperBadGradeDayKey'] as String?;
+    piperWorkdaysSinceBadGrade =
+        ((json['piperWorkdaysSinceBadGrade'] as num?)?.toInt() ?? 0)
+            .clamp(0, 99);
+    teacherCallDayKey = json['teacherCallDayKey'] as String?;
+    piperApproachSlot1Done = json['piperApproachSlot1Done'] == true;
+    piperApproachSlot2Done = json['piperApproachSlot2Done'] == true;
+    piperBadGradeSubject = json['piperBadGradeSubject'] as String? ?? '';
+    piperBadGradeTeacherId = json['piperBadGradeTeacherId'] as String? ?? '';
+    piperBadGradeToday = json['piperBadGradeToday'] == true;
+    piperBadGradeWeekKey = json['piperBadGradeWeekKey'] as String?;
+    piperBadGradeLastRollDayKey =
+        json['piperBadGradeLastRollDayKey'] as String?;
+    piperPunishmentPending = json['piperPunishmentPending'] == true;
+    piperPunishmentCrisisN =
+        ((json['piperPunishmentCrisisN'] as num?)?.toInt() ?? 0).clamp(0, 99);
+    piperUnderPunishment = json['piperUnderPunishment'] == true;
+    teacherDealHookOpen = json['teacherDealHookOpen'] == true;
+    piperNoPhone = json['piperNoPhone'] == true;
+    piperDebtType = json['piperDebtType'] as String? ?? '';
     ggEvent001StojakLastResetDayKey =
         json['ggEvent001StojakLastResetDayKey'] as String?;
     cherieMassageFunCompletions =
@@ -595,6 +789,18 @@ class GameWorldState {
     momQuest001Beach = 0;
     momQuest001InvitationAccepted = false;
     momQuest001LastBeachTripWeekKey = null;
+    momEvent002Step = 0;
+    momPoolEventActive = false;
+    momPoolEventSlotWeekday = -1;
+    momPoolEventSlotWeekKey = null;
+    momPoolCleanPendingPay = false;
+    momPoolMonWeekKey = null;
+    momPoolThuWeekKey = null;
+    momPoolCleanPaidCount = 0;
+    momOwesGgCount = 0;
+    momPoolPayOrDebtChoiceUnlocked = false;
+    momEvent002PendingKitchenRecheck = false;
+    PiperQuest001.resetCheat(this);
     ggEvent001StojakLastResetDayKey = null;
     cherieMassageFunCompletions = 0;
     rockefellerNikeOfficeStep = 0;

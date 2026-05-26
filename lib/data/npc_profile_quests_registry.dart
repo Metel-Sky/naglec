@@ -2,6 +2,8 @@ import '../models/npc_model.dart';
 import '../services/game_world_state.dart';
 import '../npcs/cherie/cherie_quests.dart';
 import '../npcs/mom/mom_quest001.dart';
+import '../npcs/mom/mom_event002_pool.dart';
+import '../npcs/piper/piper_quests.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/sem/sem_events.dart';
 
@@ -20,6 +22,11 @@ abstract final class NpcProfileQuestCheatId {
   static const cherieRelationship006 = 'cherie_relationship_006';
   static const denHooligan = 'den_hooligan';
   static const momQuest001Beach = 'mom_quest_001_beach';
+  static const momOwesGgService = 'mom_owes_gg_service';
+  static const piperBadGrades001 = 'piper_bad_grades_001';
+  static const piperPunishment1 = 'piper_punishment_1';
+  static const piperPunishment2 = 'piper_punishment_2';
+  static const piperPunishment3 = 'piper_punishment_3';
 }
 
 /// Рядок «квест у картці NPC»: заголовок l10n [titleKey] і перевірка виконання.
@@ -32,6 +39,9 @@ final class NpcProfileQuestLine {
     this.counterValue,
     this.secondaryCounterLineKey,
     this.secondaryCounterValue,
+    this.statusDoneKey,
+    this.statusPendingKey,
+    this.compactSwitch = false,
   });
 
   final String titleKey;
@@ -39,6 +49,13 @@ final class NpcProfileQuestLine {
 
   /// Якщо задано — у картці показується перемикач; зміна стану дозволена лише при увімкнених читах.
   final String? cheatId;
+
+  /// Компактніший перемикач (картка Piper тощо).
+  final bool compactSwitch;
+
+  /// Замість [quest_status_done] / [quest_status_pending] у підписі перемикача.
+  final String? statusDoneKey;
+  final String? statusPendingKey;
 
   /// Додатковий рядок під статусом (l10n; підставляється `%s` через [counterValue]).
   final String? counterLineKey;
@@ -150,6 +167,57 @@ List<NpcProfileQuestLine> npcProfileQuestLinesFor(String npcId) {
           cheatId: NpcProfileQuestCheatId.momQuest001Beach,
           counterLineKey: 'profile_mom_quest001_beach',
           counterValue: (w, _) => w.momQuest001Beach,
+        ),
+        NpcProfileQuestLine(
+          titleKey: 'npc_quest_mom_owes_service',
+          isDone: (w, npc) =>
+              npc.id == 'mom' && MomEvent002Pool.isCheatOwesPendingPay(w),
+          cheatId: NpcProfileQuestCheatId.momOwesGgService,
+          statusDoneKey: 'profile_mom_owes_service_yes',
+          statusPendingKey: 'profile_mom_owes_service_no',
+          counterLineKey: 'profile_mom_owes_gg_count',
+          counterValue: (w, _) => w.momOwesGgCount,
+        ),
+      ];
+    case 'piper':
+      return [
+        NpcProfileQuestLine(
+          titleKey: 'npc_quest_piper_bad_grades_001',
+          isDone: (w, npc) =>
+              npc.id == 'piper' && PiperQuest001.isCheatCrisisActive(w),
+          cheatId: NpcProfileQuestCheatId.piperBadGrades001,
+          statusDoneKey: 'profile_piper_bad_grades_crisis_on',
+          statusPendingKey: 'profile_piper_bad_grades_crisis_off',
+          counterLineKey: 'profile_piper_bad_grades_count',
+          counterValue: (w, _) => w.piperBadGradesCount,
+          compactSwitch: true,
+        ),
+        NpcProfileQuestLine(
+          titleKey: 'npc_quest_piper_punishment_1',
+          isDone: (w, npc) =>
+              npc.id == 'piper' && PiperQuest001.isCheatPunishmentActive(w, 1),
+          cheatId: NpcProfileQuestCheatId.piperPunishment1,
+          statusDoneKey: 'profile_piper_punishment_on',
+          statusPendingKey: 'profile_piper_punishment_off',
+          compactSwitch: true,
+        ),
+        NpcProfileQuestLine(
+          titleKey: 'npc_quest_piper_punishment_2',
+          isDone: (w, npc) =>
+              npc.id == 'piper' && PiperQuest001.isCheatPunishmentActive(w, 2),
+          cheatId: NpcProfileQuestCheatId.piperPunishment2,
+          statusDoneKey: 'profile_piper_punishment_on',
+          statusPendingKey: 'profile_piper_punishment_off',
+          compactSwitch: true,
+        ),
+        NpcProfileQuestLine(
+          titleKey: 'npc_quest_piper_punishment_3',
+          isDone: (w, npc) =>
+              npc.id == 'piper' && PiperQuest001.isCheatPunishmentActive(w, 3),
+          cheatId: NpcProfileQuestCheatId.piperPunishment3,
+          statusDoneKey: 'profile_piper_punishment_on',
+          statusPendingKey: 'profile_piper_punishment_off',
+          compactSwitch: true,
         ),
       ];
     default:

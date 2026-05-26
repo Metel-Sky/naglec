@@ -1,7 +1,7 @@
 part of '../main_game_screen.dart';
 
 class MainGameScreenState extends MainGameScreenStateBase
-    with MomGameFlow, CherieGameFlow, MainGameNpcFinance, MainGameQuestFlows, MainGameTimeTickHandler {
+    with MomGameFlow, CherieGameFlow, PiperGameFlow, MainGameNpcFinance, MainGameQuestFlows, MainGameTimeTickHandler {
   @override
   void initState() {
     super.initState();
@@ -28,6 +28,16 @@ class MainGameScreenState extends MainGameScreenStateBase
         _maybeResumeCherieQuest005AfterLoad();
         _maybeResumeCherieQuest006AfterLoad();
         _maybeResumeMomQuest001AfterLoad();
+        _maybeResumeMomEvent002AfterLoad(currentRoom);
+        _ensureMomEvent002KitchenPaymentUiCoherent();
+        _maybeResumePiperQuest001AfterLoad();
+        _ensurePiperQuest001LibraryDialogUiCoherent();
+        _ensurePiperQuest001Step2ApproachUiCoherent();
+        _ensurePiperQuest001SnitchAckUiCoherent();
+        _ensurePiperQuest001Step3TeacherCallUiCoherent();
+        _tryStartPiperQuest001Step4IfNeeded();
+        _ensurePiperQuest001Step4CorridorUiCoherent();
+        _ensurePiperQuest001Step5PunishmentUiCoherent();
         _maybeResumeCherieMassageFunEventAfterLoad();
         _maybeStartDanielleSpyCaughtAutoInRoom();
         _tryAutoStartSashaHallComunicateVideo();
@@ -616,6 +626,27 @@ class MainGameScreenState extends MainGameScreenStateBase
                                 return GameDialogPanel(
                                   message: newsMessage,
                                   highlightNames: const [],
+                                  navButtons: [_buildActionPanel()],
+                                );
+                              }
+                              if (_isPiperQuest001SnitchAckScene()) {
+                                return GameDialogPanel(
+                                  message: newsMessage,
+                                  highlightNames: const ['Piper', 'Пайпер'],
+                                  navButtons: [_buildActionPanel()],
+                                );
+                              }
+                              if (_isMomEvent002ScriptedDialogActive()) {
+                                return GameDialogPanel(
+                                  message: newsMessage,
+                                  highlightNames: const [],
+                                  navButtons: [_buildActionPanel()],
+                                );
+                              }
+                              if (_isPiperQuest001ScriptedDialogActive()) {
+                                return GameDialogPanel(
+                                  message: newsMessage,
+                                  highlightNames: const ['Piper', 'Пайпер'],
                                   navButtons: [_buildActionPanel()],
                                 );
                               }

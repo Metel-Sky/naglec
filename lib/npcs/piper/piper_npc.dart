@@ -50,7 +50,7 @@ NPCModel createPiperNpc() {
       ),
       SchedulePoint(
         hourStart: 17,
-        hourEnd: 20,
+        hourEnd: 21,
         location: 'piper_room',
         actionLabel: 'У своїй кімнаті',
         spritePath: 'lib/assets/npcs/piper/piper.png',

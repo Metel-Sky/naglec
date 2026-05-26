@@ -46,6 +46,18 @@ class NpcInteractionButtons extends StatefulWidget {
   /// Погасити борг ГГ перед NPC (позика 50/100).
   final VoidCallback? onFinanceRepayGgDebt;
 
+  /// Piper quest: «Розповісти про оцінки» у підменю «Поговорити» з мамою (null — не показувати).
+  final VoidCallback? onTalkPiperSnitch;
+
+  /// Piper quest: крок 1 — нагадати мамі, що вона «винна».
+  final VoidCallback? onTalkMomOwedAsk;
+
+  /// Piper quest: крок 2 — попросити дозволу покарати Пайпер (кухня, мама).
+  final VoidCallback? onTalkGgPunishPiper;
+
+  /// Piper quest: крок 1 — сказати Пайпер про покарання в `piper_room`.
+  final VoidCallback? onTalkTellPiperAboutPunishment;
+
   const NpcInteractionButtons({
     super.key,
     required this.npc,
@@ -61,6 +73,10 @@ class NpcInteractionButtons extends StatefulWidget {
     this.onFinanceAskAboutDebt,
     this.onFinanceOfferAlternatives,
     this.onFinanceRepayGgDebt,
+    this.onTalkPiperSnitch,
+    this.onTalkMomOwedAsk,
+    this.onTalkGgPunishPiper,
+    this.onTalkTellPiperAboutPunishment,
   });
 
   @override
@@ -363,6 +379,35 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
       };
       final talkAction = actionByLabel[_talkLabel];
       final talkRows = <Widget>[
+        if (widget.onTalkTellPiperAboutPunishment != null)
+          _elevated(
+            t('piper_quest_001_btn_tell_piper_punishment'),
+            () {
+              widget.onTalkTellPiperAboutPunishment!();
+            },
+          ),
+        if (widget.onTalkPiperSnitch != null)
+          _elevated(
+            t('piper_quest_001_btn_snitch_mom'),
+            () {
+              widget.onTalkPiperSnitch!();
+              setState(() => _talkMode = false);
+            },
+          ),
+        if (widget.onTalkMomOwedAsk != null)
+          _elevated(
+            t('piper_quest_001_btn_ask_mom_owed'),
+            () {
+              widget.onTalkMomOwedAsk!();
+            },
+          ),
+        if (widget.onTalkGgPunishPiper != null)
+          _elevated(
+            t('piper_quest_001_btn_gg_punish_piper'),
+            () {
+              widget.onTalkGgPunishPiper!();
+            },
+          ),
         if (talkAction != null && _talkActionAvailable(_talkLabel))
           _elevated(
             _askHowAreYouLabel,

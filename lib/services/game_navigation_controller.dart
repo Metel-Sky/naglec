@@ -12,6 +12,7 @@ import 'npc_service.dart';
 import 'door_lock_service.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/mom/mom_room_hours.dart';
+import '../npcs/piper/piper_quests.dart';
 
 class GameNavigationController extends ChangeNotifier {
   final GameTimeController _timeController;
@@ -310,7 +311,41 @@ class GameNavigationController extends ChangeNotifier {
     if (!isCollegeAuditoriumEntry) {
       _timeController.addMinutes(5);
     }
-    _uiStateController.setNewsMessage(LocationsData.getLocationDisplayName(name));
+    final skipDefaultRoomNews = _currentZone == 'HOME' &&
+        name == LocationsData.kitchen &&
+        (_worldState.momPoolCleanPendingPay || _worldState.momEvent002Step == 3);
+    final skipPiperLibraryEavesdropNews = _currentZone == 'COLLEGE' &&
+        name == LocationsData.canteen &&
+        (_worldState.piperQuest001Step == 1 ||
+            PiperQuest001.canAutoStartStep1LibraryScene(
+              world: _worldState,
+              weekdayIndex: _timeController.weekdayIndex,
+              hour: _timeController.dateTime.hour,
+              currentZone: _currentZone,
+              isInsideRoom: true,
+              currentRoom: name,
+            ));
+    final skipPiperTeacherCallNews = _currentZone == 'HOME' &&
+        (name == LocationsData.kitchen || name == LocationsData.hall) &&
+        _worldState.piperQuest001Step == 3;
+    final skipPiperCorridorScoldingNews = _currentZone == 'HOME' &&
+        name == LocationsData.corridor &&
+        _worldState.piperQuest001Step == 4;
+    final skipPiperStep2ApproachNews = _currentZone == 'HOME' &&
+        name == LocationsData.piperRoom &&
+        _worldState.piperQuest001Step == 2;
+    final skipPiperStep5PunishmentNews =
+        _currentZone == 'HOME' && _worldState.piperQuest001Step == 5;
+    if (!skipDefaultRoomNews &&
+        !skipPiperLibraryEavesdropNews &&
+        !skipPiperTeacherCallNews &&
+        !skipPiperCorridorScoldingNews &&
+        !skipPiperStep2ApproachNews &&
+        !skipPiperStep5PunishmentNews) {
+      _uiStateController.setNewsMessage(
+        LocationsData.getLocationDisplayName(name),
+      );
+    }
     
     // College den auto-select
     if (_currentZone == "COLLEGE" && _currentRoom == LocationsData.collegeCorridor) {
@@ -660,9 +695,11 @@ class GameNavigationController extends ChangeNotifier {
         );
       } else {
         _currentRoom = LocationsData.corridor;
-        _uiStateController.setNewsMessage(
-          LocationsData.getLocationDisplayName(_currentRoom),
-        );
+        if (_worldState.piperQuest001Step != 4) {
+          _uiStateController.setNewsMessage(
+            LocationsData.getLocationDisplayName(_currentRoom),
+          );
+        }
       }
     }
     notifyListeners();

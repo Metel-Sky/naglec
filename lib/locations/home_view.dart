@@ -271,7 +271,7 @@ class _HomeViewState extends State<HomeView> {
       );
     }
 
-    // У кімнаті мами або сестер: якщо нікого немає й у ГГ є міні-камера — кнопка «Встановити камеру»
+    // У кімнаті мами або сестер:
     const cameraableRooms = [
       LocationsData.elsaRoom,
       LocationsData.piperRoom,
@@ -335,7 +335,7 @@ class _HomeViewState extends State<HomeView> {
     return mediaContent;
   }
 
-  /// Кнопка в кімнаті ГГ: сірий фон, при натисканні — ripple поверх (через Ink, не Container).
+  /// Кнопка в кімнаті ГГ:
   Widget _roomGgButton(String label, VoidCallback? onPressed) {
     return Material(
       color: Colors.transparent,

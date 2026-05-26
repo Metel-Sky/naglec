@@ -35,6 +35,9 @@ class $AssetsAssetsGen {
 class $AssetsGgGen {
   const $AssetsGgGen();
 
+  final AssetGenImage cleanPool = const AssetGenImage(
+    'lib/assets/gg/clean_pool.jpg',
+  );
   final String ganteli = 'lib/assets/gg/ganteli.mp4';
   final String girya = 'lib/assets/gg/girya.mp4';
   final String mapCity = 'lib/assets/gg/map_city.md';
@@ -171,6 +174,9 @@ class $AssetsItemsGen {
   );
   final AssetGenImage eroBook = const AssetGenImage(
     'lib/assets/items/ero_book.jpg',
+  );
+  final AssetGenImage eroticCard = const AssetGenImage(
+    'lib/assets/items/erotic_card.jpg',
   );
   final AssetGenImage exciter = const AssetGenImage(
     'lib/assets/items/exciter.jpg',
@@ -323,6 +329,9 @@ class $AssetsItemsGen {
   final AssetGenImage plavki = const AssetGenImage(
     'lib/assets/items/plavki.png',
   );
+  final AssetGenImage playboy = const AssetGenImage(
+    'lib/assets/items/playboy.png',
+  );
   final AssetGenImage pokerCards = const AssetGenImage(
     'lib/assets/items/poker_cards.jpg',
   );
@@ -396,6 +405,9 @@ class $AssetsItemsGen {
   );
   final AssetGenImage usb = const AssetGenImage('lib/assets/items/usb.png');
   final AssetGenImage venus = const AssetGenImage('lib/assets/items/venus.png');
+  final AssetGenImage viagra = const AssetGenImage(
+    'lib/assets/items/viagra.jpg',
+  );
   final AssetGenImage vibratorRed = const AssetGenImage(
     'lib/assets/items/vibrator-red.jpg',
   );
@@ -901,10 +913,25 @@ class $AssetsPiperGen {
 class $AssetsPiperVideoGen {
   const $AssetsPiperVideoGen();
 
+  final String ggPunishPiper1 =
+      'lib/assets/npcs/piper/video/gg_punish_piper_1.webm';
+  final String ggPunishPiper2 =
+      'lib/assets/npcs/piper/video/gg_punish_piper_2.webm';
+  final String ggPunishPiper3 =
+      'lib/assets/npcs/piper/video/gg_punish_piper_3.webm';
+
+  final String piperPrositNeZdavatEe =
+      'lib/assets/npcs/piper/video/piper_prosit_ne_zdavat_ee.mp4';
   final String shavesPussy = 'lib/assets/npcs/piper/video/shaves_pussy.webm';
   final String shavesPussy1 = 'lib/assets/npcs/piper/video/shaves_pussy1.webm';
   final String shower = 'lib/assets/npcs/piper/video/shower.webm';
   final String shower2 = 'lib/assets/npcs/piper/video/shower2.webm';
+  final String spankedPiper1 =
+      'lib/assets/npcs/piper/video/spanked_piper_1.mp4';
+  final String spankedPiper2 =
+      'lib/assets/npcs/piper/video/spanked_piper_2.mp4';
+  final String spankedPiper3 =
+      'lib/assets/npcs/piper/video/spanked_piper_3.mp4';
 }
 
 class $AssetsLudaGen {
@@ -1016,6 +1043,7 @@ class $AssetsMomVideoGen {
       'lib/assets/npcs/mom/video/beach_0_prolog_1.webm';
   final String momKitch1 = 'lib/assets/npcs/mom/video/mom_kitch_1.mp4';
   final String momKitchRed1 = 'lib/assets/npcs/mom/video/mom_kitch_red_1.mp4';
+  final String momPhone = 'lib/assets/npcs/mom/video/mom_phone.mp4';
   final String momSleep1 = 'lib/assets/npcs/mom/video/mom_sleep_1.mp4';
   final String momSleep2 = 'lib/assets/npcs/mom/video/mom_sleep_2.mp4';
   final String momSleep3Gola = 'lib/assets/npcs/mom/video/mom_sleep_3_gola.mp4';

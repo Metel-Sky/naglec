@@ -1,6 +1,8 @@
 import '../data/npc_profile_quests_registry.dart';
 import '../npcs/cherie/cherie_quests.dart';
 import '../npcs/mom/mom_quest001.dart';
+import '../npcs/mom/mom_event002_pool.dart';
+import '../npcs/piper/piper_quests.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/danielle/danielle_spy_parents_quest.dart';
 import '../npcs/sem/sem_events.dart';
@@ -11,6 +13,7 @@ import '../services/inventory_controller.dart';
 import '../services/npc_service.dart';
 import '../services/player_stats_controller.dart';
 import '../services/service_locator.dart';
+import '../services/game_time_controller.dart';
 
 /// Логіка читів для квестів, прив’язаних до NPC / світу (перемикачі в картці NPC).
 abstract final class NpcQuestCheats {
@@ -307,6 +310,55 @@ abstract final class NpcQuestCheats {
           world.momQuest001Beach = 0;
           world.momQuest001Step = 0;
           world.momQuest001LastBeachTripWeekKey = null;
+        }
+        break;
+      case NpcProfileQuestCheatId.momOwesGgService:
+        if (profileNpc.id != 'mom') break;
+        if (completed) {
+          final time = sl<GameTimeController>();
+          MomEvent002Pool.applyCheatCleanedMomOwes(
+            world: world,
+            gameDate: time.dateTime,
+            weekdayIndex: time.weekdayIndex,
+          );
+        } else {
+          MomEvent002Pool.resetCheatForFreshOffer(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.piperBadGrades001:
+        if (profileNpc.id != 'piper') break;
+        if (completed) {
+          final time = sl<GameTimeController>();
+          PiperQuest001.applyCheatActiveCrisis(
+            world: world,
+            gameDate: time.dateTime,
+          );
+        } else {
+          PiperQuest001.resetCheat(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.piperPunishment1:
+        if (profileNpc.id != 'piper') break;
+        if (completed) {
+          PiperQuest001.applyCheatPunishment(world: world, crisisN: 1);
+        } else {
+          PiperQuest001.resetCheatPunishment(world, 1);
+        }
+        break;
+      case NpcProfileQuestCheatId.piperPunishment2:
+        if (profileNpc.id != 'piper') break;
+        if (completed) {
+          PiperQuest001.applyCheatPunishment(world: world, crisisN: 2);
+        } else {
+          PiperQuest001.resetCheatPunishment(world, 2);
+        }
+        break;
+      case NpcProfileQuestCheatId.piperPunishment3:
+        if (profileNpc.id != 'piper') break;
+        if (completed) {
+          PiperQuest001.applyCheatPunishment(world: world, crisisN: 3);
+        } else {
+          PiperQuest001.resetCheatPunishment(world, 3);
         }
         break;
     }

@@ -290,6 +290,10 @@ final Map<String, String> stringsEn = {
   'cherie_quest_003_snack_finale':
       '+\$200, +4 h, +\$%s tips, energy −40, +1 charisma, +10 relationship with Cherie, arousal +10.',
   'npc_quest_mom_beach_001': 'Mom: Quest (001) Beach',
+  'npc_quest_mom_owes_service': 'Mom: pool debt',
+  'profile_mom_owes_service_yes': 'Cleaned — Mom owes you (pay on kitchen)',
+  'profile_mom_owes_service_no': 'Can offer cleaning (Mon/Thu)',
+  'profile_mom_owes_gg_count': 'Times owed: %s',
   'profile_mom_quest001_beach': 'Beach counter: %s',
   'mom_quest_001_btn_agree': 'Agree',
   'mom_quest_001_btn_refuse': 'Refuse',
@@ -305,6 +309,97 @@ final Map<String, String> stringsEn = {
   'mom_quest_001_btn_finish': 'Finish',
   'mom_quest_001_beach_weekly_limit':
       'You already went to the beach with Mom this week. Try again next week.',
+  'mom_event_002_step01_news':
+      '— The pool got dirty. If you want to earn a few dollars, you can clean it.',
+  'mom_event_002_step02_news': 'You are cleaning the pool.',
+  'mom_event_002_step03_pay_news': '— Here are your \$50. Thanks for helping!',
+  'mom_event_002_step03_choice_news':
+      '— So, as we agreed? What works for you?',
+  'mom_event_002_step03_no_money_news':
+      '— I don\'t have money right now…\n— Then you owe me.',
+  'mom_event_002_step03_result_paid':
+      'Mom settled with me — she gave \$50.',
+  'mom_event_002_step03_result_debt':
+      'Mom didn\'t give me money, but promised me a favor.',
+  'mom_event_002_after_agree_news':
+      'Alright. Go to the yard and clean the pool.',
+  'mom_event_002_after_clean_news': 'Talk to Mom in the kitchen.',
+  'mom_event_002_btn_agree': 'Sure, I\'ll clean it',
+  'mom_event_002_btn_not_now': 'Not now',
+  'mom_event_002_btn_clean_pool': 'Clean the pool',
+  'mom_event_002_btn_finish': 'Finish',
+  'mom_event_002_btn_pay_50': '\$50',
+  'mom_event_002_btn_you_owe': 'You owe me',
+  'mom_event_002_btn_leave': 'Leave',
+  'piper_quest_001_step01_news':
+      'In the library Piper whispers to a classmate:\n— Don\'t tell Mom… I got an F in {subject} again.',
+  'piper_quest_001_step01_after_news': 'Now you know about Piper\'s trouble.',
+  'piper_quest_001_step02_news':
+      '— Don\'t tell Mom… I\'m in trouble with {subject} again. Please help.',
+  'piper_quest_001_step03_intro_news':
+      'I went into the kitchen; Mom was talking to someone on the phone.',
+  'piper_quest_001_step03_news':
+      '— Good evening. This is {teacher}. Piper is having trouble with {subject}…\n— Yes, I\'ll talk to her. Thank you for calling.',
+  'piper_quest_001_step04_intro_news':
+      'I went into the corridor — from Piper\'s room I could hear Mom scolding her.',
+  'piper_quest_001_step04_news':
+      'Mom is scolding Piper in her room:\n— There will be punishment. Hand over your phone now.',
+  'piper_quest_001_step05_crisis1_news':
+      '— Give me the phone. No phone until Sunday.',
+  'piper_quest_001_step07_news': 'Grade crisis closed — waiting for the next one.',
+  'piper_quest_001_step07_success_news':
+      'You worked it out — Mom didn\'t find out this time.',
+  'piper_quest_001_step07_after_punish_news':
+      'Crisis over. The next bad grade starts a new story.',
+  'piper_quest_001_snitch_news':
+      '— You know, Piper got another F today. If she asks, I didn\'t tell you.\n\n'
+      '— Again? That\'s it — she\'s in for a serious talk.',
+  'piper_quest_001_snitch_auto_news':
+      'Not enough money — you had to tell Mom.\n\n'
+      '— You know, Piper got another F today. If she asks, I didn\'t tell you.\n\n'
+      '— Again? That\'s it — she\'s in for a serious talk.',
+  'piper_quest_001_subject_math': 'math',
+  'piper_quest_001_subject_english': 'English',
+  'piper_quest_001_subject_history': 'history',
+  'piper_quest_001_teacher_lisa': 'Lisa',
+  'piper_quest_001_teacher_amia': 'Amia',
+  'piper_quest_001_teacher_nicole': 'Nicole',
+  'piper_quest_001_btn_eavesdrop': 'Eavesdrop',
+  'piper_quest_001_btn_eavesdrop_call': 'Eavesdrop',
+  'piper_quest_001_btn_homework_help':
+      'Fine, I\'ll help with homework if you clean my room',
+  'piper_quest_001_btn_cover_20': 'Cover for me for \$20',
+  'piper_quest_001_btn_refuse': 'Figure it out yourself',
+  'piper_quest_001_btn_snitch_mom': 'Tell Mom about Piper\'s grades',
+  'piper_quest_001_btn_ask_mom_owed':
+      'Mom, remember you said you owed me?',
+  'piper_quest_001_btn_gg_punish_piper': 'Let me punish Piper',
+  'piper_quest_001_btn_tell_piper_punishment': 'Tell about punishment',
+  'piper_quest_001_gg_punish_tell_piper_news':
+      'Mom said I\'m going to punish you for bad grades from now on.',
+  'piper_quest_001_gg_punish_mom_remembers_news': '— Yes, I remember.',
+  'piper_quest_001_gg_punish_mom_grants_news':
+      '— All right — but keep it reasonable.',
+  'piper_quest_001_btn_leave': 'Leave',
+  'npc_quest_piper_bad_grades_001': '001 bad grades',
+  'profile_piper_bad_grades_crisis_on': 'crisis active',
+  'profile_piper_bad_grades_crisis_off': 'crisis inactive',
+  'profile_piper_bad_grades_count': 'Bad grades: %s',
+  'npc_quest_piper_punishment_1': 'Punishment 1',
+  'npc_quest_piper_punishment_2': 'Punishment 2',
+  'npc_quest_piper_punishment_3': 'Punishment 3',
+  'profile_piper_punishment_on': 'active',
+  'profile_piper_punishment_off': 'inactive',
+  'piper_quest_001_step05_crisis2_news':
+      '— Phone again. And at nine — in your room. No laptop.',
+  'piper_quest_001_step05_crisis3_news':
+      'Mom spanks Piper in her room. She cries but doesn\'t talk back.',
+  'piper_quest_001_step05_gg_level1_news':
+      '— Phone. Hand it over. No phone until Sunday. I said it — that\'s final.',
+  'piper_quest_001_step05_gg_level2_news':
+      '— Nine o\'clock — in your room. No laptop. Mom said I\'m in charge.',
+  'piper_quest_001_step05_gg_level3_news':
+      'Piper is on her knees. Mom let me punish her — within reason.',
   'mom_quest_001_step01_news': 'Quest 001 beach\nText 1',
   'mom_quest_001_step02_news': 'Quest 001 beach\nText 2',
   'mom_quest_001_step03_news': 'Quest 001 beach\nText 3',

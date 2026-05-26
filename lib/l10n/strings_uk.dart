@@ -291,6 +291,10 @@ final Map<String, String> stringsUk = {
   'cherie_quest_003_snack_finale':
       '+\$200, +4 год, +\$%s чайових, енергія −40, +1 харизма, +10 до стосунків з Cherie, збудження +10.',
   'npc_quest_mom_beach_001': 'Мама: Квест (001) Пляж',
+  'npc_quest_mom_owes_service': 'Мама: борг за басейн',
+  'profile_mom_owes_service_yes': 'Почистив — мама винна (оплата на кухні)',
+  'profile_mom_owes_service_no': 'Може запропонувати чистку (Пн/Чт)',
+  'profile_mom_owes_gg_count': 'Разів «винна»: %s',
   'profile_mom_quest001_beach': 'Лічильник beach: %s',
   'mom_quest_001_btn_agree': 'Погодитись',
   'mom_quest_001_btn_refuse': 'Відмовитись',
@@ -306,6 +310,97 @@ final Map<String, String> stringsUk = {
   'mom_quest_001_btn_finish': 'Кінчити',
   'mom_quest_001_beach_weekly_limit':
       'На цьому тижні ви вже їздили на пляж з мамою. Спробуйте наступного тижня.',
+  'mom_event_002_step01_news':
+      '— У нас забруднився басейн. Якщо хочеш заробити пару доларів — можеш його почистити.',
+  'mom_event_002_step02_news': 'Ти чистиш басейн.',
+  'mom_event_002_step03_pay_news': '— Ось твої \$50. Дякую за допомогу!',
+  'mom_event_002_step03_choice_news':
+      '— Ну що, як домовлялись? Як тобі зручніше?',
+  'mom_event_002_step03_no_money_news':
+      '— Зараз грошей нема…\n— Ну тоді будеш мені винна.',
+  'mom_event_002_step03_result_paid':
+      'Мама розрахувалась зі мною — дала \$50.',
+  'mom_event_002_step03_result_debt':
+      'Мама не дала грошей, але пообіцяла мені послугу.',
+  'mom_event_002_after_agree_news':
+      'Добре. Тоді іди на двір і почисти басейн.',
+  'mom_event_002_after_clean_news': 'Поговори з мамою на кухні.',
+  'mom_event_002_btn_agree': 'Добре, почищу',
+  'mom_event_002_btn_not_now': 'Не зараз',
+  'mom_event_002_btn_clean_pool': 'Почистити басейн',
+  'mom_event_002_btn_finish': 'Закінчити',
+  'mom_event_002_btn_pay_50': '\$50',
+  'mom_event_002_btn_you_owe': 'Будеш мені винна',
+  'mom_event_002_btn_leave': 'Піти',
+  'piper_quest_001_step01_news':
+      'У бібліотеці Пайпер шепоче одногрупниці:\n— Не кажи мамі… у мене знову двійка з {subject}.',
+  'piper_quest_001_step01_after_news': 'Тепер ти знаєш про проблеми Пайпер.',
+  'piper_quest_001_step02_news':
+      '— Не кажи мамі… у мене знову проблеми з {subject}. Допоможи, будь ласка.',
+  'piper_quest_001_step03_intro_news':
+      'Я зайшов на кухню, там мама говорила з кимось по телефону.',
+  'piper_quest_001_step03_news':
+      '— Добрий вечір. Це {teacher}. У Пайпер проблеми з {subject}…\n— Так, я з нею поговорю. Дякую, що зателефонували.',
+  'piper_quest_001_step04_intro_news':
+      'Я зайшов у коридор — з кімнати Пайпер чутно, як мама сварить її.',
+  'piper_quest_001_step04_news':
+      'Мама сварить Пайпер у її кімнаті:\n— Буде покарання. Телефон зараз віддаєш.',
+  'piper_quest_001_step05_crisis1_news':
+      '— Телефон мені. До неділі не побачиш.',
+  'piper_quest_001_step07_news': 'Криза з оцінками закрита — чекаємо наступну.',
+  'piper_quest_001_step07_success_news':
+      'Домовились — цього разу обійшлось без мами.',
+  'piper_quest_001_step07_after_punish_news':
+      'Криза закрита. Наступна двійка — нова історія.',
+  'piper_quest_001_snitch_news':
+      '— А знаєш, Пайпер сьогодні знову отримала двійку. Якщо що, я тобі про це не казав.\n\n'
+      '— Знову? Ну все, її чекає серйозна розмова.',
+  'piper_quest_001_snitch_auto_news':
+      'Грошей не вистачило — довелось розповісти мамі.\n\n'
+      '— А знаєш, Пайпер сьогодні знову отримала двійку. Якщо що, я тобі про це не казав.\n\n'
+      '— Знову? Ну все, її чекає серйозна розмова.',
+  'piper_quest_001_subject_math': 'математики',
+  'piper_quest_001_subject_english': 'англійської',
+  'piper_quest_001_subject_history': 'історії',
+  'piper_quest_001_teacher_lisa': 'Lisa',
+  'piper_quest_001_teacher_amia': 'Amia',
+  'piper_quest_001_teacher_nicole': 'Nicole',
+  'piper_quest_001_btn_eavesdrop': 'Підслухати',
+  'piper_quest_001_btn_eavesdrop_call': 'Підслухати',
+  'piper_quest_001_btn_homework_help':
+      'Ладно, допоможу з домашкою, але прибереш у моїй кімнаті',
+  'piper_quest_001_btn_cover_20': 'За \$20 прикрию перед мамою',
+  'piper_quest_001_btn_refuse': 'Сама розбирайся',
+  'piper_quest_001_btn_snitch_mom': 'Розповісти про оцінки Пайпер',
+  'piper_quest_001_btn_ask_mom_owed':
+      'Мам, а пам\'ятаєш, що ти казала, що ти мені винна?',
+  'piper_quest_001_btn_gg_punish_piper': 'Дозволь мені наказати Пайпер',
+  'piper_quest_001_btn_tell_piper_punishment': 'Сказати про покарання',
+  'piper_quest_001_gg_punish_tell_piper_news':
+      'Мама сказала, що тепер я буду тебе карати за погані оцінки.',
+  'piper_quest_001_gg_punish_mom_remembers_news': '— Так, пам\'ятаю.',
+  'piper_quest_001_gg_punish_mom_grants_news':
+      '— Добре, тільки в межах розумного.',
+  'piper_quest_001_btn_leave': 'Піти',
+  'npc_quest_piper_bad_grades_001': '001 погані оцінки',
+  'profile_piper_bad_grades_crisis_on': 'криза активна',
+  'profile_piper_bad_grades_crisis_off': 'криза неактивна',
+  'profile_piper_bad_grades_count': 'Поганих оцінок: %s',
+  'npc_quest_piper_punishment_1': 'Покарання 1',
+  'npc_quest_piper_punishment_2': 'Покарання 2',
+  'npc_quest_piper_punishment_3': 'Покарання 3',
+  'profile_piper_punishment_on': 'активно',
+  'profile_piper_punishment_off': 'неактивно',
+  'piper_quest_001_step05_crisis2_news':
+      '— Телефон знову забираю. І о дев\'ятій — у кімнаті. Без ноутбука.',
+  'piper_quest_001_step05_crisis3_news':
+      'Мама шлепає Пайпер у її кімнаті. Вона плаче, але не сперечається.',
+  'piper_quest_001_step05_gg_level1_news':
+      '— Телефон мені. До неділі не побачиш. Я сказав — значить так.',
+  'piper_quest_001_step05_gg_level2_news':
+      '— О дев\'ятій — у кімнаті. Без ноутбука. Мама дозволила — я стежу.',
+  'piper_quest_001_step05_gg_level3_news':
+      'Пайпер стоїть навколішки. Мама дозволила мені покарати її — в межах розумного.',
   'mom_quest_001_step01_news': 'Квест 001 пляж\nТекст 1',
   'mom_quest_001_step02_news': 'Квест 001 пляж\nТекст 2',
   'mom_quest_001_step03_news': 'Квест 001 пляж\nТекст 3',

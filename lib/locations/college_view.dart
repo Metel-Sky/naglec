@@ -13,6 +13,8 @@ import '../npcs/nicole/nicole_npc.dart';
 import '../npcs/amia/amia_npc.dart';
 import '../npcs/lisa/lisa_npc.dart';
 import '../npcs/dekan/dekan_npc.dart';
+import '../npcs/piper/piper_npc.dart';
+import '../npcs/emily/emily_npc.dart';
 
 class CollegeView extends StatefulWidget {
   final String currentRoom;
@@ -26,6 +28,8 @@ class CollegeView extends StatefulWidget {
   final String? activeNpcIdInRoom;
   /// Під час авто-сцени — без оверлеїв NPC у кімнаті, лише фон.
   final bool suppressRoomNpcRaster;
+  /// piper_quest_001 крок 1: Пайпер + Emily у бібліотеці (підслуховування).
+  final bool piperLibraryEavesdropActive;
 
   const CollegeView({
     super.key,
@@ -37,6 +41,7 @@ class CollegeView extends StatefulWidget {
     required this.onNPCTap,
     required this.activeNpcIdInRoom,
     this.suppressRoomNpcRaster = false,
+    this.piperLibraryEavesdropActive = false,
   });
 
   @override
@@ -220,7 +225,7 @@ class _CollegeViewState extends State<CollegeView> {
       activeNPC = null;
     }
 
-    if (widget.suppressRoomNpcRaster) {
+    if (widget.suppressRoomNpcRaster || widget.piperLibraryEavesdropActive) {
       studentSceneRasterOverlay = null;
       specialBackground = null;
       activeNPC = null;
@@ -231,6 +236,10 @@ class _CollegeViewState extends State<CollegeView> {
       amiaActiveInEnglishRoom = false;
       lisaActiveInMathRoom = false;
     }
+
+    final bool showPiperLibraryEavesdrop = widget.piperLibraryEavesdropActive &&
+        LocationsData.migrateLegacyRoomId(widget.currentRoom) ==
+            LocationsData.canteen;
 
     final roomData = LocationsData.collegeRooms[widget.currentRoom];
     // Відео / нестандартний медіа — повноекранно; растр студентів — фон кімнати + оверлей знизу (як у викладачів).
@@ -503,9 +512,54 @@ class _CollegeViewState extends State<CollegeView> {
                       ),
                     ),
                   ),
+                if (showPiperLibraryEavesdrop)
+                  _buildPiperLibraryEavesdropOverlay(constraints),
               ],
             );
           },
+        ),
+      ),
+    );
+  }
+
+  /// Пайпер + Emily: −30% від звичного оверлею NPC, праворуч, поруч одна з одною.
+  Widget _buildPiperLibraryEavesdropOverlay(BoxConstraints constraints) {
+    const scale = 0.7;
+    final overlayHeight =
+        constraints.maxHeight * RoomNpcSceneTemplate.npcOverlayHeightFraction * scale;
+    final overlayWidth = constraints.maxWidth * 0.42;
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 6),
+        child: SizedBox(
+          height: overlayHeight,
+          width: overlayWidth,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Image.asset(
+                  kEmilyAvatarPath,
+                  fit: BoxFit.contain,
+                  alignment: Alignment.bottomCenter,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const SizedBox.shrink(),
+                ),
+              ),
+              const SizedBox(width: 2),
+              Expanded(
+                child: Image.asset(
+                  kPiperAvatarPath,
+                  fit: BoxFit.contain,
+                  alignment: Alignment.bottomCenter,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const SizedBox.shrink(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,8 +1,10 @@
 part of '../main_game_screen.dart';
 
-mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, MainGameQuestFlows {
+mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGameFlow, MainGameQuestFlows {
   void _onTimeChanged() {
     setState(() {
+      _syncMomEvent002KitchenRecheckIfNeeded();
+      _syncPiperQuest001DailyIfNeeded();
       NpcEconomyService.syncWithGameClock(
         sl<NPCService>(),
         _worldState,
@@ -354,6 +356,30 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, MainGameQ
           _tryStartMomQuest001HallIfNeeded(room);
           _maybeResumeMomQuest001AfterLoad();
         }
+        if (currentZone == 'HOME' &&
+            LocationsData.migrateLegacyRoomId(room) == LocationsData.kitchen) {
+          _tryStartMomEvent002KitchenIfNeeded(room);
+          _maybeResumeMomEvent002AfterLoad(room);
+          _ensureMomEvent002KitchenPaymentUiCoherent();
+        }
+        if (currentZone == 'COLLEGE' &&
+            LocationsData.migrateLegacyRoomId(room) == LocationsData.canteen) {
+          _tryStartPiperQuest001Step1IfNeeded(room);
+          _ensurePiperQuest001LibraryDialogUiCoherent();
+        }
+        if (currentZone == 'HOME' && isInsideRoom) {
+          _tryStartPiperQuest001Step2IfNeeded();
+          _tryStartPiperQuest001Step3IfNeeded();
+          _ensurePiperQuest001Step3TeacherCallUiCoherent();
+          _tryStartPiperQuest001Step5IfNeeded();
+          _ensurePiperQuest001Step5PunishmentUiCoherent();
+        }
+        if (currentZone == 'HOME') {
+          _ensurePiperQuest001Step2ApproachUiCoherent();
+          _ensurePiperQuest001SnitchAckUiCoherent();
+          _tryStartPiperQuest001Step4IfNeeded();
+          _ensurePiperQuest001Step4CorridorUiCoherent();
+        }
       }
       _maybeAbortCherieQuest002WrongLocation();
       _maybeAbortCherieQuest003WrongLocation();
@@ -362,6 +388,7 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, MainGameQ
       _maybeAbortCherieQuest006WrongLocation();
       _maybeAbortCherieMassageFunEventWrongLocation();
       _maybeAbortMomQuest001WrongLocation();
+      _maybeAbortMomEvent002WrongLocation();
       _ensureCherieQuest002HomeHallUiCoherent();
     });
   }

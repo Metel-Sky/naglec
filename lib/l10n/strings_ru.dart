@@ -290,6 +290,10 @@ final Map<String, String> stringsRu = {
   'cherie_quest_003_snack_finale':
       '+\$200, +4 ч, +\$%s чаевых, энергия −40, +1 харизма, +10 к отношениям с Cherie, возбуждение +10.',
   'npc_quest_mom_beach_001': 'Мама: Квест (001) Пляж',
+  'npc_quest_mom_owes_service': 'Мама: долг за бассейн',
+  'profile_mom_owes_service_yes': 'Почистил — мама должна (оплата на кухне)',
+  'profile_mom_owes_service_no': 'Может предложить чистку (Пн/Чт)',
+  'profile_mom_owes_gg_count': 'Раз «должна»: %s',
   'profile_mom_quest001_beach': 'Счётчик beach: %s',
   'mom_quest_001_btn_agree': 'Согласиться',
   'mom_quest_001_btn_refuse': 'Отказаться',
@@ -305,6 +309,97 @@ final Map<String, String> stringsRu = {
   'mom_quest_001_btn_finish': 'Кончить',
   'mom_quest_001_beach_weekly_limit':
       'На этой неделе вы уже ездили на пляж с мамой. Попробуйте на следующей неделе.',
+  'mom_event_002_step01_news':
+      '— У нас загрязнился бассейн. Если хочешь заработать пару долларов — можешь его почистить.',
+  'mom_event_002_step02_news': 'Ты чистишь бассейн.',
+  'mom_event_002_step03_pay_news': '— Вот твои \$50. Спасибо за помощь!',
+  'mom_event_002_step03_choice_news':
+      '— Ну что, как договаривались? Как тебе удобнее?',
+  'mom_event_002_step03_no_money_news':
+      '— Сейчас денег нет…\n— Ну тогда будешь мне должна.',
+  'mom_event_002_step03_result_paid':
+      'Мама рассчиталась со мной — дала \$50.',
+  'mom_event_002_step03_result_debt':
+      'Мама не дала денег, но пообещала мне услугу.',
+  'mom_event_002_after_agree_news':
+      'Хорошо. Тогда иди во двор и почисти бассейн.',
+  'mom_event_002_after_clean_news': 'Поговори с мамой на кухне.',
+  'mom_event_002_btn_agree': 'Хорошо, почищу',
+  'mom_event_002_btn_not_now': 'Не сейчас',
+  'mom_event_002_btn_clean_pool': 'Почистить бассейн',
+  'mom_event_002_btn_finish': 'Закончить',
+  'mom_event_002_btn_pay_50': '\$50',
+  'mom_event_002_btn_you_owe': 'Будешь мне должна',
+  'mom_event_002_btn_leave': 'Уйти',
+  'piper_quest_001_step01_news':
+      'В библиотеке Пайпер шепчет одногрупнице:\n— Не говори маме… у меня снова двойка по {subject}.',
+  'piper_quest_001_step01_after_news': 'Теперь ты знаешь о проблемах Пайпер.',
+  'piper_quest_001_step02_news':
+      '— Не говори маме… у меня снова проблемы с {subject}. Помоги, пожалуйста.',
+  'piper_quest_001_step03_intro_news':
+      'Я зашёл на кухню, там мама разговаривала с кем-то по телефону.',
+  'piper_quest_001_step03_news':
+      '— Добрый вечер. Это {teacher}. У Пайпер проблемы с {subject}…\n— Да, я с ней поговорю. Спасибо, что позвонили.',
+  'piper_quest_001_step04_intro_news':
+      'Я зашёл в коридор — из комнаты Пайпер слышно, как мама её ругает.',
+  'piper_quest_001_step04_news':
+      'Мама ругает Пайпер в её комнате:\n— Будет наказание. Телефон сейчас отдаёшь.',
+  'piper_quest_001_step05_crisis1_news':
+      '— Телефон мне. До воскресенья не увидишь.',
+  'piper_quest_001_step07_news': 'Кризис с оценками закрыт — ждём следующий.',
+  'piper_quest_001_step07_success_news':
+      'Договорились — в этот раз обошлось без мамы.',
+  'piper_quest_001_step07_after_punish_news':
+      'Кризис закрыт. Следующая двойка — новая история.',
+  'piper_quest_001_snitch_news':
+      '— Знаешь, Пайпер сегодня снова получила двойку. Если что, я тебе об этом не говорил.\n\n'
+      '— Снова? Ну всё, её ждёт серьёзный разговор.',
+  'piper_quest_001_snitch_auto_news':
+      'Денег не хватило — пришлось рассказать маме.\n\n'
+      '— Знаешь, Пайпер сегодня снова получила двойку. Если что, я тебе об этом не говорил.\n\n'
+      '— Снова? Ну всё, её ждёт серьёзный разговор.',
+  'piper_quest_001_subject_math': 'математике',
+  'piper_quest_001_subject_english': 'английскому',
+  'piper_quest_001_subject_history': 'истории',
+  'piper_quest_001_teacher_lisa': 'Lisa',
+  'piper_quest_001_teacher_amia': 'Amia',
+  'piper_quest_001_teacher_nicole': 'Nicole',
+  'piper_quest_001_btn_eavesdrop': 'Подслушать',
+  'piper_quest_001_btn_eavesdrop_call': 'Подслушать',
+  'piper_quest_001_btn_homework_help':
+      'Ладно, помогу с домашкой, но уберёшь в моей комнате',
+  'piper_quest_001_btn_cover_20': 'За \$20 прикрою перед мамой',
+  'piper_quest_001_btn_refuse': 'Сама разбирайся',
+  'piper_quest_001_btn_snitch_mom': 'Рассказать об оценках Пайпер',
+  'piper_quest_001_btn_ask_mom_owed':
+      'Мам, а помнишь, ты говорила, что должна мне?',
+  'piper_quest_001_btn_gg_punish_piper': 'Позволь мне наказать Пайпер',
+  'piper_quest_001_btn_tell_piper_punishment': 'Сказать о наказании',
+  'piper_quest_001_gg_punish_tell_piper_news':
+      'Мама сказала, что теперь я буду тебя наказывать за плохие оценки.',
+  'piper_quest_001_gg_punish_mom_remembers_news': '— Да, помню.',
+  'piper_quest_001_gg_punish_mom_grants_news':
+      '— Хорошо, только в разумных пределах.',
+  'piper_quest_001_btn_leave': 'Уйти',
+  'npc_quest_piper_bad_grades_001': '001 плохие оценки',
+  'profile_piper_bad_grades_crisis_on': 'кризис активен',
+  'profile_piper_bad_grades_crisis_off': 'кризис неактивен',
+  'profile_piper_bad_grades_count': 'Плохих оценок: %s',
+  'npc_quest_piper_punishment_1': 'Наказание 1',
+  'npc_quest_piper_punishment_2': 'Наказание 2',
+  'npc_quest_piper_punishment_3': 'Наказание 3',
+  'profile_piper_punishment_on': 'активно',
+  'profile_piper_punishment_off': 'неактивно',
+  'piper_quest_001_step05_crisis2_news':
+      '— Телефон снова забираю. И в девять — в комнате. Без ноутбука.',
+  'piper_quest_001_step05_crisis3_news':
+      'Мама шлёпает Пайпер в её комнате. Она плачет, но не спорит.',
+  'piper_quest_001_step05_gg_level1_news':
+      '— Телефон мне. До воскресенья не увидишь. Я сказал — значит так.',
+  'piper_quest_001_step05_gg_level2_news':
+      '— В девять — в комнате. Без ноутбука. Мама разрешила — я слежу.',
+  'piper_quest_001_step05_gg_level3_news':
+      'Пайпер стоит на коленях. Мама разрешила мне наказать её — в разумных пределах.',
   'mom_quest_001_step01_news': 'Квест 001 пляж\nТекст 1',
   'mom_quest_001_step02_news': 'Квест 001 пляж\nТекст 2',
   'mom_quest_001_step03_news': 'Квест 001 пляж\nТекст 3',

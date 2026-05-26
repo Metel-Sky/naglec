@@ -28,6 +28,7 @@ alwaysApply: true
 
 - Місток UI + події кімнати/панелі для NPC — у **`lib/npcs/<npc_id>/`** (mixin як `part` бібліотеки `main_game_screen.dart`, реалізує **`NpcScreenFlow`**). Приклад: `lib/npcs/cherie/cherie_game_flow.dart` → `CherieGameFlow`.
 - Контракт: `lib/npcs/npc_screen_flow.dart`, id: `lib/npcs/npc_screen_flow_ids.dart`.
+- **Не змішувати діалог і кнопки** між квестами/івентами — див. **`quest-ui-isolation.mdc`**.
 
 ## Імпорти асетів
 

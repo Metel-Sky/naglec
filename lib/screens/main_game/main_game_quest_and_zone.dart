@@ -1,7 +1,7 @@
 part of '../main_game_screen.dart';
 
 /// Квести й час, контент зон, права панель дій і навігація по зонах.
-mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow, MainGameNpcFinance {
+mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow, PiperGameFlow, MainGameNpcFinance {
   bool get _useQuestRuntimeV2 => sl<SettingsController>().useQuestRuntimeV2;
 
   bool get _questRuntimeMirrorMode =>
@@ -306,6 +306,22 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     _saveService.autosave();
   }
 
+  void _exitHomeRoomToCorridorGrid() {
+    _timeController.addMinutes(5);
+    setState(() {
+      isInsideRoom = false;
+      currentRoom = LocationsData.corridor;
+      _selectedNpcIdInRoom = null;
+      _tryStartPiperQuest001Step4IfNeeded();
+      if (_worldState.piperQuest001Step != 4) {
+        newsMessage =
+            LocationsData.getLocationDisplayName(LocationsData.corridor);
+      }
+      _ensurePiperQuest001Step2ApproachUiCoherent();
+      _ensurePiperQuest001Step4CorridorUiCoherent();
+    });
+  }
+
   void _handleRoomEntry(String name) {
     if (_isCollegeAuditorium(name) &&
         _isCollegeLessonLateWindow(_timeController.dateTime)) {
@@ -413,6 +429,23 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _maybeAbortCherieQuest006WrongLocation();
       _maybeAbortCherieMassageFunEventWrongLocation();
       _tryStartMomQuest001HallIfNeeded(name);
+      _syncMomEvent002KitchenRecheckIfNeeded();
+      _tryStartMomEvent002KitchenIfNeeded(name);
+      _maybeResumeMomEvent002AfterLoad(name);
+      _maybeAbortMomEvent002WrongLocation();
+      _ensureMomEvent002KitchenPaymentUiCoherent();
+      _syncPiperQuest001DailyIfNeeded();
+      _tryStartPiperQuest001Step1IfNeeded(name);
+      _ensurePiperQuest001LibraryDialogUiCoherent();
+      _tryStartPiperQuest001Step2IfNeeded();
+      _ensurePiperQuest001Step2ApproachUiCoherent();
+      _ensurePiperQuest001SnitchAckUiCoherent();
+      _tryStartPiperQuest001Step3IfNeeded();
+      _ensurePiperQuest001Step3TeacherCallUiCoherent();
+      _tryStartPiperQuest001Step4IfNeeded();
+      _ensurePiperQuest001Step4CorridorUiCoherent();
+      _tryStartPiperQuest001Step5IfNeeded();
+      _ensurePiperQuest001Step5PunishmentUiCoherent();
       _ensureCherieQuest002HomeHallUiCoherent();
     });
   }
@@ -948,16 +981,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             currentRoom: currentRoom,
             isInsideRoom: isInsideRoom,
             onRoomTap: _handleRoomEntry,
-            onBack: () {
-              _timeController.addMinutes(5);
-              setState(() {
-                isInsideRoom = false;
-                currentRoom = LocationsData.corridor;
-                _selectedNpcIdInRoom = null;
-                newsMessage =
-                    LocationsData.getLocationDisplayName(LocationsData.corridor);
-              });
-            },
+            onBack: _exitHomeRoomToCorridorGrid,
             timeController: _timeController,
             selectedNpcIdInRoom: _selectedNpcIdInRoom,
             suppressRoomNpcRaster: _danielleSpyCaughtUiActive,
@@ -984,6 +1008,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
 
           final String? activeNpcIdInRoom =
               _danielleSpyCaughtUiActive ? null : effectiveActiveNpc?.id;
+          final piperLibraryEavesdrop = _isPiperQuest001LibraryEavesdropScene();
           return CollegeView(
             key: ValueKey(_locationSceneTickKey('college')),
             currentRoom: currentRoom,
@@ -993,7 +1018,9 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
               _timeController.addMinutes(5);
             },
             timeController: _timeController,
-            suppressRoomNpcRaster: _danielleSpyCaughtUiActive,
+            suppressRoomNpcRaster:
+                _danielleSpyCaughtUiActive || piperLibraryEavesdrop,
+            piperLibraryEavesdropActive: piperLibraryEavesdrop,
             onNPCTap: (npc) {
               setState(() {
                 _selectedNpcIdInRoom = npc.id;
@@ -1585,6 +1612,9 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _maybeAbortCherieQuest005WrongLocation();
       _maybeAbortCherieQuest006WrongLocation();
       _maybeAbortCherieMassageFunEventWrongLocation();
+      _ensurePiperQuest001Step2ApproachUiCoherent();
+      _tryStartPiperQuest001Step4IfNeeded();
+      _ensurePiperQuest001Step4CorridorUiCoherent();
     });
   }
 
@@ -2757,6 +2787,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     return ListenableBuilder(
       listenable: Listenable.merge([_timeController, _playerStats, _ui]),
       builder: (context, _) {
+        _syncMomEvent002KitchenRecheckIfNeeded();
         final int hour = _timeController.dateTime.hour;
         final int day = _timeController.weekdayIndex;
         final currentRoomNorm = LocationsData.migrateLegacyRoomId(currentRoom);
@@ -2812,6 +2843,15 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
 
         final momQ001Priority = _momQuest001PriorityActionPanelIfAny();
         if (momQ001Priority != null) return momQ001Priority;
+
+        final piperSnitchAckPriority = _piperQuest001SnitchAckActionPanelIfAny();
+        if (piperSnitchAckPriority != null) return piperSnitchAckPriority;
+
+        final momE002Priority = _momEvent002PriorityActionPanelIfAny();
+        if (momE002Priority != null) return momE002Priority;
+
+        final piperQ001Priority = _piperQuest001PriorityActionPanelIfAny();
+        if (piperQ001Priority != null) return piperQ001Priority;
 
         final cherieMfPriority = _cherieMassageFunPriorityActionPanelIfAny();
         if (cherieMfPriority != null) return cherieMfPriority;
@@ -3580,6 +3620,65 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                   gameNow: _timeController.dateTime,
                 )
                     ? () => _npcFinanceOfferAlternatives(npc)
+                    : null,
+                onTalkPiperSnitch: npc.id == 'mom' &&
+                        _isPiperQuest001SnitchOfferScene()
+                    ? () {
+                        setState(() {
+                          _piperQuest001SnitchToMom(auto: false);
+                        });
+                      }
+                    : null,
+                onTalkMomOwedAsk: npc.id == 'mom' &&
+                        PiperQuest001.canAskMomOwedForGgPunishOnKitchen(
+                          world: _worldState,
+                          npcService: sl<NPCService>(),
+                          mom: npc,
+                          hour: hour,
+                          weekdayIndex: day,
+                          currentZone: currentZone,
+                          isInsideRoom: isInsideRoom,
+                          currentRoom: currentRoom,
+                        )
+                    ? () {
+                        setState(() {
+                          _piperQuest001AskMomOwedForGgPunish();
+                        });
+                      }
+                    : null,
+                onTalkGgPunishPiper: npc.id == 'mom' &&
+                        PiperQuest001.canRequestGgPunishOnKitchen(
+                          world: _worldState,
+                          npcService: sl<NPCService>(),
+                          mom: npc,
+                          hour: hour,
+                          weekdayIndex: day,
+                          currentZone: currentZone,
+                          isInsideRoom: isInsideRoom,
+                          currentRoom: currentRoom,
+                        )
+                    ? () {
+                        setState(() {
+                          _piperQuest001RequestGgPunishFromMom();
+                        });
+                      }
+                    : null,
+                onTalkTellPiperAboutPunishment: npc.id == 'piper' &&
+                        PiperQuest001.canTellPiperAboutGgPunishmentInRoom(
+                          world: _worldState,
+                          npcService: sl<NPCService>(),
+                          piper: npc,
+                          hour: hour,
+                          weekdayIndex: day,
+                          currentZone: currentZone,
+                          isInsideRoom: isInsideRoom,
+                          currentRoom: currentRoom,
+                        )
+                    ? () {
+                        setState(() {
+                          _piperQuest001TellPiperAboutGgPunishment();
+                        });
+                      }
                     : null,
               ),
             );

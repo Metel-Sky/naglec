@@ -189,6 +189,9 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   /// Останній крок mom_quest_001 після [_applyMomQuest001Patch].
   int? _momQuest001PresentationSyncedStep;
 
+  /// Останній крок mom_event_002 після [_applyMomEvent002Patch].
+  int? _momEvent002PresentationSyncedStep;
+
   /// Останній показаний діалог старту пари, щоб не дублювати AlertDialog на кожен rebuild/tick.
   String? _collegeLessonPromptKey;
 
