@@ -379,6 +379,21 @@ final Map<String, String> stringsRu = {
   'piper_quest_001_step7a_mom_grants_news':
       '— Хорошо, только в разумных пределах.',
   'piper_quest_001_btn_leave': 'Уйти',
+  'piper_event_001_intro_news':
+      'В зале у окна Пайпер курит. Она не заметила, как ты вошёл — и теперь смотрит на тебя испуганными глазами.',
+  'piper_event_001_btn_tell_mom': 'Рассказать маме',
+  'piper_event_001_btn_blackmail': 'Шантажировать',
+  'piper_event_001_btn_punish': 'Наказать сейчас',
+  'piper_event_001_branch_snitch_news':
+      'Ты решил рассказать маме. Дальше — разговор с ней на кухне. *(TBD)*',
+  'piper_event_001_branch_blackmail_news':
+      'Ты намекаешь, что теперь она в твоём долгу. Пайпер молчит, но понимает. *(TBD)*',
+  'piper_event_001_branch_punish_news':
+      'Ты говоришь, что накажешь её сам — без мамы. Пайпер бледнеет. *(TBD)*',
+  'piper_event_002_intro_news':
+      'Пайпер сидит на диване с учебниками. Она нервно поднимает взгляд — видимо, снова не успевает.',
+  'piper_event_003_intro_news':
+      'Пайпер занимается в зале. Она заметила тебя, но не останавливается — только кивает.',
   'npc_quest_piper_bad_grades_001': '001 плохие оценки',
   'profile_piper_bad_grades_crisis_on': 'кризис активен',
   'profile_piper_bad_grades_crisis_off': 'кризис неактивен',

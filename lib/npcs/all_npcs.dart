@@ -21,6 +21,15 @@ import 'emily/emily_npc.dart';
 import 'ariana/ariana_npc.dart';
 import 'india/india_npc.dart';
 import 'jessa/jessa_npc.dart';
+import 'alexis/alexis_npc.dart';
+import 'lexi/lexi_npc.dart';
+import 'flaxy/flaxy_npc.dart';
+import 'alyssa/alyssa_npc.dart';
+import 'candee/candee_npc.dart';
+import 'blanche/blanche_npc.dart';
+import 'zazie/zazie_npc.dart';
+import 'katrin/katrin_npc.dart';
+import 'caprice/caprice_npc.dart';
 
 /// Збирає список усіх NPC з їхніх файлів.
 List<NPCModel> createAllNpcs() {
@@ -47,5 +56,14 @@ List<NPCModel> createAllNpcs() {
     createSemNpc(),
     createCherieNpc(),
     createAnyaNpc(),
+    createAlexisNpc(),
+    createLexiNpc(),
+    createFlaxyNpc(),
+    createAlyssaNpc(),
+    createCandeeNpc(),
+    createBlancheNpc(),
+    createZazieNpc(),
+    createKatrinNpc(),
+    createCapriceNpc(),
   ];
 }

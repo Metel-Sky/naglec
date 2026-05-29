@@ -379,6 +379,21 @@ final Map<String, String> stringsEn = {
   'piper_quest_001_step7a_mom_grants_news':
       '— All right — but keep it reasonable.',
   'piper_quest_001_btn_leave': 'Leave',
+  'piper_event_001_intro_news':
+      'By the window in the hall, Piper is smoking. She didn\'t notice you come in — now she\'s staring at you, scared.',
+  'piper_event_001_btn_tell_mom': 'Tell Mom',
+  'piper_event_001_btn_blackmail': 'Blackmail her',
+  'piper_event_001_btn_punish': 'Punish her now',
+  'piper_event_001_branch_snitch_news':
+      'You decide to tell Mom. Next — talk to her in the kitchen. *(TBD)*',
+  'piper_event_001_branch_blackmail_news':
+      'You hint she\'s in your debt now. Piper stays silent but gets it. *(TBD)*',
+  'piper_event_001_branch_punish_news':
+      'You say you\'ll punish her yourself — without Mom. Piper goes pale. *(TBD)*',
+  'piper_event_002_intro_news':
+      'Piper is on the couch with textbooks. She looks up, nervous — probably behind again.',
+  'piper_event_003_intro_news':
+      'Piper is working out in the hall. She noticed you but keeps going — just nods.',
   'npc_quest_piper_bad_grades_001': '001 bad grades',
   'profile_piper_bad_grades_crisis_on': 'crisis active',
   'profile_piper_bad_grades_crisis_off': 'crisis inactive',

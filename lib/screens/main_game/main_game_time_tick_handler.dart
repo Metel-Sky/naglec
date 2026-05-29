@@ -380,6 +380,9 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
           _tryStartPiperQuest001Step4IfNeeded();
           _ensurePiperQuest001Step4CorridorUiCoherent();
         }
+        if (currentZone == 'HOME' && isInsideRoom) {
+          _ensurePiperHallWeekendEventUiCoherent();
+        }
       }
       _maybeAbortCherieQuest002WrongLocation();
       _maybeAbortCherieQuest003WrongLocation();

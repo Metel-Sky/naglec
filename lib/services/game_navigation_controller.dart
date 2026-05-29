@@ -13,6 +13,7 @@ import 'door_lock_service.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/mom/mom_room_hours.dart';
 import '../npcs/piper/piper_quests.dart';
+import '../npcs/piper/piper_events.dart';
 
 class GameNavigationController extends ChangeNotifier {
   final GameTimeController _timeController;
@@ -336,12 +337,25 @@ class GameNavigationController extends ChangeNotifier {
         _worldState.piperQuest001Step == 2;
     final skipPiperStep5PunishmentNews =
         _currentZone == 'HOME' && _worldState.piperQuest001Step == 5;
+    final skipPiperHallWeekendEventNews = _currentZone == 'HOME' &&
+        name == LocationsData.hall &&
+        _worldState.piperHallEventStep >= 1 &&
+        PiperHallWeekendEvents.isActiveScene(
+          world: _worldState,
+          npcService: _npcService,
+          currentZone: _currentZone,
+          isInsideRoom: true,
+          currentRoom: name,
+          weekdayIndex: _timeController.weekdayIndex,
+          hour: _timeController.dateTime.hour,
+        );
     if (!skipDefaultRoomNews &&
         !skipPiperLibraryEavesdropNews &&
         !skipPiperTeacherCallNews &&
         !skipPiperCorridorScoldingNews &&
         !skipPiperStep2ApproachNews &&
-        !skipPiperStep5PunishmentNews) {
+        !skipPiperStep5PunishmentNews &&
+        !skipPiperHallWeekendEventNews) {
       _uiStateController.setNewsMessage(
         LocationsData.getLocationDisplayName(name),
       );

@@ -81,6 +81,32 @@ class LocationsData {
   static const String cherieWeekdayEveningHomeRoam =
       'cherie_weekday_evening_home_roam';
 
+  /// Маркер: Alexis (тітка) — вдома, випадкова кімната будинку на вул. Шевченка.
+  static const String auntHomeAlexisRoam = 'aunt_home_alexis_roam';
+
+  /// Маркер: Lexi — вдома, випадкова кімната будинку однокласниці.
+  static const String classmateHomeLexiRoam = 'classmate_home_lexi_roam';
+
+  /// Маркер: Flaxy — вдома, випадкова кімната будинку тітки.
+  static const String auntHomeFlaxyRoam = 'aunt_home_flaxy_roam';
+
+  /// Маркер: Alyssa — вдома, випадкова кімната будинку однокласниці.
+  static const String classmateHomeAlyssaRoam = 'classmate_home_alyssa_roam';
+
+  /// Маркер: Candee — вдома, випадкова кімната будинку однокласниці.
+  static const String classmateHomeCandeeRoam = 'classmate_home_candee_roam';
+
+  /// Маркер: Katrin — вдома, випадкова кімната кв. 2 (Бандери 1).
+  static const String poorDistrictH1Apt2KatrinRoam =
+      'poor_district_h1_apt2_katrin_roam';
+
+  /// Чи [roomId] — кімната всередині будинку тітки на вул. Шевченка.
+  static bool isAuntHouseInteriorRoom(String? roomId) {
+    if (roomId == null) return false;
+    final map = streetHouseRooms[auntHouse];
+    return map != null && map.containsKey(roomId);
+  }
+
   // Ключі кімнат будинку тітки (9 кімнат)
   static const String auntCorridor = 'aunt_corridor';
   static const String auntKitchen = 'aunt_kitchen';
@@ -116,6 +142,13 @@ class LocationsData {
   static const String classmateHall = 'classmate_hall';
   static const String classmateYard = 'classmate_yard';
   static const String classmateBasement = 'classmate_basement';
+
+  /// Чи [roomId] — кімната всередині будинку однокласниці на вул. Шевченка.
+  static bool isClassmateHouseInteriorRoom(String? roomId) {
+    if (roomId == null) return false;
+    final map = streetHouseRooms[classmateHouse];
+    return map != null && map.containsKey(roomId);
+  }
 
   static Map<String, RoomData> get streetRooms => LocationsLoader.streetRooms;
   static List<String> get streetRoomIds => LocationsLoader.streetRoomIds;
@@ -250,6 +283,8 @@ class LocationsData {
   static const String poorVillageOverview = 'poor_village_overview';
   static const String poorVillageHouseHeadTeacher = 'poor_village_house_head_teacher';
   static const String poorVillageHouseKaty = 'poor_village_house_katy';
+  static const String poorVillageKatyRoom1 = 'poor_village_katy_room_1';
+  static const String poorVillageKatyRoom2 = 'poor_village_katy_room_2';
   static const String poorVillageHouseEnglishwoman = 'poor_village_house_englishwoman';
   static const String poorVillageHouseLogisticsBoss = 'poor_village_house_logistics_boss';
   static const String poorVillageHouseGiftShopOwner = 'poor_village_house_gift_shop_owner';
@@ -270,6 +305,7 @@ class LocationsData {
   /// Кімнати в домі шефа колцентру (Мажорщина).
   static const String poorVillageCallCenterBossRoom1 = 'poor_village_call_center_boss_room_1';
   static const String poorVillageCallCenterBossRoom2 = 'poor_village_call_center_boss_room_2';
+  static const String poorVillageCallCenterBossRoom3 = 'poor_village_call_center_boss_room_3';
   /// Зал у домі Amia (колишній «дім англічанки»).
   static const String poorVillageEnglishwomanHall = 'poor_village_englishwoman_hall';
 

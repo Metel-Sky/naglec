@@ -190,6 +190,8 @@ class GameWorldState {
 
   /// piper_quest_001: після здачі мамі — короткий діалог «Ти розповів…» + «Назад».
   bool piperQuest001SnitchAckPending = false;
+  /// Legacy двокроковий «Поговорити» на кухні (0/1/2). Крок 7A — [piperGgPunishmentGranted].
+  int piperQuest001GgPunishTalkPhase = 0;
   /// piper_quest_001 крок 7A: мама дозволила ГG наказувати Пайпер замість неї.
   bool piperGgPunishmentGranted = false;
   /// piper_quest_001 крок 7B: ГG сказав Пайпер у `piper_room` (діє з **наступної** кризи).
@@ -223,6 +225,21 @@ class GameWorldState {
   bool teacherDealHookOpen = false;
   bool piperNoPhone = false;
   String piperDebtType = '';
+
+  /// Piper зал (вихідні): 0 — фон; 1 — відео + діалог; 2 — гілка (куріння).
+  int piperHallEventStep = 0;
+  /// 1 — куріння (`piper_event_001`); 2 — навчання; 3 — фітнес.
+  int piperHallEventVariant = 0;
+  /// Ролик уже відтворено → діалог + кнопки.
+  bool piperHallEventVideoSeen = false;
+  /// `piper_event_001`: `snitch` / `blackmail` / `punish`.
+  String piperHallEventBranch = '';
+  /// ГG бачив Piper за курінням (накопичувальний прапор).
+  bool piperSmokingSecretKnown = false;
+  /// Лічильники проходів повторюваних івентів залу.
+  int piperEvent001Completions = 0;
+  int piperEvent002Completions = 0;
+  int piperEvent003Completions = 0;
 
   /// gg_event_001_stojak: дата останнього скидання прапорів мами/сестер о 6:00 (`yyyy-M-d`).
   String? ggEvent001StojakLastResetDayKey;
@@ -406,6 +423,7 @@ class GameWorldState {
         'piperSnitchedToMom': piperSnitchedToMom,
         'piperMomTalkingAboutGrades': piperMomTalkingAboutGrades,
         'piperQuest001SnitchAckPending': piperQuest001SnitchAckPending,
+        'piperQuest001GgPunishTalkPhase': piperQuest001GgPunishTalkPhase,
         'piperGgPunishmentGranted': piperGgPunishmentGranted,
         'piperGgPunishmentAnnouncedToPiper': piperGgPunishmentAnnouncedToPiper,
         'piperGgPunishmentThisCrisis': piperGgPunishmentThisCrisis,
@@ -428,6 +446,14 @@ class GameWorldState {
         'teacherDealHookOpen': teacherDealHookOpen,
         'piperNoPhone': piperNoPhone,
         'piperDebtType': piperDebtType,
+        'piperHallEventStep': piperHallEventStep,
+        'piperHallEventVariant': piperHallEventVariant,
+        'piperHallEventVideoSeen': piperHallEventVideoSeen,
+        'piperHallEventBranch': piperHallEventBranch,
+        'piperSmokingSecretKnown': piperSmokingSecretKnown,
+        'piperEvent001Completions': piperEvent001Completions,
+        'piperEvent002Completions': piperEvent002Completions,
+        'piperEvent003Completions': piperEvent003Completions,
         'ggEvent001StojakLastResetDayKey': ggEvent001StojakLastResetDayKey,
         'cherieMassageFunCompletions': cherieMassageFunCompletions,
         'rockefellerNikeOfficeStep': rockefellerNikeOfficeStep,
@@ -619,6 +645,9 @@ class GameWorldState {
     piperMomTalkingAboutGrades = json['piperMomTalkingAboutGrades'] == true;
     piperQuest001SnitchAckPending =
         json['piperQuest001SnitchAckPending'] == true;
+    piperQuest001GgPunishTalkPhase =
+        ((json['piperQuest001GgPunishTalkPhase'] as num?)?.toInt() ?? 0)
+            .clamp(0, 2);
     piperGgPunishmentGranted = json['piperGgPunishmentGranted'] == true;
     piperGgPunishmentAnnouncedToPiper =
         json['piperGgPunishmentAnnouncedToPiper'] == true;
@@ -646,6 +675,37 @@ class GameWorldState {
     teacherDealHookOpen = json['teacherDealHookOpen'] == true;
     piperNoPhone = json['piperNoPhone'] == true;
     piperDebtType = json['piperDebtType'] as String? ?? '';
+    piperHallEventStep =
+        ((json['piperHallEventStep'] as num?)?.toInt() ??
+                (json['piperQuest002Step'] as num?)?.toInt() ??
+                0)
+            .clamp(0, 2);
+    final legacyComplete = json['piperQuest002Complete'] == true;
+    if (legacyComplete && piperHallEventStep > 0) {
+      piperHallEventStep = 0;
+    }
+    piperHallEventVariant =
+        ((json['piperHallEventVariant'] as num?)?.toInt() ??
+                (json['piperQuest002VideoVariant'] as num?)?.toInt() ??
+                0)
+            .clamp(0, 3);
+    piperHallEventVideoSeen =
+        json['piperHallEventVideoSeen'] == true ||
+            json['piperQuest002VideoSeen'] == true;
+    piperHallEventBranch = (json['piperHallEventBranch'] as String? ??
+            json['piperQuest002Branch'] as String? ??
+            '')
+        .trim();
+    piperSmokingSecretKnown = json['piperSmokingSecretKnown'] == true;
+    piperEvent001Completions =
+        ((json['piperEvent001Completions'] as num?)?.toInt() ?? 0)
+            .clamp(0, 9999);
+    piperEvent002Completions =
+        ((json['piperEvent002Completions'] as num?)?.toInt() ?? 0)
+            .clamp(0, 9999);
+    piperEvent003Completions =
+        ((json['piperEvent003Completions'] as num?)?.toInt() ?? 0)
+            .clamp(0, 9999);
     ggEvent001StojakLastResetDayKey =
         json['ggEvent001StojakLastResetDayKey'] as String?;
     cherieMassageFunCompletions =

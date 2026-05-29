@@ -380,6 +380,21 @@ final Map<String, String> stringsUk = {
   'piper_quest_001_step7a_mom_grants_news':
       '— Добре, тільки в межах розумного.',
   'piper_quest_001_btn_leave': 'Піти',
+  'piper_event_001_intro_news':
+      'У залі біля вікна Пайпер курить. Вона не помітила, як ти увійшов — і тепер дивиться на тебе з переляканими очима.',
+  'piper_event_001_btn_tell_mom': 'Розповісти мамі',
+  'piper_event_001_btn_blackmail': 'Шантажувати',
+  'piper_event_001_btn_punish': 'Покарати зараз',
+  'piper_event_001_branch_snitch_news':
+      'Ти вирішив розповісти мамі. Далі — розмова з нею на кухні. *(TBD)*',
+  'piper_event_001_branch_blackmail_news':
+      'Ти намекаєш, що тепер вона у твоїх боргах. Пайпер мовчить, але розуміє. *(TBD)*',
+  'piper_event_001_branch_punish_news':
+      'Ти кажеш, що покараєш її сам — без мами. Пайпер блідне. *(TBD)*',
+  'piper_event_002_intro_news':
+      'Пайпер сидить на дивані з підручниками. Вона знервовано піднімає погляд — мабуть, знову щось не встигає.',
+  'piper_event_003_intro_news':
+      'Пайпер робить вправи в залі. Вона помітила тебе, але не зупиняється — лише киває.',
   'npc_quest_piper_bad_grades_001': '001 погані оцінки',
   'profile_piper_bad_grades_crisis_on': 'криза активна',
   'profile_piper_bad_grades_crisis_off': 'криза неактивна',

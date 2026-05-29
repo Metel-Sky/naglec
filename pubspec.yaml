@@ -87,5 +87,14 @@ flutter:
     - lib/assets/npcs/faye/
     - lib/assets/npcs/india/
     - lib/assets/npcs/jessa/
+    - lib/assets/npcs/alexis/
+    - lib/assets/npcs/lexi/
+    - lib/assets/npcs/flaxy/
+    - lib/assets/npcs/alyssa/
+    - lib/assets/npcs/candee/
+    - lib/assets/npcs/Blanche/
+    - lib/assets/npcs/zazie/
+    - lib/assets/npcs/katrin/
+    - lib/assets/npcs/Caprice/
     - lib/assets/npcs/rita/
     - lib/assets/npcs/rita/img/

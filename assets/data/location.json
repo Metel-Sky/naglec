@@ -57,7 +57,7 @@
         "aunt_room": {"displayName": "Кімната тітки", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Кімната тітки.", "isLocked": false},
         "aunt_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Ванна.", "isLocked": false},
         "aunt_guest_room": {"displayName": "Гостьова", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Гостьова кімната.", "isLocked": false},
-        "aunt_niece_room": {"displayName": "Кімната племінниці", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Кімната племінниці.", "isLocked": false},
+        "aunt_niece_room": {"displayName": "Кімната Flaxy", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Кімната Flaxy.", "isLocked": false},
         "aunt_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Зал.", "isLocked": false}
       },
       "neighbor_house": {
@@ -72,10 +72,10 @@
       "classmate_house": {
         "classmate_corridor": {"displayName": "Коридор", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Коридор будинку однокласниці.", "isLocked": false},
         "classmate_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кухня.", "isLocked": false},
-        "classmate_room": {"displayName": "Кімната однокласниці", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кімната однокласниці.", "isLocked": false},
+        "classmate_room": {"displayName": "Кімната Alyssa", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кімната Alyssa.", "isLocked": false},
         "classmate_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Ванна.", "isLocked": false},
-        "classmate_parents_room": {"displayName": "Кімната батьків", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кімната батьків.", "isLocked": false},
-        "classmate_sister_room": {"displayName": "Кімната сестри", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кімната сестри.", "isLocked": false},
+        "classmate_parents_room": {"displayName": "Кімната Lexi", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кімната Lexi.", "isLocked": false},
+        "classmate_sister_room": {"displayName": "Кімната Candee", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кімната Candee.", "isLocked": false},
         "classmate_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Зал.", "isLocked": false}
       }
     },
@@ -231,7 +231,7 @@
     "rooms": {
       "poor_village_overview": {"displayName": "Мажорщина", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Мажорщина.", "isLocked": false},
       "poor_village_house_head_teacher": {"displayName": "ДІМ ДЕКАНА", "imagePath": "lib/assets/location/houses/zavuch.webp", "description": "Дім декана.", "isLocked": false},
-      "poor_village_house_katy": {"displayName": "ДІМ КАТІ", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Дім Каті.", "isLocked": false},
+      "poor_village_house_katy": {"displayName": "Дім Blanche", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Дім Blanche.", "isLocked": false},
       "poor_village_house_englishwoman": {"displayName": "Дім Amia", "imagePath": "lib/assets/location/houses/english_teach.jpg", "description": "Дім Amia.", "isLocked": false},
       "poor_village_house_logistics_boss": {"displayName": "ДІМ НАЧАЛЬНИКА ЛОГІСТИЧНОЇ КОМПАНІЇ", "imagePath": "lib/assets/location/houses/chef_logist.webp", "description": "Дім начальника логістичної компанії.", "isLocked": false},
       "poor_village_house_gift_shop_owner": {"displayName": "Home Cherie", "imagePath": "lib/assets/location/houses/flowers_chef.jpeg", "description": "Home Cherie.", "isLocked": false},
@@ -247,8 +247,8 @@
       "poor_village_katy_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Кухня.", "isLocked": false},
       "poor_village_katy_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Ванна.", "isLocked": false},
       "poor_village_katy_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Зал.", "isLocked": false},
-      "poor_village_katy_room_1": {"displayName": "Кімната 1", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Кімната.", "isLocked": false},
-      "poor_village_katy_room_2": {"displayName": "Кімната 2", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Кімната.", "isLocked": false},
+      "poor_village_katy_room_1": {"displayName": "Кімната Blanche", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Кімната Blanche.", "isLocked": false},
+      "poor_village_katy_room_2": {"displayName": "Кімната Caprice", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Кімната Caprice.", "isLocked": false},
       "poor_village_katy_room_3": {"displayName": "Кімната 3", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Кімната.", "isLocked": false},
 
       "poor_village_englishwoman_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/english_teach.jpg", "description": "Кухня.", "isLocked": false},
@@ -277,7 +277,7 @@
       "poor_village_call_center_boss_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/loft5.jpg", "description": "Зал.", "isLocked": false},
       "poor_village_call_center_boss_room_1": {"displayName": "Кімната батьків", "imagePath": "lib/assets/location/houses/loft5.jpg", "description": "Кімната батьків.", "isLocked": false},
       "poor_village_call_center_boss_room_2": {"displayName": "Кімната Emily", "imagePath": "lib/assets/location/houses/loft5.jpg", "description": "Кімната Emily.", "isLocked": false},
-      "poor_village_call_center_boss_room_3": {"displayName": "Кімната 3", "imagePath": "lib/assets/location/houses/loft5.jpg", "description": "Кімната.", "isLocked": false}
+      "poor_village_call_center_boss_room_3": {"displayName": "Кімната Zazie", "imagePath": "lib/assets/location/houses/loft5.jpg", "description": "Кімната Zazie.", "isLocked": false}
     },
     "roomIds": ["poor_village_house_head_teacher", "poor_village_house_katy", "poor_village_house_englishwoman", "poor_village_house_logistics_boss", "poor_village_house_gift_shop_owner", "poor_village_house_call_center_boss"]
   },

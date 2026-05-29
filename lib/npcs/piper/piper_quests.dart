@@ -252,6 +252,7 @@ abstract final class PiperQuest001 {
     world.piperQuest001Step4ScoldingOverheard = false;
     world.piperQuest001Step4EarliestDayKey = null;
     world.piperQuest001SnitchAckPending = false;
+    world.piperQuest001GgPunishTalkPhase = 0;
     world.piperBadGradeWeekKey = weekKey(gameDate);
   }
 
@@ -847,6 +848,7 @@ abstract final class PiperQuest001 {
     world.piperQuest001Step4ScoldingOverheard = false;
     world.piperQuest001Step4EarliestDayKey = null;
     world.piperQuest001SnitchAckPending = false;
+    world.piperQuest001GgPunishTalkPhase = 0;
     world.piperGgPunishmentGranted = false;
     world.piperGgPunishmentAnnouncedToPiper = false;
     world.piperGgPunishmentThisCrisis = false;

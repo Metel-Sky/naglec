@@ -769,4 +769,248 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
 
     return null;
   }
+
+  bool _isPiperHallWeekendEventScene() {
+    return PiperHallWeekendEvents.isActiveScene(
+      world: _worldState,
+      npcService: sl<NPCService>(),
+      currentZone: currentZone,
+      isInsideRoom: isInsideRoom,
+      currentRoom: currentRoom,
+      weekdayIndex: _timeController.weekdayIndex,
+      hour: _timeController.dateTime.hour,
+    );
+  }
+
+  bool _isPiperHallWeekendEventScriptedDialogActive() {
+    return PiperHallWeekendEvents.isScriptedDialogActive(
+      world: _worldState,
+      currentZone: currentZone,
+      isInsideRoom: isInsideRoom,
+      currentRoom: currentRoom,
+      weekdayIndex: _timeController.weekdayIndex,
+      hour: _timeController.dateTime.hour,
+      npcService: sl<NPCService>(),
+    );
+  }
+
+  void _resetPiperHallWeekendEventPresentation() {
+    _clearPiperHallWeekendEventVideoIfShowing();
+    _ui.setEventImagePath(null);
+  }
+
+  void _applyPiperHallWeekendEventIntroPatch() {
+    _ui.clearEventSubState();
+    if (!_worldState.piperHallEventVideoSeen) return;
+    final key = PiperHallWeekendEvents.introNewsL10nForVariant(
+      _worldState.piperHallEventVariant,
+    );
+    newsMessage = sl<LocaleController>().t(key);
+    _ui.setEventImagePath(null);
+  }
+
+  void _onPiperHallWeekendEventVideoCompleted() {
+    if (!mounted || _worldState.piperHallEventStep != 1) return;
+    _worldState.piperHallEventVideoSeen = true;
+    setState(() {
+      _clearPiperHallWeekendEventVideoIfShowing();
+      _applyPiperHallWeekendEventIntroPatch();
+    });
+    _saveService.autosave();
+  }
+
+  void _clearPiperHallWeekendEventVideoIfShowing() {
+    final path = _eventVideoPath;
+    if (path == null || !PiperHallWeekendEvents.hallVideos.contains(path)) {
+      return;
+    }
+    _eventVideoPath = null;
+    _eventVideoOnComplete = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+    _eventVideoCloseWhenCompleted = true;
+    _eventVideoFullScreen = false;
+    _eventVideoMuted = false;
+  }
+
+  bool _shouldShowPiperHallWeekendEventVideo() {
+    return _worldState.piperHallEventStep == 1 &&
+        !_worldState.piperHallEventVideoSeen &&
+        _isPiperHallWeekendEventScene();
+  }
+
+  void _syncPiperHallWeekendEventVideoPresentation() {
+    if (_shouldShowPiperHallWeekendEventVideo()) {
+      final path = PiperHallWeekendEvents.videoPathForVariant(
+        _worldState.piperHallEventVariant,
+      );
+      if (_eventVideoPath == path &&
+          _eventVideoOnComplete == _onPiperHallWeekendEventVideoCompleted) {
+        return;
+      }
+      _eventVideoPath = path;
+      _eventVideoMuted = false;
+      _eventVideoFullScreen = true;
+      _eventVideoCloseWhenCompleted = true;
+      _eventVideoLoop = false;
+      _eventVideoOnComplete = _onPiperHallWeekendEventVideoCompleted;
+      _eventVideoPendingButton = null;
+      _eventVideoOnButtonPressed = null;
+      return;
+    }
+    _clearPiperHallWeekendEventVideoIfShowing();
+  }
+
+  void _tryStartPiperHallWeekendEventIfNeeded(String room) {
+    final norm = LocationsData.migrateLegacyRoomId(room);
+    if (norm != LocationsData.hall) return;
+    if (_worldState.piperHallEventStep != 0) return;
+
+    final npcService = sl<NPCService>();
+    final dt = _timeController.dateTime;
+    if (!PiperHallWeekendEvents.canRollOnHallEnter(
+      world: _worldState,
+      npcService: npcService,
+      weekdayIndex: _timeController.weekdayIndex,
+      hour: dt.hour,
+    )) {
+      return;
+    }
+
+    final variant = PiperHallWeekendEvents.rollVariant();
+    _worldState.piperHallEventStep = 1;
+    _worldState.piperHallEventVariant = variant;
+    _worldState.piperHallEventVideoSeen = false;
+    _worldState.piperHallEventBranch = '';
+    if (variant == PiperHallWeekendEvents.variantSmokes) {
+      _worldState.piperSmokingSecretKnown = true;
+    }
+    _selectedNpcIdInRoom = 'piper';
+    _clearPiperHallWeekendEventVideoIfShowing();
+    _applyPiperHallWeekendEventIntroPatch();
+    _syncPiperHallWeekendEventVideoPresentation();
+    _saveService.autosave();
+  }
+
+  void _ensurePiperHallWeekendEventUiCoherent() {
+    final step = _worldState.piperHallEventStep;
+    if (step <= 0) return;
+    if (step == 1 && !_isPiperHallWeekendEventScene()) {
+      _clearPiperHallWeekendEventVideoIfShowing();
+      return;
+    }
+    if (step == 1) {
+      _syncPiperHallWeekendEventVideoPresentation();
+      if (_worldState.piperHallEventVideoSeen) {
+        _applyPiperHallWeekendEventIntroPatch();
+      }
+      return;
+    }
+    if (step == 2 &&
+        PiperHallWeekendEvents.isHallRoom(
+          currentZone: currentZone,
+          isInsideRoom: isInsideRoom,
+          currentRoom: currentRoom,
+        )) {
+      final loc = sl<LocaleController>();
+      newsMessage = loc.t(
+        PiperHallWeekendEvents.branchNewsL10n(_worldState.piperHallEventBranch),
+      );
+    }
+  }
+
+  void _maybeResumePiperHallWeekendEventAfterLoad() {
+    if (_worldState.piperHallEventStep <= 0) return;
+    _ensurePiperHallWeekendEventUiCoherent();
+  }
+
+  void _piperHallWeekendEventApplySmokesBranch(String branch) {
+    if (_worldState.piperHallEventStep != 1 ||
+        !_worldState.piperHallEventVideoSeen ||
+        _worldState.piperHallEventVariant !=
+            PiperHallWeekendEvents.variantSmokes) {
+      return;
+    }
+    _worldState.piperHallEventBranch = branch;
+    _worldState.piperHallEventStep = 2;
+    _resetPiperHallWeekendEventPresentation();
+    newsMessage = sl<LocaleController>().t(
+      PiperHallWeekendEvents.branchNewsL10n(branch),
+    );
+    _saveService.autosave();
+  }
+
+  void _piperHallWeekendEventFinish() {
+    final step = _worldState.piperHallEventStep;
+    if (step != 1 && step != 2) return;
+    final variant = _worldState.piperHallEventVariant;
+    PiperHallWeekendEvents.incrementCompletion(_worldState, variant);
+    _worldState.piperHallEventStep = 0;
+    _worldState.piperHallEventVariant = 0;
+    _worldState.piperHallEventVideoSeen = false;
+    _worldState.piperHallEventBranch = '';
+    _resetPiperHallWeekendEventPresentation();
+    newsMessage = LocationsData.getLocationDisplayName(
+      LocationsData.migrateLegacyRoomId(currentRoom),
+    );
+    _saveService.autosave();
+  }
+
+  Widget? _piperHallWeekendEventPriorityActionPanelIfAny() {
+    if (!_isPiperHallWeekendEventScriptedDialogActive()) return null;
+
+    if (_worldState.piperHallEventStep == 1 &&
+        !_worldState.piperHallEventVideoSeen) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        width: double.infinity,
+        child: const SizedBox.shrink(),
+      );
+    }
+
+    final t = sl<LocaleController>().t;
+    final variant = _worldState.piperHallEventVariant;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (_worldState.piperHallEventStep == 1 &&
+              PiperHallWeekendEvents.hasSmokesBranchMenu(variant)) ...[
+            _navBtn(t('piper_event_001_btn_tell_mom').toUpperCase(), () {
+              setState(() {
+                _piperHallWeekendEventApplySmokesBranch(
+                  PiperHallWeekendEvents.branchSnitch,
+                );
+              });
+            }),
+            const SizedBox(height: 8),
+            _navBtn(t('piper_event_001_btn_blackmail').toUpperCase(), () {
+              setState(() {
+                _piperHallWeekendEventApplySmokesBranch(
+                  PiperHallWeekendEvents.branchBlackmail,
+                );
+              });
+            }),
+            const SizedBox(height: 8),
+            _navBtn(t('piper_event_001_btn_punish').toUpperCase(), () {
+              setState(() {
+                _piperHallWeekendEventApplySmokesBranch(
+                  PiperHallWeekendEvents.branchPunish,
+                );
+              });
+            }),
+          ] else ...[
+            _navBtn(t('piper_quest_001_btn_leave').toUpperCase(), () {
+              setState(() {
+                _piperHallWeekendEventFinish();
+              });
+            }),
+          ],
+        ],
+      ),
+    );
+  }
 }

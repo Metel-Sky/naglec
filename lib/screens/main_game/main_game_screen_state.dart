@@ -38,6 +38,8 @@ class MainGameScreenState extends MainGameScreenStateBase
         _tryStartPiperQuest001Step4IfNeeded();
         _ensurePiperQuest001Step4CorridorUiCoherent();
         _ensurePiperQuest001Step5PunishmentUiCoherent();
+        _maybeResumePiperHallWeekendEventAfterLoad();
+        _ensurePiperHallWeekendEventUiCoherent();
         _maybeResumeCherieMassageFunEventAfterLoad();
         _maybeStartDanielleSpyCaughtAutoInRoom();
         _tryAutoStartSashaHallComunicateVideo();
@@ -644,6 +646,13 @@ class MainGameScreenState extends MainGameScreenStateBase
                                 );
                               }
                               if (_isPiperQuest001ScriptedDialogActive()) {
+                                return GameDialogPanel(
+                                  message: newsMessage,
+                                  highlightNames: const ['Piper', 'Пайпер'],
+                                  navButtons: [_buildActionPanel()],
+                                );
+                              }
+                              if (_isPiperHallWeekendEventScriptedDialogActive()) {
                                 return GameDialogPanel(
                                   message: newsMessage,
                                   highlightNames: const ['Piper', 'Пайпер'],

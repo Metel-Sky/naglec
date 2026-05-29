@@ -446,6 +446,8 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _ensurePiperQuest001Step4CorridorUiCoherent();
       _tryStartPiperQuest001Step5IfNeeded();
       _ensurePiperQuest001Step5PunishmentUiCoherent();
+      _tryStartPiperHallWeekendEventIfNeeded(name);
+      _ensurePiperHallWeekendEventUiCoherent();
       _ensureCherieQuest002HomeHallUiCoherent();
     });
   }
@@ -2852,6 +2854,9 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
 
         final piperQ001Priority = _piperQuest001PriorityActionPanelIfAny();
         if (piperQ001Priority != null) return piperQ001Priority;
+
+        final piperHallEventPriority = _piperHallWeekendEventPriorityActionPanelIfAny();
+        if (piperHallEventPriority != null) return piperHallEventPriority;
 
         final cherieMfPriority = _cherieMassageFunPriorityActionPanelIfAny();
         if (cherieMfPriority != null) return cherieMfPriority;

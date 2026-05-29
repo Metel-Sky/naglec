@@ -67,6 +67,7 @@ import '../npcs/cherie/cherie_quests.dart';
 import '../npcs/mom/mom_quest001.dart';
 import '../npcs/mom/mom_event002_pool.dart';
 import '../npcs/piper/piper_quests.dart';
+import '../npcs/piper/piper_events.dart';
 import '../npcs/gg/gg_event_001_stojak.dart';
 import '../npcs/cherie/cherie_events.dart';
 import '../npcs/cherie/cherie_massage_fun_event.dart';

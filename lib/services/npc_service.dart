@@ -2,6 +2,7 @@ import 'dart:math';
 
 import '../data/college_schedule.dart';
 import '../data/locations_room_data.dart';
+import '../data/poor_district/poor_district_house_1.dart';
 import '../models/npc_model.dart';
 import '../npcs/all_npcs.dart';
 import 'cherie_quest002_location_pin.dart';
@@ -86,6 +87,100 @@ class NPCService {
   static const String _sashaNpcId = 'sasha';
   static const String _semNpcId = 'sem';
   static const String _cherieNpcId = 'cherie';
+  static const String _alexisNpcId = 'alexis';
+  static const String _lexiNpcId = 'lexi';
+  static const String _flaxyNpcId = 'flaxy';
+  static const String _alyssaNpcId = 'alyssa';
+  static const String _candeeNpcId = 'candee';
+  static const String _katrinNpcId = 'katrin';
+
+  static const List<String> _alexisHomeRoomIds = [
+    LocationsData.auntKitchen,
+    LocationsData.auntRoom,
+    LocationsData.auntBathroom,
+    LocationsData.auntGuestRoom,
+    LocationsData.auntNieceRoom,
+    LocationsData.auntHall,
+  ];
+
+  static String _alexisHomeRoom(int weekdayIndex, int hour) {
+    final seed = (weekdayIndex * 24 + hour) * 31 + 'alexis_home'.hashCode;
+    final i = Random(seed).nextInt(_alexisHomeRoomIds.length);
+    return _alexisHomeRoomIds[i];
+  }
+
+  static const List<String> _lexiHomeRoomIds = [
+    LocationsData.classmateKitchen,
+    LocationsData.classmateRoom,
+    LocationsData.classmateBathroom,
+    LocationsData.classmateParentsRoom,
+    LocationsData.classmateSisterRoom,
+    LocationsData.classmateHall,
+  ];
+
+  static String _lexiHomeRoom(int weekdayIndex, int hour) {
+    final seed = (weekdayIndex * 24 + hour) * 31 + 'lexi_home'.hashCode;
+    final i = Random(seed).nextInt(_lexiHomeRoomIds.length);
+    return _lexiHomeRoomIds[i];
+  }
+
+  static const List<String> _flaxyHomeRoomIds = [
+    LocationsData.auntKitchen,
+    LocationsData.auntRoom,
+    LocationsData.auntBathroom,
+    LocationsData.auntGuestRoom,
+    LocationsData.auntNieceRoom,
+    LocationsData.auntHall,
+  ];
+
+  static String _flaxyHomeRoom(int weekdayIndex, int hour) {
+    final seed = (weekdayIndex * 24 + hour) * 31 + 'flaxy_home'.hashCode;
+    final i = Random(seed).nextInt(_flaxyHomeRoomIds.length);
+    return _flaxyHomeRoomIds[i];
+  }
+
+  static const List<String> _alyssaHomeRoomIds = [
+    LocationsData.classmateKitchen,
+    LocationsData.classmateRoom,
+    LocationsData.classmateBathroom,
+    LocationsData.classmateParentsRoom,
+    LocationsData.classmateSisterRoom,
+    LocationsData.classmateHall,
+  ];
+
+  static String _alyssaHomeRoom(int weekdayIndex, int hour) {
+    final seed = (weekdayIndex * 24 + hour) * 31 + 'alyssa_home'.hashCode;
+    final i = Random(seed).nextInt(_alyssaHomeRoomIds.length);
+    return _alyssaHomeRoomIds[i];
+  }
+
+  static const List<String> _candeeHomeRoomIds = [
+    LocationsData.classmateKitchen,
+    LocationsData.classmateRoom,
+    LocationsData.classmateBathroom,
+    LocationsData.classmateParentsRoom,
+    LocationsData.classmateSisterRoom,
+    LocationsData.classmateHall,
+  ];
+
+  static String _candeeHomeRoom(int weekdayIndex, int hour) {
+    final seed = (weekdayIndex * 24 + hour) * 31 + 'candee_home'.hashCode;
+    final i = Random(seed).nextInt(_candeeHomeRoomIds.length);
+    return _candeeHomeRoomIds[i];
+  }
+
+  static const List<String> _katrinHomeRoomIds = [
+    PoorDistrictHouse1.rA2_1,
+    PoorDistrictHouse1.rA2_2,
+    PoorDistrictHouse1.rA2_3,
+    PoorDistrictHouse1.rA2_4,
+  ];
+
+  static String _katrinHomeRoom(int weekdayIndex, int hour) {
+    final seed = (weekdayIndex * 24 + hour) * 31 + 'katrin_home'.hashCode;
+    final i = Random(seed).nextInt(_katrinHomeRoomIds.length);
+    return _katrinHomeRoomIds[i];
+  }
 
   /// Будні 18–20: без кімнати Саші ([friendSisterRoom]) і батьків ([friendParentsRoom]).
   /// О 19:00 без залу — там окрема сцена з Сашею.
@@ -410,6 +505,30 @@ class NPCService {
           best.location == LocationsData.friendHomeDanielleWeekendNoVipRoam) {
         return _danielleWeekendNoVipHomeRoom(effectiveDay, hour);
       }
+      if (npc.id == _alexisNpcId &&
+          best.location == LocationsData.auntHomeAlexisRoam) {
+        return _alexisHomeRoom(effectiveDay, hour);
+      }
+      if (npc.id == _lexiNpcId &&
+          best.location == LocationsData.classmateHomeLexiRoam) {
+        return _lexiHomeRoom(effectiveDay, hour);
+      }
+      if (npc.id == _flaxyNpcId &&
+          best.location == LocationsData.auntHomeFlaxyRoam) {
+        return _flaxyHomeRoom(effectiveDay, hour);
+      }
+      if (npc.id == _alyssaNpcId &&
+          best.location == LocationsData.classmateHomeAlyssaRoam) {
+        return _alyssaHomeRoom(effectiveDay, hour);
+      }
+      if (npc.id == _candeeNpcId &&
+          best.location == LocationsData.classmateHomeCandeeRoam) {
+        return _candeeHomeRoom(effectiveDay, hour);
+      }
+      if (npc.id == _katrinNpcId &&
+          best.location == LocationsData.poorDistrictH1Apt2KatrinRoam) {
+        return _katrinHomeRoom(effectiveDay, hour);
+      }
       return best.location;
     }
     // Якщо в NPC немає активного слоту — він «гуляє містом» у дозволених зонах.
@@ -645,6 +764,63 @@ class NPCService {
         return npc.schedule.firstWhere((p) {
           if (p.days != null && !p.days!.contains(effectiveDay)) return false;
           if (p.location != LocationsData.cityOverview) return false;
+          return _timeMatchesPoint(p, hour);
+        });
+      } catch (_) {}
+    }
+
+    if (npc.id == _alexisNpcId &&
+        _alexisHomeRoomIds.contains(normRoom)) {
+      try {
+        return npc.schedule.firstWhere((p) {
+          if (p.location != LocationsData.auntHomeAlexisRoam) return false;
+          return _timeMatchesPoint(p, hour);
+        });
+      } catch (_) {}
+    }
+
+    if (npc.id == _lexiNpcId && _lexiHomeRoomIds.contains(normRoom)) {
+      try {
+        return npc.schedule.firstWhere((p) {
+          if (p.location != LocationsData.classmateHomeLexiRoam) return false;
+          return _timeMatchesPoint(p, hour);
+        });
+      } catch (_) {}
+    }
+
+    if (npc.id == _flaxyNpcId && _flaxyHomeRoomIds.contains(normRoom)) {
+      try {
+        return npc.schedule.firstWhere((p) {
+          if (p.location != LocationsData.auntHomeFlaxyRoam) return false;
+          return _timeMatchesPoint(p, hour);
+        });
+      } catch (_) {}
+    }
+
+    if (npc.id == _alyssaNpcId && _alyssaHomeRoomIds.contains(normRoom)) {
+      try {
+        return npc.schedule.firstWhere((p) {
+          if (p.location != LocationsData.classmateHomeAlyssaRoam) return false;
+          return _timeMatchesPoint(p, hour);
+        });
+      } catch (_) {}
+    }
+
+    if (npc.id == _candeeNpcId && _candeeHomeRoomIds.contains(normRoom)) {
+      try {
+        return npc.schedule.firstWhere((p) {
+          if (p.location != LocationsData.classmateHomeCandeeRoam) return false;
+          return _timeMatchesPoint(p, hour);
+        });
+      } catch (_) {}
+    }
+
+    if (npc.id == _katrinNpcId && _katrinHomeRoomIds.contains(normRoom)) {
+      try {
+        return npc.schedule.firstWhere((p) {
+          if (p.location != LocationsData.poorDistrictH1Apt2KatrinRoam) {
+            return false;
+          }
           return _timeMatchesPoint(p, hour);
         });
       } catch (_) {}
