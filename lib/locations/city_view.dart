@@ -383,6 +383,32 @@ class _CityViewState extends State<CityView> {
         );
       }
       final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
+      final rileyLanaPair = currentRoomNorm == LocationsData.cityEliteApartment2Bedroom
+          ? NpcRoomScenePicker.rileyLanaBedroomPair(candidates)
+          : null;
+      if (rileyLanaPair != null) {
+        final leftRaster = NpcRoomScenePicker.npcRasterOverlayPath(
+          rileyLanaPair.left.npc,
+          rileyLanaPair.left.point,
+        );
+        final rightRaster = NpcRoomScenePicker.npcRasterOverlayPath(
+          rileyLanaPair.right.npc,
+          rileyLanaPair.right.point,
+        );
+        if (leftRaster != null && rightRaster != null) {
+          return RoomNpcSceneTemplate.clippedRoomWithDualNpcOverlay(
+            roomBackgroundPath: bg,
+            leftNpcRasterAssetPath: leftRaster,
+            leftNpcRasterFallbackPath: rileyLanaPair.left.npc.avatarPath,
+            rightNpcRasterAssetPath: rightRaster,
+            rightNpcRasterFallbackPath: rileyLanaPair.right.npc.avatarPath,
+            leftFlipHorizontally: rileyLanaPair.left.npc.id == 'lana',
+            rightFlipHorizontally: rileyLanaPair.right.npc.id == 'lana',
+            onTapLeft: () => widget.onNPCTap(rileyLanaPair.left.npc),
+            onTapRight: () => widget.onNPCTap(rileyLanaPair.right.npc),
+          );
+        }
+      }
       String? npcRaster = npcRasterOverlay;
       // Sasha у парковому кафе — завжди офіціантка (дублює kSashaCafeWaiterPath у sasha_npc.dart).
       if (chosenPair != null &&
@@ -390,10 +416,13 @@ class _CityViewState extends State<CityView> {
           widget.currentRoom == LocationsData.cityParkCafe) {
         npcRaster = 'lib/assets/npcs/sasha/sasha_waiter.png';
       }
+      final flipLanaPortrait = currentRoomNorm == LocationsData.cityEliteApartment2Bedroom &&
+          chosenPair?.npc.id == 'lana';
       return RoomNpcSceneTemplate.clippedRoomWithNpcOverlay(
         roomBackgroundPath: bg,
         npcRasterAssetPath: npcRaster,
         npcRasterFallbackPath: chosenPair?.npc.avatarPath,
+        flipHorizontally: flipLanaPortrait,
         onTap: () {
           if (activeNPC != null) widget.onNPCTap(activeNPC);
         },
@@ -403,10 +432,13 @@ class _CityViewState extends State<CityView> {
     // Для всіх локацій міста: якщо у NPC растр, показуємо його як оверлей (логіка коледжу).
     if (npcRasterOverlay != null && npcRasterOverlay.isNotEmpty) {
       final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
+      final flipLanaPortrait = currentRoomNorm == LocationsData.cityEliteApartment2Bedroom &&
+          chosenPair?.npc.id == 'lana';
       return RoomNpcSceneTemplate.clippedRoomWithNpcOverlay(
         roomBackgroundPath: bg,
         npcRasterAssetPath: npcRasterOverlay,
         npcRasterFallbackPath: chosenPair?.npc.avatarPath,
+        flipHorizontally: flipLanaPortrait,
         onTap: () {
           if (activeNPC != null) widget.onNPCTap(activeNPC);
         },

@@ -44,21 +44,21 @@ class PoorDistrictHouse1 {
       isLocked: false,
     ),
     apt1: RoomData(
-      displayName: "Кв. 1",
+      displayName: "Квартира 1 — Luda",
       imagePath: "lib/assets/location/houses/hrushchevki-spb.jpg",
-      description: "Квартира 1.",
+      description: "Квартира 1, Бандери 1. Тут живе Luda.",
       isLocked: false,
     ),
     apt2: RoomData(
-      displayName: "Кв. 2",
+      displayName: "Квартира 2 — Katrin",
       imagePath: "lib/assets/location/houses/hrushchevki-spb.jpg",
-      description: "Квартира 2.",
+      description: "Квартира 2, Бандери 1. Тут живе Katrin.",
       isLocked: false,
     ),
     apt3: RoomData(
-      displayName: "Кв. 3",
+      displayName: "Квартира 3 — Peta",
       imagePath: "lib/assets/location/houses/hrushchevki-spb.jpg",
-      description: "Квартира 3.",
+      description: "Квартира 3, Бандери 1. Тут живе Peta.",
       isLocked: false,
     ),
     /// Порядок кімнат у кожній квартирі: кухня → ванна → зал → спальня.

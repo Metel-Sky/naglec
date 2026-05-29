@@ -504,6 +504,40 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     final candidates = npcService.getCandidatesInRoom(currentRoom, hour, day);
     if (candidates.isEmpty) return [];
     if (candidates.length == 1) return [candidates.first.npc];
+    if (currentRoom == LocationsData.cityEliteApartment2Bedroom) {
+      final ordered = <NPCModel>[];
+      for (final id in ['lana', 'riley']) {
+        for (final c in candidates) {
+          if (c.npc.id == id) {
+            ordered.add(c.npc);
+            break;
+          }
+        }
+      }
+      for (final c in candidates) {
+        if (c.npc.id != 'riley' && c.npc.id != 'lana') {
+          ordered.add(c.npc);
+        }
+      }
+      if (ordered.isNotEmpty) return ordered;
+    }
+    if (currentRoom == LocationsData.poorDistrictH2Apt2Bedroom) {
+      final ordered = <NPCModel>[];
+      for (final id in ['zazie', 'geisha']) {
+        for (final c in candidates) {
+          if (c.npc.id == id) {
+            ordered.add(c.npc);
+            break;
+          }
+        }
+      }
+      for (final c in candidates) {
+        if (c.npc.id != 'zazie' && c.npc.id != 'geisha') {
+          ordered.add(c.npc);
+        }
+      }
+      if (ordered.isNotEmpty) return ordered;
+    }
     final chosen = candidates[Random(_dailySeed(_timeController.dateTime, currentRoom)).nextInt(candidates.length)];
 
     final list = <NPCModel>[

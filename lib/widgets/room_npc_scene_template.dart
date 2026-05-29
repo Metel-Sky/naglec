@@ -54,6 +54,7 @@ class RoomNpcSceneTemplate {
     String? npcRasterAssetPath,
     String? npcRasterFallbackPath,
     required VoidCallback onTap,
+    bool flipHorizontally = false,
     double borderRadius = defaultClipRadius,
   }) {
     final displayPath = _effectiveNpcRasterPath(npcRasterAssetPath, npcRasterFallbackPath);
@@ -96,6 +97,7 @@ class RoomNpcSceneTemplate {
                       child: _NpcOverlayRaster(
                         primaryPath: displayPath,
                         fallbackPath: errorFallback,
+                        flipHorizontally: flipHorizontally,
                       ),
                     ),
                   ),
@@ -105,6 +107,95 @@ class RoomNpcSceneTemplate {
         ),
       ),
     );
+  }
+
+  /// Два NPC знизу: лівий і правий оверлеї (Riley + Lana у спальні тощо).
+  static Widget clippedRoomWithDualNpcOverlay({
+    required String roomBackgroundPath,
+    required String leftNpcRasterAssetPath,
+    String? leftNpcRasterFallbackPath,
+    required String rightNpcRasterAssetPath,
+    String? rightNpcRasterFallbackPath,
+    required VoidCallback onTapLeft,
+    required VoidCallback onTapRight,
+    bool leftFlipHorizontally = false,
+    bool rightFlipHorizontally = false,
+    double borderRadius = defaultClipRadius,
+  }) {
+    final leftPath =
+        _effectiveNpcRasterPath(leftNpcRasterAssetPath, leftNpcRasterFallbackPath);
+    final rightPath =
+        _effectiveNpcRasterPath(rightNpcRasterAssetPath, rightNpcRasterFallbackPath);
+    final leftFb = _errorFallbackPath(leftNpcRasterAssetPath, leftNpcRasterFallbackPath);
+    final rightFb = _errorFallbackPath(rightNpcRasterAssetPath, rightNpcRasterFallbackPath);
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final maxH = constraints.maxHeight;
+          final maxW = constraints.maxWidth;
+          final overlayHeight = maxH.isFinite
+              ? maxH * npcOverlayHeightFraction
+              : (maxW.isFinite ? maxW * npcOverlayHeightFraction : 400.0);
+          final halfWidth = maxW.isFinite ? maxW * 0.5 : 200.0;
+
+          return Stack(
+            fit: StackFit.expand,
+            clipBehavior: Clip.none,
+            children: [
+              Positioned.fill(child: layerBackground(roomBackgroundPath)),
+              if (leftPath != null)
+                Positioned(
+                  left: 0,
+                  bottom: 0,
+                  width: halfWidth,
+                  height: overlayHeight,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: onTapLeft,
+                    child: _NpcOverlayRaster(
+                      primaryPath: leftPath,
+                      fallbackPath: leftFb,
+                      alignment: Alignment.bottomCenter,
+                      flipHorizontally: leftFlipHorizontally,
+                    ),
+                  ),
+                ),
+              if (rightPath != null)
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  width: halfWidth,
+                  height: overlayHeight,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: onTapRight,
+                    child: _NpcOverlayRaster(
+                      primaryPath: rightPath,
+                      fallbackPath: rightFb,
+                      alignment: Alignment.bottomCenter,
+                      flipHorizontally: rightFlipHorizontally,
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  static String? _errorFallbackPath(String? primary, String? fallback) {
+    final displayPath = _effectiveNpcRasterPath(primary, fallback);
+    final fbTrim = fallback?.trim();
+    if (fbTrim != null &&
+        fbTrim.isNotEmpty &&
+        displayPath != null &&
+        fbTrim != displayPath) {
+      return fbTrim;
+    }
+    return null;
   }
 
   static String? _effectiveNpcRasterPath(String? primary, String? fallback) {
@@ -125,35 +216,48 @@ class _NpcOverlayRaster extends StatelessWidget {
   const _NpcOverlayRaster({
     required this.primaryPath,
     this.fallbackPath,
+    this.alignment = Alignment.bottomCenter,
+    this.flipHorizontally = false,
   });
 
   final String primaryPath;
   final String? fallbackPath;
+  final Alignment alignment;
+  final bool flipHorizontally;
+
+  Widget _wrapFlip(Widget child) {
+    if (!flipHorizontally) return child;
+    return Transform.flip(flipX: true, child: child);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      primaryPath,
-      fit: BoxFit.contain,
-      width: double.infinity,
-      height: double.infinity,
-      alignment: Alignment.bottomCenter,
-      filterQuality: FilterQuality.medium,
-      errorBuilder: (_, _, _) {
-        final fb = fallbackPath?.trim();
-        if (fb != null && fb.isNotEmpty) {
-          return Image.asset(
-            fb,
-            fit: BoxFit.contain,
-            width: double.infinity,
-            height: double.infinity,
-            alignment: Alignment.bottomCenter,
-            filterQuality: FilterQuality.medium,
-            errorBuilder: (_, _, _) => const _NpcOverlayPlaceholder(),
-          );
-        }
-        return const _NpcOverlayPlaceholder();
-      },
+    return _wrapFlip(
+      Image.asset(
+        primaryPath,
+        fit: BoxFit.contain,
+        width: double.infinity,
+        height: double.infinity,
+        alignment: alignment,
+        filterQuality: FilterQuality.medium,
+        errorBuilder: (_, _, _) {
+          final fb = fallbackPath?.trim();
+          if (fb != null && fb.isNotEmpty) {
+            return _wrapFlip(
+              Image.asset(
+                fb,
+                fit: BoxFit.contain,
+                width: double.infinity,
+                height: double.infinity,
+                alignment: alignment,
+                filterQuality: FilterQuality.medium,
+                errorBuilder: (_, _, _) => const _NpcOverlayPlaceholder(),
+              ),
+            );
+          }
+          return const _NpcOverlayPlaceholder();
+        },
+      ),
     );
   }
 }
@@ -233,4 +337,34 @@ class NpcRoomScenePicker {
       (roomImagePath != null && roomImagePath.isNotEmpty)
           ? roomImagePath
           : RoomNpcSceneTemplate.fallbackRoomImagePath;
+
+  /// Riley + Lana у спальні квартири 2 (елітний ЖК): Lana зліва, Riley справа.
+  static ({({NPCModel npc, SchedulePoint point}) left, ({NPCModel npc, SchedulePoint point}) right})?
+      rileyLanaBedroomPair(
+    List<({NPCModel npc, SchedulePoint point})> candidates,
+  ) {
+    ({NPCModel npc, SchedulePoint point})? riley;
+    ({NPCModel npc, SchedulePoint point})? lana;
+    for (final c in candidates) {
+      if (c.npc.id == 'riley') riley = c;
+      if (c.npc.id == 'lana') lana = c;
+    }
+    if (riley == null || lana == null) return null;
+    return (left: lana, right: riley);
+  }
+
+  /// Zazie + Geisha у спальні кв. 2 (Бандери 2): Zazie зліва, Geisha справа.
+  static ({({NPCModel npc, SchedulePoint point}) left, ({NPCModel npc, SchedulePoint point}) right})?
+      zazieGeishaBedroomPair(
+    List<({NPCModel npc, SchedulePoint point})> candidates,
+  ) {
+    ({NPCModel npc, SchedulePoint point})? zazie;
+    ({NPCModel npc, SchedulePoint point})? geisha;
+    for (final c in candidates) {
+      if (c.npc.id == 'zazie') zazie = c;
+      if (c.npc.id == 'geisha') geisha = c;
+    }
+    if (zazie == null || geisha == null) return null;
+    return (left: zazie, right: geisha);
+  }
 }

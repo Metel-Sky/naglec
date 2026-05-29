@@ -44,21 +44,21 @@ class PoorDistrictHouse2 {
       isLocked: false,
     ),
     apt1: RoomData(
-      displayName: "Кв. 1",
+      displayName: "Квартира 1 — Kyler",
       imagePath: "lib/assets/location/houses/hrushchevki-spb.jpg",
-      description: "Квартира 1.",
+      description: "Квартира 1, Бандери 2. Тут живе Kyler.",
       isLocked: false,
     ),
     apt2: RoomData(
-      displayName: "Кв. 2",
+      displayName: "Квартира 2 — Zazie, Geisha",
       imagePath: "lib/assets/location/houses/hrushchevki-spb.jpg",
-      description: "Квартира 2.",
+      description: "Квартира 2, Бандери 2. Тут живуть Zazie та Geisha.",
       isLocked: false,
     ),
     apt3: RoomData(
-      displayName: "Кв. 3",
+      displayName: "Квартира 3 — Foxy",
       imagePath: "lib/assets/location/houses/hrushchevki-spb.jpg",
-      description: "Квартира 3.",
+      description: "Квартира 3, Бандери 2. Тут живе Foxy.",
       isLocked: false,
     ),
     /// Порядок кімнат у кожній квартирі: кухня → ванна → зал → спальня.
@@ -69,10 +69,10 @@ class PoorDistrictHouse2 {
     rA2_1: RoomData(displayName: "Кухня", imagePath: "lib/assets/location/home_gg/rooms/kitchen.jpg", description: "Кухня.", isLocked: false),
     rA2_2: RoomData(displayName: "Ванна", imagePath: "lib/assets/location/home_gg/rooms/bathroom.jpg", description: "Ванна.", isLocked: false),
     rA2_3: RoomData(displayName: "Зал", imagePath: "lib/assets/location/home_gg/rooms/relax_room.jpg", description: "Зал.", isLocked: false),
-    rA2_4: RoomData(displayName: "Спальня", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня.", isLocked: false),
+    rA2_4: RoomData(displayName: "Кімната Zazie", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня квартири 2, Бандери 2. Тут живуть Zazie та Geisha.", isLocked: false),
     rA3_1: RoomData(displayName: "Кухня", imagePath: "lib/assets/location/home_gg/rooms/kitchen.jpg", description: "Кухня.", isLocked: false),
     rA3_2: RoomData(displayName: "Ванна", imagePath: "lib/assets/location/home_gg/rooms/bathroom.jpg", description: "Ванна.", isLocked: false),
     rA3_3: RoomData(displayName: "Зал", imagePath: "lib/assets/location/home_gg/rooms/relax_room.jpg", description: "Зал.", isLocked: false),
-    rA3_4: RoomData(displayName: "Спальня", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня.", isLocked: false),
+    rA3_4: RoomData(displayName: "Кімната Foxy", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня квартири 3, Бандери 2. Тут живе Foxy.", isLocked: false),
   };
 }

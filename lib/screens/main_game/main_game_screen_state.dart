@@ -318,25 +318,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                                           .shouldAutoSelectNpcInAvatarStrip(
                                                         currentRoom,
                                                       ),
-                                                      onNpcTap: (npc) => setState(() {
-                                                        _selectedNpcIdInRoom = npc.id;
-                                                        if (npc.id == 'den') {
-                                                          _resetDenLocalUi();
-                                                          newsMessage = _getDenDialogueText(npc);
-                                                        } else if (npc.id == 'loshok') {
-                                                          _ui.setEventImagePath(null);
-                                                          newsMessage = '';
-                                                        } else if (npc.id == 'rockefeller') {
-                                                          _ui.setEventImagePath(null);
-                                                          newsMessage = '';
-                                                        } else if (npc.id == 'nicole') {
-                                                          _ui.setEventImagePath(null);
-                                                          newsMessage = '';
-                                                        } else if (npc.id == 'dekan') {
-                                                          _ui.setEventImagePath(null);
-                                                          newsMessage = '';
-                                                        }
-                                                      }),
+                                                      onNpcTap: (npc) => setState(
+                                                        () => _handleRoomNpcTap(npc),
+                                                      ),
                                                     ),
                                                   ),
                                                 if (_showMasturbateVideo &&
@@ -824,7 +808,13 @@ class MainGameScreenState extends MainGameScreenStateBase
                                 if (constructionMessage != null) constructionMessage,
                                 if (callCenterMessage != null) callCenterMessage,
                               ];
-                              var combinedMessage = messages.isNotEmpty ? messages.join(' ') : newsMessage;
+                              var combinedMessage = messages.isNotEmpty
+                                  ? messages.join(' ')
+                                  : (_isQuestOrEventScriptedDialogForNews()
+                                      ? newsMessage
+                                      : (_selectedNpcIdInRoom != null
+                                          ? ''
+                                          : newsMessage));
                               List<String> dialogueHighlightNames;
                               final locPanel = sl<LocaleController>();
                               if (messages.isEmpty) {

@@ -7,6 +7,55 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   bool get _questRuntimeMirrorMode =>
       sl<SettingsController>().questRuntimeMirrorMode;
 
+  /// Чи [newsMessage] зараз належить активному кроку квесту чи івенту в цій локації.
+  bool _isQuestOrEventScriptedDialogForNews() {
+    if (_ui.cherieQuest001OfficePhase != CherieQuest001OfficePhase.inactive) {
+      return true;
+    }
+    if (_worldState.cherieAnimatorIntroStep != 0) return true;
+    return _isCherieMassageFunEventScriptedDialogActive() ||
+        _isCherieQuest002ScriptedDialogActive() ||
+        _isCherieQuest003ScriptedDialogActive() ||
+        _isCherieQuest004ScriptedDialogActive() ||
+        _isCherieQuest005ScriptedDialogActive() ||
+        _isCherieQuest006ScriptedDialogActive() ||
+        _isMomQuest001ScriptedDialogActive() ||
+        _isMomEvent002ScriptedDialogActive() ||
+        _isPiperQuest001SnitchAckScene() ||
+        _isPiperQuest001ScriptedDialogActive() ||
+        _isPiperHallWeekendEventScriptedDialogActive() ||
+        _sashaComunicateInHallUiActive ||
+        _sashaMorningRunUiActive;
+  }
+
+  /// Не показувати текст квестів/івентів поза їхнім контекстом — назва поточної локації.
+  void _resetNewsMessageIfOutsideQuestEventContext() {
+    if (_isQuestOrEventScriptedDialogForNews()) return;
+    if (_ui.cherieAnimatorShiftTc2DialogPending) return;
+    if (_danielleSpyCaughtUiActive || _spyOnSemParentsUiActive) return;
+    if (_collegeToiletUnderwearSaleActive) return;
+    if (_semFriendHouseTalkActive || _semParentsTalkActive) return;
+    newsMessage = LocationsData.getLocationDisplayName(
+      LocationsData.migrateLegacyRoomId(currentRoom),
+    );
+  }
+
+  /// Тап по NPC у кімнаті: не тягнути застарілий текст іншого квесту/івенту в діалог.
+  void _handleRoomNpcTap(NPCModel npc) {
+    _selectedNpcIdInRoom = npc.id;
+    if (_isQuestOrEventScriptedDialogForNews()) return;
+    newsMessage = '';
+    if (npc.id == 'den') {
+      _resetDenLocalUi();
+      newsMessage = _getDenDialogueText(npc);
+    } else if (npc.id == 'loshok' ||
+        npc.id == 'rockefeller' ||
+        npc.id == 'nicole' ||
+        npc.id == 'dekan') {
+      _ui.setEventImagePath(null);
+    }
+  }
+
   int _legacyQuestStep(String questId) {
     switch (questId) {
       case 'cherie_quest_002':
@@ -449,6 +498,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _tryStartPiperHallWeekendEventIfNeeded(name);
       _ensurePiperHallWeekendEventUiCoherent();
       _ensureCherieQuest002HomeHallUiCoherent();
+      _resetNewsMessageIfOutsideQuestEventContext();
     });
   }
 
@@ -988,7 +1038,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             selectedNpcIdInRoom: _selectedNpcIdInRoom,
             suppressRoomNpcRaster: _danielleSpyCaughtUiActive,
             onNPCTap: (npc) {
-              setState(() => _selectedNpcIdInRoom = npc.id);
+              setState(() => _handleRoomNpcTap(npc));
             },
             onOpenLaptop: () => setState(() => isLaptopOpen = true),
             onSleep: _onSleepInRoom,
@@ -1024,22 +1074,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                 _danielleSpyCaughtUiActive || piperLibraryEavesdrop,
             piperLibraryEavesdropActive: piperLibraryEavesdrop,
             onNPCTap: (npc) {
-              setState(() {
-                _selectedNpcIdInRoom = npc.id;
-                if (npc.id == 'den') {
-                  _resetDenLocalUi();
-                  newsMessage = _getDenDialogueText(npc);
-                } else if (npc.id == 'loshok') {
-                  _ui.setEventImagePath(null);
-                  newsMessage = '';
-                } else if (npc.id == 'nicole') {
-                  _ui.setEventImagePath(null);
-                  newsMessage = '';
-                } else if (npc.id == 'dekan') {
-                  _ui.setEventImagePath(null);
-                  newsMessage = '';
-                }
-              });
+              setState(() => _handleRoomNpcTap(npc));
             },
             activeNpcIdInRoom: activeNpcIdInRoom,
           );
@@ -1273,11 +1308,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             timeController: _timeController,
             onNPCTap: (npc) {
               setState(() {
-                _selectedNpcIdInRoom = npc.id;
-                if (npc.id == 'rockefeller') {
-                  _ui.setEventImagePath(null);
-                  newsMessage = '';
-                }
+                _handleRoomNpcTap(npc);
               });
             },
             mallShopProducts: mallProducts,
@@ -1325,7 +1356,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             },
             timeController: _timeController,
             onNPCTap: (npc) {
-              setState(() => _selectedNpcIdInRoom = npc.id);
+              setState(() => _handleRoomNpcTap(npc));
             },
           );
         },
@@ -1368,7 +1399,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             },
             timeController: _timeController,
             onNPCTap: (npc) {
-              setState(() => _selectedNpcIdInRoom = npc.id);
+              setState(() => _handleRoomNpcTap(npc));
             },
           );
         },
@@ -1409,7 +1440,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             },
             timeController: _timeController,
             onNPCTap: (npc) {
-              setState(() => _selectedNpcIdInRoom = npc.id);
+              setState(() => _handleRoomNpcTap(npc));
             },
           );
         },
@@ -1455,7 +1486,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             },
             timeController: _timeController,
             onNPCTap: (npc) {
-              setState(() => _selectedNpcIdInRoom = npc.id);
+              setState(() => _handleRoomNpcTap(npc));
             },
           );
         },
@@ -2345,6 +2376,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           isStatsOpen = false;
           isBackpackOpen = false;
           _maybeAbortCherieQuest002WrongLocation();
+          _resetNewsMessageIfOutsideQuestEventContext();
         });
       }));
       actionWidgets.add(const SizedBox(height: 8));
@@ -2365,6 +2397,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           isStatsOpen = false;
           isBackpackOpen = false;
           _tryStartSashaMorningRunOnStreetOverview();
+          _resetNewsMessageIfOutsideQuestEventContext();
         });
       }));
       actionWidgets.add(const SizedBox(height: 8));
@@ -2385,6 +2418,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           isInsideRoom = false;
           isStatsOpen = false;
           isBackpackOpen = false;
+          _resetNewsMessageIfOutsideQuestEventContext();
         });
       }));
       actionWidgets.add(const SizedBox(height: 8));
@@ -2399,6 +2433,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           isInsideRoom = false;
           isStatsOpen = false;
           isBackpackOpen = false;
+          _resetNewsMessageIfOutsideQuestEventContext();
         });
       }));
       actionWidgets.add(const SizedBox(height: 8));
@@ -2422,6 +2457,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           isInsideRoom = false;
           isStatsOpen = false;
           isBackpackOpen = false;
+          _resetNewsMessageIfOutsideQuestEventContext();
         });
       }));
       actionWidgets.add(const SizedBox(height: 8));
@@ -2445,6 +2481,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           isInsideRoom = false;
           isStatsOpen = false;
           isBackpackOpen = false;
+          _resetNewsMessageIfOutsideQuestEventContext();
         });
       }));
       actionWidgets.add(const SizedBox(height: 8));
@@ -2467,6 +2504,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           isInsideRoom = false;
           isStatsOpen = false;
           isBackpackOpen = false;
+          _resetNewsMessageIfOutsideQuestEventContext();
         });
       }));
       actionWidgets.add(const SizedBox(height: 8));

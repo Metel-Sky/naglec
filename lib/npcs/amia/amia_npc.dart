@@ -22,7 +22,7 @@ NPCModel createAmiaNpc() {
       SchedulePoint(
         hourStart: 19,
         hourEnd: 8,
-        location: LocationsData.poorVillageEnglishwomanHall,
+        location: LocationsData.poorVillageEnglishwomanRoom1,
         actionLabel: 'Вдома',
         spritePath: kAmiaAvatarPath,
         days: _weekdays,
@@ -30,7 +30,7 @@ NPCModel createAmiaNpc() {
       SchedulePoint(
         hourStart: 0,
         hourEnd: 23,
-        location: LocationsData.poorVillageEnglishwomanHall,
+        location: LocationsData.poorVillageEnglishwomanRoom1,
         actionLabel: 'Вдома',
         spritePath: kAmiaAvatarPath,
         days: [5, 6],
@@ -38,7 +38,7 @@ NPCModel createAmiaNpc() {
       SchedulePoint(
         hourStart: 9,
         hourEnd: 9,
-        location: LocationsData.poorVillageEnglishwomanHall,
+        location: LocationsData.poorVillageEnglishwomanRoom1,
         actionLabel: 'Вдома',
         spritePath: kAmiaAvatarPath,
         days: _weekdays,
@@ -54,7 +54,7 @@ NPCModel createAmiaNpc() {
       SchedulePoint(
         hourStart: 12,
         hourEnd: 12,
-        location: LocationsData.poorVillageEnglishwomanHall,
+        location: LocationsData.poorVillageEnglishwomanRoom1,
         actionLabel: 'Вдома',
         spritePath: kAmiaAvatarPath,
         days: _weekdays,
@@ -70,7 +70,7 @@ NPCModel createAmiaNpc() {
       SchedulePoint(
         hourStart: 15,
         hourEnd: 15,
-        location: LocationsData.poorVillageEnglishwomanHall,
+        location: LocationsData.poorVillageEnglishwomanRoom1,
         actionLabel: 'Вдома',
         spritePath: kAmiaAvatarPath,
         days: _weekdays,
@@ -86,7 +86,7 @@ NPCModel createAmiaNpc() {
       SchedulePoint(
         hourStart: 18,
         hourEnd: 23,
-        location: LocationsData.poorVillageEnglishwomanHall,
+        location: LocationsData.poorVillageEnglishwomanRoom1,
         actionLabel: 'Вдома',
         spritePath: kAmiaAvatarPath,
         days: _weekdays,

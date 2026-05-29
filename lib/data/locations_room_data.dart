@@ -100,6 +100,13 @@ class LocationsData {
   static const String poorDistrictH1Apt2KatrinRoam =
       'poor_district_h1_apt2_katrin_roam';
 
+  /// Маркер: Kyler — вдома, випадкова кімната кв. 1 (Бандери 2).
+  static const String poorDistrictH2Apt1KylerRoam =
+      'poor_district_h2_apt1_kyler_roam';
+
+  /// Маркер: Riley — вдома, випадкова кімната кв. 2 (елітний ЖК).
+  static const String cityEliteApt2RileyRoam = 'city_elite_apt2_riley_roam';
+
   /// Чи [roomId] — кімната всередині будинку тітки на вул. Шевченка.
   static bool isAuntHouseInteriorRoom(String? roomId) {
     if (roomId == null) return false;
@@ -231,6 +238,8 @@ class LocationsData {
 
   static const String poorDistrictHouse1 = PoorDistrictHouse1.id;
   static const String poorDistrictHouse2 = PoorDistrictHouse2.id;
+  /// Спальня кв. 2, Бандери 2 (Zazie + Geisha).
+  static const String poorDistrictH2Apt2Bedroom = PoorDistrictHouse2.rA2_4;
 
   static const List<String> poorDistrictResidentialHouseIds = [
     poorDistrictHouse1,
@@ -288,7 +297,7 @@ class LocationsData {
   static const String poorVillageHouseEnglishwoman = 'poor_village_house_englishwoman';
   static const String poorVillageHouseLogisticsBoss = 'poor_village_house_logistics_boss';
   static const String poorVillageHouseGiftShopOwner = 'poor_village_house_gift_shop_owner';
-  /// Home Cherie (Мажорщина): кімнати для проживання.
+  /// Будинок Cherie (Мажорщина): кімнати для проживання.
   static const String poorVillageGiftShopOwnerRoom1 = 'poor_village_gift_shop_owner_room_1';
   static const String poorVillageGiftShopOwnerRoom2 = 'poor_village_gift_shop_owner_room_2';
   static const String poorVillageGiftShopOwnerRoom3 = 'poor_village_gift_shop_owner_room_3';
@@ -299,6 +308,8 @@ class LocationsData {
   static const String poorVillageHouseCallCenterBoss = 'poor_village_house_call_center_boss';
   /// Спальня в домі декана/завуча (Мажорщина).
   static const String poorVillageHeadTeacherBedroom = 'poor_village_head_teacher_bedroom';
+  /// Кімната Naomi (донька декана) у будинку декана.
+  static const String poorVillageHeadTeacherRoom = 'poor_village_head_teacher_room';
   /// Кімнати в домі начальника логістичної компанії (Мажорщина).
   static const String poorVillageLogisticsBossRoom2 = 'poor_village_logistics_boss_room_2';
   static const String poorVillageLogisticsBossRoom3 = 'poor_village_logistics_boss_room_3';
@@ -308,6 +319,7 @@ class LocationsData {
   static const String poorVillageCallCenterBossRoom3 = 'poor_village_call_center_boss_room_3';
   /// Зал у домі Amia (колишній «дім англічанки»).
   static const String poorVillageEnglishwomanHall = 'poor_village_englishwoman_hall';
+  static const String poorVillageEnglishwomanRoom1 = 'poor_village_englishwoman_room_1';
 
   static List<String> get poorVillageRoomIds => LocationsLoader.poorVillageRoomIds;
 
@@ -440,7 +452,9 @@ class LocationsData {
       roomId == cityMall || roomId.startsWith('city_mall_');
 
   static const String cityEliteApartment1 = 'city_elite_apt_1';
+  static const String cityEliteApartment1Bedroom = 'city_elite_apt_1_bedroom';
   static const String cityEliteApartment2 = 'city_elite_apt_2';
+  static const String cityEliteApartment2Bedroom = 'city_elite_apt_2_bedroom';
   static const String cityEliteApartment3 = 'city_elite_apt_3';
   static const String cityEliteApartment4 = 'city_elite_apt_4';
   static const String cityEliteApartment5 = 'city_elite_apt_5';

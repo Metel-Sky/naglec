@@ -78,6 +78,7 @@ flutter:
     - lib/assets/npcs/loh/
     - lib/assets/npcs/sasha/
     - lib/assets/npcs/sasha/sash_video/
+    - lib/assets/npcs/samantha/
     - lib/assets/npcs/sem/
     - lib/assets/npcs/cherie/
     # Явно: новий webm інколи не потрапляє в bundle до clean build.
@@ -87,14 +88,23 @@ flutter:
     - lib/assets/npcs/faye/
     - lib/assets/npcs/india/
     - lib/assets/npcs/jessa/
+    - lib/assets/npcs/katrin/
+    - lib/assets/npcs/adriana/
     - lib/assets/npcs/alexis/
     - lib/assets/npcs/lexi/
     - lib/assets/npcs/flaxy/
     - lib/assets/npcs/alyssa/
+    - lib/assets/npcs/blanche/
     - lib/assets/npcs/candee/
-    - lib/assets/npcs/Blanche/
+    - lib/assets/npcs/caprice/
+    - lib/assets/npcs/foxy/
+    - lib/assets/npcs/geisha/
+    - lib/assets/npcs/jennifer/
+    - lib/assets/npcs/kyler/
+    - lib/assets/npcs/lana/
+    - lib/assets/npcs/naomi/
+    - lib/assets/npcs/peta/
+    - lib/assets/npcs/riley/
     - lib/assets/npcs/zazie/
-    - lib/assets/npcs/katrin/
-    - lib/assets/npcs/Caprice/
     - lib/assets/npcs/rita/
     - lib/assets/npcs/rita/img/

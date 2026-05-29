@@ -3,6 +3,7 @@ import 'dart:math';
 import '../data/college_schedule.dart';
 import '../data/locations_room_data.dart';
 import '../data/poor_district/poor_district_house_1.dart';
+import '../data/poor_district/poor_district_house_2.dart';
 import '../models/npc_model.dart';
 import '../npcs/all_npcs.dart';
 import 'cherie_quest002_location_pin.dart';
@@ -93,6 +94,8 @@ class NPCService {
   static const String _alyssaNpcId = 'alyssa';
   static const String _candeeNpcId = 'candee';
   static const String _katrinNpcId = 'katrin';
+  static const String _kylerNpcId = 'kyler';
+  static const String _rileyNpcId = 'riley';
 
   static const List<String> _alexisHomeRoomIds = [
     LocationsData.auntKitchen,
@@ -180,6 +183,30 @@ class NPCService {
     final seed = (weekdayIndex * 24 + hour) * 31 + 'katrin_home'.hashCode;
     final i = Random(seed).nextInt(_katrinHomeRoomIds.length);
     return _katrinHomeRoomIds[i];
+  }
+
+  static const List<String> _kylerHomeRoomIds = [
+    PoorDistrictHouse2.rA1_1,
+    PoorDistrictHouse2.rA1_2,
+    PoorDistrictHouse2.rA1_3,
+    PoorDistrictHouse2.rA1_4,
+  ];
+
+  static String _kylerHomeRoom(int weekdayIndex, int hour) {
+    final seed = (weekdayIndex * 24 + hour) * 31 + 'kyler_home'.hashCode;
+    final i = Random(seed).nextInt(_kylerHomeRoomIds.length);
+    return _kylerHomeRoomIds[i];
+  }
+
+  static final List<String> _rileyHomeRoomIds =
+      LocationsData.cityEliteInnerRoomIdsForApartment(
+    LocationsData.cityEliteApartment2,
+  );
+
+  static String _rileyHomeRoom(int weekdayIndex, int hour) {
+    final seed = (weekdayIndex * 24 + hour) * 31 + 'riley_home'.hashCode;
+    final i = Random(seed).nextInt(_rileyHomeRoomIds.length);
+    return _rileyHomeRoomIds[i];
   }
 
   /// Будні 18–20: без кімнати Саші ([friendSisterRoom]) і батьків ([friendParentsRoom]).
@@ -529,6 +556,14 @@ class NPCService {
           best.location == LocationsData.poorDistrictH1Apt2KatrinRoam) {
         return _katrinHomeRoom(effectiveDay, hour);
       }
+      if (npc.id == _kylerNpcId &&
+          best.location == LocationsData.poorDistrictH2Apt1KylerRoam) {
+        return _kylerHomeRoom(effectiveDay, hour);
+      }
+      if (npc.id == _rileyNpcId &&
+          best.location == LocationsData.cityEliteApt2RileyRoam) {
+        return _rileyHomeRoom(effectiveDay, hour);
+      }
       return best.location;
     }
     // Якщо в NPC немає активного слоту — він «гуляє містом» у дозволених зонах.
@@ -821,6 +856,26 @@ class NPCService {
           if (p.location != LocationsData.poorDistrictH1Apt2KatrinRoam) {
             return false;
           }
+          return _timeMatchesPoint(p, hour);
+        });
+      } catch (_) {}
+    }
+
+    if (npc.id == _kylerNpcId && _kylerHomeRoomIds.contains(normRoom)) {
+      try {
+        return npc.schedule.firstWhere((p) {
+          if (p.location != LocationsData.poorDistrictH2Apt1KylerRoam) {
+            return false;
+          }
+          return _timeMatchesPoint(p, hour);
+        });
+      } catch (_) {}
+    }
+
+    if (npc.id == _rileyNpcId && _rileyHomeRoomIds.contains(normRoom)) {
+      try {
+        return npc.schedule.firstWhere((p) {
+          if (p.location != LocationsData.cityEliteApt2RileyRoam) return false;
           return _timeMatchesPoint(p, hour);
         });
       } catch (_) {}
