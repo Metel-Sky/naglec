@@ -18,9 +18,12 @@ import 'sem/sem_npc.dart';
 import 'cherie/cherie_npc.dart';
 import 'anya/anya_npc.dart';
 import 'faye/faye_npc.dart';
+import 'hanna/hanna_npc.dart';
+import 'oleksandr/oleksandr_npc.dart';
 import 'emily/emily_npc.dart';
 import 'ariana/ariana_npc.dart';
 import 'india/india_npc.dart';
+import 'artur/artur_npc.dart';
 import 'jessa/jessa_npc.dart';
 import 'adriana/adriana_npc.dart';
 import 'alexis/alexis_npc.dart';
@@ -40,6 +43,8 @@ import 'kyler/kyler_npc.dart';
 import 'riley/riley_npc.dart';
 import 'lana/lana_npc.dart';
 import 'naomi/naomi_npc.dart';
+import 'cecilia/cecilia_npc.dart';
+import 'tiffany/tiffany_npc.dart';
 
 /// Збирає список усіх NPC з їхніх файлів.
 List<NPCModel> createAllNpcs() {
@@ -50,9 +55,12 @@ List<NPCModel> createAllNpcs() {
     createLudaNpc(),
     createDenNpc(),
     createFayeNpc(),
+    createHannaNpc(),
+    createOleksandrNpc(),
     createEmilyNpc(),
     createArianaNpc(),
     createIndiaNpc(),
+    createArturNpc(),
     createJessaNpc(),
     createLoshokNpc(),
     createNicoleNpc(),
@@ -85,5 +93,7 @@ List<NPCModel> createAllNpcs() {
     createRileyNpc(),
     createLanaNpc(),
     createNaomiNpc(),
+    createCeciliaNpc(),
+    createTiffanyNpc(),
   ];
 }

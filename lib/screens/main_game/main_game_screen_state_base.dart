@@ -125,7 +125,9 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   DenAfterUiPhase get _denAfterUiPhase => _ui.denAfterUiPhase;
   set _denAfterUiPhase(DenAfterUiPhase v) => _ui.setDenAfterUiPhase(v);
 
-  static const String _momOfficeImagePath = 'lib/assets/npcs/mom/mom_work_place.jpg';
+  static const String momOfficeFallbackImagePath =
+      'lib/assets/npcs/mom/mom_work_place.jpg';
+  static const String _momOfficeImagePath = momOfficeFallbackImagePath;
   static const String _momOfficeButtonImagePath = 'lib/assets/location/biznes_centr/logistic/cab_mom.jpg';
   static const List<String> _momOfficeVideoPaths = [
     'lib/assets/npcs/mom/video/work_01.mp4',
@@ -133,7 +135,95 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     'lib/assets/npcs/mom/video/work_03.mp4',
   ];
 
+  bool _isMomAtLogisticsOfficeNow() {
+    final mom = sl<NPCService>().npcById('mom');
+    if (mom == null) return false;
+    final hour = _timeController.dateTime.hour;
+    final day = _timeController.weekdayIndex;
+    return sl<NPCService>().getCurrentLocationId(mom, hour, day) ==
+        LocationsData.cityBcLogisticsMomOffice;
+  }
 
+  /// Кабінет мами: якщо мама на роботі — завжди одне з work_01…03; інакше статичний кадр.
+  void _syncMomOfficeViewState({bool pickNewVideoIfMissing = true}) {
+    final isMomAtWork = _isMomAtLogisticsOfficeNow();
+    _momOfficeUseButtonImage = !isMomAtWork;
+    if (isMomAtWork) {
+      if (pickNewVideoIfMissing || _momOfficeVideoIndex == null) {
+        _momOfficeVideoIndex = Random().nextInt(_momOfficeVideoPaths.length) + 1;
+      }
+    } else {
+      _momOfficeVideoIndex = null;
+    }
+  }
+
+  void _openMomOfficeViewForCurrentTime() {
+    _showLogisticsOfficeVideo = false;
+    _approachedSecretary = false;
+    _syncMomOfficeViewState();
+    _showMomOfficeView = true;
+  }
+
+  /// Вихід з кабінету мами: назад до приймальні (якщо Luda на роботі) або холу логістики.
+  void _exitMomOfficeView() {
+    _showMomOfficeView = false;
+    final luda = sl<NPCService>().npcById('luda');
+    final hour = _timeController.dateTime.hour;
+    final day = _timeController.weekdayIndex;
+    final isLudaAtWork = luda != null &&
+        sl<NPCService>().getCurrentLocationId(luda, hour, day) ==
+            LocationsData.cityBcLogistics;
+    if (isLudaAtWork) {
+      _showLogisticsOfficeVideo = true;
+      _approachedSecretary = false;
+    } else {
+      _showLogisticsOfficeVideo = false;
+      _approachedSecretary = false;
+    }
+  }
+
+  bool _isMomOfficeKompromatVideoActive() {
+    final index = _momOfficeVideoIndex;
+    if (index == null) return false;
+    if (index == 3) return true;
+    return _momOfficeVideoPaths[index - 1].contains('work_03');
+  }
+
+  bool _isMomOfficeCompromatAlreadySaved() =>
+      _worldState.hasMomOfficeCompromatVideo3;
+
+  bool _saveMomOfficeCompromatFromVideo3() {
+    if (_isMomOfficeCompromatAlreadySaved()) {
+      return false;
+    }
+    if (_inventory.count('usb_empty') > 0) {
+      _inventory.removeItem('usb_empty');
+      _inventory.addItem(GameItems.usbCompromat);
+    }
+    _worldState.hasMomOfficeCompromatVideo3 = true;
+    if (!_worldState.compromatNpcIds.contains('mom')) {
+      _worldState.compromatNpcIds.add('mom');
+    }
+    _saveService.autosave();
+    return true;
+  }
+
+  /// Вхід у «Офіс мами»: спочатку приймальня / секретарка Luda (якщо на роботі), потім кабінет.
+  void _enterLogisticsMomOfficeFlow() {
+    final luda = sl<NPCService>().npcById('luda');
+    final hour = _timeController.dateTime.hour;
+    final day = _timeController.weekdayIndex;
+    final isLudaAtWork = luda != null &&
+        sl<NPCService>().getCurrentLocationId(luda, hour, day) ==
+            LocationsData.cityBcLogistics;
+    if (isLudaAtWork) {
+      _showMomOfficeView = false;
+      _approachedSecretary = false;
+      _showLogisticsOfficeVideo = true;
+    } else {
+      _openMomOfficeViewForCurrentTime();
+    }
+  }
 
   bool _friendHouseStreetFacade = false;
   /// Sem показано біля дверей після успішного «Позвати Сема» на цьому фасаді.

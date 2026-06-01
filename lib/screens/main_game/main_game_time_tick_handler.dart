@@ -144,32 +144,12 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
         final ludaAtWork = ludaList.isNotEmpty &&
             npcService.getCurrentLocationId(ludaList.first, hour, day) == LocationsData.cityBcLogistics;
         if (!ludaAtWork) {
-          _showLogisticsOfficeVideo = false;
-          _approachedSecretary = false;
-          final momList = npcService.allNPCs.where((n) => n.id == 'mom').toList();
-          final mom = momList.isEmpty ? null : momList.first;
-          final isMomAtWork = mom != null &&
-              npcService.getCurrentLocationId(mom, hour, day) == LocationsData.cityBcLogisticsMomOffice;
-          _momOfficeUseButtonImage = !isMomAtWork;
-          _momOfficeVideoIndex = isMomAtWork ? (Random().nextBool() ? null : Random().nextInt(3) + 1) : null;
-          _showMomOfficeView = true;
+          _openMomOfficeViewForCurrentTime();
         }
       }
 
       if (_showMomOfficeView) {
-        final momList = npcService.allNPCs.where((n) => n.id == 'mom').toList();
-        final mom = momList.isEmpty ? null : momList.first;
-        final isMomAtWork = mom != null &&
-            npcService.getCurrentLocationId(mom, hour, day) == LocationsData.cityBcLogisticsMomOffice;
-        if (isMomAtWork) {
-          _momOfficeUseButtonImage = false;
-          if (_momOfficeVideoIndex == null) {
-            _momOfficeVideoIndex = Random().nextBool() ? null : Random().nextInt(3) + 1;
-          }
-        } else {
-          _momOfficeUseButtonImage = true;
-          _momOfficeVideoIndex = null;
-        }
+        _syncMomOfficeViewState(pickNewVideoIfMissing: false);
       }
 
       _maybeStartDanielleSpyCaughtAutoInRoom();

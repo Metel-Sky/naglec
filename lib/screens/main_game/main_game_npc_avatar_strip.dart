@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/npc_model.dart';
 import '../../theme/game_theme.dart';
+import '../../widgets/npc_circle_avatar_image.dart';
 
 /// Круглі аватари NPC зліва для вибору активного персонажа в кімнаті.
 class MainGameNpcAvatarStrip extends StatelessWidget {
@@ -66,10 +67,7 @@ class MainGameNpcAvatarStrip extends StatelessWidget {
                     height: 52,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isSelected ? GameTheme.textGreen : Colors.white24,
-                        width: isSelected ? 3 : 1,
-                      ),
+                      color: Colors.transparent,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.4),
@@ -78,14 +76,30 @@ class MainGameNpcAvatarStrip extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: ClipOval(
-                      child: npc.avatarPath != null
-                          ? Image.asset(
-                              npc.avatarPath!,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => _avatarPlaceholder(),
-                            )
-                          : _avatarPlaceholder(),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        ClipOval(
+                          child: npc.avatarPath != null
+                              ? NpcCircleAvatarImage(
+                                  size: 52,
+                                  imagePath: npc.avatarPath!,
+                                  errorBuilder: (_, __, ___) => _avatarPlaceholder(),
+                                )
+                              : _avatarPlaceholder(),
+                        ),
+                        IgnorePointer(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: isSelected ? GameTheme.textGreen : Colors.white24,
+                                width: isSelected ? 3 : 1,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

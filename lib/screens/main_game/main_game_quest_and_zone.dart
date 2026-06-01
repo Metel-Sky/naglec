@@ -1104,7 +1104,11 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             MainGameScreenStateBase._momOfficeVideoPaths[_momOfficeVideoIndex! - 1];
         return ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: VideoSceneWidget(key: ValueKey('mom_office_$videoPath'), videoPath: videoPath),
+          child: VideoSceneWidget(
+            key: ValueKey('mom_office_$videoPath'),
+            videoPath: videoPath,
+            fallbackImagePath: MainGameScreenStateBase.momOfficeFallbackImagePath,
+          ),
         );
       }
       if (_showRockefellerReceptionView &&
@@ -1188,33 +1192,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                 _suppressCherieGiftShopOfficeTc1Underlay,
             onRoomTap: _handleRoomEntry,
             onLogisticsOfficeTap: () {
-              final npcService = sl<NPCService>();
-              final ludaList = npcService.allNPCs.where((n) => n.id == 'luda').toList();
-              final hour = _timeController.dateTime.hour;
-              final day = _timeController.weekdayIndex;
-              final isLudaAtWork = ludaList.isNotEmpty &&
-                  npcService.getCurrentLocationId(ludaList.first, hour, day) == LocationsData.cityBcLogistics;
-              setState(() {
-                if (isLudaAtWork) {
-                  _showLogisticsOfficeVideo = true;
-                } else {
-                  final momList = npcService.allNPCs.where((n) => n.id == 'mom').toList();
-                  final NPCModel? mom = momList.isEmpty ? null : momList.first;
-                  final isMomAtWork = mom != null && npcService.getCurrentLocationId(mom, hour, day) == LocationsData.cityBcLogisticsMomOffice;
-                  if (isMomAtWork) {
-                    _momOfficeUseButtonImage = false;
-                    if (Random().nextBool()) {
-                      _momOfficeVideoIndex = null;
-                    } else {
-                      _momOfficeVideoIndex = Random().nextInt(3) + 1;
-                    }
-                  } else {
-                    _momOfficeUseButtonImage = true;
-                    _momOfficeVideoIndex = null;
-                  }
-                  _showMomOfficeView = true;
-                }
-              });
+              setState(_enterLogisticsMomOfficeFlow);
             },
             onRockefellerCabinetTap: () {
               final npcService = sl<NPCService>();
@@ -1634,6 +1612,10 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         _semFriendHouseTalkActive = false;
         _semParentsTalkActive = false;
       });
+      return;
+    }
+    if (_showMomOfficeView) {
+      setState(_exitMomOfficeView);
       return;
     }
     _nav.handleBackTap();
@@ -2881,6 +2863,10 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           );
         }
 
+        if (_showMomOfficeView) {
+          return _buildMomOfficeActionPanel();
+        }
+
         final momQ001Priority = _momQuest001PriorityActionPanelIfAny();
         if (momQ001Priority != null) return momQ001Priority;
 
@@ -4050,49 +4036,142 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     );
   }
 
-  /// Кнопки зон (як [_appendStandardWorldTravelButtons]) + «Назад» останньою.
-  Widget _buildMomOfficeNavButtons() {
+  /// Кабінет мами: work_03 — лише «Зберегти компромат» + «Назад»; інакше взаємодії з мамою або навігація.
+  Widget _buildMomOfficeActionPanel() {
     return ListenableBuilder(
-      listenable: _timeController,
+      listenable: Listenable.merge([_timeController, _ui]),
       builder: (context, _) {
+        final hour = _timeController.dateTime.hour;
+        final isMomAtWork = _isMomAtLogisticsOfficeNow();
+        final isKompromatVideo = _isMomOfficeKompromatVideoActive();
+        final t = sl<LocaleController>().t;
         final list = <Widget>[];
-        void closeAndGo(String zone, String room, bool isInsideRoom) {
-          setState(() {
-            _friendHouseStreetFacade = false;
-            _semSummonedAtFriendFacade = false;
-            _semFriendHouseTalkActive = false;
-            _semParentsTalkActive = false;
-            _showMomOfficeView = false;
-            _nav.spendMoveEnergy();
-            _addTravelTime("CITY", zone);
-            currentZone = zone;
-            currentRoom = room;
-            this.isInsideRoom = isInsideRoom;
-            if (zone != 'STREET') {
-              currentStreetHouse = null;
-            }
-            isStatsOpen = false;
-            isBackpackOpen = false;
-            newsMessage = LocationsData.getLocationDisplayName(room);
-            if (zone == 'STREET') {
-              // EVENT №2 Саші: якщо це перенесення на «вул. Шевченка», пробуємо старт.
-              _tryStartSashaMorningRunOnStreetOverview();
-            }
-          });
+
+        if (isKompromatVideo) {
+          if (!_isMomOfficeCompromatAlreadySaved()) {
+            list.add(
+              _navBtn(
+                t('laptop_save_compromat'),
+                () {
+                  final saved = _saveMomOfficeCompromatFromVideo3();
+                  if (!saved) return;
+                  setState(() {});
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(t('mom_compromat_saved_laptop')),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                },
+              ),
+            );
+            list.add(const SizedBox(height: 8));
+          }
+          list.add(_navBtn('Назад', () => setState(_exitMomOfficeView)));
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: list,
+            ),
+          );
         }
-        list.add(_navBtn("ДІМ", () => closeAndGo("HOME", LocationsData.corridor, false)));
-        list.add(const SizedBox(height: 8));
-        list.add(_navBtn("ВУЛ. ШЕВЧЕНКА", () => closeAndGo("STREET", LocationsData.street, false)));
-        list.add(const SizedBox(height: 8));
-        list.add(_navBtn("КОЛЕДЖ", () => closeAndGo("COLLEGE", LocationsData.collegeHall, false)));
-        list.add(const SizedBox(height: 8));
-        list.add(_navBtn("Бідний р-н", () => closeAndGo("POOR_DISTRICT", LocationsData.poorDistrictOverview, false)));
-        list.add(const SizedBox(height: 8));
-        list.add(_navBtn("Мажорщина", () => closeAndGo("POOR_VILLAGE", LocationsData.poorVillageOverview, false)));
-        list.add(const SizedBox(height: 8));
-        list.add(_navBtn("На море", () => closeAndGo("OUT_OF_TOWN", LocationsData.outOfTownOverview, false)));
-        list.add(const SizedBox(height: 8));
-        list.add(_navBtn('Назад', () => setState(() => _showMomOfficeView = false)));
+
+        if (isMomAtWork) {
+          final mom = sl<NPCService>().npcById('mom');
+          if (mom != null) {
+            list.add(
+              NpcInteractionButtons(
+                key: const ValueKey('mom_office_cabinet'),
+                npc: mom,
+                location: LocationsData.cityBcLogisticsMomOffice,
+                hour: hour,
+                onUpdate: () => setState(_dismissNpcGalleryIfOpen),
+                onActionExecuted: (label, npc) =>
+                    _handleNpcActionExecuted(label, npc),
+                onFinanceGiveMoney: () => _npcFinanceGiveMoney(mom),
+                onFinanceAskLoan: () => _npcFinanceAskLoan(mom),
+                onFinanceGiveLoan: () => _npcFinanceGiveLoan(mom),
+                onFinanceAskMomMoney: (amount) => _npcFinanceAskMomMoney(mom, amount),
+                onFinanceRepayGgDebt:
+                    NpcFinanceService.ggOwesNpc(_worldState, mom.id) > 0
+                        ? () => _npcFinanceRepayGgDebt(mom)
+                        : null,
+                onFinanceAskAboutDebt: NpcFinanceService.showAskAboutDebtButton(
+                  _worldState,
+                  mom.id,
+                )
+                    ? () => _npcFinanceAskAboutDebt(mom)
+                    : null,
+                onFinanceOfferAlternatives:
+                    NpcFinanceService.showOfferAlternativesButton(
+                  w: _worldState,
+                  npcId: mom.id,
+                  gender: mom.gender,
+                  gameNow: _timeController.dateTime,
+                )
+                    ? () => _npcFinanceOfferAlternatives(mom)
+                    : null,
+                onTalkPiperSnitch: _isPiperQuest001SnitchOfferScene()
+                    ? () {
+                        setState(() {
+                          _piperQuest001SnitchToMom(auto: false);
+                        });
+                      }
+                    : null,
+              ),
+            );
+            list.add(const SizedBox(height: 8));
+          }
+        } else {
+          void closeAndGo(String zone, String room, bool insideRoom) {
+            setState(() {
+              _friendHouseStreetFacade = false;
+              _semSummonedAtFriendFacade = false;
+              _semFriendHouseTalkActive = false;
+              _semParentsTalkActive = false;
+              _showMomOfficeView = false;
+              _nav.spendMoveEnergy();
+              _addTravelTime('CITY', zone);
+              currentZone = zone;
+              currentRoom = room;
+              isInsideRoom = insideRoom;
+              if (zone != 'STREET') {
+                currentStreetHouse = null;
+              }
+              isStatsOpen = false;
+              isBackpackOpen = false;
+              newsMessage = LocationsData.getLocationDisplayName(room);
+              if (zone == 'STREET') {
+                _tryStartSashaMorningRunOnStreetOverview();
+              }
+            });
+          }
+          list.add(_navBtn('ДІМ', () => closeAndGo('HOME', LocationsData.corridor, false)));
+          list.add(const SizedBox(height: 8));
+          list.add(_navBtn('ВУЛ. ШЕВЧЕНКА', () => closeAndGo('STREET', LocationsData.street, false)));
+          list.add(const SizedBox(height: 8));
+          list.add(_navBtn('КОЛЕДЖ', () => closeAndGo('COLLEGE', LocationsData.collegeHall, false)));
+          list.add(const SizedBox(height: 8));
+          list.add(
+            _navBtn('Бідний р-н', () => closeAndGo('POOR_DISTRICT', LocationsData.poorDistrictOverview, false)),
+          );
+          list.add(const SizedBox(height: 8));
+          list.add(
+            _navBtn('Мажорщина', () => closeAndGo('POOR_VILLAGE', LocationsData.poorVillageOverview, false)),
+          );
+          list.add(const SizedBox(height: 8));
+          list.add(
+            _navBtn('На море', () => closeAndGo('OUT_OF_TOWN', LocationsData.outOfTownOverview, false)),
+          );
+          list.add(const SizedBox(height: 8));
+        }
+
+        list.add(_navBtn('Назад', () => setState(_exitMomOfficeView)));
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           width: double.infinity,
@@ -4157,7 +4236,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     );
   }
 
-  /// Офіс Рокфеллера: дії з NPC (якщо він у офісі) + навігація по зонах, як у [_buildMomOfficeNavButtons].
+  /// Офіс Рокфеллера: дії з NPC (якщо він у офісі) + навігація по зонах, як у [_buildMomOfficeActionPanel] для порожнього кабінету.
   Widget _buildRockefellerCabinetNavButtons() {
     return ListenableBuilder(
       listenable: _timeController,

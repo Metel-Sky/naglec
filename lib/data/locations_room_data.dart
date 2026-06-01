@@ -311,15 +311,18 @@ class LocationsData {
   /// Кімната Naomi (донька декана) у будинку декана.
   static const String poorVillageHeadTeacherRoom = 'poor_village_head_teacher_room';
   /// Кімнати в домі начальника логістичної компанії (Мажорщина).
+  static const String poorVillageLogisticsBossRoom1 = 'poor_village_logistics_boss_room_1';
   static const String poorVillageLogisticsBossRoom2 = 'poor_village_logistics_boss_room_2';
   static const String poorVillageLogisticsBossRoom3 = 'poor_village_logistics_boss_room_3';
-  /// Кімнати в домі шефа колцентру (Мажорщина).
+  /// Кімнати в домі Artur (Мажорщина).
   static const String poorVillageCallCenterBossRoom1 = 'poor_village_call_center_boss_room_1';
   static const String poorVillageCallCenterBossRoom2 = 'poor_village_call_center_boss_room_2';
   static const String poorVillageCallCenterBossRoom3 = 'poor_village_call_center_boss_room_3';
   /// Зал у домі Amia (колишній «дім англічанки»).
   static const String poorVillageEnglishwomanHall = 'poor_village_englishwoman_hall';
   static const String poorVillageEnglishwomanRoom1 = 'poor_village_englishwoman_room_1';
+  static const String poorVillageEnglishwomanRoom2 = 'poor_village_englishwoman_room_2';
+  static const String poorVillageEnglishwomanRoom3 = 'poor_village_englishwoman_room_3';
 
   static List<String> get poorVillageRoomIds => LocationsLoader.poorVillageRoomIds;
 

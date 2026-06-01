@@ -25,13 +25,13 @@ class CallCenterCompanyView extends StatelessWidget {
       backgroundImagePath: _backgroundImagePath,
       topWindow: CompanyWindowButton(
         imagePath: 'lib/assets/location/houses/company/coll-centr.png',
-        label: 'Зал операторів',
-        onTap: onOperatorsHallTap,
+        label: 'Кімната керівника',
+        onTap: onBossOfficeTap,
       ),
       bottomWindow: CompanyWindowButton(
         imagePath: 'lib/assets/location/houses/company/coll-centr.png',
-        label: 'Кімната керівника',
-        onTap: onBossOfficeTap,
+        label: 'Зал операторів',
+        onTap: onOperatorsHallTap,
       ),
     );
   }

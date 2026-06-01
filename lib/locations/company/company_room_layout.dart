@@ -150,16 +150,6 @@ class CompanyRoomLayout extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (npcBottomOverlay != null)
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  height: h * RoomNpcSceneTemplate.npcOverlayHeightFraction,
-                  child: ClipRect(
-                    child: npcBottomOverlay!,
-                  ),
-                ),
               Positioned(
                 right: padding,
                 top: gap,
@@ -174,6 +164,17 @@ class CompanyRoomLayout extends StatelessWidget {
                 height: windowHeight,
                 child: bottomWindow,
               ),
+              // NPC завжди поверх фону та кнопок-вікон (передній план).
+              if (npcBottomOverlay != null)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: h * RoomNpcSceneTemplate.npcOverlayHeightFraction,
+                  child: ClipRect(
+                    child: npcBottomOverlay!,
+                  ),
+                ),
             ],
           );
         },

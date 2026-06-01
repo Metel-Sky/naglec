@@ -3,13 +3,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../models/npc_model.dart';
+import '../data/locations_room_data.dart';
 import '../services/npc_service.dart';
 import 'video_scene_widget.dart';
 
 /// Шаблон відображення кімнати з NPC як у **коледжі**:
 /// - фон — картинка/відео кімнати на весь блок (`BoxFit.cover` для растру);
-/// - NPC — **оверлей знизу по центру**, висота **[npcOverlayHeightFraction]** від висоти віджета,
-///   `BoxFit.contain` (як Amia/Lisa/Den у [CollegeView]).
+/// - NPC — **оверлей знизу по центру на передньому плані** (Stack після фону),
+///   висота **[npcOverlayHeightFraction]** від висоти віджета, `BoxFit.contain` (як Amia/Lisa/Den у [CollegeView]).
+/// Для офісів БЦ використовуйте [clippedRoomWithNpcOverlay], а не окремий Container лише з фоном.
 ///
 /// Для сцен, де саме медіа NPC має бути повноекранним (кухня мами з відео тощо), не використовуйте цей шаблон —
 /// залишайте окрему логіку.
@@ -55,6 +57,7 @@ class RoomNpcSceneTemplate {
     String? npcRasterFallbackPath,
     required VoidCallback onTap,
     bool flipHorizontally = false,
+    double npcOverlayScale = 1.0,
     double borderRadius = defaultClipRadius,
   }) {
     final displayPath = _effectiveNpcRasterPath(npcRasterAssetPath, npcRasterFallbackPath);
@@ -74,9 +77,10 @@ class RoomNpcSceneTemplate {
           builder: (context, constraints) {
             final maxH = constraints.maxHeight;
             final maxW = constraints.maxWidth;
-            final overlayHeight = maxH.isFinite
+            final overlayHeight = (maxH.isFinite
                 ? maxH * npcOverlayHeightFraction
-                : (maxW.isFinite ? maxW * npcOverlayHeightFraction : 400.0);
+                : (maxW.isFinite ? maxW * npcOverlayHeightFraction : 400.0)) *
+                npcOverlayScale;
 
             return Stack(
               fit: StackFit.expand,
@@ -337,6 +341,18 @@ class NpcRoomScenePicker {
       (roomImagePath != null && roomImagePath.isNotEmpty)
           ? roomImagePath
           : RoomNpcSceneTemplate.fallbackRoomImagePath;
+
+  /// Масштаб оверлею NPC у конкретній кімнаті (1.0 = стандарт; Oleksandr у офісі — 1.08).
+  static double npcOverlayScaleFor({
+    required String roomId,
+    String? npcId,
+  }) {
+    if (roomId == LocationsData.cityBcLogisticsBossOffice &&
+        npcId == 'oleksandr') {
+      return 1.08;
+    }
+    return 1.0;
+  }
 
   /// Riley + Lana у спальні квартири 2 (елітний ЖК): Lana зліва, Riley справа.
   static ({({NPCModel npc, SchedulePoint point}) left, ({NPCModel npc, SchedulePoint point}) right})?

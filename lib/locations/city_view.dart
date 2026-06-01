@@ -12,11 +12,8 @@ import '../widgets/room_npc_scene_template.dart';
 import '../widgets/video_scene_widget.dart';
 import '../widgets/laptop_shop_view.dart' show ShopProduct;
 import 'company/logistics_company_view.dart';
-import 'company/logistics_boss_office_view.dart';
 import 'company/gleam_team_company_view.dart';
 import 'company/call_center_company_view.dart';
-import 'company/call_center_operators_hall_view.dart';
-import 'company/call_center_boss_office_view.dart';
 import 'company/rockefeller_company_view.dart';
 import 'car_dealership_company_view.dart';
 import 'park_view.dart';
@@ -199,9 +196,6 @@ class _CityViewState extends State<CityView> {
         onOfficeTap: widget.onLogisticsOfficeTap,
       );
     }
-    if (widget.currentRoom == LocationsData.cityBcLogisticsBossOffice) {
-      return const LogisticsBossOfficeView();
-    }
     if (widget.currentRoom == LocationsData.cityBcGleamTeam) {
       return GleamTeamCompanyView(
         onProjectsTap: () => widget.onRoomTap(LocationsData.cityBcGleamTeamProjects),
@@ -219,12 +213,6 @@ class _CityViewState extends State<CityView> {
         onShowroomTap: () => widget.onRoomTap(LocationsData.cityCarDealershipShowroom),
         onWorkshopTap: () => widget.onRoomTap(LocationsData.cityCarDealershipWorkshop),
       );
-    }
-    if (widget.currentRoom == LocationsData.cityBcCallCenterOperatorsHall) {
-      return const CallCenterOperatorsHallView();
-    }
-    if (widget.currentRoom == LocationsData.cityBcCallCenterBossOffice) {
-      return const CallCenterBossOfficeView();
     }
     if (widget.currentRoom == LocationsData.cityBcRockefellerOffice) {
       final npcService = sl<NPCService>();
@@ -418,11 +406,16 @@ class _CityViewState extends State<CityView> {
       }
       final flipLanaPortrait = currentRoomNorm == LocationsData.cityEliteApartment2Bedroom &&
           chosenPair?.npc.id == 'lana';
+      final npcOverlayScale = NpcRoomScenePicker.npcOverlayScaleFor(
+        roomId: currentRoomNorm,
+        npcId: activeNPC?.id,
+      );
       return RoomNpcSceneTemplate.clippedRoomWithNpcOverlay(
         roomBackgroundPath: bg,
         npcRasterAssetPath: npcRaster,
         npcRasterFallbackPath: chosenPair?.npc.avatarPath,
         flipHorizontally: flipLanaPortrait,
+        npcOverlayScale: npcOverlayScale,
         onTap: () {
           if (activeNPC != null) widget.onNPCTap(activeNPC);
         },
@@ -434,11 +427,16 @@ class _CityViewState extends State<CityView> {
       final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
       final flipLanaPortrait = currentRoomNorm == LocationsData.cityEliteApartment2Bedroom &&
           chosenPair?.npc.id == 'lana';
+      final npcOverlayScale = NpcRoomScenePicker.npcOverlayScaleFor(
+        roomId: currentRoomNorm,
+        npcId: activeNPC?.id,
+      );
       return RoomNpcSceneTemplate.clippedRoomWithNpcOverlay(
         roomBackgroundPath: bg,
         npcRasterAssetPath: npcRasterOverlay,
         npcRasterFallbackPath: chosenPair?.npc.avatarPath,
         flipHorizontally: flipLanaPortrait,
+        npcOverlayScale: npcOverlayScale,
         onTap: () {
           if (activeNPC != null) widget.onNPCTap(activeNPC);
         },

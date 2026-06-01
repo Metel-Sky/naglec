@@ -153,7 +153,8 @@ Widget laptopDesktopShortcutsGrid({
 }) {
   final world = sl<GameWorldState>();
   final hasCameras = world.installedSpyCameraRooms.isNotEmpty;
-  final hasCompromat = world.compromatNpcIds.isNotEmpty;
+  final hasCompromat =
+      world.hasMomOfficeCompromatVideo3 || world.compromatNpcIds.isNotEmpty;
   final hasUsb = sl<InventoryController>().count('usb_compromat') > 0;
 
   return Column(

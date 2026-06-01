@@ -10,6 +10,40 @@ import '../laptop_shared_widgets.dart';
 import 'laptop_compromat_data.dart';
 
 mixin LaptopCompromatMixin on LaptopScreenStateBase {
+  Widget _compromatSubmenuTile({
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.white.withValues(alpha: 0.2),
+      borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Icon(Icons.play_circle_filled,
+                  size: 28, color: Colors.white.withValues(alpha: 0.95)),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.95),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void onCompromatVideoCompleted() {
     if (currentCompromatSource == 'usb' && currentCompromatNpcId != null) {
       final inventory = sl<InventoryController>();
@@ -28,6 +62,8 @@ mixin LaptopCompromatMixin on LaptopScreenStateBase {
 
   String compromatVideoPathForNpc(String npcId) {
     switch (npcId) {
+      case 'mom':
+        return laptopMomOfficeCompromatVideoPath;
       case 'piper':
         return laptopElsaCompromatVideoPath;
       default:
@@ -37,6 +73,8 @@ mixin LaptopCompromatMixin on LaptopScreenStateBase {
 
   String npcNameForCompromat(String npcId) {
     switch (npcId) {
+      case 'mom':
+        return 'Компромат на маму';
       case 'elsa':
         return 'Компромат на Piper';
       case 'piper':
@@ -53,44 +91,31 @@ mixin LaptopCompromatMixin on LaptopScreenStateBase {
     final world = sl<GameWorldState>();
     final List<Widget> items = [];
 
+    if (world.hasMomOfficeCompromatVideo3 &&
+        !world.compromatNpcIds.contains('mom')) {
+      items.add(_compromatSubmenuTile(
+        label: npcNameForCompromat('mom'),
+        onTap: () => setState(() {
+          currentCompromatVideoPath = compromatVideoPathForNpc('mom');
+          currentCompromatNpcId = 'mom';
+          currentCompromatSource = 'stored';
+          watchingCompromatVideo = true;
+        }),
+      ));
+      items.add(const SizedBox(height: 12));
+    }
+
     for (final npcId in world.compromatNpcIds) {
       final label = npcNameForCompromat(npcId);
-      items.add(
-        Material(
-          color: Colors.white.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(10),
-          child: InkWell(
-            onTap: () => setState(() {
-              currentCompromatVideoPath = compromatVideoPathForNpc(npcId);
-              currentCompromatNpcId = npcId;
-              currentCompromatSource = 'stored';
-              watchingCompromatVideo = true;
-            }),
-            borderRadius: BorderRadius.circular(10),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              child: Row(
-                children: [
-                  Icon(Icons.play_circle_filled,
-                      size: 28,
-                      color: Colors.white.withValues(alpha: 0.95)),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      label,
-                      style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.95),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
+      items.add(_compromatSubmenuTile(
+        label: label,
+        onTap: () => setState(() {
+          currentCompromatVideoPath = compromatVideoPathForNpc(npcId);
+          currentCompromatNpcId = npcId;
+          currentCompromatSource = 'stored';
+          watchingCompromatVideo = true;
+        }),
+      ));
       items.add(const SizedBox(height: 12));
     }
 
@@ -172,7 +197,7 @@ mixin LaptopCompromatMixin on LaptopScreenStateBase {
               borderRadius: BorderRadius.circular(10),
               child: InkWell(
                 onTap: () => setState(() {
-                  currentCompromatVideoPath = laptopGenericCompromatVideoPath;
+                  currentCompromatVideoPath = compromatVideoPathForNpc('mom');
                   currentCompromatNpcId = 'mom';
                   currentCompromatSource = 'usb';
                   watchingCompromatVideo = true;

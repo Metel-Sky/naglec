@@ -8,7 +8,7 @@ const String kIndiaGalleryPortraitPath = 'lib/assets/npcs/india/india_ava.jpg';
 const String kIndiaAvatarPath = 'lib/assets/npcs/india/india.png';
 
 /// India — дружина власника колцентру.
-/// Працює 10–17 у кімнаті керівника колцентру, живе в Мажорщині у домі шефа колцентру (кімната батьків).
+/// Працює 10–17 у кімнаті керівника колцентру, живе в Мажорщині у домі Artur (спальня).
 NPCModel createIndiaNpc() {
   return NPCModel(
     id: 'india_summer',
@@ -32,7 +32,7 @@ NPCModel createIndiaNpc() {
         hourStart: 0,
         hourEnd: 9,
         location: LocationsData.poorVillageCallCenterBossRoom1,
-        actionLabel: 'Вдома (кімната батьків)',
+        actionLabel: 'Вдома (спальня)',
         spritePath: kIndiaAvatarPath,
         days: _weekdays,
       ),
@@ -40,7 +40,7 @@ NPCModel createIndiaNpc() {
         hourStart: 18,
         hourEnd: 23,
         location: LocationsData.poorVillageCallCenterBossRoom1,
-        actionLabel: 'Вдома (кімната батьків)',
+        actionLabel: 'Вдома (спальня)',
         spritePath: kIndiaAvatarPath,
         days: _weekdays,
       ),

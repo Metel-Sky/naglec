@@ -12,6 +12,7 @@ import '../theme/game_theme.dart';
 import '../services/locale_controller.dart';
 import '../models/npc_secondary.dart';
 import '../utils/npc_portrait_paths.dart';
+import 'npc_circle_avatar_image.dart';
 
 /// Телефон зі списком контактів: аватар (тап = статистика NPC), місце знаходження, подзвонити/SMS.
 class PhoneView extends StatefulWidget {
@@ -618,16 +619,10 @@ class _ContactCardState extends State<_ContactCard> {
     final path = widget.portraitPath;
     const size = 56.0;
     if (path != null) {
-      return ClipOval(
-        child: SizedBox(
-          width: size,
-          height: size,
-          child: Image.asset(
-            path,
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => _avatarPlaceholder(size),
-          ),
-        ),
+      return NpcCircleAvatarImage(
+        size: size,
+        imagePath: path,
+        errorBuilder: (_, __, ___) => _avatarPlaceholder(size),
       );
     }
     return _avatarPlaceholder(size);

@@ -437,16 +437,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                             ]),
                             builder: (context, _) {
                               if (_showMomOfficeView) {
-                                final isImageOrVideo12 = _momOfficeVideoIndex == null ||
-                                    _momOfficeVideoIndex == 1 ||
-                                    _momOfficeVideoIndex == 2;
                                 return GameDialogPanel(
                                   message: 'Кабінет мами',
-                                  navButtons: isImageOrVideo12
-                                      ? [_buildMomOfficeNavButtons()]
-                                      : [
-                                          _navBtn('Назад', () => setState(() => _showMomOfficeView = false)),
-                                        ],
+                                  navButtons: [_buildMomOfficeActionPanel()],
                                 );
                               }
                               if (_showRockefellerReceptionView) {
@@ -524,28 +517,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         _navBtn('Піти в кабінет мами', () {
-                                          setState(() {
-                                            _showLogisticsOfficeVideo = false;
-                                            _approachedSecretary = false;
-                                            final npcService = sl<NPCService>();
-                                            final momList = npcService.allNPCs.where((n) => n.id == 'mom').toList();
-                                            final NPCModel? mom = momList.isEmpty ? null : momList.first;
-                                            final hour = _timeController.dateTime.hour;
-                                            final day = _timeController.weekdayIndex;
-                                            final isMomAtWork = mom != null && npcService.getCurrentLocationId(mom, hour, day) == LocationsData.cityBcLogisticsMomOffice;
-                                            if (isMomAtWork) {
-                                              _momOfficeUseButtonImage = false;
-                                              if (Random().nextBool()) {
-                                                _momOfficeVideoIndex = null;
-                                              } else {
-                                                _momOfficeVideoIndex = Random().nextInt(3) + 1;
-                                              }
-                                            } else {
-                                              _momOfficeUseButtonImage = true;
-                                              _momOfficeVideoIndex = null;
-                                            }
-                                            _showMomOfficeView = true;
-                                          });
+                                          setState(_openMomOfficeViewForCurrentTime);
                                         }),
                                         const SizedBox(height: 8),
                                         _navBtn('Підійти до секретарки', () => setState(() => _approachedSecretary = true)),

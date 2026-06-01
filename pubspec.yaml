@@ -49,7 +49,7 @@ flutter:
     - lib/assets/location/home_gg/rooms/
     - lib/assets/location/houses/
     # Явно (нові файли інколи не підхоплюються до повного rebuild):
-    - lib/assets/location/houses/
+    - lib/assets/location/houses/rooms/
     - lib/assets/location/houses/company/
     - lib/assets/location/poor_district/
     - lib/assets/location/trc/
@@ -83,9 +83,11 @@ flutter:
     - lib/assets/npcs/cherie/
     # Явно: новий webm інколи не потрапляє в bundle до clean build.
     - lib/assets/npcs/anya/
+    - lib/assets/npcs/artur/
     - lib/assets/npcs/ariana/
     - lib/assets/npcs/emily/
     - lib/assets/npcs/faye/
+    - lib/assets/npcs/hanna/
     - lib/assets/npcs/india/
     - lib/assets/npcs/jessa/
     - lib/assets/npcs/katrin/
@@ -97,12 +99,15 @@ flutter:
     - lib/assets/npcs/blanche/
     - lib/assets/npcs/candee/
     - lib/assets/npcs/caprice/
+    - lib/assets/npcs/cecilia/
+    - lib/assets/npcs/tiffany/
     - lib/assets/npcs/foxy/
     - lib/assets/npcs/geisha/
     - lib/assets/npcs/jennifer/
     - lib/assets/npcs/kyler/
     - lib/assets/npcs/lana/
     - lib/assets/npcs/naomi/
+    - lib/assets/npcs/oleksandr/
     - lib/assets/npcs/peta/
     - lib/assets/npcs/riley/
     - lib/assets/npcs/zazie/

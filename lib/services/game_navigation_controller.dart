@@ -431,6 +431,21 @@ class GameNavigationController extends ChangeNotifier {
     }
     if (_uiStateController.showMomOfficeView) {
       _uiStateController.setShowMomOfficeView(false);
+      final luda = _npcService.npcById('luda');
+      final hour = _timeController.dateTime.hour;
+      final day = _timeController.weekdayIndex;
+      final isLudaAtWork = luda != null &&
+          _npcService.getCurrentLocationId(luda, hour, day) ==
+              LocationsData.cityBcLogistics;
+      if (isLudaAtWork) {
+        _uiStateController.setShowLogisticsOfficeVideo(true);
+        _uiStateController.setApproachedSecretary(false);
+      } else {
+        _uiStateController.setShowLogisticsOfficeVideo(false);
+        _uiStateController.setApproachedSecretary(false);
+      }
+      notifyListeners();
+      return;
     }
     if (_uiStateController.showRockefellerCabinetView) {
       _uiStateController.setShowRockefellerCabinetView(false);

@@ -6,7 +6,7 @@ const List<int> _weekdays = [0, 1, 2, 3, 4];
 const String kAnyaGalleryPortraitPath = 'lib/assets/npcs/anya/anya_ava.jpg';
 const String kAnyaAvatarPath = 'lib/assets/npcs/anya/anya.png';
 
-/// Anya — двоюрідна сестра. Коледж 10–17 у будні (роумінг); «Кімната Ані» в Home Cherie (Мажорщина).
+/// Anya — двоюрідна сестра. Коледж 10–17 у будні (роумінг); «Кімната Anya» в будинку Cherie (Мажорщина).
 NPCModel createAnyaNpc() {
   return NPCModel(
     id: 'anya',

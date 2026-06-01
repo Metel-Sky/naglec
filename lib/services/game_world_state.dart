@@ -294,6 +294,9 @@ class GameWorldState {
   int? friendHouseDanielleDoorOpenWeekday;
   int? friendHouseSashaDoorOpenWeekday;
 
+  /// work_03 у кабінеті мами: ГG зняв/зберіг компромат на флешку та ноут.
+  bool hasMomOfficeCompromatVideo3 = false;
+
   /// Компроматні відео, які збережені на ноуті (по нпс).
   /// Наприклад: ['mom', 'elsa', 'piper', 'luda'].
   List<String> compromatNpcIds = [];
@@ -484,6 +487,7 @@ class GameWorldState {
         'kitchenVisitSeed': kitchenVisitSeed,
         'momRoomNightVisitSeed': momRoomNightVisitSeed,
         'piperBathroomVisitSeed': piperBathroomVisitSeed,
+        'hasMomOfficeCompromatVideo3': hasMomOfficeCompromatVideo3,
         'compromatNpcIds': compromatNpcIds,
         'vipGymCardPurchasedAtIso': vipGymCardPurchasedAtIso,
         'spyOnSemParentsDone': spyOnSemParentsDone,
@@ -747,6 +751,7 @@ class GameWorldState {
         json['friendHouseDanielleDoorOpenWeekday'] as int?;
     friendHouseSashaDoorOpenWeekday =
         json['friendHouseSashaDoorOpenWeekday'] as int?;
+    hasMomOfficeCompromatVideo3 = json['hasMomOfficeCompromatVideo3'] == true;
     final compromatList = json['compromatNpcIds'];
     compromatNpcIds = compromatList != null
         ? List<String>.from(compromatList as List)
@@ -886,6 +891,7 @@ class GameWorldState {
     kitchenVisitSeed = null;
     momRoomNightVisitSeed = null;
     piperBathroomVisitSeed = null;
+    hasMomOfficeCompromatVideo3 = false;
     compromatNpcIds = [];
     vipGymCardPurchasedAtIso = null;
     spyOnSemParentsDone = false;
