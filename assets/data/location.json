@@ -209,7 +209,7 @@
       "poor_district_house_2": {"displayName": "Бандери 2", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Будинок 2.", "isLocked": false},
       "poor_district_h2_apt_1": {"displayName": "Квартира 1 — Kyler", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 1, Бандери 2. Тут живе Kyler.", "isLocked": false},
       "poor_district_h2_apt_2": {"displayName": "Квартира 2 — Zazie, Geisha", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 2, Бандери 2. Тут живуть Zazie та Geisha.", "isLocked": false},
-      "poor_district_h2_apt_3": {"displayName": "Квартира 3 — Foxy", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 3, Бандери 2. Тут живе Foxy.", "isLocked": false},
+      "poor_district_h2_apt_3": {"displayName": "Квартира 3 — Foxy, Nikki", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 3, Бандери 2. Тут живуть Foxy та Nikki.", "isLocked": false},
       "poor_district_h2_a1_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
       "poor_district_h2_a1_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
       "poor_district_h2_a1_room_3": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
@@ -220,7 +220,7 @@
       "poor_district_h2_a2_room_4": {"displayName": "Кімната Zazie", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня квартири 2, Бандери 2. Тут живуть Zazie та Geisha.", "isLocked": false},
       "poor_district_h2_a3_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
       "poor_district_h2_a3_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_district_h2_a3_room_3": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
+      "poor_district_h2_a3_room_3": {"displayName": "Кімната Nikki", "imagePath": "lib/assets/location/houses/rooms/nikki_room.jpg", "description": "Кімната Nikki, квартира 3, Бандери 2.", "isLocked": false},
       "poor_district_h2_a3_room_4": {"displayName": "Кімната Foxy", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня квартири 3, Бандери 2. Тут живе Foxy.", "isLocked": false},
       "poor_district_hotel": {"displayName": "Готель", "imagePath": "lib/assets/location/houses/hotel.jpg", "description": "Готель.", "isLocked": false}
     },

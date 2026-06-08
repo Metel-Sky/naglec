@@ -495,6 +495,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _ensurePiperQuest001Step4CorridorUiCoherent();
       _tryStartPiperQuest001Step5IfNeeded();
       _ensurePiperQuest001Step5PunishmentUiCoherent();
+      _ensurePiperQuest001Step6ClosureUiCoherent();
       _tryStartPiperHallWeekendEventIfNeeded(name);
       _ensurePiperHallWeekendEventUiCoherent();
       _ensureCherieQuest002HomeHallUiCoherent();

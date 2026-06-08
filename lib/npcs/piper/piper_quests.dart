@@ -20,7 +20,7 @@ final class PiperQuest001Patch {
   final String? imagePath;
 }
 
-/// QUEST: piper_quest_001 — «погані оцінки» (перший прохід + хвіст TBD).
+/// QUEST: piper_quest_001 — «погані оцінки» (перший прохід + хвіст 7C TBD).
 ///
 /// Нумерація кроків (Notion `001_piper_погані_оцінки`):
 /// 1 — бібліотека; 2 — просьба; 3 — дзвінок; 4 — сварка; 5 — покарання;
@@ -428,7 +428,7 @@ abstract final class PiperQuest001 {
     required bool isInsideRoom,
     required String currentRoom,
   }) {
-    if (world.piperCrisisResolved ||
+    if (!world.piperCrisisResolved ||
         world.teacherCalledMom ||
         world.piperMomTalkingAboutGrades ||
         world.piperSnitchedToMom) {
@@ -786,8 +786,18 @@ abstract final class PiperQuest001 {
     world.piperBadGradeToday = false;
     world.teacherCallPending = false;
     world.piperPunishmentPending = false;
+    world.piperUnderPunishment = false;
+    world.piperNoPhone = false;
     world.piperHelpRequested = false;
     world.piperGgPunishmentThisCrisis = false;
+    world.piperCrisisResolved = true;
+  }
+
+  /// Завершити крок 6 і повернутись до фонового режиму до наступної кризи.
+  static void finishCrisisPass(GameWorldState world) {
+    if (world.piperQuest001Step != 6) return;
+    world.piperQuest001Step = 0;
+    world.piperQuest001PassesCompleted++;
   }
 
   /// Чит: активна криза з поганою оцінкою сьогодні.
@@ -878,5 +888,6 @@ abstract final class PiperQuest001 {
     world.teacherDealHookOpen = false;
     world.piperNoPhone = false;
     world.piperDebtType = '';
+    world.piperQuest001PassesCompleted = 0;
   }
 }

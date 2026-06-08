@@ -337,6 +337,8 @@ class GameNavigationController extends ChangeNotifier {
         _worldState.piperQuest001Step == 2;
     final skipPiperStep5PunishmentNews =
         _currentZone == 'HOME' && _worldState.piperQuest001Step == 5;
+    final skipPiperStep6ClosureNews =
+        _currentZone == 'HOME' && _worldState.piperQuest001Step == 6;
     final skipPiperHallWeekendEventNews = _currentZone == 'HOME' &&
         name == LocationsData.hall &&
         _worldState.piperHallEventStep >= 1 &&
@@ -355,6 +357,7 @@ class GameNavigationController extends ChangeNotifier {
         !skipPiperCorridorScoldingNews &&
         !skipPiperStep2ApproachNews &&
         !skipPiperStep5PunishmentNews &&
+        !skipPiperStep6ClosureNews &&
         !skipPiperHallWeekendEventNews) {
       _uiStateController.setNewsMessage(
         LocationsData.getLocationDisplayName(name),

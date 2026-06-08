@@ -179,6 +179,8 @@ class GameWorldState {
   /// piper_quest_001: 0 — фон; 1–5 — основний флоу; 6 — фінал проходу кризи.
   /// Крок 7 (7A/7B/7C) — unlock ГG, окремі прапори, не [piperQuest001Step].
   int piperQuest001Step = 0;
+  /// Скільки разів закрито крок 6 (завершено прохід кризи).
+  int piperQuest001PassesCompleted = 0;
   /// piper_quest_001 крок 2: ролик «просить не здавати» уже відтворено (не перезапускати).
   bool piperQuest001Step2VideoSeen = false;
   /// piper_quest_001 крок 3: ГГ уже натиснув «Підслухати» (лише «Піти»).
@@ -413,6 +415,7 @@ class GameWorldState {
         'momPoolPayOrDebtChoiceUnlocked': momPoolPayOrDebtChoiceUnlocked,
         'momEvent002PendingKitchenRecheck': momEvent002PendingKitchenRecheck,
         'piperQuest001Step': piperQuest001Step,
+        'piperQuest001PassesCompleted': piperQuest001PassesCompleted,
         'piperQuest001Step2VideoSeen': piperQuest001Step2VideoSeen,
         'piperQuest001Step3CallOverheard': piperQuest001Step3CallOverheard,
         'piperQuest001Step4ScoldingOverheard':
@@ -631,6 +634,9 @@ class GameWorldState {
     final legacyStep = (json['piperQuest001Step'] as num?)?.toInt();
     piperQuest001Step =
         (legacyStep == 7 ? 6 : (legacyStep ?? 0)).clamp(0, 6);
+    piperQuest001PassesCompleted =
+        ((json['piperQuest001PassesCompleted'] as num?)?.toInt() ?? 0)
+            .clamp(0, 9999);
     piperQuest001Step2VideoSeen =
         json['piperQuest001Step2VideoSeen'] == true;
     piperQuest001Step3CallOverheard =

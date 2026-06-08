@@ -45,6 +45,7 @@ import 'lana/lana_npc.dart';
 import 'naomi/naomi_npc.dart';
 import 'cecilia/cecilia_npc.dart';
 import 'tiffany/tiffany_npc.dart';
+import 'nikki/nikki_npc.dart';
 
 /// Збирає список усіх NPC з їхніх файлів.
 List<NPCModel> createAllNpcs() {
@@ -95,5 +96,6 @@ List<NPCModel> createAllNpcs() {
     createNaomiNpc(),
     createCeciliaNpc(),
     createTiffanyNpc(),
+    createNikkiNpc(),
   ];
 }

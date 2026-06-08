@@ -245,7 +245,6 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _syncPiperQuest001Step2VideoPresentation();
   }
 
-  /// Крок 5: відновити діалог/відео покарання після навігації.
   void _ensurePiperQuest001Step5PunishmentUiCoherent() {
     if (_worldState.piperQuest001Step != 5) return;
     if (currentZone != 'HOME' || !isInsideRoom) return;
@@ -336,6 +335,22 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     }
     _syncPiperQuest001Step5VideoPresentation(patch);
     _piperQuest001PresentationSyncedStep = 5;
+  }
+
+  void _ensurePiperQuest001Step6ClosureUiCoherent() {
+    if (_worldState.piperQuest001Step != 6) return;
+    if (currentZone != 'HOME' || !isInsideRoom) return;
+    final loc = sl<LocaleController>();
+    final fallback = loc.t('piper_quest_001_step06_news');
+    if (newsMessage.trim().isEmpty || newsMessage == fallback) {
+      newsMessage = fallback;
+    }
+  }
+
+  bool _isPiperQuest001Step6Scene() {
+    if (_worldState.piperQuest001Step != 6) return false;
+    if (currentZone != 'HOME' || !isInsideRoom) return false;
+    return true;
   }
 
   void _tryStartPiperQuest001Step1IfNeeded(String enteredRoom) {
@@ -480,6 +495,8 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
       _applyPiperQuest001Step3Patch();
     } else if (s == 4) {
       _applyPiperQuest001Step4Patch();
+    } else if (s == 6) {
+      _ensurePiperQuest001Step6ClosureUiCoherent();
     } else {
       _applyPiperQuest001Patch(PiperQuest001.patchForStep(s));
     }
@@ -506,6 +523,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     PiperQuest001.closeCrisisPass(_worldState);
     _resetPiperQuest001PresentationSession();
     newsMessage = sl<LocaleController>().t('piper_quest_001_step06_success_news');
+    _piperQuest001PresentationSyncedStep = 6;
     _saveService.autosave();
   }
 
@@ -526,6 +544,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     PiperQuest001.closeCrisisPass(_worldState);
     _resetPiperQuest001PresentationSession();
     newsMessage = sl<LocaleController>().t('piper_quest_001_step06_success_news');
+    _piperQuest001PresentationSyncedStep = 6;
     _saveService.autosave();
   }
 
@@ -628,6 +647,17 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     PiperQuest001.closeCrisisPass(_worldState);
     _resetPiperQuest001PresentationSession();
     newsMessage = sl<LocaleController>().t('piper_quest_001_step06_after_punish_news');
+    _piperQuest001PresentationSyncedStep = 6;
+    _saveService.autosave();
+  }
+
+  void _piperQuest001FinishStep6() {
+    if (_worldState.piperQuest001Step != 6) return;
+    PiperQuest001.finishCrisisPass(_worldState);
+    _resetPiperQuest001PresentationSession();
+    newsMessage = LocationsData.getLocationDisplayName(
+      LocationsData.migrateLegacyRoomId(currentRoom),
+    );
     _saveService.autosave();
   }
 
@@ -762,6 +792,17 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
         _navBtn(t('piper_quest_001_btn_leave').toUpperCase(), () {
           setState(() {
             _piperQuest001FinishStep5();
+          });
+        }),
+      ]);
+    }
+
+    if (s == 6) {
+      if (!_isPiperQuest001Step6Scene()) return null;
+      return column([
+        _navBtn(t('mom_quest_001_btn_back').toUpperCase(), () {
+          setState(() {
+            _piperQuest001FinishStep6();
           });
         }),
       ]);

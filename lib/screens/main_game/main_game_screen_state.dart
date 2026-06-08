@@ -38,6 +38,7 @@ class MainGameScreenState extends MainGameScreenStateBase
         _tryStartPiperQuest001Step4IfNeeded();
         _ensurePiperQuest001Step4CorridorUiCoherent();
         _ensurePiperQuest001Step5PunishmentUiCoherent();
+        _ensurePiperQuest001Step6ClosureUiCoherent();
         _maybeResumePiperHallWeekendEventAfterLoad();
         _ensurePiperHallWeekendEventUiCoherent();
         _maybeResumeCherieMassageFunEventAfterLoad();

@@ -353,6 +353,7 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
           _ensurePiperQuest001Step3TeacherCallUiCoherent();
           _tryStartPiperQuest001Step5IfNeeded();
           _ensurePiperQuest001Step5PunishmentUiCoherent();
+          _ensurePiperQuest001Step6ClosureUiCoherent();
         }
         if (currentZone == 'HOME') {
           _ensurePiperQuest001Step2ApproachUiCoherent();

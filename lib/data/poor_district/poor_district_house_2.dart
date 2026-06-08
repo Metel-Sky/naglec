@@ -56,9 +56,9 @@ class PoorDistrictHouse2 {
       isLocked: false,
     ),
     apt3: RoomData(
-      displayName: "Квартира 3 — Foxy",
+      displayName: "Квартира 3 — Foxy, Nikki",
       imagePath: "lib/assets/location/houses/hrushchevki-spb.jpg",
-      description: "Квартира 3, Бандери 2. Тут живе Foxy.",
+      description: "Квартира 3, Бандери 2. Тут живуть Foxy та Nikki.",
       isLocked: false,
     ),
     /// Порядок кімнат у кожній квартирі: кухня → ванна → зал → спальня.
@@ -72,7 +72,7 @@ class PoorDistrictHouse2 {
     rA2_4: RoomData(displayName: "Кімната Zazie", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня квартири 2, Бандери 2. Тут живуть Zazie та Geisha.", isLocked: false),
     rA3_1: RoomData(displayName: "Кухня", imagePath: "lib/assets/location/home_gg/rooms/kitchen.jpg", description: "Кухня.", isLocked: false),
     rA3_2: RoomData(displayName: "Ванна", imagePath: "lib/assets/location/home_gg/rooms/bathroom.jpg", description: "Ванна.", isLocked: false),
-    rA3_3: RoomData(displayName: "Зал", imagePath: "lib/assets/location/home_gg/rooms/relax_room.jpg", description: "Зал.", isLocked: false),
+    rA3_3: RoomData(displayName: "Кімната Nikki", imagePath: "lib/assets/location/houses/rooms/nikki_room.jpg", description: "Кімната Nikki, квартира 3, Бандери 2.", isLocked: false),
     rA3_4: RoomData(displayName: "Кімната Foxy", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня квартири 3, Бандери 2. Тут живе Foxy.", isLocked: false),
   };
 }
