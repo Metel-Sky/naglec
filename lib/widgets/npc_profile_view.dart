@@ -15,6 +15,7 @@ import '../services/settings_controller.dart';
 import '../services/service_locator.dart';
 import '../theme/game_theme.dart';
 import '../utils/npc_portrait_paths.dart';
+import 'npc_stat_edit_rows.dart';
 
 /// Профіль NPC у стилі аркуша персонажа: властивості, зовнішність, біографія, слабкості, чекпоінти, компромат.
 class NpcProfileView extends StatelessWidget {
@@ -71,58 +72,7 @@ class NpcProfileView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      _propertyRow('Ім\'я', npc.fullName),
-                      if (isSecondaryNpc(npc)) ...[
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Text(
-                            'Категорія: другорядний персонаж. Стати не ведуться.',
-                            style: TextStyle(color: Colors.white54, fontSize: 14, height: 1.35),
-                          ),
-                        ),
-                      ] else if (isRelationshipInfluenceOnlyNpc(npc)) ...[
-                        const Padding(
-                          padding: EdgeInsets.only(top: 4, bottom: 8),
-                          child: Text(
-                            'Категорія: чоловічий персонаж. У статах лише відносини та вплив ГГ.',
-                            style: TextStyle(color: Colors.white54, fontSize: 14, height: 1.35),
-                          ),
-                        ),
-                        _propertyRow('Відносини', '${npc.relationship.toInt()} / 1000'),
-                        _propertyRow('Гроші', '\$${npc.money}'),
-                        _propertyRow('Вплив ГГ', '${npc.influenceFromGg} / 100'),
-                        _propertyRow(
-                          sl<LocaleController>().t('npc_card_debt_npc_owes_gg'),
-                          gameWorld != null
-                              ? '\$${NpcFinanceService.npcOwesGg(gameWorld!, npc.id)}'
-                              : '\$0',
-                        ),
-                        _propertyRow(
-                          sl<LocaleController>().t('npc_card_debt_gg_owes_npc'),
-                          gameWorld != null
-                              ? '\$${NpcFinanceService.ggOwesNpc(gameWorld!, npc.id)}'
-                              : '\$0',
-                        ),
-                      ] else ...[
-                        _propertyRow('Хтивість', '${npc.lust.toInt()} / 1000'),
-                        _propertyRow('Відносини', '${npc.relationship.toInt()} / 1000'),
-                        _propertyRow('Поведінка', '${npc.behavior.toInt()} / 1000'),
-                        _propertyRow('Збудження', '${npc.arousal} / 100'),
-                        _propertyRow('Гроші', '\$${npc.money}'),
-                        _propertyRow('Вплив ГГ', '${npc.influenceFromGg} / 100'),
-                        _propertyRow(
-                          sl<LocaleController>().t('npc_card_debt_npc_owes_gg'),
-                          gameWorld != null
-                              ? '\$${NpcFinanceService.npcOwesGg(gameWorld!, npc.id)}'
-                              : '\$0',
-                        ),
-                        _propertyRow(
-                          sl<LocaleController>().t('npc_card_debt_gg_owes_npc'),
-                          gameWorld != null
-                              ? '\$${NpcFinanceService.ggOwesNpc(gameWorld!, npc.id)}'
-                              : '\$0',
-                        ),
-                      ],
+                      _NpcProfileStatsPanel(npc: npc, gameWorld: gameWorld),
                       if (npc.status != null || npc.subStatus != null) ...[
                         const SizedBox(height: 8),
                         Row(
@@ -309,24 +259,6 @@ class NpcProfileView extends StatelessWidget {
     );
   }
 
-  Widget _propertyRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.baseline,
-        textBaseline: TextBaseline.alphabetic,
-        children: [
-          SizedBox(
-            width: 140,
-            child: Text('$label:', style: const TextStyle(fontSize: 14, color: Colors.white70)),
-          ),
-          const SizedBox(width: 8),
-          Text(value, style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500)),
-        ],
-      ),
-    );
-  }
-
   Widget _sectionLabel(String text, {bool highlight = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
@@ -412,6 +344,223 @@ class NpcProfileView extends StatelessWidget {
   }
 }
 
+/// Стати в шапці картки NPC: read-only або ± при увімкнених читах.
+class _NpcProfileStatsPanel extends StatefulWidget {
+  const _NpcProfileStatsPanel({
+    required this.npc,
+    required this.gameWorld,
+  });
+
+  final NPCModel npc;
+  final GameWorldState? gameWorld;
+
+  @override
+  State<_NpcProfileStatsPanel> createState() => _NpcProfileStatsPanelState();
+}
+
+class _NpcProfileStatsPanelState extends State<_NpcProfileStatsPanel> {
+  static const double _statsBlockWidthReduction = 200;
+
+  void _applyStatChange(VoidCallback action) {
+    action();
+    sl<SaveService>().autosave();
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final npc = widget.npc;
+    final gameWorld = widget.gameWorld;
+    final t = sl<LocaleController>().t;
+
+    return ListenableBuilder(
+      listenable: sl<SettingsController>(),
+      builder: (context, _) {
+        final cheatsOn = sl<SettingsController>().cheatsEnabled;
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final maxW = constraints.maxWidth;
+            final blockWidth = maxW.isFinite
+                ? (maxW - _statsBlockWidthReduction).clamp(0.0, maxW)
+                : null;
+
+            final statsBlock = Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+            NpcStatReadOnlyRow(label: 'Ім\'я', value: npc.fullName),
+            if (isSecondaryNpc(npc)) ...[
+              const Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text(
+                  'Категорія: другорядний персонаж. Стати не ведуться.',
+                  style: TextStyle(color: Colors.white54, fontSize: 14, height: 1.35),
+                ),
+              ),
+            ] else if (isRelationshipInfluenceOnlyNpc(npc)) ...[
+              const Padding(
+                padding: EdgeInsets.only(top: 4, bottom: 8),
+                child: Text(
+                  'Категорія: чоловічий персонаж. У статах лише відносини та вплив ГГ.',
+                  style: TextStyle(color: Colors.white54, fontSize: 14, height: 1.35),
+                ),
+              ),
+              if (cheatsOn) ...[
+                NpcStatEditRow(
+                  label: 'Відносини',
+                  value: '${npc.relationship.round()} / 1000',
+                  tier: NpcStatTierLabels.relationship(npc.relationship.round()),
+                  onMinus: () => _applyStatChange(() {
+                    npc.changeTrust(-2);
+                    npc.changeLove(-2);
+                  }),
+                  onPlus: () => _applyStatChange(() {
+                    npc.changeTrust(2);
+                    npc.changeLove(2);
+                  }),
+                ),
+                NpcStatEditRow(
+                  label: 'Гроші',
+                  value: '\$${npc.money}',
+                  onMinus: () => _applyStatChange(() => npc.changeMoney(-100)),
+                  onPlus: () => _applyStatChange(() => npc.changeMoney(100)),
+                ),
+                NpcStatEditRow(
+                  label: 'Вплив ГГ',
+                  value: '${npc.influenceFromGg} / 100',
+                  onMinus: () => _applyStatChange(() => npc.changeInfluence(-1)),
+                  onPlus: () => _applyStatChange(() => npc.changeInfluence(1)),
+                ),
+              ] else ...[
+                NpcStatReadOnlyRow(
+                  label: 'Відносини',
+                  value: '${npc.relationship.toInt()} / 1000',
+                ),
+                NpcStatReadOnlyRow(label: 'Гроші', value: '\$${npc.money}'),
+                NpcStatReadOnlyRow(
+                  label: 'Вплив ГГ',
+                  value: '${npc.influenceFromGg} / 100',
+                ),
+              ],
+              NpcStatReadOnlyRow(
+                label: t('npc_card_debt_npc_owes_gg'),
+                value: gameWorld != null
+                    ? '\$${NpcFinanceService.npcOwesGg(gameWorld, npc.id)}'
+                    : '\$0',
+              ),
+              NpcStatReadOnlyRow(
+                label: t('npc_card_debt_gg_owes_npc'),
+                value: gameWorld != null
+                    ? '\$${NpcFinanceService.ggOwesNpc(gameWorld, npc.id)}'
+                    : '\$0',
+              ),
+            ] else if (cheatsOn) ...[
+              NpcStatEditRow(
+                label: 'Хтивість',
+                value: '${npc.lust.round()} / 1000',
+                tier: NpcStatTierLabels.lust(npc.lust.round()),
+                onMinus: () => _applyStatChange(() => npc.changeLust(-25)),
+                onPlus: () => _applyStatChange(() => npc.changeLust(25)),
+              ),
+              NpcStatEditRow(
+                label: 'Відносини',
+                value: '${npc.relationship.round()} / 1000',
+                tier: NpcStatTierLabels.relationship(npc.relationship.round()),
+                onMinus: () => _applyStatChange(() {
+                  npc.changeTrust(-2);
+                  npc.changeLove(-2);
+                }),
+                onPlus: () => _applyStatChange(() {
+                  npc.changeTrust(2);
+                  npc.changeLove(2);
+                }),
+              ),
+              NpcStatEditRow(
+                label: 'Поведінка',
+                value: '${npc.behavior.round()} / 1000',
+                tier: NpcStatTierLabels.behavior(npc.behavior.round()),
+                onMinus: () => _applyStatChange(() => npc.changeBehavior(-25)),
+                onPlus: () => _applyStatChange(() => npc.changeBehavior(25)),
+              ),
+              NpcStatEditRow(
+                label: 'Збудження',
+                value: '${npc.arousal} / 100',
+                onMinus: () => _applyStatChange(() => npc.changeArousal(-10)),
+                onPlus: () => _applyStatChange(() => npc.changeArousal(10)),
+              ),
+              NpcStatEditRow(
+                label: 'Гроші',
+                value: '\$${npc.money}',
+                onMinus: () => _applyStatChange(() => npc.changeMoney(-100)),
+                onPlus: () => _applyStatChange(() => npc.changeMoney(100)),
+              ),
+              NpcStatEditRow(
+                label: 'Вплив ГГ',
+                value: '${npc.influenceFromGg} / 100',
+                onMinus: () => _applyStatChange(() => npc.changeInfluence(-1)),
+                onPlus: () => _applyStatChange(() => npc.changeInfluence(1)),
+              ),
+              NpcStatReadOnlyRow(
+                label: t('npc_card_debt_npc_owes_gg'),
+                value: gameWorld != null
+                    ? '\$${NpcFinanceService.npcOwesGg(gameWorld, npc.id)}'
+                    : '\$0',
+              ),
+              NpcStatReadOnlyRow(
+                label: t('npc_card_debt_gg_owes_npc'),
+                value: gameWorld != null
+                    ? '\$${NpcFinanceService.ggOwesNpc(gameWorld, npc.id)}'
+                    : '\$0',
+              ),
+            ] else ...[
+              NpcStatReadOnlyRow(
+                label: 'Хтивість',
+                value: '${npc.lust.toInt()} / 1000',
+              ),
+              NpcStatReadOnlyRow(
+                label: 'Відносини',
+                value: '${npc.relationship.toInt()} / 1000',
+              ),
+              NpcStatReadOnlyRow(
+                label: 'Поведінка',
+                value: '${npc.behavior.toInt()} / 1000',
+              ),
+              NpcStatReadOnlyRow(
+                label: 'Збудження',
+                value: '${npc.arousal} / 100',
+              ),
+              NpcStatReadOnlyRow(label: 'Гроші', value: '\$${npc.money}'),
+              NpcStatReadOnlyRow(
+                label: 'Вплив ГГ',
+                value: '${npc.influenceFromGg} / 100',
+              ),
+              NpcStatReadOnlyRow(
+                label: t('npc_card_debt_npc_owes_gg'),
+                value: gameWorld != null
+                    ? '\$${NpcFinanceService.npcOwesGg(gameWorld, npc.id)}'
+                    : '\$0',
+              ),
+              NpcStatReadOnlyRow(
+                label: t('npc_card_debt_gg_owes_npc'),
+                value: gameWorld != null
+                    ? '\$${NpcFinanceService.ggOwesNpc(gameWorld, npc.id)}'
+                    : '\$0',
+              ),
+            ],
+              ],
+            );
+
+            if (blockWidth != null) {
+              return SizedBox(width: blockWidth, child: statsBlock);
+            }
+            return statsBlock;
+          },
+        );
+      },
+    );
+  }
+}
+
 class _NpcProfileQuestsList extends StatefulWidget {
   const _NpcProfileQuestsList({
     required this.npc,
@@ -436,6 +585,7 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
       'profile_cherie_quest005_actor';
   static const String _kCherieQuest005LizunKey =
       'profile_cherie_quest005_lizun';
+  static const String _kMomOwesGgCounterKey = 'profile_mom_owes_gg_label';
 
   void _nudgeGiftShopAnimatorShifts(int delta) {
     final v = widget.world.giftShopAnimatorShiftsCompleted + delta;
@@ -496,6 +646,72 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
           onPressed: active ? () => _nudgeGiftShopAnimatorShifts(1) : null,
+          icon: Icon(
+            Icons.add_circle_outline,
+            color: active ? iconAccent : iconDisabled,
+            size: 22,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _nudgeMomOwesGgCount(int delta) {
+    final next = (widget.world.momOwesGgCount + delta).clamp(0, 9999);
+    widget.world.momOwesGgCount = next;
+    sl<SaveService>().autosave();
+    setState(() {});
+  }
+
+  Widget _momOwesGgStepper(
+    String Function(String) t, {
+    required bool active,
+  }) {
+    final n = widget.world.momOwesGgCount;
+    final lineStyle = TextStyle(
+      color: active ? Colors.white54 : Colors.white30,
+      fontSize: 12,
+      height: 1.35,
+    );
+    final digitColor = active ? Colors.white : Colors.white38;
+    final iconAccent = Colors.white70;
+    final iconDisabled = Colors.white24;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Text(
+            '${t(_kMomOwesGgCounterKey)} — ',
+            style: lineStyle,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          onPressed: active && n > 0 ? () => _nudgeMomOwesGgCount(-1) : null,
+          icon: Icon(
+            Icons.remove_circle_outline,
+            color: active && n > 0 ? iconAccent : iconDisabled,
+            size: 22,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2),
+          child: Text(
+            '$n',
+            style: TextStyle(
+              color: digitColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              height: 1.2,
+            ),
+          ),
+        ),
+        IconButton(
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          onPressed: active ? () => _nudgeMomOwesGgCount(1) : null,
           icon: Icon(
             Icons.add_circle_outline,
             color: active ? iconAccent : iconDisabled,
@@ -699,12 +915,192 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
     );
   }
 
+  Widget _questGroupExpansion(
+    BuildContext context,
+    NpcProfileQuestGroup group,
+    String Function(String) t,
+    bool cheatsOn,
+    PlayerStatsController stats,
+    NPCService npcSvc,
+  ) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        controlAffinity: ListTileControlAffinity.leading,
+        initiallyExpanded: false,
+        tilePadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+        childrenPadding: const EdgeInsets.only(left: 4, bottom: 4, top: 0),
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            t(group.titleKey),
+            style: const TextStyle(
+              color: Colors.white70,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+        children: group.lines
+            .map(
+              (q) => _buildQuestLineTile(
+                q,
+                t,
+                cheatsOn,
+                stats,
+                npcSvc,
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildQuestLineTile(
+    NpcProfileQuestLine q,
+    String Function(String) t,
+    bool cheatsOn,
+    PlayerStatsController stats,
+    NPCService npcSvc,
+  ) {
+    final done = q.isDone(widget.world, widget.npc);
+    final canToggle = cheatsOn && q.cheatId != null;
+    final statusLabel = done
+        ? t(q.statusDoneKey ?? 'quest_status_done')
+        : t(q.statusPendingKey ?? 'quest_status_pending');
+    final statusStyle = TextStyle(
+      color: done ? GameTheme.textGreen : Colors.orange.shade200,
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+    );
+    final counterKey = q.counterLineKey;
+    final counterFn = q.counterValue;
+    final secondaryCounterKey = q.secondaryCounterLineKey;
+    final secondaryCounterFn = q.secondaryCounterValue;
+    final isCherieQuest005DualCounters = counterKey == _kCherieQuest005ActorKey &&
+        secondaryCounterKey == _kCherieQuest005LizunKey;
+    final counterText = counterKey != null &&
+            counterFn != null &&
+            counterKey != _kCherieAnimatorCounterKey &&
+            counterKey != _kCherieMasseurCounterKey &&
+            counterKey != _kMomOwesGgCounterKey &&
+            !isCherieQuest005DualCounters
+        ? t(counterKey).replaceAll('%s', () {
+            final raw = counterFn(widget.world, widget.npc);
+            return '$raw';
+          }())
+        : '';
+    final secondaryCounterText = secondaryCounterKey != null &&
+            secondaryCounterFn != null &&
+            !isCherieQuest005DualCounters
+        ? t(secondaryCounterKey).replaceAll('%s', () {
+            final raw = secondaryCounterFn(widget.world, widget.npc);
+            return '$raw';
+          }())
+        : '';
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      dense: true,
+      visualDensity: q.compactSwitch
+          ? const VisualDensity(horizontal: 0, vertical: -3)
+          : VisualDensity.standard,
+      title: Text(
+        t(q.titleKey),
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: q.compactSwitch ? 13 : 14,
+          height: 1.35,
+        ),
+      ),
+      subtitle: counterKey != null && counterFn != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  statusLabel,
+                  style: statusStyle,
+                ),
+                const SizedBox(height: 4),
+                if (counterKey == _kCherieAnimatorCounterKey)
+                  _cherieAnimatorShiftsStepper(
+                    t,
+                    questOneDone: done,
+                  )
+                else if (counterKey == _kCherieMasseurCounterKey)
+                  _cherieMasseurStepper(
+                    t,
+                    massageTherapistUnlocked: CherieQuest003.isUnlocked(widget.npc),
+                  )
+                else if (counterKey == _kMomOwesGgCounterKey)
+                  _momOwesGgStepper(t, active: cheatsOn)
+                else if (isCherieQuest005DualCounters)
+                  _cherieQuest005CountersRow(
+                    t,
+                    active: cheatsOn ||
+                        CherieQuest004.isLingerieContractDone(widget.npc),
+                  )
+                else ...[
+                  if (counterText.isNotEmpty)
+                    Text(
+                      counterText,
+                      style: const TextStyle(
+                        color: Colors.white54,
+                        fontSize: 12,
+                        height: 1.35,
+                      ),
+                    ),
+                  if (secondaryCounterText.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      secondaryCounterText,
+                      style: const TextStyle(
+                        color: Colors.white54,
+                        fontSize: 12,
+                        height: 1.35,
+                      ),
+                    ),
+                  ],
+                ],
+              ],
+            )
+          : Text(
+              statusLabel,
+              style: statusStyle,
+            ),
+      trailing: Transform.scale(
+        scale: q.compactSwitch ? 0.78 : 0.92,
+        alignment: Alignment.centerRight,
+        child: Switch(
+          value: done,
+          activeThumbColor: GameTheme.textGreen,
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          onChanged: canToggle
+              ? (v) {
+                  NpcQuestCheats.setQuestCompleted(
+                    q.cheatId!,
+                    v,
+                    widget.world,
+                    stats,
+                    npcSvc,
+                    widget.npc,
+                  );
+                  sl<SaveService>().autosave();
+                  setState(() {});
+                }
+              : null,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = sl<LocaleController>();
     final t = loc.t;
-    final lines = npcProfileQuestLinesFor(widget.npc.id);
-    if (lines.isEmpty) {
+    final groups = npcProfileQuestGroupsFor(widget.npc.id);
+    final lines = groups == null ? npcProfileQuestLinesFor(widget.npc.id) : const <NpcProfileQuestLine>[];
+    if (groups == null && lines.isEmpty) {
       return const Padding(
         padding: EdgeInsets.only(bottom: 6),
         child: Text(
@@ -722,139 +1118,36 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
       listenable: settings,
       builder: (context, _) {
         final cheatsOn = settings.cheatsEnabled;
+        if (groups != null && groups.isNotEmpty) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: groups
+                .map(
+                  (g) => _questGroupExpansion(
+                    context,
+                    g,
+                    t,
+                    cheatsOn,
+                    stats,
+                    npcSvc,
+                  ),
+                )
+                .toList(),
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: lines.map((q) {
-            final done = q.isDone(widget.world, widget.npc);
-            final canToggle = cheatsOn && q.cheatId != null;
-            final statusLabel = done
-                ? t(q.statusDoneKey ?? 'quest_status_done')
-                : t(q.statusPendingKey ?? 'quest_status_pending');
-            final statusStyle = TextStyle(
-              color: done ? GameTheme.textGreen : Colors.orange.shade200,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-            );
-            final counterKey = q.counterLineKey;
-            final counterFn = q.counterValue;
-            final secondaryCounterKey = q.secondaryCounterLineKey;
-            final secondaryCounterFn = q.secondaryCounterValue;
-            final isCherieQuest005DualCounters = counterKey ==
-                    _kCherieQuest005ActorKey &&
-                secondaryCounterKey == _kCherieQuest005LizunKey;
-            final counterText = counterKey != null &&
-                    counterFn != null &&
-                    counterKey != _kCherieAnimatorCounterKey &&
-                    counterKey != _kCherieMasseurCounterKey &&
-                    !isCherieQuest005DualCounters
-                ? t(counterKey).replaceAll('%s', () {
-                    final raw = counterFn(widget.world, widget.npc);
-                    return '$raw';
-                  }())
-                : '';
-            final secondaryCounterText = secondaryCounterKey != null &&
-                    secondaryCounterFn != null &&
-                    !isCherieQuest005DualCounters
-                ? t(secondaryCounterKey).replaceAll('%s', () {
-                    final raw = secondaryCounterFn(widget.world, widget.npc);
-                    return '$raw';
-                  }())
-                : '';
-            return ListTile(
-              contentPadding: EdgeInsets.zero,
-              dense: true,
-              visualDensity: q.compactSwitch
-                  ? const VisualDensity(horizontal: 0, vertical: -3)
-                  : VisualDensity.standard,
-              title: Text(
-                t(q.titleKey),
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: q.compactSwitch ? 13 : 14,
-                  height: 1.35,
+          children: lines
+              .map(
+                (q) => _buildQuestLineTile(
+                  q,
+                  t,
+                  cheatsOn,
+                  stats,
+                  npcSvc,
                 ),
-              ),
-              subtitle: counterKey != null && counterFn != null
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          statusLabel,
-                          style: statusStyle,
-                        ),
-                        const SizedBox(height: 4),
-                        if (counterKey == _kCherieAnimatorCounterKey)
-                          _cherieAnimatorShiftsStepper(
-                            t,
-                            questOneDone: done,
-                          )
-                        else if (counterKey == _kCherieMasseurCounterKey)
-                          _cherieMasseurStepper(
-                            t,
-                            massageTherapistUnlocked:
-                                CherieQuest003.isUnlocked(widget.npc),
-                          )
-                        else if (isCherieQuest005DualCounters)
-                          _cherieQuest005CountersRow(
-                            t,
-                            active: cheatsOn ||
-                                CherieQuest004.isLingerieContractDone(
-                                  widget.npc,
-                                ),
-                          )
-                        else ...[
-                          if (counterText.isNotEmpty)
-                            Text(
-                              counterText,
-                              style: const TextStyle(
-                                color: Colors.white54,
-                                fontSize: 12,
-                                height: 1.35,
-                              ),
-                            ),
-                          if (secondaryCounterText.isNotEmpty) ...[
-                            const SizedBox(height: 4),
-                            Text(
-                              secondaryCounterText,
-                              style: const TextStyle(
-                                color: Colors.white54,
-                                fontSize: 12,
-                                height: 1.35,
-                              ),
-                            ),
-                          ],
-                        ],
-                      ],
-                    )
-                  : Text(
-                      statusLabel,
-                      style: statusStyle,
-                    ),
-              trailing: Transform.scale(
-                scale: q.compactSwitch ? 0.78 : 0.92,
-                alignment: Alignment.centerRight,
-                child: Switch(
-                  value: done,
-                  activeThumbColor: GameTheme.textGreen,
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  onChanged: canToggle
-                      ? (v) {
-                          NpcQuestCheats.setQuestCompleted(
-                            q.cheatId!,
-                            v,
-                            widget.world,
-                            stats,
-                            npcSvc,
-                            widget.npc,
-                          );
-                          sl<SaveService>().autosave();
-                          setState(() {});
-                        }
-                      : null,
-                ),
-              ),
-            );
-          }).toList(),
+              )
+              .toList(),
         );
       },
     );

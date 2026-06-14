@@ -75,6 +75,17 @@ abstract final class SashaQuestDefinitions {
         ],
       ),
       QuestStepDefinition(
+        step: 31,
+        locationId: 'street_overview',
+        entryVideoPath: SashaEvents.morningRunVideoRun2Path,
+        availableActions: <QuestAction>[
+          QuestAction(id: 'give10', label: '10\$'),
+          QuestAction(id: 'give20', label: '20\$'),
+          QuestAction(id: 'give50', label: '50\$'),
+          QuestAction(id: 'backFromMoneyChoice', label: 'Назад'),
+        ],
+      ),
+      QuestStepDefinition(
         step: 4,
         locationId: 'street_overview',
         entryVideoPath: SashaEvents.morningRunVideoRun2Path,

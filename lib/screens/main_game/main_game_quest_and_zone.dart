@@ -24,6 +24,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         _isPiperQuest001SnitchAckScene() ||
         _isPiperQuest001ScriptedDialogActive() ||
         _isPiperHallWeekendEventScriptedDialogActive() ||
+        _isPiperGgVoluntaryPunishVideoActive() ||
         _sashaComunicateInHallUiActive ||
         _sashaMorningRunUiActive;
   }
@@ -274,6 +275,9 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       case SashaMorningRunPhase.payOffer:
         newsMessage = SashaEvents.morningRunStep3Talk;
         break;
+      case SashaMorningRunPhase.moneyAmountChoice:
+        newsMessage = SashaEvents.morningRunStep3Talk;
+        break;
       case SashaMorningRunPhase.afterPaid:
         newsMessage = SashaEvents.morningRunAfterPaidTalk;
         break;
@@ -488,6 +492,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _ensurePiperQuest001LibraryDialogUiCoherent();
       _tryStartPiperQuest001Step2IfNeeded();
       _ensurePiperQuest001Step2ApproachUiCoherent();
+      _ensurePiperGgVoluntaryPunishUiCoherent();
       _ensurePiperQuest001SnitchAckUiCoherent();
       _tryStartPiperQuest001Step3IfNeeded();
       _ensurePiperQuest001Step3TeacherCallUiCoherent();
@@ -2514,6 +2519,18 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     return eventButtons;
   }
 
+  void _finishSashaMorningRunAfterPayment(NPCModel sashaNpc) {
+    setState(() {
+      _sashaMorningRunPhase = SashaMorningRunPhase.afterPaid;
+      newsMessage = SashaEvents.morningRunAfterPaidTalk;
+      sashaNpc.setVar(
+        SashaEvents.morningRunStepVar,
+        SashaEvents.stepForPhase(SashaMorningRunPhase.afterPaid),
+      );
+    });
+    _saveService.autosave();
+  }
+
   void _onSashaMorningRunAction(String actionId, NPCModel? sashaNpc) {
     switch (actionId) {
       case 'approach':
@@ -2551,24 +2568,62 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         return;
       case 'giveMoney':
         if (sashaNpc == null) return;
-        if (_playerStats.money < 10) {
-          showInsufficientMoneyDialog(context);
-          return;
-        }
-        _playerStats.changeMoney(-10);
-        SashaEvents.applyMorningRunGiveMoney(
-          sasha: sashaNpc,
-          dollarsGiven: 10,
-        );
         setState(() {
-          _sashaMorningRunPhase = SashaMorningRunPhase.afterPaid;
-          newsMessage = SashaEvents.morningRunAfterPaidTalk;
+          _sashaMorningRunPhase = SashaMorningRunPhase.moneyAmountChoice;
           sashaNpc.setVar(
             SashaEvents.morningRunStepVar,
-            SashaEvents.stepForPhase(SashaMorningRunPhase.afterPaid),
+            SashaEvents.stepForPhase(SashaMorningRunPhase.moneyAmountChoice),
           );
         });
         _saveService.autosave();
+        return;
+      case 'backFromMoneyChoice':
+        if (sashaNpc == null) return;
+        setState(() {
+          _sashaMorningRunPhase = SashaMorningRunPhase.payOffer;
+          sashaNpc.setVar(
+            SashaEvents.morningRunStepVar,
+            SashaEvents.stepForPhase(SashaMorningRunPhase.payOffer),
+          );
+        });
+        _saveService.autosave();
+        return;
+      case 'give10':
+        if (sashaNpc == null) return;
+        if (!SashaEvents.applyMorningRunGiveCash(
+          sasha: sashaNpc,
+          player: _playerStats,
+          amount: 10,
+        )) {
+          showInsufficientMoneyDialog(context);
+          return;
+        }
+        _finishSashaMorningRunAfterPayment(sashaNpc);
+        return;
+      case 'give20':
+        if (sashaNpc == null) return;
+        if (!SashaEvents.applyMorningRunGiveCash(
+          sasha: sashaNpc,
+          player: _playerStats,
+          amount: 20,
+        )) {
+          showInsufficientMoneyDialog(context);
+          return;
+        }
+        _finishSashaMorningRunAfterPayment(sashaNpc);
+        return;
+      case 'give50':
+        if (sashaNpc == null) return;
+        if (!SashaEvents.applyMorningRunGiveAsDebt(
+          world: _worldState,
+          sasha: sashaNpc,
+          player: _playerStats,
+          gameNow: _timeController.dateTime,
+        )) {
+          showInsufficientMoneyDialog(context);
+          return;
+        }
+        _finishSashaMorningRunAfterPayment(sashaNpc);
         return;
       case 'sendAway':
         if (sashaNpc != null) {
@@ -2824,6 +2879,8 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             isInsideRoom &&
             currentRoomNorm == LocationsData.hall &&
             _eventVideoPath == 'lib/assets/gg/girya.mp4';
+        final isPiperGgVoluntaryPunishVideoActive =
+            _isPiperGgVoluntaryPunishVideoActive();
 
         if (isHomeHallDumbbellsWorkoutVideoActive) {
           return Container(
@@ -2857,6 +2914,29 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                   child: _navBtn(
                     this.t('home_hall_workout_finish'),
                     _onHomeHallWorkoutKettlebellFinishPressed,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        if (isPiperGgVoluntaryPunishVideoActive) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: _navBtn(
+                    this.t('piper_quest_gg_punish_finish_btn'),
+                    () {
+                      setState(() {
+                        _finishPiperGgVoluntaryPunish();
+                      });
+                    },
                   ),
                 ),
               ],
@@ -3615,6 +3695,19 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
               _navBtn('Піти', _exitLoshokToCorridor),
             ]);
           } else {
+            if (npc.id == 'piper' && _canShowPiperGgVoluntaryPunishButton()) {
+              actionWidgets.add(
+                _navBtn(
+                  t('piper_quest_gg_punish_piper_btn').toUpperCase(),
+                  () {
+                    setState(() {
+                      _startPiperGgVoluntaryPunish();
+                    });
+                  },
+                ),
+              );
+              actionWidgets.add(const SizedBox(height: 8));
+            }
             // Для всіх інших NPC — стандартні кнопки взаємодії (навіть якщо ще не тапнули по смузі NPC).
             actionWidgets.add(
               NpcInteractionButtons(
@@ -3629,7 +3722,6 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                 onActionExecuted: (label, npc) =>
                     _handleNpcActionExecuted(label, npc),
                 onFinanceGiveMoney: () => _npcFinanceGiveMoney(npc),
-                onFinanceAskLoan: () => _npcFinanceAskLoan(npc),
                 onFinanceGiveLoan: () => _npcFinanceGiveLoan(npc),
                 onFinanceAskMomMoney: (amount) => _npcFinanceAskMomMoney(npc, amount),
                 onFinanceRepayGgDebt:
@@ -4095,7 +4187,6 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                 onActionExecuted: (label, npc) =>
                     _handleNpcActionExecuted(label, npc),
                 onFinanceGiveMoney: () => _npcFinanceGiveMoney(mom),
-                onFinanceAskLoan: () => _npcFinanceAskLoan(mom),
                 onFinanceGiveLoan: () => _npcFinanceGiveLoan(mom),
                 onFinanceAskMomMoney: (amount) => _npcFinanceAskMomMoney(mom, amount),
                 onFinanceRepayGgDebt:

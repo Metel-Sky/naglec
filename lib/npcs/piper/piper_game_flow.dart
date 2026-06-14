@@ -54,6 +54,8 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _ui.setEventImagePath(null);
     _eventVideoPath = null;
     _eventVideoOnComplete = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoMinWatchDuration = null;
     _eventVideoPendingButton = null;
     _eventVideoOnButtonPressed = null;
     _eventVideoCloseWhenCompleted = true;
@@ -71,22 +73,59 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     } else {
       _ui.setEventImagePath(null);
     }
-    if (p.videoPath != null) {
-      _eventVideoPath = p.videoPath;
-      _eventVideoMuted = false;
-      _eventVideoFullScreen = true;
-      _eventVideoCloseWhenCompleted = false;
-      _eventVideoLoop = false;
-      _eventVideoOnComplete = null;
-      _eventVideoPendingButton = null;
-      _eventVideoOnButtonPressed = null;
-    } else {
-      _eventVideoPath = null;
-      _eventVideoOnComplete = null;
-      _eventVideoPendingButton = null;
-      _eventVideoOnButtonPressed = null;
-    }
+    // Відео квесту — через _syncPiperQuest001Step*VideoPresentation (loop ≥1 с перегляду).
+    _eventVideoPath = null;
+    _eventVideoOnComplete = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoMinWatchDuration = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+    _eventVideoCloseWhenCompleted = true;
+    _eventVideoFullScreen = false;
+    _eventVideoLoop = false;
+    _eventVideoMuted = false;
     _piperQuest001PresentationSyncedStep = _worldState.piperQuest001Step;
+  }
+
+  static const Duration _piperQuest001MinVideoWatch = Duration(seconds: 1);
+
+  void _presentPiperQuest001LoopingVideo({
+    required String videoPath,
+    VoidCallback? onMinWatchReached,
+    Duration? minWatchDuration,
+    bool clearVideoOnMinWatch = false,
+  }) {
+    if (_eventVideoPath == videoPath &&
+        _eventVideoMinWatchDuration == minWatchDuration &&
+        _eventVideoLoop &&
+        !_eventVideoCloseWhenCompleted) {
+      return;
+    }
+    _eventVideoPath = videoPath;
+    _eventVideoMuted = false;
+    _eventVideoFullScreen = true;
+    _eventVideoCloseWhenCompleted = false;
+    _eventVideoLoop = true;
+    _eventVideoOnComplete = null;
+    _eventVideoMinWatchDuration = minWatchDuration;
+    _eventVideoOnMinWatchReached = onMinWatchReached == null
+        ? null
+        : () {
+            onMinWatchReached();
+            if (clearVideoOnMinWatch && mounted) {
+              setState(() {
+                if (_eventVideoPath == videoPath) {
+                  _eventVideoPath = null;
+                  _eventVideoOnMinWatchReached = null;
+                  _eventVideoMinWatchDuration = null;
+                  _eventVideoFullScreen = false;
+                  _eventVideoLoop = false;
+                }
+              });
+            }
+          };
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
   }
 
   String _resolvePiperQuest001News(String key, LocaleController loc) {
@@ -145,18 +184,12 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     return r == LocationsData.kitchen || r == LocationsData.hall;
   }
 
-  void _onPiperQuest001Step2VideoCompleted() {
-    if (!mounted || _worldState.piperQuest001Step != 2) return;
-    _worldState.piperQuest001Step2VideoSeen = true;
-    setState(() {
-      _clearPiperQuest001Step2VideoIfShowing();
-    });
-  }
-
   void _clearPiperQuest001Step2VideoIfShowing() {
     if (_eventVideoPath != PiperQuest001.quest001Step2Video) return;
     _eventVideoPath = null;
     _eventVideoOnComplete = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoMinWatchDuration = null;
     _eventVideoPendingButton = null;
     _eventVideoOnButtonPressed = null;
     _eventVideoCloseWhenCompleted = true;
@@ -166,21 +199,14 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
 
   bool _shouldShowPiperQuest001Step2Video() {
     return _worldState.piperQuest001Step == 2 &&
-        !_worldState.piperQuest001Step2VideoSeen &&
         _isPiperQuest001Step2ApproachScene();
   }
 
   void _syncPiperQuest001Step2VideoPresentation() {
     if (_shouldShowPiperQuest001Step2Video()) {
-      if (_eventVideoPath == PiperQuest001.quest001Step2Video) return;
-      _eventVideoPath = PiperQuest001.quest001Step2Video;
-      _eventVideoMuted = false;
-      _eventVideoFullScreen = true;
-      _eventVideoCloseWhenCompleted = true;
-      _eventVideoLoop = false;
-      _eventVideoOnComplete = _onPiperQuest001Step2VideoCompleted;
-      _eventVideoPendingButton = null;
-      _eventVideoOnButtonPressed = null;
+      _presentPiperQuest001LoopingVideo(
+        videoPath: PiperQuest001.quest001Step2Video,
+      );
       return;
     }
     _clearPiperQuest001Step2VideoIfShowing();
@@ -197,6 +223,47 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
         callOverheard: _worldState.piperQuest001Step3CallOverheard,
       ),
     );
+    _syncPiperQuest001Step3VideoPresentation();
+  }
+
+  void _onPiperQuest001Step3VideoMinWatchReached() {
+    if (!mounted || _worldState.piperQuest001Step != 3) return;
+    if (_worldState.piperQuest001Step3VideoSeen) return;
+    _worldState.piperQuest001Step3VideoSeen = true;
+    setState(() {});
+    _saveService.autosave();
+  }
+
+  void _clearPiperQuest001Step3VideoIfShowing() {
+    if (_eventVideoPath != PiperQuest001.quest001TeacherCallVideo) return;
+    _eventVideoPath = null;
+    _eventVideoOnComplete = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoMinWatchDuration = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+    _eventVideoCloseWhenCompleted = true;
+    _eventVideoFullScreen = false;
+    _eventVideoLoop = false;
+    _eventVideoMuted = false;
+  }
+
+  bool _shouldShowPiperQuest001Step3Video() {
+    return _worldState.piperQuest001Step == 3 &&
+        !_worldState.piperQuest001Step3CallOverheard &&
+        _isPiperQuest001Step3TeacherCallScene();
+  }
+
+  void _syncPiperQuest001Step3VideoPresentation() {
+    if (_shouldShowPiperQuest001Step3Video()) {
+      _presentPiperQuest001LoopingVideo(
+        videoPath: PiperQuest001.quest001TeacherCallVideo,
+        minWatchDuration: _piperQuest001MinVideoWatch,
+        onMinWatchReached: _onPiperQuest001Step3VideoMinWatchReached,
+      );
+      return;
+    }
+    _clearPiperQuest001Step3VideoIfShowing();
   }
 
   void _applyPiperQuest001Step4Patch() {
@@ -228,10 +295,11 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _applyPiperQuest001Step3Patch();
   }
 
-  /// Крок 2: відео лише в [piper_room]; поза нею — закрити оверлей, step=2 лишається.
+  /// Крок 2: сцена лише в [piper_room] або [room_gg]; поза ними — закрити оверлей, step=2 лишається.
   void _ensurePiperQuest001Step2ApproachUiCoherent() {
     if (_worldState.piperQuest001Step != 2) {
       _clearPiperQuest001Step2VideoIfShowing();
+      PiperQuest001.resetStep2GgDealSubmenu(_worldState);
       return;
     }
     if (_isPiperQuest001Step2ApproachScene()) {
@@ -249,6 +317,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     if (_worldState.piperQuest001Step != 5) return;
     if (currentZone != 'HOME' || !isInsideRoom) return;
     if (_worldState.piperGgPunishmentThisCrisis &&
+        PiperQuest001.ggPunishesInsteadOfMom(_worldState) &&
         !PiperQuest001.isGgPunishmentSceneActive(
           world: _worldState,
           currentZone: currentZone,
@@ -263,7 +332,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   bool _isPiperQuest001Step5Scene() {
     if (_worldState.piperQuest001Step != 5) return false;
     if (currentZone != 'HOME' || !isInsideRoom) return false;
-    if (_worldState.piperGgPunishmentThisCrisis) {
+    if (PiperQuest001.ggPunishesInsteadOfMom(_worldState)) {
       return PiperQuest001.isGgPunishmentSceneActive(
         world: _worldState,
         currentZone: currentZone,
@@ -282,11 +351,43 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     if (_eventVideoPath == null || !paths.contains(_eventVideoPath)) return;
     _eventVideoPath = null;
     _eventVideoOnComplete = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoMinWatchDuration = null;
     _eventVideoPendingButton = null;
     _eventVideoOnButtonPressed = null;
     _eventVideoCloseWhenCompleted = true;
     _eventVideoFullScreen = false;
+    _eventVideoLoop = false;
     _eventVideoMuted = false;
+  }
+
+  void _onPiperQuest001Step5VideoMinWatchReached() {
+    if (!mounted || _worldState.piperQuest001Step != 5) return;
+    _worldState.piperQuest001Step5VideoSeen = true;
+    _saveService.autosave();
+  }
+
+  bool _shouldShowPiperQuest001Step5Video(PiperQuest001Patch patch) {
+    final video = patch.videoPath;
+    if (video == null || video.isEmpty) return false;
+    if (_worldState.piperQuest001Step != 5) return false;
+    if (_worldState.piperQuest001Step5VideoSeen) return false;
+    if (currentZone != 'HOME' || !isInsideRoom) return false;
+    if (PiperQuest001.ggPunishesInsteadOfMom(_worldState)) {
+      return PiperQuest001.isGgPunishmentSceneActive(
+        world: _worldState,
+        currentZone: currentZone,
+        isInsideRoom: isInsideRoom,
+        currentRoom: currentRoom,
+      );
+    }
+    if (PiperQuest001.punishmentLevelFromCrisisN(
+          _worldState.piperPunishmentCrisisN,
+        ) >=
+        3) {
+      return PiperQuest001.isStep5PunishmentRoom(currentRoom);
+    }
+    return true;
   }
 
   void _syncPiperQuest001Step5VideoPresentation(PiperQuest001Patch patch) {
@@ -295,29 +396,25 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
       _clearPiperQuest001Step5VideoIfShowing();
       return;
     }
-    if (_worldState.piperGgPunishmentThisCrisis &&
-        !PiperQuest001.isStep5PunishmentRoom(currentRoom)) {
-      _clearPiperQuest001Step5VideoIfShowing();
+    if (_shouldShowPiperQuest001Step5Video(patch)) {
+      _presentPiperQuest001LoopingVideo(
+        videoPath: video,
+        minWatchDuration: _piperQuest001MinVideoWatch,
+        onMinWatchReached: _onPiperQuest001Step5VideoMinWatchReached,
+        clearVideoOnMinWatch: false,
+      );
       return;
     }
-    if (!_worldState.piperGgPunishmentThisCrisis &&
-        PiperQuest001.punishmentLevelFromCrisisN(
-              _worldState.piperPunishmentCrisisN,
-            ) >=
-            3 &&
-        !PiperQuest001.isStep5PunishmentRoom(currentRoom)) {
-      _clearPiperQuest001Step5VideoIfShowing();
+    final punishmentPaths = {
+      ...PiperQuest001.quest001PunishmentVideos,
+      ...PiperQuest001.quest001GgPunishmentVideos,
+    };
+    if (_worldState.piperQuest001Step == 5 &&
+        _eventVideoPath != null &&
+        punishmentPaths.contains(_eventVideoPath)) {
       return;
     }
-    if (_eventVideoPath == video) return;
-    _eventVideoPath = video;
-    _eventVideoMuted = false;
-    _eventVideoFullScreen = true;
-    _eventVideoCloseWhenCompleted = false;
-    _eventVideoLoop = false;
-    _eventVideoOnComplete = null;
-    _eventVideoPendingButton = null;
-    _eventVideoOnButtonPressed = null;
+    _clearPiperQuest001Step5VideoIfShowing();
   }
 
   void _applyPiperQuest001Step5Patch() {
@@ -412,12 +509,27 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _worldState.piperQuest001Step = 2;
     _worldState.piperHelpRequested = true;
     _worldState.piperQuest001Step2VideoSeen = false;
+    PiperQuest001.resetStep2GgDealSubmenu(_worldState);
     _selectedNpcIdInRoom = 'piper';
     _piperQuest001PresentationSyncedStep = null;
     _applyPiperQuest001Step2Patch();
   }
 
   void _tryStartPiperQuest001Step3IfNeeded() {
+    final dt = _timeController.dateTime;
+    final hour = dt.hour;
+    if (PiperQuest001.isMomExcludedFromQuestChain(_worldState)) {
+      PiperQuest001.clearMomChainStateForGgPunisher(_worldState);
+      if (PiperQuest001.canScheduleGgPunishmentSkippingMomChain(
+        world: _worldState,
+        gameDate: dt,
+        hour: hour,
+      )) {
+        PiperQuest001.markGgPunishmentPendingSkippingMomChain(_worldState);
+        _tryStartPiperQuest001Step5IfNeeded();
+      }
+      return;
+    }
     if (_worldState.piperQuest001Step >= 3) return;
     if (!PiperQuest001.canStartStep3TeacherCall(
       world: _worldState,
@@ -431,6 +543,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     }
     _worldState.piperQuest001Step = 3;
     _worldState.piperQuest001Step3CallOverheard = false;
+    _worldState.piperQuest001Step3VideoSeen = false;
     _worldState.teacherCalledMom = true;
     _worldState.piperMomTalkingAboutGrades = true;
     _worldState.teacherDealHookOpen = true;
@@ -440,11 +553,12 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
       _timeController.dateTime.hour,
     );
     _piperQuest001PresentationSyncedStep = null;
-    _applyPiperQuest001Patch(PiperQuest001.step3IntroPatch);
+    _applyPiperQuest001Step3Patch();
   }
 
   void _tryStartPiperQuest001Step4IfNeeded() {
     if (_worldState.piperQuest001Step >= 4) return;
+    if (PiperQuest001.isMomExcludedFromQuestChain(_worldState)) return;
     final dt = _timeController.dateTime;
     if (!PiperQuest001.canStartStep4MomScolds(
       world: _worldState,
@@ -475,7 +589,9 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _worldState.piperUnderPunishment = true;
     _worldState.piperPunishmentPending = false;
     _piperQuest001PresentationSyncedStep = null;
+    _worldState.piperQuest001Step5VideoSeen = false;
     if (_worldState.piperGgPunishmentThisCrisis &&
+        PiperQuest001.ggPunishesInsteadOfMom(_worldState) &&
         level >= 3 &&
         PiperQuest001.isStep5PunishmentRoom(currentRoom)) {
       _selectedNpcIdInRoom = 'piper';
@@ -484,6 +600,9 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   }
 
   void _maybeResumePiperQuest001AfterLoad() {
+    if (PiperQuest001.isMomExcludedFromQuestChain(_worldState)) {
+      PiperQuest001.clearMomChainStateForGgPunisher(_worldState);
+    }
     final s = _worldState.piperQuest001Step;
     if (s <= 0) return;
     if (_piperQuest001PresentationSyncedStep == s) return;
@@ -511,6 +630,102 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     newsMessage = sl<LocaleController>().t('piper_quest_001_step01_after_news');
   }
 
+  void _piperQuest001LeaveStep2() {
+    if (_worldState.piperQuest001Step != 2) return;
+    _worldState.piperQuest001Step = 0;
+    PiperQuest001.resetStep2GgDealSubmenu(_worldState);
+    _resetPiperQuest001PresentationSession();
+    newsMessage = LocationsData.getLocationDisplayName(
+      LocationsData.migrateLegacyRoomId(currentRoom),
+    );
+    _saveService.autosave();
+  }
+
+  void _piperQuest001OpenStep2GgDealSubmenu() {
+    if (_worldState.piperQuest001Step != 2) return;
+    _worldState.piperQuest001Step2GgDealSubmenu = true;
+    newsMessage = sl<LocaleController>().t('piper_quest_001_step02_gg_deal_news');
+  }
+
+  void _piperQuest001CloseStep2GgDealSubmenu() {
+    if (_worldState.piperQuest001Step != 2) return;
+    PiperQuest001.resetStep2GgDealSubmenu(_worldState);
+    final loc = sl<LocaleController>();
+    newsMessage = _resolvePiperQuest001News('piper_quest_001_step02_news', loc);
+  }
+
+  void _piperQuest001ApplyCover20NoPunishment() {
+    if (_worldState.piperQuest001Step != 2) return;
+    final piper = sl<NPCService>().npcById('piper');
+    if (_playerStats.money < PiperQuest001.coverPaymentAmount) {
+      showInsufficientMoneyDialog(context);
+      return;
+    }
+    _playerStats.changeMoney(-PiperQuest001.coverPaymentAmount);
+    if (piper != null) {
+      PiperQuest001.applyRelationshipDelta(piper, 10);
+      piper.changeBehavior(2);
+    }
+    _worldState.piperCrisisResolved = true;
+    _worldState.piperDebtType = PiperQuest001.debtTypeGgCoverNoPunish;
+    PiperQuest001.resetStep2GgDealSubmenu(_worldState);
+    PiperQuest001.closeCrisisPass(_worldState);
+    _resetPiperQuest001PresentationSession();
+    newsMessage = sl<LocaleController>().t('piper_quest_001_step06_success_news');
+    _piperQuest001PresentationSyncedStep = 6;
+    _saveService.autosave();
+  }
+
+  void _piperQuest001ApplyStep2GgDealOutcome({required String debtType, required String newsKey}) {
+    if (_worldState.piperQuest001Step != 2) return;
+    final piper = sl<NPCService>().npcById('piper');
+    if (piper != null) {
+      PiperQuest001.applyRelationshipDelta(piper, 5);
+      piper.changeBehavior(2);
+      piper.changeLust(2);
+    }
+    _worldState.piperCrisisResolved = true;
+    _worldState.piperDebtType = debtType;
+    PiperQuest001.resetStep2GgDealSubmenu(_worldState);
+    PiperQuest001.closeCrisisPass(_worldState);
+    _resetPiperQuest001PresentationSession();
+    newsMessage = sl<LocaleController>().t(newsKey);
+    _piperQuest001PresentationSyncedStep = 6;
+    _saveService.autosave();
+  }
+
+  void _piperQuest001ApplyPunishFromStep2() {
+    if (_worldState.piperQuest001Step != 2) return;
+    if (!PiperQuest001.canGgPunishPiperDuringStep2Approach(_worldState)) return;
+    _worldState.piperQuest001Step = 0;
+    PiperQuest001.resetStep2GgDealSubmenu(_worldState);
+    _resetPiperQuest001PresentationSession();
+    _startPiperGgVoluntaryPunishFromStep2();
+    _saveService.autosave();
+  }
+
+  void _startPiperGgVoluntaryPunishFromStep2() {
+    if (_isPiperGgVoluntaryPunishVideoActive()) return;
+    if (currentZone != 'HOME' || !isInsideRoom) return;
+    if (LocationsData.migrateLegacyRoomId(currentRoom) !=
+        LocationsData.piperRoom) {
+      return;
+    }
+    _eventVideoPath = PiperQuest001.ggVoluntaryPunishVideo;
+    _eventVideoMuted = false;
+    _eventVideoFullScreen = true;
+    _eventVideoCloseWhenCompleted = false;
+    _eventVideoLoop = false;
+    _eventVideoOnComplete = null;
+    _eventVideoMinWatchDuration = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+    _ui.setEventImagePath(null);
+    _selectedNpcIdInRoom = 'piper';
+    newsMessage = '';
+  }
+
   void _piperQuest001ApplyHomeworkHelp() {
     if (_worldState.piperQuest001Step != 2) return;
     final piper = sl<NPCService>().npcById('piper');
@@ -531,6 +746,10 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     if (_worldState.piperQuest001Step != 2) return;
     final piper = sl<NPCService>().npcById('piper');
     if (_playerStats.money < PiperQuest001.coverPaymentAmount) {
+      if (PiperQuest001.isMomExcludedFromQuestChain(_worldState)) {
+        _piperQuest001ApplyRefuseHelp();
+        return;
+      }
       _piperQuest001SnitchToMom(auto: true);
       return;
     }
@@ -555,6 +774,10 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
       PiperQuest001.applyRelationshipDelta(piper, -15);
     }
     _worldState.piperQuest001Step = 0;
+    if (PiperQuest001.isMomExcludedFromQuestChain(_worldState) &&
+        _worldState.piperGgPunishmentThisCrisis) {
+      PiperQuest001.markGgPunishmentPendingSkippingMomChain(_worldState);
+    }
     _resetPiperQuest001PresentationSession();
     newsMessage = LocationsData.getLocationDisplayName(
       LocationsData.migrateLegacyRoomId(currentRoom),
@@ -564,6 +787,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
 
   void _piperQuest001RequestGgCommandPiperFromMom() {
     PiperQuest001.applyGgCommandsPiperInsteadOfMom(_worldState);
+    _resetPiperQuest001PresentationSession();
     newsMessage = sl<LocaleController>().t(
       'piper_quest_001_step7a_mom_grants_news',
     );
@@ -575,13 +799,81 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     newsMessage = sl<LocaleController>().t(
       'piper_quest_001_step7b_tell_piper_news',
     );
-    if (_worldState.piperQuest001Step == 5) {
-      _applyPiperQuest001Step5Patch();
-    }
     _saveService.autosave();
   }
 
+  bool _isPiperGgVoluntaryPunishVideoActive() {
+    return _eventVideoPath == PiperQuest001.ggVoluntaryPunishVideo;
+  }
+
+  bool _canShowPiperGgVoluntaryPunishButton() {
+    final npcService = sl<NPCService>();
+    return PiperQuest001.canShowGgVoluntaryPunishButton(
+      world: _worldState,
+      npcService: npcService,
+      piper: npcService.npcById('piper'),
+      hour: _timeController.dateTime.hour,
+      weekdayIndex: _timeController.weekdayIndex,
+      currentZone: currentZone,
+      isInsideRoom: isInsideRoom,
+      currentRoom: currentRoom,
+    );
+  }
+
+  void _startPiperGgVoluntaryPunish() {
+    if (_isPiperGgVoluntaryPunishVideoActive()) return;
+    if (currentZone != 'HOME' || !isInsideRoom) return;
+    if (LocationsData.migrateLegacyRoomId(currentRoom) !=
+        LocationsData.piperRoom) {
+      return;
+    }
+    _eventVideoPath = PiperQuest001.ggVoluntaryPunishVideo;
+    _eventVideoMuted = false;
+    _eventVideoFullScreen = true;
+    _eventVideoCloseWhenCompleted = false;
+    _eventVideoLoop = false;
+    _eventVideoOnComplete = null;
+    _eventVideoMinWatchDuration = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+    _ui.setEventImagePath(null);
+    _selectedNpcIdInRoom = 'piper';
+    newsMessage = '';
+  }
+
+  void _finishPiperGgVoluntaryPunish() {
+    if (!_isPiperGgVoluntaryPunishVideoActive()) return;
+    PiperQuest001.markGgVoluntaryPunishDoneThisCrisis(_worldState);
+    PiperQuest001.applyGgVoluntaryPunishStatRewards(
+      sl<NPCService>().npcById('piper'),
+    );
+    _eventVideoPath = null;
+    _eventVideoOnComplete = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoMinWatchDuration = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+    _eventVideoCloseWhenCompleted = true;
+    _eventVideoFullScreen = false;
+    _eventVideoLoop = false;
+    _ui.setEventImagePath(null);
+    newsMessage = LocationsData.getLocationDisplayName(LocationsData.piperRoom);
+    _saveService.autosave();
+  }
+
+  void _ensurePiperGgVoluntaryPunishUiCoherent() {
+    if (!_isPiperGgVoluntaryPunishVideoActive()) return;
+    if (currentZone != 'HOME' ||
+        !isInsideRoom ||
+        LocationsData.migrateLegacyRoomId(currentRoom) !=
+            LocationsData.piperRoom) {
+      _finishPiperGgVoluntaryPunish();
+    }
+  }
+
   void _piperQuest001SnitchToMom({required bool auto}) {
+    if (PiperQuest001.isMomExcludedFromQuestChain(_worldState)) return;
     final piper = sl<NPCService>().npcById('piper');
     if (piper != null) {
       PiperQuest001.applyRelationshipDelta(piper, -15);
@@ -682,9 +974,22 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     );
   }
 
+  Widget _piperQuest001VideoBlockingEmptyPanel() => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        width: double.infinity,
+        child: const SizedBox.shrink(),
+      );
+
+  /// Крок 3: відео дзвінка вчителю — «Підслухати» лише після ≥1 с перегляду.
+  bool _isPiperQuest001Step3IntroVideoBlockingActions() {
+    return _worldState.piperQuest001Step == 3 &&
+        _isPiperQuest001Step3TeacherCallScene() &&
+        !_worldState.piperQuest001Step3CallOverheard &&
+        !_worldState.piperQuest001Step3VideoSeen;
+  }
+
   Widget? _piperQuest001PriorityActionPanelIfAny() {
     final t = sl<LocaleController>().t;
-    final loc = sl<LocaleController>();
 
     Widget column(List<Widget> children) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -711,6 +1016,60 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     }
 
     if (s == 2) {
+      if (PiperQuest001.usesGgPunisherStep2Buttons(_worldState)) {
+        if (_worldState.piperQuest001Step2GgDealSubmenu) {
+          return column([
+            _navBtn(t('piper_quest_001_btn_deal_show_breasts').toUpperCase(), () {
+              setState(() {
+                _piperQuest001ApplyStep2GgDealOutcome(
+                  debtType: PiperQuest001.debtTypeGgDealBreasts,
+                  newsKey: 'piper_quest_001_step02_gg_deal_breasts_news',
+                );
+              });
+            }),
+            const SizedBox(height: 8),
+            _navBtn(t('piper_quest_001_btn_deal_show_ass').toUpperCase(), () {
+              setState(() {
+                _piperQuest001ApplyStep2GgDealOutcome(
+                  debtType: PiperQuest001.debtTypeGgDealAss,
+                  newsKey: 'piper_quest_001_step02_gg_deal_ass_news',
+                );
+              });
+            }),
+            const SizedBox(height: 8),
+            _navBtn(t('piper_quest_001_btn_leave').toUpperCase(), () {
+              setState(() {
+                _piperQuest001CloseStep2GgDealSubmenu();
+              });
+            }),
+          ]);
+        }
+        return column([
+          _navBtn(t('piper_quest_001_btn_gg_deal').toUpperCase(), () {
+            setState(() {
+              _piperQuest001OpenStep2GgDealSubmenu();
+            });
+          }),
+          const SizedBox(height: 8),
+          _navBtn(t('piper_quest_001_btn_cover_20_no_punish').toUpperCase(), () {
+            setState(() {
+              _piperQuest001ApplyCover20NoPunishment();
+            });
+          }),
+          const SizedBox(height: 8),
+          _navBtn(t('piper_quest_001_btn_punish').toUpperCase(), () {
+            setState(() {
+              _piperQuest001ApplyPunishFromStep2();
+            });
+          }),
+          const SizedBox(height: 8),
+          _navBtn(t('piper_quest_001_btn_leave').toUpperCase(), () {
+            setState(() {
+              _piperQuest001LeaveStep2();
+            });
+          }),
+        ]);
+      }
       return column([
         _navBtn(t('piper_quest_001_btn_homework_help').toUpperCase(), () {
           setState(() {
@@ -733,15 +1092,15 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     }
 
     if (s == 3) {
+      if (_isPiperQuest001Step3IntroVideoBlockingActions()) {
+        return _piperQuest001VideoBlockingEmptyPanel();
+      }
       if (!_worldState.piperQuest001Step3CallOverheard) {
         return column([
           _navBtn(t('piper_quest_001_btn_eavesdrop_call').toUpperCase(), () {
             setState(() {
               _worldState.piperQuest001Step3CallOverheard = true;
-              newsMessage = _resolvePiperQuest001News(
-                'piper_quest_001_step03_news',
-                loc,
-              );
+              _applyPiperQuest001Step3Patch();
             });
             _saveService.autosave();
           }),

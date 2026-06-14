@@ -27,7 +27,88 @@ abstract final class NpcProfileQuestCheatId {
   static const piperPunishment1 = 'piper_punishment_1';
   static const piperPunishment2 = 'piper_punishment_2';
   static const piperPunishment3 = 'piper_punishment_3';
+  static const piperGgPunishment = 'piper_gg_punishment';
 }
+
+/// Група квестів у картці NPC (другий рівень випадаючого списку).
+final class NpcProfileQuestGroup {
+  const NpcProfileQuestGroup({
+    required this.titleKey,
+    required this.lines,
+  });
+
+  final String titleKey;
+  final List<NpcProfileQuestLine> lines;
+}
+
+/// Групи квестів (наприклад Piper: «001 погані оцінки» всередині «Квести»).
+List<NpcProfileQuestGroup>? npcProfileQuestGroupsFor(String npcId) {
+  if (npcId == 'piper') {
+    return [
+      NpcProfileQuestGroup(
+        titleKey: 'npc_quest_piper_bad_grades_001',
+        lines: _piperQuest001ProfileLines(),
+      ),
+    ];
+  }
+  return null;
+}
+
+List<NpcProfileQuestLine> _piperQuest001ProfileLines() => [
+      NpcProfileQuestLine(
+        titleKey: 'profile_piper_bad_grades_crisis_row',
+        isDone: (w, npc) =>
+            npc.id == 'piper' && PiperQuest001.isCheatCrisisActive(w),
+        cheatId: NpcProfileQuestCheatId.piperBadGrades001,
+        statusDoneKey: 'profile_piper_bad_grades_crisis_on',
+        statusPendingKey: 'profile_piper_bad_grades_crisis_off',
+        counterLineKey: 'profile_piper_bad_grades_count',
+        counterValue: (w, _) => w.piperBadGradesCount,
+        compactSwitch: true,
+      ),
+      NpcProfileQuestLine(
+        titleKey: 'npc_quest_piper_punishment_1',
+        isDone: (w, npc) =>
+            npc.id == 'piper' &&
+            PiperQuest001.isCheatPunishmentActive(w, 1) &&
+            !PiperQuest001.isCheatGgPunishmentActive(w),
+        cheatId: NpcProfileQuestCheatId.piperPunishment1,
+        statusDoneKey: 'profile_piper_punishment_on',
+        statusPendingKey: 'profile_piper_punishment_off',
+        compactSwitch: true,
+      ),
+      NpcProfileQuestLine(
+        titleKey: 'npc_quest_piper_punishment_2',
+        isDone: (w, npc) =>
+            npc.id == 'piper' &&
+            PiperQuest001.isCheatPunishmentActive(w, 2) &&
+            !PiperQuest001.isCheatGgPunishmentActive(w),
+        cheatId: NpcProfileQuestCheatId.piperPunishment2,
+        statusDoneKey: 'profile_piper_punishment_on',
+        statusPendingKey: 'profile_piper_punishment_off',
+        compactSwitch: true,
+      ),
+      NpcProfileQuestLine(
+        titleKey: 'npc_quest_piper_punishment_3',
+        isDone: (w, npc) =>
+            npc.id == 'piper' &&
+            PiperQuest001.isCheatPunishmentActive(w, 3) &&
+            !PiperQuest001.isCheatGgPunishmentActive(w),
+        cheatId: NpcProfileQuestCheatId.piperPunishment3,
+        statusDoneKey: 'profile_piper_punishment_on',
+        statusPendingKey: 'profile_piper_punishment_off',
+        compactSwitch: true,
+      ),
+      NpcProfileQuestLine(
+        titleKey: 'npc_quest_piper_gg_punishment',
+        isDone: (w, npc) =>
+            npc.id == 'piper' && PiperQuest001.isCheatGgPunishmentActive(w),
+        cheatId: NpcProfileQuestCheatId.piperGgPunishment,
+        statusDoneKey: 'profile_piper_punishment_on',
+        statusPendingKey: 'profile_piper_punishment_off',
+        compactSwitch: true,
+      ),
+    ];
 
 /// Рядок «квест у картці NPC»: заголовок l10n [titleKey] і перевірка виконання.
 final class NpcProfileQuestLine {
@@ -175,51 +256,12 @@ List<NpcProfileQuestLine> npcProfileQuestLinesFor(String npcId) {
           cheatId: NpcProfileQuestCheatId.momOwesGgService,
           statusDoneKey: 'profile_mom_owes_service_yes',
           statusPendingKey: 'profile_mom_owes_service_no',
-          counterLineKey: 'profile_mom_owes_gg_count',
+          counterLineKey: 'profile_mom_owes_gg_label',
           counterValue: (w, _) => w.momOwesGgCount,
         ),
       ];
     case 'piper':
-      return [
-        NpcProfileQuestLine(
-          titleKey: 'npc_quest_piper_bad_grades_001',
-          isDone: (w, npc) =>
-              npc.id == 'piper' && PiperQuest001.isCheatCrisisActive(w),
-          cheatId: NpcProfileQuestCheatId.piperBadGrades001,
-          statusDoneKey: 'profile_piper_bad_grades_crisis_on',
-          statusPendingKey: 'profile_piper_bad_grades_crisis_off',
-          counterLineKey: 'profile_piper_bad_grades_count',
-          counterValue: (w, _) => w.piperBadGradesCount,
-          compactSwitch: true,
-        ),
-        NpcProfileQuestLine(
-          titleKey: 'npc_quest_piper_punishment_1',
-          isDone: (w, npc) =>
-              npc.id == 'piper' && PiperQuest001.isCheatPunishmentActive(w, 1),
-          cheatId: NpcProfileQuestCheatId.piperPunishment1,
-          statusDoneKey: 'profile_piper_punishment_on',
-          statusPendingKey: 'profile_piper_punishment_off',
-          compactSwitch: true,
-        ),
-        NpcProfileQuestLine(
-          titleKey: 'npc_quest_piper_punishment_2',
-          isDone: (w, npc) =>
-              npc.id == 'piper' && PiperQuest001.isCheatPunishmentActive(w, 2),
-          cheatId: NpcProfileQuestCheatId.piperPunishment2,
-          statusDoneKey: 'profile_piper_punishment_on',
-          statusPendingKey: 'profile_piper_punishment_off',
-          compactSwitch: true,
-        ),
-        NpcProfileQuestLine(
-          titleKey: 'npc_quest_piper_punishment_3',
-          isDone: (w, npc) =>
-              npc.id == 'piper' && PiperQuest001.isCheatPunishmentActive(w, 3),
-          cheatId: NpcProfileQuestCheatId.piperPunishment3,
-          statusDoneKey: 'profile_piper_punishment_on',
-          statusPendingKey: 'profile_piper_punishment_off',
-          compactSwitch: true,
-        ),
-      ];
+      return const [];
     default:
       return const [];
   }

@@ -293,7 +293,7 @@ final Map<String, String> stringsRu = {
   'npc_quest_mom_owes_service': 'Мама: долг за бассейн',
   'profile_mom_owes_service_yes': 'Почистил — мама должна (оплата на кухне)',
   'profile_mom_owes_service_no': 'Может предложить чистку (Пн/Чт)',
-  'profile_mom_owes_gg_count': 'Раз «должна»: %s',
+  'profile_mom_owes_gg_label': 'Долг за услугу',
   'profile_mom_quest001_beach': 'Счётчик beach: %s',
   'mom_quest_001_btn_agree': 'Согласиться',
   'mom_quest_001_btn_refuse': 'Отказаться',
@@ -370,10 +370,23 @@ final Map<String, String> stringsRu = {
       'Ладно, помогу с домашкой, но уберёшь в моей комнате',
   'piper_quest_001_btn_cover_20': 'За \$20 прикрою перед мамой',
   'piper_quest_001_btn_refuse': 'Сама разбирайся',
+  'piper_quest_001_btn_gg_deal': 'Договориться',
+  'piper_quest_001_btn_cover_20_no_punish': '\$20 и наказания не будет',
+  'piper_quest_001_btn_punish': 'Наказать',
+  'piper_quest_001_btn_deal_show_breasts': 'Покажи сиськи',
+  'piper_quest_001_btn_deal_show_ass': 'Покажи попу',
+  'piper_quest_001_step02_gg_deal_news':
+      '— Ладно, договоримся. Но ты мне кое-что покажешь.',
+  'piper_quest_001_step02_gg_deal_breasts_news':
+      'Пайпер неохотно выполняет просьбу. *(TBD — видео)*',
+  'piper_quest_001_step02_gg_deal_ass_news':
+      'Пайпер поворачивается и показывает то, о чём ты просил. *(TBD — видео)*',
   'piper_quest_001_btn_snitch_mom': 'Рассказать об оценках Пайпер',
   'piper_quest_001_btn_step7a_command_piper':
       'Пусть я буду наказывать Пайпер вместо тебя',
   'piper_quest_001_btn_tell_piper_punishment': 'Сказать о наказании',
+  'piper_quest_gg_punish_piper_btn': 'Наказать Пайпер',
+  'piper_quest_gg_punish_finish_btn': 'Завершить',
   'piper_quest_001_step7b_tell_piper_news':
       '— Мама устала тебя командовать и хочет, чтобы это теперь делал я.',
   'piper_quest_001_step7a_mom_grants_news':
@@ -395,6 +408,8 @@ final Map<String, String> stringsRu = {
   'piper_event_003_intro_news':
       'Пайпер занимается в зале. Она заметила тебя, но не останавливается — только кивает.',
   'npc_quest_piper_bad_grades_001': '001 плохие оценки',
+  'profile_piper_bad_grades_crisis_row': 'Кризис с двойкой',
+  'npc_quest_piper_gg_punishment': 'Наказание от ГG',
   'profile_piper_bad_grades_crisis_on': 'кризис активен',
   'profile_piper_bad_grades_crisis_off': 'кризис неактивен',
   'profile_piper_bad_grades_count': 'Плохих оценок: %s',

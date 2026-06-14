@@ -20,7 +20,7 @@ const TextStyle _npcButtonTextStyle = TextStyle(
 /// Показує список дій, повернутих [NPCModel.getAvailableActions].
 ///
 /// Для NPC з економікою додається «Фінанси» → підменю. Логіку фінансових кнопок
-/// підключають через [onFinanceGiveMoney], [onFinanceAskLoan] тощо (або дописують окремо).
+/// підключають через [onFinanceGiveMoney], [onFinanceGiveLoan] тощо (або дописують окремо).
 class NpcInteractionButtons extends StatefulWidget {
   final NPCModel npc;
   final String location;
@@ -33,7 +33,6 @@ class NpcInteractionButtons extends StatefulWidget {
 
   /// Логіка фінансового підменю — за потреби передати з батька; якщо null, тап без ефекту.
   final VoidCallback? onFinanceGiveMoney;
-  final VoidCallback? onFinanceAskLoan;
   final VoidCallback? onFinanceGiveLoan;
   final bool Function(int amount)? onFinanceAskMomMoney;
 
@@ -64,7 +63,6 @@ class NpcInteractionButtons extends StatefulWidget {
     this.onBack,
     this.onActionExecuted,
     this.onFinanceGiveMoney,
-    this.onFinanceAskLoan,
     this.onFinanceGiveLoan,
     this.onFinanceAskMomMoney,
     this.onFinanceAskAboutDebt,
@@ -318,9 +316,8 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
         );
       }
 
-      // Мама: 1 попросити грошей → 2 дати → 3 попросити в борг → 4 дати в борг → 5 назад (до діалогового меню).
-      // Інші NPC: три фінансові дії тим самим порядком без пункту «попросити грошей».
-      // Закрити всю панель — лише з головного списку дій (одна кнопка «Назад»), інакше два однакові підписи.
+      // Мама: попросити грошей → дати → дати в борг → назад.
+      // Інші NPC: дати → дати в борг → … → назад.
       final financeRows = <Widget>[
         if (isMom && widget.onFinanceAskMomMoney != null)
           _elevated(
@@ -330,10 +327,6 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
         _elevated(
           t('npc_finance_give_money'),
           () => widget.onFinanceGiveMoney?.call(),
-        ),
-        _elevated(
-          t('npc_finance_ask_loan'),
-          () => widget.onFinanceAskLoan?.call(),
         ),
         _elevated(
           t('npc_finance_give_loan'),

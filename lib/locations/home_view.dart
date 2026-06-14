@@ -194,12 +194,16 @@ class _HomeViewState extends State<HomeView> {
           : mom_vf.momRoomMorningVideoListSeeded(momSeed);
       activeNPC ??= momNpc;
     }
-    // Мама у ванній 8–9
-    if (activeNPC?.id == 'mom' &&
-        widget.currentRoom == 'bathroom') {
-      if (h >= 8 && h < 9) {
-        specialBackground = mom_vf.momShowerMorningVideosSeeded(mediaSeed);
-      }
+    // Мама у ванній о 9:00 — seed при вході (як кухня / душ Пайпер).
+    final momShowerHere = momNpc != null &&
+        widget.currentRoom == LocationsData.bathroom &&
+        npcService.getCurrentLocationId(momNpc, h, day) ==
+            LocationsData.bathroom &&
+        mom_vf.momShowerScheduleHour(h, day);
+    if (momShowerHere) {
+      final showerSeed = world.momBathroomVisitSeed ?? mediaSeed;
+      specialBackground = mom_vf.momShowerMorningVideosSeeded(showerSeed);
+      activeNPC ??= momNpc;
     }
     // Пайпер у душі: один з чотирьох роликів (після мами — щоб перекрити рідкі колізії розкладу).
     final piperNpc = npcService.npcById('piper');
@@ -235,7 +239,10 @@ class _HomeViewState extends State<HomeView> {
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: _buildMediaContent(finalMedia),
+              child: _buildMediaContent(
+                finalMedia,
+                videoFallbackImagePath: roomData?.imagePath,
+              ),
             ),
           );
 
@@ -367,8 +374,16 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildMediaContent(String path) {
-    return RoomNpcSceneTemplate.layerBackground(path);
+  Widget _buildMediaContent(
+    String path, {
+    String? videoFallbackImagePath,
+  }) {
+    return RoomNpcSceneTemplate.layerBackground(
+      path,
+      fallbackImagePath: NpcRoomScenePicker.isVideoAssetPath(path)
+          ? videoFallbackImagePath
+          : null,
+    );
   }
 
   // --- СІТКА КІМНАТ ---

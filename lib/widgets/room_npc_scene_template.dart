@@ -28,10 +28,17 @@ class RoomNpcSceneTemplate {
       'lib/assets/location/home_gg/rooms/kitchen.jpg';
 
   /// Фон локації: відео або зображення на весь простір (`BoxFit.cover`).
-  static Widget layerBackground(String path) {
+  /// [fallbackImagePath] — якщо відео не відкрилось (Git LFS-заглушка тощо).
+  static Widget layerBackground(
+    String path, {
+    String? fallbackImagePath,
+  }) {
     final lower = path.toLowerCase();
     if (lower.endsWith('.mp4') || lower.endsWith('.webm')) {
-      return VideoSceneWidget(videoPath: path);
+      return VideoSceneWidget(
+        videoPath: path,
+        fallbackImagePath: fallbackImagePath,
+      );
     }
     return Image.asset(
       path,

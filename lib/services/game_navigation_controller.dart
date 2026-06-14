@@ -333,8 +333,8 @@ class GameNavigationController extends ChangeNotifier {
         name == LocationsData.corridor &&
         _worldState.piperQuest001Step == 4;
     final skipPiperStep2ApproachNews = _currentZone == 'HOME' &&
-        name == LocationsData.piperRoom &&
-        _worldState.piperQuest001Step == 2;
+        _worldState.piperQuest001Step == 2 &&
+        PiperQuest001.isStep2ApproachRoom(name);
     final skipPiperStep5PunishmentNews =
         _currentZone == 'HOME' && _worldState.piperQuest001Step == 5;
     final skipPiperStep6ClosureNews =
@@ -392,6 +392,7 @@ class GameNavigationController extends ChangeNotifier {
       _worldState.kitchenVisitSeed = Random().nextInt(0x7FFFFFFF);
     }
     if (name == LocationsData.bathroom) {
+      _worldState.momBathroomVisitSeed = Random().nextInt(0x7FFFFFFF);
       _worldState.piperBathroomVisitSeed = Random().nextInt(0x7FFFFFFF);
     }
     if (name == LocationsData.momRoom &&

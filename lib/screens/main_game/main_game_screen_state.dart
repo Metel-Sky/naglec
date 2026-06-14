@@ -33,6 +33,7 @@ class MainGameScreenState extends MainGameScreenStateBase
         _maybeResumePiperQuest001AfterLoad();
         _ensurePiperQuest001LibraryDialogUiCoherent();
         _ensurePiperQuest001Step2ApproachUiCoherent();
+        _ensurePiperGgVoluntaryPunishUiCoherent();
         _ensurePiperQuest001SnitchAckUiCoherent();
         _ensurePiperQuest001Step3TeacherCallUiCoherent();
         _tryStartPiperQuest001Step4IfNeeded();
@@ -399,6 +400,11 @@ class MainGameScreenState extends MainGameScreenStateBase
                                                           ComunicateSashaInHallPhase
                                                               .moneyChoice)),
                                           eventVideoOnComplete: () => _eventVideoOnComplete?.call(),
+                                          eventVideoMinWatchDuration:
+                                              _eventVideoMinWatchDuration,
+                                          eventVideoOnMinWatchReached: () =>
+                                              _eventVideoOnMinWatchReached
+                                                  ?.call(),
                                           eventVideoPendingButton: _eventVideoPendingButton,
                                           eventVideoOnButtonPressed: () {
                                             _eventVideoOnButtonPressed?.call();
@@ -482,7 +488,6 @@ class MainGameScreenState extends MainGameScreenStateBase
                                               onActionExecuted: (label, npc) =>
                                                   _handleNpcActionExecuted(label, npc),
                                               onFinanceGiveMoney: () => _npcFinanceGiveMoney(luda),
-                                              onFinanceAskLoan: () => _npcFinanceAskLoan(luda),
                                               onFinanceGiveLoan: () => _npcFinanceGiveLoan(luda),
                                               onFinanceRepayGgDebt:
                                                   NpcFinanceService.ggOwesNpc(_worldState, luda.id) > 0

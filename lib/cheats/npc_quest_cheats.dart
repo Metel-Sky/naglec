@@ -340,6 +340,7 @@ abstract final class NpcQuestCheats {
       case NpcProfileQuestCheatId.piperPunishment1:
         if (profileNpc.id != 'piper') break;
         if (completed) {
+          PiperQuest001.resetCheatGgPunishment(world);
           PiperQuest001.applyCheatPunishment(world: world, crisisN: 1);
         } else {
           PiperQuest001.resetCheatPunishment(world, 1);
@@ -348,6 +349,7 @@ abstract final class NpcQuestCheats {
       case NpcProfileQuestCheatId.piperPunishment2:
         if (profileNpc.id != 'piper') break;
         if (completed) {
+          PiperQuest001.resetCheatGgPunishment(world);
           PiperQuest001.applyCheatPunishment(world: world, crisisN: 2);
         } else {
           PiperQuest001.resetCheatPunishment(world, 2);
@@ -356,9 +358,18 @@ abstract final class NpcQuestCheats {
       case NpcProfileQuestCheatId.piperPunishment3:
         if (profileNpc.id != 'piper') break;
         if (completed) {
+          PiperQuest001.resetCheatGgPunishment(world);
           PiperQuest001.applyCheatPunishment(world: world, crisisN: 3);
         } else {
           PiperQuest001.resetCheatPunishment(world, 3);
+        }
+        break;
+      case NpcProfileQuestCheatId.piperGgPunishment:
+        if (profileNpc.id != 'piper') break;
+        if (completed) {
+          PiperQuest001.applyCheatGgPunishment(world: world);
+        } else {
+          PiperQuest001.resetCheatGgPunishment(world);
         }
         break;
     }

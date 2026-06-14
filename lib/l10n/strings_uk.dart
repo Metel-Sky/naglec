@@ -294,7 +294,7 @@ final Map<String, String> stringsUk = {
   'npc_quest_mom_owes_service': 'Мама: борг за басейн',
   'profile_mom_owes_service_yes': 'Почистив — мама винна (оплата на кухні)',
   'profile_mom_owes_service_no': 'Може запропонувати чистку (Пн/Чт)',
-  'profile_mom_owes_gg_count': 'Разів «винна»: %s',
+  'profile_mom_owes_gg_label': 'Вин на послугу',
   'profile_mom_quest001_beach': 'Лічильник beach: %s',
   'mom_quest_001_btn_agree': 'Погодитись',
   'mom_quest_001_btn_refuse': 'Відмовитись',
@@ -371,10 +371,23 @@ final Map<String, String> stringsUk = {
       'Ладно, допоможу з домашкою, але прибереш у моїй кімнаті',
   'piper_quest_001_btn_cover_20': 'За \$20 прикрию перед мамою',
   'piper_quest_001_btn_refuse': 'Сама розбирайся',
+  'piper_quest_001_btn_gg_deal': 'Домовитись',
+  'piper_quest_001_btn_cover_20_no_punish': '\$20 і покарання не буде',
+  'piper_quest_001_btn_punish': 'Покарати',
+  'piper_quest_001_btn_deal_show_breasts': 'Покажи сіськи',
+  'piper_quest_001_btn_deal_show_ass': 'Покажи дупу',
+  'piper_quest_001_step02_gg_deal_news':
+      '— Добре, домовимось. Але ти мені зараз щось покажеш.',
+  'piper_quest_001_step02_gg_deal_breasts_news':
+      'Пайпер неохоче виконує прохання. *(TBD — відео)*',
+  'piper_quest_001_step02_gg_deal_ass_news':
+      'Пайпер відвертається і показує, про що ти просив. *(TBD — відео)*',
   'piper_quest_001_btn_snitch_mom': 'Розповісти про оцінки Пайпер',
   'piper_quest_001_btn_step7a_command_piper':
       'Нехай я наказую Пайпер замість тебе',
   'piper_quest_001_btn_tell_piper_punishment': 'Сказати про покарання',
+  'piper_quest_gg_punish_piper_btn': 'Покарати Пайпер',
+  'piper_quest_gg_punish_finish_btn': 'Завершити',
   'piper_quest_001_step7b_tell_piper_news':
       '— Мама втомилась тебе наказувати і хоче, щоб це тепер робив я.',
   'piper_quest_001_step7a_mom_grants_news':
@@ -396,6 +409,8 @@ final Map<String, String> stringsUk = {
   'piper_event_003_intro_news':
       'Пайпер робить вправи в залі. Вона помітила тебе, але не зупиняється — лише киває.',
   'npc_quest_piper_bad_grades_001': '001 погані оцінки',
+  'profile_piper_bad_grades_crisis_row': 'Криза з двійкою',
+  'npc_quest_piper_gg_punishment': 'Покарання від ГG',
   'profile_piper_bad_grades_crisis_on': 'криза активна',
   'profile_piper_bad_grades_crisis_off': 'криза неактивна',
   'profile_piper_bad_grades_count': 'Поганих оцінок: %s',

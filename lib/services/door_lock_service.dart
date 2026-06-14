@@ -1,5 +1,6 @@
 import 'dart:math';
 import '../data/locations_room_data.dart';
+import '../npcs/mom/mom_video_func.dart' as mom_vf;
 import '../npcs/piper/piper_shower_videos.dart';
 import '../models/item_model.dart';
 import 'game_world_state.dart';
@@ -150,7 +151,14 @@ class HomeDoorAccess {
 
   // Ванна: якщо хтось у ванній — зачинені, окрім 1 з 6 випадків або відмичка + курс/100
   if (roomId == LocationsData.bathroom) {
-    // Пайпер за розкладом «у душі» — двері не блокують сцену (інакше ГГ майже ніколи не потрапляє всередину).
+    // Мама / Пайпер за розкладом «у душі» — двері не блокують сцену.
+    final mom = npcService.npcById('mom');
+    if (mom != null &&
+        mom_vf.momShowerScheduleHour(hour, weekdayIndex) &&
+        npcService.getCurrentLocationId(mom, hour, weekdayIndex) ==
+            LocationsData.bathroom) {
+      return (false, null);
+    }
     final piper = npcService.npcById('piper');
     if (piper != null &&
         piperShowerScheduleHour(hour, weekdayIndex) &&

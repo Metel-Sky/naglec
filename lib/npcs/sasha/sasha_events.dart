@@ -1,4 +1,6 @@
 import '../../models/npc_model.dart';
+import '../../data/npc_finance_state.dart';
+import '../../services/game_world_state.dart';
 import '../../services/inventory_controller.dart';
 import '../../services/player_stats_controller.dart';
 
@@ -26,7 +28,10 @@ enum SashaMorningRunPhase {
   /// 3) Після «ну і вали»: відео run_2, діалог з умовою боргу, кнопки гроші/послати
   payOffer,
 
-  /// 4) Після «дати гроші»: відео run_2, фінальний діалог, кнопка «піти»
+  /// 3б) Після «дати гроші»: вибір 10 / 20 / 50 / назад
+  moneyAmountChoice,
+
+  /// 4) Після оплати: відео run_2, фінальний діалог, кнопка «піти»
   afterPaid,
 }
 
@@ -106,11 +111,13 @@ abstract final class SashaEvents {
         SashaMorningRunPhase.intro => 1,
         SashaMorningRunPhase.video2 => 2,
         SashaMorningRunPhase.payOffer => 3,
+        SashaMorningRunPhase.moneyAmountChoice => 31,
         SashaMorningRunPhase.afterPaid => 4,
       };
 
   static SashaMorningRunPhase phaseFromStep(int? step) {
     final s = step ?? 0;
+    if (s == 31) return SashaMorningRunPhase.moneyAmountChoice;
     return switch (s) {
       1 => SashaMorningRunPhase.intro,
       2 => SashaMorningRunPhase.video2,
@@ -132,14 +139,47 @@ abstract final class SashaEvents {
     return 0;
   }
 
-  /// Після «дати гроші»: додаємо борг Саші +10 і (як у ТЗ) +10 відношення.
-  static void applyMorningRunGiveMoney({
+  /// Після «дати гроші» ($10 / $20): готівка Саші +10 відносин.
+  static bool applyMorningRunGiveCash({
     required NPCModel sasha,
-    required int dollarsGiven,
+    required PlayerStatsController player,
+    required int amount,
   }) {
-    final prevDebt = _readIntVar(sasha, morningRunDebtBucksVar);
-    sasha.setVar(morningRunDebtBucksVar, prevDebt + dollarsGiven);
+    if (amount <= 0 || player.money < amount) return false;
+    player.changeMoney(-amount);
+    sasha.changeMoney(amount);
     sasha.addRelationship(10.0);
+    return true;
+  }
+
+  /// $50 у борг: гроші з ГГ → Саші, +50 до боргу NPC перед ГГ (і event-var).
+  static bool applyMorningRunGiveAsDebt({
+    required GameWorldState world,
+    required NPCModel sasha,
+    required PlayerStatsController player,
+    required DateTime gameNow,
+  }) {
+    const amount = 50;
+    if (player.money < amount) return false;
+
+    player.changeMoney(-amount);
+    sasha.changeMoney(amount);
+
+    final prevDebt = _readIntVar(sasha, morningRunDebtBucksVar);
+    sasha.setVar(morningRunDebtBucksVar, prevDebt + amount);
+
+    final r = NpcFinanceRecord.fromJson(world.npcFinanceByNpcId['sasha']);
+    final todayIso = NpcFinanceRecord.dateIso(gameNow);
+    if (r.npcOwesGgTotal <= 0 && r.npcDebtFirstIssueDateIso == null) {
+      r.npcDebtFirstIssueDateIso = todayIso;
+    }
+    r.npcOwesGgTotal = (r.npcOwesGgTotal + amount).clamp(0, kNpcOwesGgMaxUsd);
+    r.npcOwesGgPenaltyBase =
+        (r.npcOwesGgPenaltyBase + amount).clamp(0, kNpcOwesGgMaxUsd);
+    world.npcFinanceByNpcId['sasha'] = r.toJson();
+
+    sasha.addRelationship(10.0);
+    return true;
   }
 
   static void incrementMorningRunTimesCompleted(NPCModel sasha) {

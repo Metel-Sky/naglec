@@ -42,10 +42,13 @@ String momKitchenEveningSeeded(int seed) => _pickSeeded(_momKitchenEveningVideos
 
 ///==========================================================================================
 
-/// Відео для мами у ванній вранці (8:00–9:00). Порожній = заглушка.
+/// Відео для мами у ванній вранці (9:00). Порожній = заглушка.
 const List<String> _momShowerMorningVideoList = [
   "lib/assets/npcs/mom/video/shower_25_use_1.mp4"
 ];
+
+/// Слот «мама у душі» — будні та вихідні о 9:00 (розклад mom_npc.dart).
+bool momShowerScheduleHour(int hour, int weekdayIndex) => hour == 9;
 
 String momShowerMorningVideos() => _pickRandom(_momShowerMorningVideoList);
 

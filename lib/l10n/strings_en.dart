@@ -293,7 +293,7 @@ final Map<String, String> stringsEn = {
   'npc_quest_mom_owes_service': 'Mom: pool debt',
   'profile_mom_owes_service_yes': 'Cleaned — Mom owes you (pay on kitchen)',
   'profile_mom_owes_service_no': 'Can offer cleaning (Mon/Thu)',
-  'profile_mom_owes_gg_count': 'Times owed: %s',
+  'profile_mom_owes_gg_label': 'Owed service',
   'profile_mom_quest001_beach': 'Beach counter: %s',
   'mom_quest_001_btn_agree': 'Agree',
   'mom_quest_001_btn_refuse': 'Refuse',
@@ -370,10 +370,23 @@ final Map<String, String> stringsEn = {
       'Fine, I\'ll help with homework if you clean my room',
   'piper_quest_001_btn_cover_20': 'Cover for me for \$20',
   'piper_quest_001_btn_refuse': 'Figure it out yourself',
+  'piper_quest_001_btn_gg_deal': 'Make a deal',
+  'piper_quest_001_btn_cover_20_no_punish': '\$20 and no punishment',
+  'piper_quest_001_btn_punish': 'Punish',
+  'piper_quest_001_btn_deal_show_breasts': 'Show your breasts',
+  'piper_quest_001_btn_deal_show_ass': 'Show your ass',
+  'piper_quest_001_step02_gg_deal_news':
+      '— Fine, we\'ll deal. But you\'ll show me something first.',
+  'piper_quest_001_step02_gg_deal_breasts_news':
+      'Piper reluctantly does what you asked. *(TBD — video)*',
+  'piper_quest_001_step02_gg_deal_ass_news':
+      'Piper turns around and shows you what you wanted. *(TBD — video)*',
   'piper_quest_001_btn_snitch_mom': 'Tell Mom about Piper\'s grades',
   'piper_quest_001_btn_step7a_command_piper':
       'Let me command Piper instead of you',
   'piper_quest_001_btn_tell_piper_punishment': 'Tell about punishment',
+  'piper_quest_gg_punish_piper_btn': 'Punish Piper',
+  'piper_quest_gg_punish_finish_btn': 'Finish',
   'piper_quest_001_step7b_tell_piper_news':
       '— Mom is tired of ordering you around and wants me to do it now.',
   'piper_quest_001_step7a_mom_grants_news':
@@ -395,6 +408,8 @@ final Map<String, String> stringsEn = {
   'piper_event_003_intro_news':
       'Piper is working out in the hall. She noticed you but keeps going — just nods.',
   'npc_quest_piper_bad_grades_001': '001 bad grades',
+  'profile_piper_bad_grades_crisis_row': 'Bad grade crisis',
+  'npc_quest_piper_gg_punishment': 'GG punishment',
   'profile_piper_bad_grades_crisis_on': 'crisis active',
   'profile_piper_bad_grades_crisis_off': 'crisis inactive',
   'profile_piper_bad_grades_count': 'Bad grades: %s',

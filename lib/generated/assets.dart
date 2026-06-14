@@ -503,11 +503,11 @@ class $AssetsLogisticGen {
 class $AssetsCollegeGen {
   const $AssetsCollegeGen();
 
-  final $AssetsRoomsGen rooms = const $AssetsRoomsGen();
+  final $AssetsCollegeRoomsGen rooms = const $AssetsCollegeRoomsGen();
 }
 
-class $AssetsRoomsGen {
-  const $AssetsRoomsGen();
+class $AssetsCollegeRoomsGen {
+  const $AssetsCollegeRoomsGen();
 
   final AssetGenImage audit1 = const AssetGenImage(
     'lib/assets/location/college/rooms/audit_1.jpg',
@@ -541,7 +541,7 @@ class $AssetsRoomsGen {
 class $AssetsHomeGgGen {
   const $AssetsHomeGgGen();
 
-  final $AssetsRoomsGen rooms = const $AssetsRoomsGen();
+  final $AssetsHomeGgRoomsGen rooms = const $AssetsHomeGgRoomsGen();
   final AssetGenImage a8 = const AssetGenImage(
     'lib/assets/location/home_gg/8.jpg',
   );
@@ -550,8 +550,8 @@ class $AssetsHomeGgGen {
   );
 }
 
-class $AssetsRoomsGen {
-  const $AssetsRoomsGen();
+class $AssetsHomeGgRoomsGen {
+  const $AssetsHomeGgRoomsGen();
 
   final AssetGenImage basement = const AssetGenImage(
     'lib/assets/location/home_gg/rooms/basement.jpg',
@@ -900,7 +900,7 @@ class $AssetsAmiaGen {
 class $AssetsPiperGen {
   const $AssetsPiperGen();
 
-  final $AssetsVideoGen video = const $AssetsVideoGen();
+  final $AssetsPiperVideoGen video = const $AssetsPiperVideoGen();
   final AssetGenImage piper = const AssetGenImage(
     'lib/assets/npcs/piper/piper.png',
   );
@@ -912,8 +912,8 @@ class $AssetsPiperGen {
   );
 }
 
-class $AssetsVideoGen {
-  const $AssetsVideoGen();
+class $AssetsPiperVideoGen {
+  const $AssetsPiperVideoGen();
 
   final String ggPunishPiper1 =
       'lib/assets/npcs/piper/video/gg_punish_piper_1.webm';
@@ -967,7 +967,7 @@ class $AssetsLisaGen {
 class $AssetsMomGen {
   const $AssetsMomGen();
 
-  final $AssetsVideoGen video = const $AssetsVideoGen();
+  final $AssetsMomVideoGen video = const $AssetsMomVideoGen();
   final AssetGenImage a9568826Img6122880x660 = const AssetGenImage(
     'lib/assets/npcs/mom/9568826-img-6122_880x660.jpg',
   );
@@ -1013,8 +1013,8 @@ class $AssetsMomGen {
   );
 }
 
-class $AssetsVideoGen {
-  const $AssetsVideoGen();
+class $AssetsMomVideoGen {
+  const $AssetsMomVideoGen();
 
   final String beach02Pereodevalka =
       'lib/assets/npcs/mom/video/Beach_02_pereodevalka.webm';
@@ -1165,7 +1165,7 @@ class $AssetsKorishFatherGen {
 class $AssetsNicoleGen {
   const $AssetsNicoleGen();
 
-  final $AssetsImgGen img = const $AssetsImgGen();
+  final $AssetsNicoleImgGen img = const $AssetsNicoleImgGen();
   final AssetGenImage a20208345Image0880x660 = const AssetGenImage(
     'lib/assets/npcs/nicole/20208345-image-0_880x660.png',
   );
@@ -1183,8 +1183,8 @@ class $AssetsNicoleGen {
   final String zauch = 'lib/assets/npcs/nicole/zauch.mp4';
 }
 
-class $AssetsImgGen {
-  const $AssetsImgGen();
+class $AssetsNicoleImgGen {
+  const $AssetsNicoleImgGen();
 
   final AssetGenImage a136074233912780880x660 = const AssetGenImage(
     'lib/assets/npcs/nicole/img/13607423-3912780_880x660.jpg',
@@ -1645,11 +1645,11 @@ class $AssetsLexiGen {
 class $AssetsRitaGen {
   const $AssetsRitaGen();
 
-  final $AssetsImgGen img = const $AssetsImgGen();
+  final $AssetsRitaImgGen img = const $AssetsRitaImgGen();
 }
 
-class $AssetsImgGen {
-  const $AssetsImgGen();
+class $AssetsRitaImgGen {
+  const $AssetsRitaImgGen();
 
   final AssetGenImage compromisingPhone1 = const AssetGenImage(
     'lib/assets/npcs/rita/img/compromising_phone_1.jpg',

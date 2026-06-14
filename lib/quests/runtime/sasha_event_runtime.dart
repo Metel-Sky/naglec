@@ -42,6 +42,13 @@ class SashaEventRuntime {
           QuestAction(id: 'giveMoney', label: 'дати гроші'),
           QuestAction(id: 'sendAway', label: 'Послать', isDestructive: true),
         ];
+      case SashaMorningRunPhase.moneyAmountChoice:
+        return const <QuestAction>[
+          QuestAction(id: 'give10', label: '10\$'),
+          QuestAction(id: 'give20', label: '20\$'),
+          QuestAction(id: 'give50', label: '50\$'),
+          QuestAction(id: 'backFromMoneyChoice', label: 'Назад'),
+        ];
       case SashaMorningRunPhase.afterPaid:
         return const <QuestAction>[
           QuestAction(id: 'leave', label: 'піти'),

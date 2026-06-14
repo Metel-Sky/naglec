@@ -11,6 +11,8 @@ class EventInteractionOverlay extends StatelessWidget {
   final bool eventVideoCloseWhenCompleted;
   final bool eventVideoLoop;
   final VoidCallback? eventVideoOnComplete;
+  final Duration? eventVideoMinWatchDuration;
+  final VoidCallback? eventVideoOnMinWatchReached;
   
   final String? eventVideoPendingButton;
   final VoidCallback? eventVideoOnButtonPressed;
@@ -25,6 +27,8 @@ class EventInteractionOverlay extends StatelessWidget {
     this.eventVideoCloseWhenCompleted = true,
     this.eventVideoLoop = false,
     this.eventVideoOnComplete,
+    this.eventVideoMinWatchDuration,
+    this.eventVideoOnMinWatchReached,
     this.eventVideoPendingButton,
     this.eventVideoOnButtonPressed,
     this.eventImagePath,
@@ -77,6 +81,8 @@ class EventInteractionOverlay extends StatelessWidget {
                   eventVideoPendingButton == null && !eventVideoFullScreen,
               closeWhenCompleted: eventVideoPendingButton == null && eventVideoCloseWhenCompleted,
               loop: eventVideoLoop,
+              minWatchDuration: eventVideoMinWatchDuration,
+              onMinWatchReached: eventVideoOnMinWatchReached,
               onClose: eventVideoPendingButton == null
                   ? () => eventVideoOnComplete?.call()
                   : () {},

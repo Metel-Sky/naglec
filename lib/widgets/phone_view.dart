@@ -497,38 +497,41 @@ class _NpcStatsDialogState extends State<_NpcStatsDialog> {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            children: [
-              SizedBox(
-                width: _labelWidth,
-                child: Text('$label:', style: const TextStyle(fontSize: 16, color: Colors.white70)),
-              ),
-              const SizedBox(width: _gapBetweenColumns),
-              SizedBox(width: _buttonColumnWidth, child: _miniBtn('-', onMinus)),
-              const SizedBox(width: _gapBetweenColumns),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-              const SizedBox(width: _gapBetweenColumns),
-              SizedBox(width: _buttonColumnWidth, child: _miniBtn('+', onPlus)),
-            ],
+          SizedBox(
+            width: _labelWidth,
+            child: Text('$label:', style: const TextStyle(fontSize: 16, color: Colors.white70)),
           ),
-          if (tier != null) ...[
-            Padding(
-              padding: const EdgeInsets.only(left: 12, top: 2),
-              child: Text('· $tier', style: const TextStyle(fontSize: 14, color: Colors.white54)),
+          const SizedBox(width: _gapBetweenColumns),
+          SizedBox(width: _buttonColumnWidth, child: _miniBtn('-', onMinus)),
+          const SizedBox(width: _gapBetweenColumns),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  value,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (tier != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      tier,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 14, color: Colors.white54),
+                    ),
+                  ),
+              ],
             ),
-          ],
+          ),
+          const SizedBox(width: _gapBetweenColumns),
+          SizedBox(width: _buttonColumnWidth, child: _miniBtn('+', onPlus)),
         ],
       ),
     );

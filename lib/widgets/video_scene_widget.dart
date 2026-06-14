@@ -33,7 +33,10 @@ class _VideoSceneWidgetState extends State<VideoSceneWidget> {
   void initState() {
     super.initState();
     player.setVolume(0);
-    _openVideo(widget.videoPath);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _openVideo(widget.videoPath);
+    });
   }
 
   @override

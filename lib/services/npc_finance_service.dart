@@ -157,9 +157,10 @@ abstract final class NpcFinanceService {
       if (player.money < 250) return false;
       player.changeMoney(-250);
       npc.changeMoney(250);
-      npc.addRelationship(20);
-      npc.changeBehavior(3);
-      npc.changeLust(2);
+      npc.changeLust(5);
+      npc.addRelationship(25);
+      npc.changeBehavior(4);
+      npc.changeArousal(5);
       r.give250Count++;
     } else {
       return false;

@@ -106,6 +106,12 @@ class GameUiStateController extends ChangeNotifier {
   bool _eventVideoLoop = false;
   bool get eventVideoLoop => _eventVideoLoop;
 
+  Duration? _eventVideoMinWatchDuration;
+  Duration? get eventVideoMinWatchDuration => _eventVideoMinWatchDuration;
+
+  VoidCallback? _eventVideoOnMinWatchReached;
+  VoidCallback? get eventVideoOnMinWatchReached => _eventVideoOnMinWatchReached;
+
   DenIntroUiPhase _denIntroUiPhase = DenIntroUiPhase.initial;
   DenIntroUiPhase get denIntroUiPhase => _denIntroUiPhase;
 
@@ -263,6 +269,14 @@ class GameUiStateController extends ChangeNotifier {
   void setEventVideoFullScreen(bool val) { _eventVideoFullScreen = val; notifyListeners(); }
   void setEventVideoCloseWhenCompleted(bool val) { _eventVideoCloseWhenCompleted = val; notifyListeners(); }
   void setEventVideoOnComplete(VoidCallback? val) { _eventVideoOnComplete = val; notifyListeners(); }
+  void setEventVideoMinWatchDuration(Duration? val) {
+    _eventVideoMinWatchDuration = val;
+    notifyListeners();
+  }
+  void setEventVideoOnMinWatchReached(VoidCallback? val) {
+    _eventVideoOnMinWatchReached = val;
+    notifyListeners();
+  }
   void setEventVideoPendingButtonOnly(String? val) { _eventVideoPendingButton = val; notifyListeners(); }
   void setEventVideoOnButtonPressedOnly(VoidCallback? val) { _eventVideoOnButtonPressed = val; notifyListeners(); }
 
@@ -281,6 +295,8 @@ class GameUiStateController extends ChangeNotifier {
     _eventVideoFullScreen = false;
     _eventVideoCloseWhenCompleted = true;
     _eventVideoLoop = false;
+    _eventVideoMinWatchDuration = null;
+    _eventVideoOnMinWatchReached = null;
     _eventImagePath = null;
     notifyListeners();
   }

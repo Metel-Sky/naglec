@@ -183,6 +183,12 @@ class GameWorldState {
   int piperQuest001PassesCompleted = 0;
   /// piper_quest_001 крок 2: ролик «просить не здавати» уже відтворено (не перезапускати).
   bool piperQuest001Step2VideoSeen = false;
+  /// piper_quest_001 крок 2 (ГG карає): підменю «Домовитись» — «Покажи сіськи» / «Покажи дупу».
+  bool piperQuest001Step2GgDealSubmenu = false;
+  /// piper_quest_001 крок 3: дзвінок мами (mom_phone) переглянуто до кінця.
+  bool piperQuest001Step3VideoSeen = false;
+  /// piper_quest_001 крок 5: поточне відео покарання переглянуто до кінця.
+  bool piperQuest001Step5VideoSeen = false;
   /// piper_quest_001 крок 3: ГГ уже натиснув «Підслухати» (лише «Піти»).
   bool piperQuest001Step3CallOverheard = false;
   /// piper_quest_001 крок 4: ГГ підслухав сварку (опційно; без відео).
@@ -200,6 +206,8 @@ class GameWorldState {
   bool piperGgPunishmentAnnouncedToPiper = false;
   /// piper_quest_001: чи ГG карає в **поточній** кризі (встановлюється при старті нової двійки).
   bool piperGgPunishmentThisCrisis = false;
+  /// piper_quest_001: добровільне покарання spank_001 у `piper_room` уже використано в цій кризі.
+  bool piperGgVoluntaryPunishDoneThisCrisis = false;
   /// piper_quest_001 крок 7C: `gg_punisher` / `gg_cover` / `homework_deal`.
   String piperPunishmentBranch = '';
   int piperBadGradesCount = 0;
@@ -310,6 +318,9 @@ class GameWorldState {
   int? kitchenVisitSeed;
   /// Seed для нічних sleep-відео в кімнаті мами (22–6): новий при кожному вході.
   int? momRoomNightVisitSeed;
+  /// Seed для відео мами у ванні (душ): новий при кожному заході в bathroom.
+  int? momBathroomVisitSeed;
+
   /// Seed для відео Пайпер у ванні (душ): новий при кожному заході в bathroom.
   int? piperBathroomVisitSeed;
   /// Квест Danielle / Sem: підглядання біля кімнати батьків (spyOnSemParents) вже відіграно.
@@ -417,6 +428,9 @@ class GameWorldState {
         'piperQuest001Step': piperQuest001Step,
         'piperQuest001PassesCompleted': piperQuest001PassesCompleted,
         'piperQuest001Step2VideoSeen': piperQuest001Step2VideoSeen,
+        'piperQuest001Step2GgDealSubmenu': piperQuest001Step2GgDealSubmenu,
+        'piperQuest001Step3VideoSeen': piperQuest001Step3VideoSeen,
+        'piperQuest001Step5VideoSeen': piperQuest001Step5VideoSeen,
         'piperQuest001Step3CallOverheard': piperQuest001Step3CallOverheard,
         'piperQuest001Step4ScoldingOverheard':
             piperQuest001Step4ScoldingOverheard,
@@ -433,6 +447,8 @@ class GameWorldState {
         'piperGgPunishmentGranted': piperGgPunishmentGranted,
         'piperGgPunishmentAnnouncedToPiper': piperGgPunishmentAnnouncedToPiper,
         'piperGgPunishmentThisCrisis': piperGgPunishmentThisCrisis,
+        'piperGgVoluntaryPunishDoneThisCrisis':
+            piperGgVoluntaryPunishDoneThisCrisis,
         'piperPunishmentBranch': piperPunishmentBranch,
         'teacherCallPending': teacherCallPending,
         'teacherCalledMom': teacherCalledMom,
@@ -489,6 +505,7 @@ class GameWorldState {
         'friendHouseSashaDoorOpenWeekday': friendHouseSashaDoorOpenWeekday,
         'kitchenVisitSeed': kitchenVisitSeed,
         'momRoomNightVisitSeed': momRoomNightVisitSeed,
+        'momBathroomVisitSeed': momBathroomVisitSeed,
         'piperBathroomVisitSeed': piperBathroomVisitSeed,
         'hasMomOfficeCompromatVideo3': hasMomOfficeCompromatVideo3,
         'compromatNpcIds': compromatNpcIds,
@@ -639,6 +656,12 @@ class GameWorldState {
             .clamp(0, 9999);
     piperQuest001Step2VideoSeen =
         json['piperQuest001Step2VideoSeen'] == true;
+    piperQuest001Step2GgDealSubmenu =
+        json['piperQuest001Step2GgDealSubmenu'] == true;
+    piperQuest001Step3VideoSeen =
+        json['piperQuest001Step3VideoSeen'] == true;
+    piperQuest001Step5VideoSeen =
+        json['piperQuest001Step5VideoSeen'] == true;
     piperQuest001Step3CallOverheard =
         json['piperQuest001Step3CallOverheard'] == true;
     piperQuest001Step4ScoldingOverheard =
@@ -662,6 +685,8 @@ class GameWorldState {
     piperGgPunishmentAnnouncedToPiper =
         json['piperGgPunishmentAnnouncedToPiper'] == true;
     piperGgPunishmentThisCrisis = json['piperGgPunishmentThisCrisis'] == true;
+    piperGgVoluntaryPunishDoneThisCrisis =
+        json['piperGgVoluntaryPunishDoneThisCrisis'] == true;
     piperPunishmentBranch = json['piperPunishmentBranch'] as String? ?? '';
     teacherCallPending = json['teacherCallPending'] == true;
     teacherCalledMom = json['teacherCalledMom'] == true;
@@ -784,6 +809,7 @@ class GameWorldState {
         (json['danielleSpyCaughtConfrontationCount'] as num?)?.toInt() ?? 0;
     kitchenVisitSeed = (json['kitchenVisitSeed'] as num?)?.toInt();
     momRoomNightVisitSeed = (json['momRoomNightVisitSeed'] as num?)?.toInt();
+    momBathroomVisitSeed = (json['momBathroomVisitSeed'] as num?)?.toInt();
     piperBathroomVisitSeed = (json['piperBathroomVisitSeed'] as num?)?.toInt();
     lastNpcEconomyProcessedDateKey =
         json['lastNpcEconomyProcessedDateKey'] as String?;
@@ -896,6 +922,7 @@ class GameWorldState {
     friendHouseSashaDoorOpenWeekday = null;
     kitchenVisitSeed = null;
     momRoomNightVisitSeed = null;
+    momBathroomVisitSeed = null;
     piperBathroomVisitSeed = null;
     hasMomOfficeCompromatVideo3 = false;
     compromatNpcIds = [];
