@@ -42,8 +42,17 @@ final Map<String, String> stringsEn = {
   'settings_cheats_on': 'On',
   'settings_cheats_off': 'Off',
   'profile_quests_section': 'Quests',
-  'npc_card_debt_npc_owes_gg': 'NPC owes PC',
-  'npc_card_debt_gg_owes_npc': 'PC owes NPC',
+  'profile_npc_sex_section': 'Intimate history',
+  'profile_npc_sex_drochila': 'handjob',
+  'profile_npc_sex_sosala': 'blowjob',
+  'profile_npc_sex_sex': 'sex',
+  'profile_npc_sex_anal': 'anal',
+  'profile_npc_sex_lesbo': 'lesbian',
+  'profile_npc_sex_grupovushka': 'group',
+  'npc_card_owes_alex': 'Owes Alex',
+  'npc_card_owes_alex_money': 'Money',
+  'npc_card_owes_alex_service': 'Favor',
+  'npc_card_debt_gg_owes_npc': 'Alex owes',
   'quest_status_done': 'Done',
   'quest_status_pending': 'Not done',
   'npc_quest_sem_parents_talk': 'Sem: talk about parents (house facade)',
@@ -331,11 +340,16 @@ final Map<String, String> stringsEn = {
   'mom_event_002_btn_pay_50': '\$50',
   'mom_event_002_btn_you_owe': 'You owe me',
   'mom_event_002_btn_leave': 'Leave',
+  'mom_grocery_debt_btn': 'Mom, I bought groceries for home',
+  'mom_grocery_debt_news':
+      '— Oh, what a good boy! You really saved me. And I owe you one.',
   'piper_quest_001_step01_news':
       'In the library Piper whispers to a classmate:\n— Don\'t tell Mom… I got an F in {subject} again.',
   'piper_quest_001_step01_after_news': 'Now you know about Piper\'s trouble.',
   'piper_quest_001_step02_news':
       '— Don\'t tell Mom… I\'m in trouble with {subject} again. Please help.',
+  'piper_quest_001_step02_gg_news':
+      '— I got an F in {subject} again. You can punish me now, like we agreed with Mom… Help me somehow.',
   'piper_quest_001_step03_intro_news':
       'I went into the kitchen; Mom was talking to someone on the phone.',
   'piper_quest_001_step03_news':
@@ -375,18 +389,30 @@ final Map<String, String> stringsEn = {
   'piper_quest_001_btn_punish': 'Punish',
   'piper_quest_001_btn_deal_show_breasts': 'Show your breasts',
   'piper_quest_001_btn_deal_show_ass': 'Show your ass',
+  'piper_quest_001_btn_deal_strip_full': 'Strip completely',
   'piper_quest_001_step02_gg_deal_news':
       '— Fine, we\'ll deal. But you\'ll show me something first.',
-  'piper_quest_001_step02_gg_deal_breasts_news':
-      'Piper reluctantly does what you asked. *(TBD — video)*',
-  'piper_quest_001_step02_gg_deal_ass_news':
-      'Piper turns around and shows you what you wanted. *(TBD — video)*',
+  'piper_quest_001_step02_gg_deal_rejected_news': 'Are you crazy?',
   'piper_quest_001_btn_snitch_mom': 'Tell Mom about Piper\'s grades',
   'piper_quest_001_btn_step7a_command_piper':
       'Let me command Piper instead of you',
   'piper_quest_001_btn_tell_piper_punishment': 'Tell about punishment',
   'piper_quest_gg_punish_piper_btn': 'Punish Piper',
   'piper_quest_gg_punish_finish_btn': 'Finish',
+  'piper_quest_001_btn_punish_harsh': 'Punish harshly',
+  'piper_quest_001_btn_harsh_finish': 'Finish in mouth',
+  'piper_quest_001_btn_spread_legs': 'Spread legs',
+  'piper_quest_001_btn_harsh_doggy': 'On all fours',
+  'piper_quest_001_btn_harsh_cowgirl': 'Ride on top',
+  'piper_quest_001_btn_harsh_finish_on_ass': 'Finish on ass',
+  'piper_quest_001_spread_legs_news':
+      '— Spread your legs wider, — you say.\n\nPiper silently obeys, never breaking eye contact.',
+  'piper_quest_001_spread_legs_rejected_news':
+      'Are you out of your mind? Try something like that again and I\'ll tell Mom.',
+  'piper_quest_001_harsh_sex_doggy_news':
+      'You put Piper on all fours.',
+  'piper_quest_001_harsh_sex_cowgirl_news':
+      'You sit Piper on top.',
   'piper_quest_001_step7b_tell_piper_news':
       '— Mom is tired of ordering you around and wants me to do it now.',
   'piper_quest_001_step7a_mom_grants_news':
@@ -428,6 +454,12 @@ final Map<String, String> stringsEn = {
       '— Nine o\'clock — in your room. No laptop. Mom said I\'m in charge.',
   'piper_quest_001_step05_gg_level3_news':
       'Piper is on her knees. Mom let me punish her — within reason.',
+  'piper_quest_001_step05_level3_news_1st':
+      '— If you don\'t start studying properly, next time I\'ll punish you completely differently!',
+  'piper_quest_001_step05_level3_news_2nd':
+      '— That\'s your second warning. Next time I won\'t be joking — it\'ll be completely different!',
+  'piper_quest_001_step05_level3_news_3rd_final':
+      '— That\'s it, Piper — last warning. Next bad grade, and I punish you completely differently!!!',
   'mom_quest_001_step01_news': 'Quest 001 beach\nText 1',
   'mom_quest_001_step02_news': 'Quest 001 beach\nText 2',
   'mom_quest_001_step03_news': 'Quest 001 beach\nText 3',
@@ -665,7 +697,8 @@ final Map<String, String> stringsEn = {
   'npc_finance_mom_no_money': "Sorry, I don't have any money right now",
   'npc_finance_back_actions': 'Back',
   'gg_event_001_stojak_body':
-      "Aren't you ashamed?\nNo, no. Why?\nWell, something's about to burst out of your pants.",
+      'Something is about to burst out of your pants.',
+  'gg_event_001_stojak_btn_leave': 'Leave',
   'npc_finance_pick_amount': 'Choose amount',
   'npc_finance_npc_no_money': 'This character does not have enough money right now.',
   'npc_finance_you_gifted': r'You gave the character %s $.',

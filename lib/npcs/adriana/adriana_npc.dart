@@ -12,7 +12,7 @@ NPCModel createAdrianaNpc() {
     gender: NpcGender.female,
     name: 'Adriana',
     fullName: 'Adriana',
-    status: 'Мешканка',
+    status: 'Двоюрідна сестра',
     biographyType:
         'Живе в будинку Cherie в Мажорщині, у кімнаті Adriana.',
     age: 22,

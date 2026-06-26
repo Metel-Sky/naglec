@@ -18,6 +18,7 @@ class EventInteractionOverlay extends StatelessWidget {
   final VoidCallback? eventVideoOnButtonPressed;
   
   final String? eventImagePath;
+  final double eventVideoPlaybackRate;
 
   const EventInteractionOverlay({
     super.key,
@@ -32,6 +33,7 @@ class EventInteractionOverlay extends StatelessWidget {
     this.eventVideoPendingButton,
     this.eventVideoOnButtonPressed,
     this.eventImagePath,
+    this.eventVideoPlaybackRate = 1.0,
   });
 
   @override
@@ -76,6 +78,7 @@ class EventInteractionOverlay extends StatelessWidget {
             child: MasturbateVideoOverlay(
               key: ValueKey<String>(eventVideoPath!),
               videoPath: eventVideoPath!,
+              playbackRate: eventVideoPlaybackRate,
               // Повноекранне відео + кнопки в GameDialogPanel: інакше AdaptiveVideoControls дає другі «…».
               showControls:
                   eventVideoPendingButton == null && !eventVideoFullScreen,

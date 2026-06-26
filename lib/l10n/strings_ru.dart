@@ -42,8 +42,17 @@ final Map<String, String> stringsRu = {
   'settings_cheats_on': 'Включено',
   'settings_cheats_off': 'Выключено',
   'profile_quests_section': 'Квесты',
-  'npc_card_debt_npc_owes_gg': 'Долг ГГ (виновата)',
-  'npc_card_debt_gg_owes_npc': 'ГГ должен',
+  'profile_npc_sex_section': 'Иntimная история',
+  'profile_npc_sex_drochila': 'дрочила',
+  'profile_npc_sex_sosala': 'сосала',
+  'profile_npc_sex_sex': 'секс',
+  'profile_npc_sex_anal': 'анал',
+  'profile_npc_sex_lesbo': 'лесбо',
+  'profile_npc_sex_grupovushka': 'групповуха',
+  'npc_card_owes_alex': 'Должна Алексу',
+  'npc_card_owes_alex_money': 'Денег',
+  'npc_card_owes_alex_service': 'Услугу',
+  'npc_card_debt_gg_owes_npc': 'Алекс должен',
   'quest_status_done': 'Пройден',
   'quest_status_pending': 'Не пройден',
   'npc_quest_sem_parents_talk': 'Sem: разговор о родителях (фасад дома)',
@@ -331,11 +340,16 @@ final Map<String, String> stringsRu = {
   'mom_event_002_btn_pay_50': '\$50',
   'mom_event_002_btn_you_owe': 'Будешь мне должна',
   'mom_event_002_btn_leave': 'Уйти',
+  'mom_grocery_debt_btn': 'Мама, я купил домой продукты',
+  'mom_grocery_debt_news':
+      '— Ох, какой ты молодец! Очень сильно выручил. А я тебе должна.',
   'piper_quest_001_step01_news':
       'В библиотеке Пайпер шепчет одногрупнице:\n— Не говори маме… у меня снова двойка по {subject}.',
   'piper_quest_001_step01_after_news': 'Теперь ты знаешь о проблемах Пайпер.',
   'piper_quest_001_step02_news':
       '— Не говори маме… у меня снова проблемы с {subject}. Помоги, пожалуйста.',
+  'piper_quest_001_step02_gg_news':
+      '— У меня снова двойка по {subject}. Ты же теперь можешь меня наказать… Помоги как-нибудь.',
   'piper_quest_001_step03_intro_news':
       'Я зашёл на кухню, там мама разговаривала с кем-то по телефону.',
   'piper_quest_001_step03_news':
@@ -375,18 +389,30 @@ final Map<String, String> stringsRu = {
   'piper_quest_001_btn_punish': 'Наказать',
   'piper_quest_001_btn_deal_show_breasts': 'Покажи сиськи',
   'piper_quest_001_btn_deal_show_ass': 'Покажи попу',
+  'piper_quest_001_btn_deal_strip_full': 'Разоденься полностью',
   'piper_quest_001_step02_gg_deal_news':
       '— Ладно, договоримся. Но ты мне кое-что покажешь.',
-  'piper_quest_001_step02_gg_deal_breasts_news':
-      'Пайпер неохотно выполняет просьбу. *(TBD — видео)*',
-  'piper_quest_001_step02_gg_deal_ass_news':
-      'Пайпер поворачивается и показывает то, о чём ты просил. *(TBD — видео)*',
+  'piper_quest_001_step02_gg_deal_rejected_news': 'Ты что, дурной?',
   'piper_quest_001_btn_snitch_mom': 'Рассказать об оценках Пайпер',
   'piper_quest_001_btn_step7a_command_piper':
       'Пусть я буду наказывать Пайпер вместо тебя',
   'piper_quest_001_btn_tell_piper_punishment': 'Сказать о наказании',
   'piper_quest_gg_punish_piper_btn': 'Наказать Пайпер',
   'piper_quest_gg_punish_finish_btn': 'Завершить',
+  'piper_quest_001_btn_punish_harsh': 'Наказать жёстко',
+  'piper_quest_001_btn_harsh_finish': 'Кончить в рот',
+  'piper_quest_001_btn_spread_legs': 'Раздвинуть ноги',
+  'piper_quest_001_btn_harsh_doggy': 'Поставить раком',
+  'piper_quest_001_btn_harsh_cowgirl': 'Посадить сверху',
+  'piper_quest_001_btn_harsh_finish_on_ass': 'Кончить на попу',
+  'piper_quest_001_spread_legs_news':
+      '— Раздвинь ноги шире, — говоришь ты.\n\nПайпер молча подчиняется, не отводя от тебя взгляда.',
+  'piper_quest_001_spread_legs_rejected_news':
+      'Ты что, вообще, конченый? Ещё раз что-то подобное выкинешь — расскажу маме.',
+  'piper_quest_001_harsh_sex_doggy_news':
+      'Ты переворачиваешь Пайпер на четвереньки.',
+  'piper_quest_001_harsh_sex_cowgirl_news':
+      'Ты садишь Пайпер сверху.',
   'piper_quest_001_step7b_tell_piper_news':
       '— Мама устала тебя командовать и хочет, чтобы это теперь делал я.',
   'piper_quest_001_step7a_mom_grants_news':
@@ -428,6 +454,12 @@ final Map<String, String> stringsRu = {
       '— В девять — в комнате. Без ноутбука. Мама разрешила — я слежу.',
   'piper_quest_001_step05_gg_level3_news':
       'Пайпер стоит на коленях. Мама разрешила мне наказать её — в разумных пределах.',
+  'piper_quest_001_step05_level3_news_1st':
+      '— Если ты не начнёшь нормально учиться, то в следующий раз буду наказывать совсем по-другому!',
+  'piper_quest_001_step05_level3_news_2nd':
+      '— Это уже второе предупреждение. В следующий раз не шучу — будет совсем по-другому!',
+  'piper_quest_001_step05_level3_news_3rd_final':
+      '— Ну всё, Пайпер, это последнее предупреждение. За следующую двойку накажу совсем по-другому!!!',
   'mom_quest_001_step01_news': 'Квест 001 пляж\nТекст 1',
   'mom_quest_001_step02_news': 'Квест 001 пляж\nТекст 2',
   'mom_quest_001_step03_news': 'Квест 001 пляж\nТекст 3',
@@ -671,7 +703,8 @@ final Map<String, String> stringsRu = {
   'npc_finance_mom_no_money': 'Извини, но у меня сейчас нет денег',
   'npc_finance_back_actions': 'Назад',
   'gg_event_001_stojak_body':
-      'Тебе не стыдно?\nНет, нет. А что?\nНу, у тебя сейчас из штанов что-то вылезет.',
+      'У тебя сейчас из штанов что-то выскочит.',
+  'gg_event_001_stojak_btn_leave': 'Уйти',
   'npc_finance_pick_amount': 'Выбери сумму',
   'npc_finance_npc_no_money': 'У этого персонажа сейчас слишком мало денег.',
   'npc_finance_you_gifted': r'Ты передал персонажу %s $.',

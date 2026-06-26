@@ -10,9 +10,11 @@ import '../services/game_time_controller.dart';
 import '../data/locations_room_data.dart';
 import '../theme/game_theme.dart';
 import '../services/locale_controller.dart';
+import '../data/npc_profile_display.dart';
 import '../models/npc_secondary.dart';
 import '../utils/npc_portrait_paths.dart';
 import 'npc_circle_avatar_image.dart';
+import 'npc_profile_owes_alex_row.dart';
 
 /// Телефон зі списком контактів: аватар (тап = статистика NPC), місце знаходження, подзвонити/SMS.
 class PhoneView extends StatefulWidget {
@@ -358,10 +360,7 @@ class _NpcStatsDialogState extends State<_NpcStatsDialog> {
                               onMinus: () => _change(() => npc.changeInfluence(-1)),
                               onPlus: () => _change(() => npc.changeInfluence(1)),
                             ),
-                            _buildStatRowReadOnly(
-                              sl<LocaleController>().t('npc_card_debt_npc_owes_gg'),
-                              '\$${NpcFinanceService.npcOwesGg(sl<GameWorldState>(), npc.id)}',
-                            ),
+                            _buildOwesAlexRows(npc),
                             _buildStatRowReadOnly(
                               sl<LocaleController>().t('npc_card_debt_gg_owes_npc'),
                               '\$${NpcFinanceService.ggOwesNpc(sl<GameWorldState>(), npc.id)}',
@@ -413,10 +412,7 @@ class _NpcStatsDialogState extends State<_NpcStatsDialog> {
                               onMinus: () => _change(() => npc.changeInfluence(-1)),
                               onPlus: () => _change(() => npc.changeInfluence(1)),
                             ),
-                            _buildStatRowReadOnly(
-                              sl<LocaleController>().t('npc_card_debt_npc_owes_gg'),
-                              '\$${NpcFinanceService.npcOwesGg(sl<GameWorldState>(), npc.id)}',
-                            ),
+                            _buildOwesAlexRows(npc),
                             _buildStatRowReadOnly(
                               sl<LocaleController>().t('npc_card_debt_gg_owes_npc'),
                               '\$${NpcFinanceService.ggOwesNpc(sl<GameWorldState>(), npc.id)}',
@@ -436,7 +432,7 @@ class _NpcStatsDialogState extends State<_NpcStatsDialog> {
             margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             decoration: GameTheme.cardDecoration(),
             child: Text(
-              '${npc.fullName}, ${npc.age} років',
+              '${NpcProfileDisplay.cardTitleLine(npc)}',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
             ),
@@ -458,6 +454,17 @@ class _NpcStatsDialogState extends State<_NpcStatsDialog> {
   void _change(VoidCallback action) {
     action();
     setState(() {});
+  }
+
+  Widget _buildOwesAlexRows(NPCModel npc) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: NpcProfileOwesAlexRow(
+        gameWorld: sl<GameWorldState>(),
+        npc: npc,
+        fontSize: 16,
+      ),
+    );
   }
 
   Widget _buildStatRowReadOnly(String label, String value) {

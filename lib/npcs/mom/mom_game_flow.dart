@@ -850,4 +850,26 @@ mixin MomGameFlow on MainGameScreenStateBase {
 
     return null;
   }
+
+  bool _canMomDeliverGroceriesToMom() {
+    final npcService = sl<NPCService>();
+    return MomGroceryDebt.canDeliverGroceriesToMom(
+      npcService: npcService,
+      mom: npcService.npcById('mom'),
+      hour: _timeController.dateTime.hour,
+      weekdayIndex: _timeController.weekdayIndex,
+      currentZone: currentZone,
+      isInsideRoom: isInsideRoom,
+      currentRoom: currentRoom,
+      groceryItemCount: _inventory.count(MomGroceryDebt.groceryItemId),
+    );
+  }
+
+  void _momApplyGroceryDelivery() {
+    if (!_canMomDeliverGroceriesToMom()) return;
+    MomGroceryDebt.applyDelivery(world: _worldState);
+    _inventory.removeItem(MomGroceryDebt.groceryItemId);
+    newsMessage = sl<LocaleController>().t('mom_grocery_debt_news');
+    _saveService.autosave();
+  }
 }

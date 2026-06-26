@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../cheats/npc_quest_cheats.dart';
+import '../data/npc_profile_display.dart';
 import '../data/npc_profile_quests_registry.dart';
+import '../data/npc_sex_stats.dart';
 import '../npcs/cherie/cherie_quests.dart';
 import '../models/npc_model.dart';
 import '../models/npc_secondary.dart';
@@ -15,9 +17,10 @@ import '../services/settings_controller.dart';
 import '../services/service_locator.dart';
 import '../theme/game_theme.dart';
 import '../utils/npc_portrait_paths.dart';
+import 'npc_profile_owes_alex_row.dart';
 import 'npc_stat_edit_rows.dart';
 
-/// Профіль NPC у стилі аркуша персонажа: властивості, зовнішність, біографія, слабкості, чекпоінти, компромат.
+/// Профіль NPC у стилі аркуша персонажа: властивості, біографія, чекпоінти, компромат.
 class NpcProfileView extends StatelessWidget {
   final NPCModel npc;
   /// Якщо разом із [npcService] задано — велике фото враховує поточний розклад (офіціантка в кафе тощо).
@@ -64,7 +67,7 @@ class NpcProfileView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        npc.status ?? npc.name,
+                        NpcProfileDisplay.cardTitleLine(npc),
                         style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -73,57 +76,6 @@ class NpcProfileView extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       _NpcProfileStatsPanel(npc: npc, gameWorld: gameWorld),
-                      if (npc.status != null || npc.subStatus != null) ...[
-                        const SizedBox(height: 8),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (npc.status != null)
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: Colors.deepOrange.shade700.withValues(alpha: 0.8),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  npc.status!,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            if (npc.status != null && npc.subStatus != null)
-                              const SizedBox(width: 5),
-                            if (npc.subStatus != null)
-                              Container(
-                                constraints: const BoxConstraints(maxWidth: 220),
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: GameTheme.textGreen,
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.35),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Text(
-                                  npc.subStatus!,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ],
                     ],
                   ),
                 ),
@@ -131,27 +83,25 @@ class NpcProfileView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Body (зовнішність)
-            if (npc.bodyDescription != null && npc.bodyDescription!.isNotEmpty) ...[
-              _sectionLabel('≡ Body:'),
-              const SizedBox(height: 4),
+            if (npc.biographyType != null && npc.biographyType!.isNotEmpty) ...[
+              _sectionLabel('Біографія та Характер', highlight: true),
+              const SizedBox(height: 8),
               Text(
-                npc.bodyDescription!,
+                npc.biographyType!,
                 textAlign: TextAlign.left,
                 style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
             ],
 
-            // Біографія та Характер
-            if ((npc.biographyType != null && npc.biographyType!.isNotEmpty) ||
-                (npc.biographyAppearance != null && npc.biographyAppearance!.isNotEmpty)) ...[
-              _sectionLabel('Біографія та Характер', highlight: true),
+            if (NpcProfileDisplay.appearanceParagraph(npc) != null) ...[
+              _sectionLabel('Зовнішність', highlight: true),
               const SizedBox(height: 8),
-              if (npc.biographyType != null && npc.biographyType!.isNotEmpty)
-                _bioLine('Типаж:', npc.biographyType!),
-              if (npc.biographyAppearance != null && npc.biographyAppearance!.isNotEmpty)
-                _bioLine('Зовнішність:', npc.biographyAppearance!),
+              Text(
+                NpcProfileDisplay.appearanceParagraph(npc)!,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
+              ),
               const SizedBox(height: 16),
             ],
 
@@ -233,24 +183,13 @@ class NpcProfileView extends StatelessWidget {
                   : [const Padding(padding: EdgeInsets.only(bottom: 6), child: Text('—', style: TextStyle(color: Colors.white54, fontSize: 14)))],
             ),
 
-            // Слабкості (Fetishes/Hooks)
-            if (npc.weaknesses != null && npc.weaknesses!.isNotEmpty)
-              _collapsibleSection(
-                context,
-                title: 'Слабкості (Fetishes/Hooks)',
-                children: npc.weaknesses!
-                    .map((s) => Padding(
-                          padding: const EdgeInsets.only(bottom: 6),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('• ', style: TextStyle(color: Colors.white70, fontSize: 14)),
-                              Expanded(child: Text(s, style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.35))),
-                            ],
-                          ),
-                        ))
-                    .toList(),
-              ),
+            _collapsibleSection(
+              context,
+              title: sl<LocaleController>().t('profile_npc_sex_section'),
+              children: [
+                _NpcProfileSexStatsList(npc: npc),
+              ],
+            ),
 
             const SizedBox(height: 24),
           ],
@@ -272,21 +211,6 @@ class NpcProfileView extends StatelessWidget {
           fontSize: 15,
           fontWeight: FontWeight.w600,
           color: highlight ? Colors.amber.shade200 : Colors.white,
-        ),
-      ),
-    );
-  }
-
-  Widget _bioLine(String label, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: RichText(
-        text: TextSpan(
-          style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
-          children: [
-            TextSpan(text: '$label ', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.9))),
-            TextSpan(text: text),
-          ],
         ),
       ),
     );
@@ -345,6 +269,28 @@ class NpcProfileView extends StatelessWidget {
 }
 
 /// Стати в шапці картки NPC: read-only або ± при увімкнених читах.
+class _NpcProfileOwesAlexBlock extends StatelessWidget {
+  const _NpcProfileOwesAlexBlock({
+    required this.gameWorld,
+    required this.npc,
+  });
+
+  final GameWorldState? gameWorld;
+  final NPCModel npc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: NpcProfileOwesAlexRow(
+        gameWorld: gameWorld,
+        npc: npc,
+      ),
+    );
+  }
+}
+
+/// Стати в шапці картки NPC: read-only або ± при увімкнених читах.
 class _NpcProfileStatsPanel extends StatefulWidget {
   const _NpcProfileStatsPanel({
     required this.npc,
@@ -388,7 +334,6 @@ class _NpcProfileStatsPanelState extends State<_NpcProfileStatsPanel> {
             final statsBlock = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            NpcStatReadOnlyRow(label: 'Ім\'я', value: npc.fullName),
             if (isSecondaryNpc(npc)) ...[
               const Padding(
                 padding: EdgeInsets.only(top: 8),
@@ -442,12 +387,7 @@ class _NpcProfileStatsPanelState extends State<_NpcProfileStatsPanel> {
                   value: '${npc.influenceFromGg} / 100',
                 ),
               ],
-              NpcStatReadOnlyRow(
-                label: t('npc_card_debt_npc_owes_gg'),
-                value: gameWorld != null
-                    ? '\$${NpcFinanceService.npcOwesGg(gameWorld, npc.id)}'
-                    : '\$0',
-              ),
+              _NpcProfileOwesAlexBlock(gameWorld: gameWorld, npc: npc),
               NpcStatReadOnlyRow(
                 label: t('npc_card_debt_gg_owes_npc'),
                 value: gameWorld != null
@@ -500,12 +440,7 @@ class _NpcProfileStatsPanelState extends State<_NpcProfileStatsPanel> {
                 onMinus: () => _applyStatChange(() => npc.changeInfluence(-1)),
                 onPlus: () => _applyStatChange(() => npc.changeInfluence(1)),
               ),
-              NpcStatReadOnlyRow(
-                label: t('npc_card_debt_npc_owes_gg'),
-                value: gameWorld != null
-                    ? '\$${NpcFinanceService.npcOwesGg(gameWorld, npc.id)}'
-                    : '\$0',
-              ),
+              _NpcProfileOwesAlexBlock(gameWorld: gameWorld, npc: npc),
               NpcStatReadOnlyRow(
                 label: t('npc_card_debt_gg_owes_npc'),
                 value: gameWorld != null
@@ -534,12 +469,7 @@ class _NpcProfileStatsPanelState extends State<_NpcProfileStatsPanel> {
                 label: 'Вплив ГГ',
                 value: '${npc.influenceFromGg} / 100',
               ),
-              NpcStatReadOnlyRow(
-                label: t('npc_card_debt_npc_owes_gg'),
-                value: gameWorld != null
-                    ? '\$${NpcFinanceService.npcOwesGg(gameWorld, npc.id)}'
-                    : '\$0',
-              ),
+              _NpcProfileOwesAlexBlock(gameWorld: gameWorld, npc: npc),
               NpcStatReadOnlyRow(
                 label: t('npc_card_debt_gg_owes_npc'),
                 value: gameWorld != null
@@ -1150,6 +1080,34 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
               .toList(),
         );
       },
+    );
+  }
+}
+
+class _NpcProfileSexStatsList extends StatelessWidget {
+  const _NpcProfileSexStatsList({required this.npc});
+
+  final NPCModel npc;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = sl<LocaleController>().t;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final varKey in NpcSexStats.orderedVarKeys)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(
+              '${t(NpcSexStats.labelL10nKeys[varKey]!)}: ${NpcSexStats.read(npc, varKey)}',
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+                height: 1.35,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

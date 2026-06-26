@@ -7,6 +7,10 @@ import 'mom_video_func.dart';
 const String kMomGalleryPortraitPath = 'lib/assets/npcs/mom/mom.jpg';
 const String kMomAvatarPath = 'lib/assets/npcs/mom/mom_ava.png';
 
+/// Заглушка офісу / work slot — не показувати як силует NPC у домі (кухня тощо).
+const String kMomWorkplacePlaceholderPath =
+    'lib/assets/npcs/mom/mom_work_place.jpg';
+
 /// Особисті речі мами, які можуть дуже рідко випадати при обшуку її кімнати.
 const List<LootOption> momPersonalLoot = [
   LootOption(item: GameItems.panties, weight: 0.1),
@@ -158,7 +162,7 @@ NPCModel createMomNpc() {
         hourStart: 10,
         hourEnd: 11,
         location: 'kitchen',
-        spritePath: 'lib/assets/npcs/mom/mom_work_place.jpg',
+        spritePath: kMomAvatarPath,
         days: [5, 6],
         actionLabel: '',
       ),

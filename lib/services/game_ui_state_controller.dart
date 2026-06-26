@@ -112,6 +112,9 @@ class GameUiStateController extends ChangeNotifier {
   VoidCallback? _eventVideoOnMinWatchReached;
   VoidCallback? get eventVideoOnMinWatchReached => _eventVideoOnMinWatchReached;
 
+  double _eventVideoPlaybackRate = 1.0;
+  double get eventVideoPlaybackRate => _eventVideoPlaybackRate;
+
   DenIntroUiPhase _denIntroUiPhase = DenIntroUiPhase.initial;
   DenIntroUiPhase get denIntroUiPhase => _denIntroUiPhase;
 
@@ -277,6 +280,10 @@ class GameUiStateController extends ChangeNotifier {
     _eventVideoOnMinWatchReached = val;
     notifyListeners();
   }
+  void setEventVideoPlaybackRate(double val) {
+    _eventVideoPlaybackRate = val;
+    notifyListeners();
+  }
   void setEventVideoPendingButtonOnly(String? val) { _eventVideoPendingButton = val; notifyListeners(); }
   void setEventVideoOnButtonPressedOnly(VoidCallback? val) { _eventVideoOnButtonPressed = val; notifyListeners(); }
 
@@ -297,6 +304,7 @@ class GameUiStateController extends ChangeNotifier {
     _eventVideoLoop = false;
     _eventVideoMinWatchDuration = null;
     _eventVideoOnMinWatchReached = null;
+    _eventVideoPlaybackRate = 1.0;
     _eventImagePath = null;
     notifyListeners();
   }

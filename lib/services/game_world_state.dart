@@ -185,8 +185,29 @@ class GameWorldState {
   bool piperQuest001Step2VideoSeen = false;
   /// piper_quest_001 крок 2 (ГG карає): підменю «Домовитись» — «Покажи сіськи» / «Покажи дупу».
   bool piperQuest001Step2GgDealSubmenu = false;
+  /// Після «Покажи сіськи/дупу»: картинка або відмова — очікує «Піти».
+  bool piperQuest001GgDealRevealPending = false;
+  bool piperQuest001GgDealRevealSuccess = false;
+  /// `breasts` | `ass` | `full`
+  String piperQuest001GgDealRevealKind = '';
+  /// Успішне «Покажи дупу» в «Домовитись» (назавжди — для spank_002).
+  bool piperQuest001GgDealAssShown = false;
+  /// Успішне «Покажи сіськи» в «Домовитись» (назавжди — для spank_003).
+  bool piperQuest001GgDealBreastsShown = false;
+  /// Успішних «Роздягнись повністю» (для tier statів у таблиці Notion).
+  int piperQuest001GgDealFullStripCount = 0;
+  /// Скільки разів завершено «Покарати жорстко» (spank_004 tier statів).
+  int piperQuest001HarshPunishCount = 0;
   /// piper_quest_001 крок 3: дзвінок мами (mom_phone) переглянуто до кінця.
   bool piperQuest001Step3VideoSeen = false;
+  /// piper_quest_001 крок 5: криза ≥ 6 — після spank_003 доступна «Покарати жорстко».
+  bool piperQuest001Step5HarshOfferActive = false;
+  /// piper_quest_001 крок 5: активне spank_004 після «Покарати жорстко».
+  bool piperQuest001HarshPunishActive = false;
+  /// Жорстке покарання: «Роздвинути ноги» уже зараховано в лічильник «Секс» (1 раз за сесію).
+  bool piperQuest001HarshSpreadLegsSexCounted = false;
+  /// piper_quest_001 «Везунчик»: stat-gate обійдено — уся harsh-гілка до кінця сесії.
+  bool piperQuest001VezunchykActive = false;
   /// piper_quest_001 крок 5: поточне відео покарання переглянуто до кінця.
   bool piperQuest001Step5VideoSeen = false;
   /// piper_quest_001 крок 3: ГГ уже натиснув «Підслухати» (лише «Піти»).
@@ -429,8 +450,21 @@ class GameWorldState {
         'piperQuest001PassesCompleted': piperQuest001PassesCompleted,
         'piperQuest001Step2VideoSeen': piperQuest001Step2VideoSeen,
         'piperQuest001Step2GgDealSubmenu': piperQuest001Step2GgDealSubmenu,
+        'piperQuest001GgDealRevealPending': piperQuest001GgDealRevealPending,
+        'piperQuest001GgDealRevealSuccess': piperQuest001GgDealRevealSuccess,
+        'piperQuest001GgDealRevealKind': piperQuest001GgDealRevealKind,
+        'piperQuest001GgDealAssShown': piperQuest001GgDealAssShown,
+        'piperQuest001GgDealBreastsShown': piperQuest001GgDealBreastsShown,
+        'piperQuest001GgDealFullStripCount': piperQuest001GgDealFullStripCount,
+        'piperQuest001HarshPunishCount': piperQuest001HarshPunishCount,
         'piperQuest001Step3VideoSeen': piperQuest001Step3VideoSeen,
         'piperQuest001Step5VideoSeen': piperQuest001Step5VideoSeen,
+        'piperQuest001Step5HarshOfferActive':
+            piperQuest001Step5HarshOfferActive,
+        'piperQuest001HarshPunishActive': piperQuest001HarshPunishActive,
+        'piperQuest001HarshSpreadLegsSexCounted':
+            piperQuest001HarshSpreadLegsSexCounted,
+        'piperQuest001VezunchykActive': piperQuest001VezunchykActive,
         'piperQuest001Step3CallOverheard': piperQuest001Step3CallOverheard,
         'piperQuest001Step4ScoldingOverheard':
             piperQuest001Step4ScoldingOverheard,
@@ -658,10 +692,32 @@ class GameWorldState {
         json['piperQuest001Step2VideoSeen'] == true;
     piperQuest001Step2GgDealSubmenu =
         json['piperQuest001Step2GgDealSubmenu'] == true;
+    piperQuest001GgDealRevealPending =
+        json['piperQuest001GgDealRevealPending'] == true;
+    piperQuest001GgDealRevealSuccess =
+        json['piperQuest001GgDealRevealSuccess'] == true;
+    piperQuest001GgDealRevealKind =
+        json['piperQuest001GgDealRevealKind'] as String? ?? '';
+    piperQuest001GgDealAssShown =
+        json['piperQuest001GgDealAssShown'] == true;
+    piperQuest001GgDealBreastsShown =
+        json['piperQuest001GgDealBreastsShown'] == true;
+    piperQuest001GgDealFullStripCount =
+        (json['piperQuest001GgDealFullStripCount'] as num?)?.toInt() ?? 0;
+    piperQuest001HarshPunishCount =
+        (json['piperQuest001HarshPunishCount'] as num?)?.toInt() ?? 0;
     piperQuest001Step3VideoSeen =
         json['piperQuest001Step3VideoSeen'] == true;
     piperQuest001Step5VideoSeen =
         json['piperQuest001Step5VideoSeen'] == true;
+    piperQuest001Step5HarshOfferActive =
+        json['piperQuest001Step5HarshOfferActive'] == true;
+    piperQuest001HarshPunishActive =
+        json['piperQuest001HarshPunishActive'] == true;
+    piperQuest001HarshSpreadLegsSexCounted =
+        json['piperQuest001HarshSpreadLegsSexCounted'] == true;
+    piperQuest001VezunchykActive =
+        json['piperQuest001VezunchykActive'] == true;
     piperQuest001Step3CallOverheard =
         json['piperQuest001Step3CallOverheard'] == true;
     piperQuest001Step4ScoldingOverheard =

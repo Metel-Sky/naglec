@@ -145,7 +145,7 @@
         {
           "id": "eda",
           "name": "Повний кошик їжі",
-          "price": 100,
+          "price": 300,
           "purchasableOnce": false,
           "imagePath": "lib/assets/items/eda.jpg"
         },

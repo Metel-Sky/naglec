@@ -14,7 +14,7 @@ NPCModel createEmilyNpc() {
     gender: NpcGender.female,
     name: 'Emily',
     fullName: 'Emily',
-    status: 'Одногрупниця',
+    status: 'Молодша донька Індії',
     age: 18,
     galleryPortraitPath: kEmilyGalleryPortraitPath,
     avatarPath: kEmilyAvatarPath,

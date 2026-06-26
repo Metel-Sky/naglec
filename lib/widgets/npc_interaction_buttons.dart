@@ -54,6 +54,9 @@ class NpcInteractionButtons extends StatefulWidget {
   /// Piper quest: крок 7B — сказати Пайпер про покарання в `piper_room`.
   final VoidCallback? onTalkTellPiperAboutPunishment;
 
+  /// Кошик їжі з ТРЦ: ввечері на кухні — «Мама, я купив до дому продукти».
+  final VoidCallback? onMomDeliverGroceries;
+
   const NpcInteractionButtons({
     super.key,
     required this.npc,
@@ -71,6 +74,7 @@ class NpcInteractionButtons extends StatefulWidget {
     this.onTalkPiperSnitch,
     this.onTalkGgCommandPiper,
     this.onTalkTellPiperAboutPunishment,
+    this.onMomDeliverGroceries,
   });
 
   @override
@@ -217,6 +221,23 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
     );
   }
 
+  Widget _stojakLeaveButton() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: ElevatedButton(
+        style: GameTheme.actionButtonStyle(
+          color: GameTheme.textBlack,
+        ).copyWith(textStyle: WidgetStateProperty.all(_npcButtonTextStyle)),
+        onPressed: widget.onBack,
+        child: Text(
+          sl<LocaleController>().t('gg_event_001_stojak_btn_leave').toUpperCase(),
+          textAlign: TextAlign.center,
+          style: _npcButtonTextStyle,
+        ),
+      ),
+    );
+  }
+
   Widget _closePanelButton() {
     return ElevatedButton(
       style: GameTheme.actionButtonStyle(
@@ -290,7 +311,7 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (widget.onBack != null) _closePanelButton(),
+          if (widget.onBack != null) _stojakLeaveButton(),
         ],
       );
     }
@@ -415,6 +436,12 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (widget.onMomDeliverGroceries != null)
+          _elevated(
+            t('mom_grocery_debt_btn'),
+            widget.onMomDeliverGroceries!,
+          ),
+        if (widget.onMomDeliverGroceries != null) const SizedBox(height: 8),
         for (final action in actions.where(
           (action) =>
               action.label != _complimentLabel &&

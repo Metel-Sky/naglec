@@ -1,14 +1,15 @@
 import '../../models/room_models.dart';
 
-/// Будинок 1 у спальних будинках бідного району: 3 квартири, по 4 кімнати.
+/// Будинок 1 у спальних будинках бідного району: 4 квартири, по 4 кімнати.
 class PoorDistrictHouse1 {
   static const String id = 'poor_district_house_1';
 
   static const String apt1 = 'poor_district_h1_apt_1';
   static const String apt2 = 'poor_district_h1_apt_2';
   static const String apt3 = 'poor_district_h1_apt_3';
+  static const String apt4 = 'poor_district_h1_apt_4';
 
-  static const List<String> apartmentIds = [apt1, apt2, apt3];
+  static const List<String> apartmentIds = [apt1, apt2, apt3, apt4];
 
   static const String rA1_1 = 'poor_district_h1_a1_room_1';
   static const String rA1_2 = 'poor_district_h1_a1_room_2';
@@ -22,6 +23,10 @@ class PoorDistrictHouse1 {
   static const String rA3_2 = 'poor_district_h1_a3_room_2';
   static const String rA3_3 = 'poor_district_h1_a3_room_3';
   static const String rA3_4 = 'poor_district_h1_a3_room_4';
+  static const String rA4_1 = 'poor_district_h1_a4_room_1';
+  static const String rA4_2 = 'poor_district_h1_a4_room_2';
+  static const String rA4_3 = 'poor_district_h1_a4_room_3';
+  static const String rA4_4 = 'poor_district_h1_a4_room_4';
 
   static List<String> getRoomIdsForApartment(String apartmentId) {
     switch (apartmentId) {
@@ -31,6 +36,8 @@ class PoorDistrictHouse1 {
         return [rA2_1, rA2_2, rA2_3, rA2_4];
       case apt3:
         return [rA3_1, rA3_2, rA3_3, rA3_4];
+      case apt4:
+        return [rA4_1, rA4_2, rA4_3, rA4_4];
       default:
         return [];
     }
@@ -61,6 +68,12 @@ class PoorDistrictHouse1 {
       description: "Квартира 3, Бандери 1. Тут живе Peta.",
       isLocked: false,
     ),
+    apt4: RoomData(
+      displayName: "Квартира 4",
+      imagePath: "lib/assets/location/houses/hrushchevki-spb.jpg",
+      description: "Квартира 4, Бандери 1.",
+      isLocked: false,
+    ),
     /// Порядок кімнат у кожній квартирі: кухня → ванна → зал → спальня.
     rA1_1: RoomData(displayName: "Кухня", imagePath: "lib/assets/location/home_gg/rooms/kitchen.jpg", description: "Кухня.", isLocked: false),
     rA1_2: RoomData(displayName: "Ванна", imagePath: "lib/assets/location/home_gg/rooms/bathroom.jpg", description: "Ванна.", isLocked: false),
@@ -74,5 +87,9 @@ class PoorDistrictHouse1 {
     rA3_2: RoomData(displayName: "Ванна", imagePath: "lib/assets/location/home_gg/rooms/bathroom.jpg", description: "Ванна.", isLocked: false),
     rA3_3: RoomData(displayName: "Зал", imagePath: "lib/assets/location/home_gg/rooms/relax_room.jpg", description: "Зал.", isLocked: false),
     rA3_4: RoomData(displayName: "Спальня", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня.", isLocked: false),
+    rA4_1: RoomData(displayName: "Кухня", imagePath: "lib/assets/location/home_gg/rooms/kitchen.jpg", description: "Кухня.", isLocked: false),
+    rA4_2: RoomData(displayName: "Ванна", imagePath: "lib/assets/location/home_gg/rooms/bathroom.jpg", description: "Ванна.", isLocked: false),
+    rA4_3: RoomData(displayName: "Зал", imagePath: "lib/assets/location/home_gg/rooms/relax_room.jpg", description: "Зал.", isLocked: false),
+    rA4_4: RoomData(displayName: "Спальня", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня.", isLocked: false),
   };
 }

@@ -116,6 +116,8 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
       _ui.eventVideoOnMinWatchReached;
   set _eventVideoOnMinWatchReached(VoidCallback? v) =>
       _ui.setEventVideoOnMinWatchReached(v);
+  double get _eventVideoPlaybackRate => _ui.eventVideoPlaybackRate;
+  set _eventVideoPlaybackRate(double v) => _ui.setEventVideoPlaybackRate(v);
 
   DenIntroUiPhase get _denIntroUiPhase => _ui.denIntroUiPhase;
   set _denIntroUiPhase(DenIntroUiPhase v) => _ui.setDenIntroUiPhase(v);

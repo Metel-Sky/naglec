@@ -80,6 +80,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                 builder: (context, _) => MainLeftSidebar(
                   playerStats: _playerStats,
                   onNpcGalleryTap: () => setState(() {
+                    _prepareForPlayerAction();
                     if (isNpcGalleryOpen) {
                       isNpcGalleryOpen = false;
                       _selectedNpcForProfile = null;
@@ -94,6 +95,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                     }
                   }),
                   onBackpackTap: () => setState(() {
+                    _prepareForPlayerAction();
                     isBackpackOpen = !isBackpackOpen;
                     isStatsOpen = false;
                     isNpcGalleryOpen = false;
@@ -104,6 +106,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                     newsMessage = isBackpackOpen ? 'Рюкзак' : '';
                   }),
                   onPhoneTap: () => setState(() {
+                    _prepareForPlayerAction();
                     isPhoneOpen = true;
                     isBackpackOpen = false;
                     isStatsOpen = false;
@@ -111,6 +114,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                   }),
                   onSaveTap: () async {
                     setState(() {
+                      _prepareForPlayerAction();
                       isBackpackOpen = false;
                       isStatsOpen = false;
                       isNpcGalleryOpen = false;
@@ -130,6 +134,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                     if (result == true && mounted) setState(() {});
                   },
                   onPersonTap: () => setState(() {
+                    _prepareForPlayerAction();
                     isStatsOpen = !isStatsOpen;
                     isBackpackOpen = false;
                     isNpcGalleryOpen = false;
@@ -140,11 +145,11 @@ class MainGameScreenState extends MainGameScreenStateBase
                     // Щоб не показувати опис ГГ у діалоговому вікні, коли відкриті стати.
                     newsMessage = '';
                   }),
-                  onRefresh: () => setState(_dismissNpcGalleryIfOpen),
-                  onBeforeSettingsNavigation: () => setState(_dismissNpcGalleryIfOpen),
+                  onRefresh: () => setState(_prepareForPlayerAction),
+                  onBeforeSettingsNavigation: () => setState(_prepareForPlayerAction),
                   // Знайди у своєму коді обробник натискання на шестерню (onDebugMenuTap)
                   onDebugMenuTap: () {
-                    setState(_dismissNpcGalleryIfOpen);
+                    setState(_prepareForPlayerAction);
                     // Головне меню — маршрут `/menu` (`/` — лише LoadingScreen).
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil('/menu', (route) => false);
@@ -184,35 +189,35 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   isNpcGalleryOpen: isNpcGalleryOpen,
                                   isStatsOpen: isStatsOpen,
                                   onNextDayName: () => setState(() {
-                                    _dismissNpcGalleryIfOpen();
+                                    _prepareForPlayerAction();
                                     _timeController.nextDayName();
                                   }),
                                   onPrevDayName: () => setState(() {
-                                    _dismissNpcGalleryIfOpen();
+                                    _prepareForPlayerAction();
                                     _timeController.prevDayName();
                                   }),
                                   onAddDay: () => setState(() {
-                                    _dismissNpcGalleryIfOpen();
+                                    _prepareForPlayerAction();
                                     _timeController.addDay();
                                   }),
                                   onSubDay: () => setState(() {
-                                    _dismissNpcGalleryIfOpen();
+                                    _prepareForPlayerAction();
                                     _timeController.subDay();
                                   }),
                                   onSubHour: () => setState(() {
-                                    _dismissNpcGalleryIfOpen();
+                                    _prepareForPlayerAction();
                                     _timeController.subHour();
                                   }),
                                   onSubMinute: () => setState(() {
-                                    _dismissNpcGalleryIfOpen();
+                                    _prepareForPlayerAction();
                                     _timeController.subMinute();
                                   }),
                                   onAddMinutes5: () => setState(() {
-                                    _dismissNpcGalleryIfOpen();
+                                    _prepareForPlayerAction();
                                     _timeController.addMinutes(5);
                                   }),
                                   onAddHour: () => setState(() {
-                                    _dismissNpcGalleryIfOpen();
+                                    _prepareForPlayerAction();
                                     _timeController.addHour();
                                   }),
                                 ),
@@ -225,7 +230,8 @@ class MainGameScreenState extends MainGameScreenStateBase
                                       if (_eventVideoPath == null &&
                                           _eventVideoPendingButton == null &&
                                           (_eventImagePath == null ||
-                                              _danielleSpyCaughtUiActive)) ...[
+                                              _danielleSpyCaughtUiActive ||
+                                              _isPiperQuest001GgDealRevealOverlayActive())) ...[
                                         ListenableBuilder(
                                           listenable: _timeController,
                                           builder: (context, _) {
@@ -301,12 +307,77 @@ class MainGameScreenState extends MainGameScreenStateBase
                                                       ),
                                                     ),
                                                   ),
+                                                if (_isPiperQuest001GgDealRevealOverlayActive() &&
+                                                    !fullScreenMainPanelOpen)
+                                                  Positioned.fill(
+                                                    child: IgnorePointer(
+                                                      child: LayoutBuilder(
+                                                        builder: (context, c) {
+                                                          final imagePath =
+                                                              _piperQuest001GgDealRevealOverlayPath();
+                                                          if (imagePath == null) {
+                                                            return const SizedBox.shrink();
+                                                          }
+                                                          final maxH = c.maxHeight;
+                                                          final overlayH = maxH.isFinite
+                                                              ? maxH *
+                                                                  RoomNpcSceneTemplate
+                                                                      .npcOverlayHeightFraction
+                                                              : 400.0;
+                                                          return Align(
+                                                            alignment:
+                                                                Alignment.bottomCenter,
+                                                            child: SizedBox(
+                                                              height: overlayH,
+                                                              width: double.infinity,
+                                                              child: Image.asset(
+                                                                imagePath,
+                                                                fit: BoxFit.contain,
+                                                                alignment: Alignment
+                                                                    .bottomCenter,
+                                                                errorBuilder: (ctx, _,
+                                                                    __) {
+                                                                  return Center(
+                                                                    child: Padding(
+                                                                      padding:
+                                                                          const EdgeInsets
+                                                                              .all(12),
+                                                                      child: Text(
+                                                                        sl<LocaleController>()
+                                                                            .t(
+                                                                              'asset_load_failed_short',
+                                                                            )
+                                                                            .replaceAll(
+                                                                              '%s',
+                                                                              imagePath,
+                                                                            ),
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color: Colors
+                                                                              .white70,
+                                                                          fontSize: 12,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
                                                 // Ліва смуга вибору NPC — 2+ персонажі; магазин подарунків ТРЦ: тільки хто в кімнаті,
                                                 // але без авто-підсвітки (щоб вибрав гравець).
                                                 if (isInsideRoom &&
                                                     !fullScreenMainPanelOpen &&
                                                     shouldShowNpcStrip &&
-                                                    !_danielleSpyCaughtUiActive)
+                                                    !_danielleSpyCaughtUiActive &&
+                                                    !_isPiperQuest001GgDealRevealOverlayActive())
                                                   Positioned(
                                                     left: 0,
                                                     top: 0,
@@ -414,6 +485,8 @@ class MainGameScreenState extends MainGameScreenStateBase
                                             });
                                           },
                                           eventImagePath: _eventImagePath,
+                                          eventVideoPlaybackRate:
+                                              _eventVideoPlaybackRate,
                                         ),
                                       ],
                                       if (fullScreenMainPanelOpen)
@@ -484,7 +557,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                                               npc: luda,
                                               location: LocationsData.cityBcLogistics,
                                               hour: hour,
-                                              onUpdate: () => setState(_dismissNpcGalleryIfOpen),
+                                              onUpdate: () => setState(_prepareForPlayerAction),
                                               onActionExecuted: (label, npc) =>
                                                   _handleNpcActionExecuted(label, npc),
                                               onFinanceGiveMoney: () => _npcFinanceGiveMoney(luda),
@@ -796,43 +869,23 @@ class MainGameScreenState extends MainGameScreenStateBase
                               List<String> dialogueHighlightNames;
                               final locPanel = sl<LocaleController>();
                               if (messages.isEmpty) {
-                                NPCModel? selNpc;
-                                final sid = _selectedNpcIdInRoom;
-                                if (sid != null) {
-                                  try {
-                                    selNpc = sl<NPCService>().allNPCs.firstWhere((n) => n.id == sid);
-                                  } catch (_) {
-                                    selNpc = null;
-                                  }
-                                }
-                                if (selNpc == null &&
-                                    currentZone == 'HOME' &&
-                                    isInsideRoom &&
-                                    LocationsData.migrateLegacyRoomId(currentRoom) ==
-                                        LocationsData.kitchen &&
-                                    dt.hour == 7) {
-                                  final npcService = sl<NPCService>();
-                                  final mom = npcService.npcById('mom');
-                                  if (mom != null &&
-                                      npcService.getCurrentLocationId(
-                                            mom,
-                                            dt.hour,
-                                            _timeController.weekdayIndex,
-                                          ) ==
-                                          LocationsData.kitchen) {
-                                    selNpc = mom;
-                                  }
-                                }
+                                final activeNPCs = _getActiveNPCsInCurrentRoom();
                                 final maxA = _playerStats.player.maxArousal;
-                                final sn = selNpc;
-                                final stojakHere = sn != null &&
-                                    GgEvent001Stojak.stojakDialogApplies(
-                                      sn,
-                                      _playerStats.arousal,
-                                      maxA,
-                                    );
+                                final stojakHere =
+                                    GgEvent001Stojak.shouldShowGenericStojakFallback(
+                                  activeNpcs: activeNPCs,
+                                  selectedNpcIdInRoom: _selectedNpcIdInRoom,
+                                  playerArousal: _playerStats.arousal,
+                                  playerMaxArousal: maxA,
+                                  zone: currentZone,
+                                  room: currentRoom,
+                                  hour: dt.hour,
+                                  world: _worldState,
+                                ) &&
+                                    !_isQuestOrEventScriptedDialogForNews();
                                 if (stojakHere) {
-                                  combinedMessage = locPanel.t('gg_event_001_stojak_body');
+                                  combinedMessage =
+                                      locPanel.t('gg_event_001_stojak_body');
                                   dialogueHighlightNames = const [];
                                 } else {
                                   combinedMessage =

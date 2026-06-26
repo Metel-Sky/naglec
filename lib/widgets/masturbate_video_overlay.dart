@@ -24,6 +24,8 @@ class MasturbateVideoOverlay extends StatefulWidget {
   final VoidCallback? onMinWatchReached;
   final double borderRadius;
   final BoxFit fit;
+  /// 1.0 — нормальна швидкість; 0.95 — на 5 % повільніше.
+  final double playbackRate;
 
   const MasturbateVideoOverlay({
     super.key,
@@ -37,6 +39,7 @@ class MasturbateVideoOverlay extends StatefulWidget {
     this.onMinWatchReached,
     this.borderRadius = 12,
     this.fit = BoxFit.contain,
+    this.playbackRate = 1.0,
   });
 
   @override
@@ -129,7 +132,8 @@ class _MasturbateVideoOverlayState extends State<MasturbateVideoOverlay> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.videoPath != widget.videoPath ||
         oldWidget.loop != widget.loop ||
-        oldWidget.minWatchDuration != widget.minWatchDuration) {
+        oldWidget.minWatchDuration != widget.minWatchDuration ||
+        oldWidget.playbackRate != widget.playbackRate) {
       _alreadyClosed = false;
       _hasStartedPlaying = false;
       _minWatchReached = false;
@@ -145,6 +149,7 @@ class _MasturbateVideoOverlayState extends State<MasturbateVideoOverlay> {
       await _player.setPlaylistMode(
         widget.loop ? PlaylistMode.loop : PlaylistMode.single,
       );
+      await _player.setRate(widget.playbackRate);
       await _player.play();
     } catch (_) {
       if (mounted) setState(() {});

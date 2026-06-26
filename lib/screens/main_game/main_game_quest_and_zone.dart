@@ -7,7 +7,63 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   bool get _questRuntimeMirrorMode =>
       sl<SettingsController>().questRuntimeMirrorMode;
 
+  /// Без стандартного растру NPC у кімнаті (Danielle spy, reveal Пайпер тощо).
+  bool get _suppressRoomNpcRasterForScene =>
+      _danielleSpyCaughtUiActive ||
+      _isPiperQuest001GgDealRevealOverlayActive();
+
+  /// Галерея, профіль, рюкзак, характеристики та оверлей «домовитись» — закрити перед іншою дією гравця.
+  void _prepareForPlayerAction() {
+    _dismissNpcGalleryIfOpen();
+    _dismissPiperGgDealRevealIfActive();
+  }
+
   /// Чи [newsMessage] зараз належить активному кроку квесту чи івенту в цій локації.
+  /// Квести/івенти з обов'язковими 100% збудженення — пріоритетніше звичайних квестів і generic stojak.
+  Widget? _fullArousalQuestPriorityActionPanelIfAny() {
+    // return _momStojakQuestPriorityActionPanelIfAny(); // when implemented
+    return null;
+  }
+
+  /// gg_event_001_stojak: лише «Піти», без квестових/стандартних кнопок NPC.
+  Widget? _ggEvent001StojakPriorityActionPanelIfAny() {
+    if (!isInsideRoom) return null;
+    final activeNPCs = _getActiveNPCsInCurrentRoom();
+    if (activeNPCs.isEmpty) return null;
+    final stats = _playerStats;
+    if (!GgEvent001Stojak.shouldShowGenericStojakFallback(
+      activeNpcs: activeNPCs,
+      selectedNpcIdInRoom: _selectedNpcIdInRoom,
+      playerArousal: stats.arousal,
+      playerMaxArousal: stats.player.maxArousal,
+      zone: currentZone,
+      room: currentRoom,
+      hour: _timeController.dateTime.hour,
+      world: _worldState,
+    )) {
+      return null;
+    }
+    final npc = GgEvent001Stojak.npcForStojakInRoom(
+      activeNpcs: activeNPCs,
+      selectedNpcIdInRoom: _selectedNpcIdInRoom,
+    );
+    if (npc != null) {
+      GgEvent001Stojak.onStojakPanelFirstBuild(npc);
+    }
+    final t = sl<LocaleController>().t;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _navBtn(t('gg_event_001_stojak_btn_leave'), _handleBackTap),
+        ],
+      ),
+    );
+  }
+
   bool _isQuestOrEventScriptedDialogForNews() {
     if (_ui.cherieQuest001OfficePhase != CherieQuest001OfficePhase.inactive) {
       return true;
@@ -25,6 +81,8 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         _isPiperQuest001ScriptedDialogActive() ||
         _isPiperHallWeekendEventScriptedDialogActive() ||
         _isPiperGgVoluntaryPunishVideoActive() ||
+        _isPiperGgHarshPunishSceneActive() ||
+        _isPiperQuest001GgDealRevealActive() ||
         _sashaComunicateInHallUiActive ||
         _sashaMorningRunUiActive;
   }
@@ -43,6 +101,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
 
   /// Тап по NPC у кімнаті: не тягнути застарілий текст іншого квесту/івенту в діалог.
   void _handleRoomNpcTap(NPCModel npc) {
+    _prepareForPlayerAction();
     _selectedNpcIdInRoom = npc.id;
     if (_isQuestOrEventScriptedDialogForNews()) return;
     newsMessage = '';
@@ -383,6 +442,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     }
     _nav.handleRoomEntry(name);
     setState(() {
+      _prepareForPlayerAction();
       if (LocationsData.migrateLegacyRoomId(name) != LocationsData.toilet) {
         _resetCollegeToiletUnderwearSaleUi();
       }
@@ -1042,7 +1102,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             onBack: _exitHomeRoomToCorridorGrid,
             timeController: _timeController,
             selectedNpcIdInRoom: _selectedNpcIdInRoom,
-            suppressRoomNpcRaster: _danielleSpyCaughtUiActive,
+            suppressRoomNpcRaster: _suppressRoomNpcRasterForScene,
             onNPCTap: (npc) {
               setState(() => _handleRoomNpcTap(npc));
             },
@@ -1077,7 +1137,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             },
             timeController: _timeController,
             suppressRoomNpcRaster:
-                _danielleSpyCaughtUiActive || piperLibraryEavesdrop,
+                _suppressRoomNpcRasterForScene || piperLibraryEavesdrop,
             piperLibraryEavesdropActive: piperLibraryEavesdrop,
             onNPCTap: (npc) {
               setState(() => _handleRoomNpcTap(npc));
@@ -1193,7 +1253,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             currentRoom: currentRoom,
             isInsideRoom: isInsideRoom,
             selectedNpcIdInRoom: _selectedNpcIdInRoom,
-            suppressRoomNpcRaster: _danielleSpyCaughtUiActive,
+            suppressRoomNpcRaster: _suppressRoomNpcRasterForScene,
             suppressCherieGiftShopOfficeTc1Background:
                 _suppressCherieGiftShopOfficeTc1Underlay,
             onRoomTap: _handleRoomEntry,
@@ -1312,7 +1372,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             currentRoom: currentRoom,
             isInsideRoom: isInsideRoom,
             selectedNpcIdInRoom: _selectedNpcIdInRoom,
-            suppressRoomNpcRaster: _danielleSpyCaughtUiActive,
+            suppressRoomNpcRaster: _suppressRoomNpcRasterForScene,
             onRoomTap: _handleRoomEntry,
             onBack: () {
               if (isInsideRoom) {
@@ -1355,7 +1415,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             currentRoom: currentRoom,
             isInsideRoom: isInsideRoom,
             selectedNpcIdInRoom: _selectedNpcIdInRoom,
-            suppressRoomNpcRaster: _danielleSpyCaughtUiActive,
+            suppressRoomNpcRaster: _suppressRoomNpcRasterForScene,
             onRoomTap: _handleRoomEntry,
             onBack: () {
               if (isInsideRoom) {
@@ -1398,7 +1458,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             currentRoom: currentRoom,
             isInsideRoom: isInsideRoom,
             selectedNpcIdInRoom: _selectedNpcIdInRoom,
-            suppressRoomNpcRaster: _danielleSpyCaughtUiActive,
+            suppressRoomNpcRaster: _suppressRoomNpcRasterForScene,
             onRoomTap: _handleRoomEntry,
             onBack: () {
               if (isInsideRoom) {
@@ -1441,7 +1501,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             currentRoom: currentRoom,
             isInsideRoom: isInsideRoom,
             selectedNpcIdInRoom: _selectedNpcIdInRoom,
-            suppressRoomNpcRaster: _danielleSpyCaughtUiActive,
+            suppressRoomNpcRaster: _suppressRoomNpcRasterForScene,
             friendHouseStreetFacade: _friendHouseStreetFacade,
             onFriendHouseStreetFacadeChanged: (visible) => setState(() {
               _friendHouseStreetFacade = visible;
@@ -1485,6 +1545,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     );
   }
   void _handleBackTap() {
+    setState(_prepareForPlayerAction);
     if (CherieQuest002.shouldPresentHomeHallSteps(
           world: _worldState,
           cherie: sl<NPCService>().npcById('cherie'),
@@ -1666,12 +1727,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     return ElevatedButton(
       style: GameTheme.actionButtonStyle(color: GameTheme.textBlack),
       onPressed: () {
-        if (isNpcGalleryOpen ||
-            _selectedNpcForProfile != null ||
-            isBackpackOpen ||
-            isStatsOpen) {
-          setState(_dismissNpcGalleryIfOpen);
-        }
+        setState(_prepareForPlayerAction);
         onTap();
       },
       child: SizedBox(
@@ -2328,7 +2384,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     _saveService.autosave();
   }
 
-  /// Кнопки переходу між зонами: Дім → (на огляді Мажорщини «Місто») → Вул. Шевченка → Коледж → (з дому «В МІСТО») → Бідний р-н → Мажорщина → На море.
+  /// Кнопки переходу між зонами: Дім → … → (з дому / вул. Шевченка «В МІСТО») → …
   void _appendStandardWorldTravelButtons(List<Widget> actionWidgets) {
     if (currentZone != "HOME") {
       actionWidgets.add(        _navBtn("ДІМ", () {
@@ -2411,11 +2467,18 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       }));
       actionWidgets.add(const SizedBox(height: 8));
     }
-    if (currentZone == "HOME") {
+    if (currentZone == "HOME" || currentZone == "STREET") {
       actionWidgets.add(_navBtn("В МІСТО", () {
         _nav.spendMoveEnergy();
         _addTravelTime(currentZone, "CITY");
         setState(() {
+          if (currentZone == "STREET") {
+            _friendHouseStreetFacade = false;
+            _semSummonedAtFriendFacade = false;
+            _semFriendHouseTalkActive = false;
+            _semParentsTalkActive = false;
+            currentStreetHouse = null;
+          }
           currentZone = "CITY";
           currentRoom = LocationsData.cityOverview;
           isInsideRoom = false;
@@ -2920,7 +2983,161 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             ),
           );
         }
+        if (_isPiperGgHarshPunishFinishVideoActive()) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: _navBtn(
+                    this.t('piper_quest_001_btn_leave').toUpperCase(),
+                    () {
+                      setState(() {
+                        _leavePiperGgHarshPunish();
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        if (_isPiperGgHarshPunishSexVideoActive()) {
+          final showDoggy = _canShowPiperGgHarshSexDoggyButton();
+          final showCowgirl = _canShowPiperGgHarshSexCowgirlButton();
+          final showSpreadLegs = _canShowPiperGgSpreadLegsButton();
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (showDoggy) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: _navBtn(
+                      this.t('piper_quest_001_btn_harsh_doggy').toUpperCase(),
+                      () {
+                        setState(() {
+                          _onPiperGgHarshSexDoggyPressed();
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+                if (showCowgirl) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: _navBtn(
+                      this.t('piper_quest_001_btn_harsh_cowgirl').toUpperCase(),
+                      () {
+                        setState(() {
+                          _onPiperGgHarshSexCowgirlPressed();
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+                if (showSpreadLegs) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: _navBtn(
+                      this.t('piper_quest_001_btn_spread_legs').toUpperCase(),
+                      () {
+                        setState(() {
+                          _onPiperGgSpreadLegsPressed();
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+                SizedBox(
+                  width: double.infinity,
+                  child: _navBtn(
+                    this.t('piper_quest_001_btn_harsh_finish'),
+                    () {
+                      setState(() {
+                        _finishPiperGgHarshPunish();
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: _navBtn(
+                    this.t('piper_quest_001_btn_harsh_finish_on_ass'),
+                    () {
+                      setState(() {
+                        _finishPiperGgHarshPunishOnAss();
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        if (_isPiperGgHarshPunishSpank4Active()) {
+          final showSpreadLegs = _canShowPiperGgSpreadLegsButton();
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            width: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: _navBtn(
+                    this.t('piper_quest_001_btn_harsh_finish'),
+                    () {
+                      setState(() {
+                        _finishPiperGgHarshPunish();
+                      });
+                    },
+                  ),
+                ),
+                if (showSpreadLegs) ...[
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: _navBtn(
+                      this.t('piper_quest_001_btn_spread_legs').toUpperCase(),
+                      () {
+                        setState(() {
+                          _onPiperGgSpreadLegsPressed();
+                        });
+                      },
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: _navBtn(
+                    this.t('piper_quest_001_btn_leave').toUpperCase(),
+                    () {
+                      setState(() {
+                        _leavePiperGgHarshPunish();
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
         if (isPiperGgVoluntaryPunishVideoActive) {
+          final showHarshOffer = _isPiperQuest001HarshPunishOfferActive();
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             width: double.infinity,
@@ -2939,10 +3156,28 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                     },
                   ),
                 ),
+                if (showHarshOffer) ...[
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: _navBtn(
+                      this.t('piper_quest_001_btn_punish_harsh').toUpperCase(),
+                      () {
+                        setState(() {
+                          _startPiperGgHarshPunish();
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ],
             ),
           );
         }
+
+        final fullArousalQuestPriority =
+            _fullArousalQuestPriorityActionPanelIfAny();
+        if (fullArousalQuestPriority != null) return fullArousalQuestPriority;
 
         if (_showMomOfficeView) {
           return _buildMomOfficeActionPanel();
@@ -2975,6 +3210,9 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         if (cherieQ4Priority != null) return cherieQ4Priority;
         final cherieQ2Priority = _cherieQuest002PriorityActionPanelIfAny();
         if (cherieQ2Priority != null) return cherieQ2Priority;
+
+        final stojakPriority = _ggEvent001StojakPriorityActionPanelIfAny();
+        if (stojakPriority != null) return stojakPriority;
 
         final arousal100InRoomGg = _playerStats.arousal >= 100 &&
             currentZone == 'HOME' &&
@@ -3716,7 +3954,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                 location: currentRoom,
                 hour: hour,
                 onUpdate: () => setState(() {
-                  _dismissNpcGalleryIfOpen();
+                  _prepareForPlayerAction();
                 }),
                 onBack: _handleBackTap,
                 onActionExecuted: (label, npc) =>
@@ -3782,6 +4020,14 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                     ? () {
                         setState(() {
                           _piperQuest001TellPiperAboutGgPunishment();
+                        });
+                      }
+                    : null,
+                onMomDeliverGroceries: npc.id == 'mom' &&
+                        _canMomDeliverGroceriesToMom()
+                    ? () {
+                        setState(() {
+                          _momApplyGroceryDelivery();
                         });
                       }
                     : null,
@@ -3887,7 +4133,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                       _selectedNpcForProfile != null ||
                       isBackpackOpen ||
                       isStatsOpen) {
-                    setState(_dismissNpcGalleryIfOpen);
+                    setState(_prepareForPlayerAction);
                   }
                   final loot = RoomSearchLootService.rollHomeFamilyBedroom(
                     currentRoomNorm,
@@ -3946,7 +4192,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                       _selectedNpcForProfile != null ||
                       isBackpackOpen ||
                       isStatsOpen) {
-                    setState(_dismissNpcGalleryIfOpen);
+                    setState(_prepareForPlayerAction);
                   }
                   // TODO: реальна логіка перевірки ноутбука
                 },
@@ -3963,7 +4209,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                       _selectedNpcForProfile != null ||
                       isBackpackOpen ||
                       isStatsOpen) {
-                    setState(_dismissNpcGalleryIfOpen);
+                    setState(_prepareForPlayerAction);
                   }
                   // TODO: реальна логіка «поритись в речах»
                 },
@@ -4183,7 +4429,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                 npc: mom,
                 location: LocationsData.cityBcLogisticsMomOffice,
                 hour: hour,
-                onUpdate: () => setState(_dismissNpcGalleryIfOpen),
+                onUpdate: () => setState(_prepareForPlayerAction),
                 onActionExecuted: (label, npc) =>
                     _handleNpcActionExecuted(label, npc),
                 onFinanceGiveMoney: () => _npcFinanceGiveMoney(mom),

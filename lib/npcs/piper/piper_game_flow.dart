@@ -51,6 +51,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
 
   void _resetPiperQuest001PresentationSession() {
     _piperQuest001PresentationSyncedStep = null;
+    PiperQuest001.resetStep5HarshPunishUi(_worldState);
     _ui.setEventImagePath(null);
     _eventVideoPath = null;
     _eventVideoOnComplete = null;
@@ -62,6 +63,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _eventVideoFullScreen = false;
     _eventVideoLoop = false;
     _eventVideoMuted = false;
+    _eventVideoPlaybackRate = 1.0;
   }
 
   void _applyPiperQuest001Patch(PiperQuest001Patch p) {
@@ -194,6 +196,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _eventVideoOnButtonPressed = null;
     _eventVideoCloseWhenCompleted = true;
     _eventVideoFullScreen = false;
+    _eventVideoLoop = false;
     _eventVideoMuted = false;
   }
 
@@ -213,8 +216,14 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   }
 
   void _applyPiperQuest001Step2Patch() {
-    _applyPiperQuest001Patch(PiperQuest001.patchForStep(2));
+    final loc = sl<LocaleController>();
+    newsMessage = _resolvePiperQuest001News(
+      PiperQuest001.step2NewsL10nKey(_worldState),
+      loc,
+    );
+    _ui.setEventImagePath(null);
     _syncPiperQuest001Step2VideoPresentation();
+    _piperQuest001PresentationSyncedStep = 2;
   }
 
   void _applyPiperQuest001Step3Patch() {
@@ -304,8 +313,10 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     }
     if (_isPiperQuest001Step2ApproachScene()) {
       final loc = sl<LocaleController>();
-      final expectedNews =
-          _resolvePiperQuest001News('piper_quest_001_step02_news', loc);
+      final expectedNews = _resolvePiperQuest001News(
+        PiperQuest001.step2NewsL10nKey(_worldState),
+        loc,
+      );
       if (newsMessage != expectedNews) {
         newsMessage = expectedNews;
       }
@@ -314,18 +325,29 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   }
 
   void _ensurePiperQuest001Step5PunishmentUiCoherent() {
-    if (_worldState.piperQuest001Step != 5) return;
-    if (currentZone != 'HOME' || !isInsideRoom) return;
-    if (_worldState.piperGgPunishmentThisCrisis &&
-        PiperQuest001.ggPunishesInsteadOfMom(_worldState) &&
-        !PiperQuest001.isGgPunishmentSceneActive(
-          world: _worldState,
-          currentZone: currentZone,
-          isInsideRoom: isInsideRoom,
-          currentRoom: currentRoom,
-        )) {
+    if (_worldState.piperQuest001Step != 5) {
+      if (!_isPiperGgPunishVideoActive()) {
+        _clearPiperQuest001Step5VideoIfShowing();
+      }
       return;
     }
+    if (PiperQuest001.ggPunishesInsteadOfMom(_worldState) &&
+        (currentZone != 'HOME' ||
+            !isInsideRoom ||
+            !PiperQuest001.isGgPunishmentSceneActive(
+              world: _worldState,
+              currentZone: currentZone,
+              isInsideRoom: isInsideRoom,
+              currentRoom: currentRoom,
+            ))) {
+      _clearPiperQuest001Step5VideoIfShowing();
+      return;
+    }
+    if (currentZone != 'HOME' || !isInsideRoom) {
+      _clearPiperQuest001Step5VideoIfShowing();
+      return;
+    }
+    if (_isPiperGgHarshPunishSceneActive()) return;
     _applyPiperQuest001Step5Patch();
   }
 
@@ -347,6 +369,15 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     final paths = {
       ...PiperQuest001.quest001PunishmentVideos,
       ...PiperQuest001.quest001GgPunishmentVideos,
+      PiperQuest001.ggVoluntaryPunishVideo,
+      PiperQuest001.ggVoluntaryPunishVideoHighBond,
+      PiperQuest001.ggVoluntaryPunishVideo3,
+      PiperQuest001.ggVoluntaryPunishVideo4,
+      PiperQuest001.ggVoluntaryPunishVideo5Sex,
+      PiperQuest001.ggHarshPunishSexCowgirlVideo,
+      PiperQuest001.ggHarshPunishSexDoggyVideo,
+      PiperQuest001.ggVoluntaryPunishVideo5Finish,
+      PiperQuest001.ggHarshPunishFinishOnAssVideo,
     };
     if (_eventVideoPath == null || !paths.contains(_eventVideoPath)) return;
     _eventVideoPath = null;
@@ -367,20 +398,39 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _saveService.autosave();
   }
 
+  bool _shouldShowPiperQuest001Step5GgSpankVideo() {
+    if (_worldState.piperQuest001Step != 5) return false;
+    if (!PiperQuest001.ggPunishesInsteadOfMom(_worldState)) return false;
+    if (_worldState.piperQuest001Step5VideoSeen) return false;
+    if (currentZone != 'HOME' || !isInsideRoom) return false;
+    return PiperQuest001.isGgPunishmentSceneActive(
+      world: _worldState,
+      currentZone: currentZone,
+      isInsideRoom: isInsideRoom,
+      currentRoom: currentRoom,
+    );
+  }
+
+  void _syncPiperQuest001Step5GgSpankPresentation() {
+    if (_isPiperGgHarshPunishSceneActive()) return;
+    if (_worldState.piperQuest001HarshPunishActive) return;
+    if (_shouldShowPiperQuest001Step5GgSpankVideo()) {
+      _startPiperGgPunishVideo(clearNewsMessage: false);
+      return;
+    }
+    if (_isPiperGgVoluntaryPunishVideoActive() &&
+        _worldState.piperQuest001Step == 5) {
+      _clearPiperGgPunishVideoIfShowing();
+    }
+  }
+
   bool _shouldShowPiperQuest001Step5Video(PiperQuest001Patch patch) {
     final video = patch.videoPath;
     if (video == null || video.isEmpty) return false;
     if (_worldState.piperQuest001Step != 5) return false;
     if (_worldState.piperQuest001Step5VideoSeen) return false;
     if (currentZone != 'HOME' || !isInsideRoom) return false;
-    if (PiperQuest001.ggPunishesInsteadOfMom(_worldState)) {
-      return PiperQuest001.isGgPunishmentSceneActive(
-        world: _worldState,
-        currentZone: currentZone,
-        isInsideRoom: isInsideRoom,
-        currentRoom: currentRoom,
-      );
-    }
+    if (PiperQuest001.ggPunishesInsteadOfMom(_worldState)) return false;
     if (PiperQuest001.punishmentLevelFromCrisisN(
           _worldState.piperPunishmentCrisisN,
         ) >=
@@ -391,6 +441,11 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   }
 
   void _syncPiperQuest001Step5VideoPresentation(PiperQuest001Patch patch) {
+    if (PiperQuest001.ggPunishesInsteadOfMom(_worldState)) {
+      _syncPiperQuest001Step5GgSpankPresentation();
+      return;
+    }
+
     final video = patch.videoPath;
     if (video == null) {
       _clearPiperQuest001Step5VideoIfShowing();
@@ -405,13 +460,11 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
       );
       return;
     }
-    final punishmentPaths = {
-      ...PiperQuest001.quest001PunishmentVideos,
-      ...PiperQuest001.quest001GgPunishmentVideos,
-    };
+    final punishmentPaths = {...PiperQuest001.quest001PunishmentVideos};
     if (_worldState.piperQuest001Step == 5 &&
         _eventVideoPath != null &&
-        punishmentPaths.contains(_eventVideoPath)) {
+        punishmentPaths.contains(_eventVideoPath) &&
+        _shouldShowPiperQuest001Step5Video(patch)) {
       return;
     }
     _clearPiperQuest001Step5VideoIfShowing();
@@ -436,6 +489,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
 
   void _ensurePiperQuest001Step6ClosureUiCoherent() {
     if (_worldState.piperQuest001Step != 6) return;
+    if (PiperQuest001.isStep2GgDealRevealPending(_worldState)) return;
     if (currentZone != 'HOME' || !isInsideRoom) return;
     final loc = sl<LocaleController>();
     final fallback = loc.t('piper_quest_001_step06_news');
@@ -603,6 +657,11 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     if (PiperQuest001.isMomExcludedFromQuestChain(_worldState)) {
       PiperQuest001.clearMomChainStateForGgPunisher(_worldState);
     }
+    if (PiperQuest001.isStep2GgDealRevealPending(_worldState)) {
+      _restorePiperQuest001GgDealRevealPresentation();
+      _piperQuest001PresentationSyncedStep = 6;
+      return;
+    }
     final s = _worldState.piperQuest001Step;
     if (s <= 0) return;
     if (_piperQuest001PresentationSyncedStep == s) return;
@@ -651,7 +710,10 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     if (_worldState.piperQuest001Step != 2) return;
     PiperQuest001.resetStep2GgDealSubmenu(_worldState);
     final loc = sl<LocaleController>();
-    newsMessage = _resolvePiperQuest001News('piper_quest_001_step02_news', loc);
+    newsMessage = _resolvePiperQuest001News(
+      PiperQuest001.step2NewsL10nKey(_worldState),
+      loc,
+    );
   }
 
   void _piperQuest001ApplyCover20NoPunishment() {
@@ -676,23 +738,105 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _saveService.autosave();
   }
 
-  void _piperQuest001ApplyStep2GgDealOutcome({required String debtType, required String newsKey}) {
+  void _piperQuest001ApplyStep2GgDealBreasts() {
+    _piperQuest001ApplyStep2GgDealReveal(kind: 'breasts');
+  }
+
+  void _piperQuest001ApplyStep2GgDealAss() {
+    _piperQuest001ApplyStep2GgDealReveal(kind: 'ass');
+  }
+
+  void _piperQuest001ApplyStep2GgDealFullStrip() {
+    _piperQuest001ApplyStep2GgDealReveal(kind: 'full');
+  }
+
+  void _piperQuest001ApplyStep2GgDealReveal({required String kind}) {
     if (_worldState.piperQuest001Step != 2) return;
     final piper = sl<NPCService>().npcById('piper');
-    if (piper != null) {
-      PiperQuest001.applyRelationshipDelta(piper, 5);
-      piper.changeBehavior(2);
-      piper.changeLust(2);
-    }
-    _worldState.piperCrisisResolved = true;
-    _worldState.piperDebtType = debtType;
+    final success = PiperQuest001.canGgDealRevealKind(piper, kind);
+
+    _clearPiperQuest001Step2VideoIfShowing();
+    _worldState.piperDebtType = PiperQuest001.debtTypeForGgDealRevealKind(kind);
     PiperQuest001.resetStep2GgDealSubmenu(_worldState);
+    PiperQuest001.markStep2GgDealRevealPending(
+      world: _worldState,
+      kind: kind,
+      success: success,
+    );
+    if (success) {
+      PiperQuest001.applyGgDealRevealStatRewards(piper, kind, _worldState);
+      if (kind == 'ass') {
+        PiperQuest001.markGgDealAssShown(_worldState);
+      } else if (kind == 'breasts') {
+        PiperQuest001.markGgDealBreastsShown(_worldState);
+      } else if (kind == 'full') {
+        PiperQuest001.markGgDealAssShown(_worldState);
+        PiperQuest001.markGgDealBreastsShown(_worldState);
+      }
+    } else {
+      PiperQuest001.applyGgDealRevealRejectedPenalties(piper);
+    }
     PiperQuest001.closeCrisisPass(_worldState);
-    _resetPiperQuest001PresentationSession();
-    newsMessage = sl<LocaleController>().t(newsKey);
+
+    _eventVideoPath = null;
+    _eventVideoOnComplete = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoMinWatchDuration = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+    _eventVideoCloseWhenCompleted = true;
+    _eventVideoFullScreen = false;
+    _eventVideoLoop = false;
+
+    final imagePath = PiperQuest001.ggDealRevealImagePath(_worldState);
+    _ui.setEventImagePath(null);
+    if (imagePath != null) {
+      newsMessage = '';
+    } else {
+      newsMessage = sl<LocaleController>().t(
+        'piper_quest_001_step02_gg_deal_rejected_news',
+      );
+    }
     _piperQuest001PresentationSyncedStep = 6;
     _saveService.autosave();
   }
+
+  void _restorePiperQuest001GgDealRevealPresentation() {
+    if (!PiperQuest001.isStep2GgDealRevealPending(_worldState)) return;
+    _ui.setEventImagePath(null);
+    final imagePath = PiperQuest001.ggDealRevealImagePath(_worldState);
+    if (imagePath != null) {
+      newsMessage = '';
+    } else {
+      newsMessage = sl<LocaleController>().t(
+        'piper_quest_001_step02_gg_deal_rejected_news',
+      );
+    }
+  }
+
+  void _piperQuest001FinishStep2GgDealReveal() {
+    _dismissPiperGgDealRevealIfActive();
+  }
+
+  void _dismissPiperGgDealRevealIfActive() {
+    if (!PiperQuest001.isStep2GgDealRevealPending(_worldState)) return;
+    PiperQuest001.clearStep2GgDealReveal(_worldState);
+    PiperQuest001.finishCrisisPass(_worldState);
+    _resetPiperQuest001PresentationSession();
+    newsMessage = LocationsData.getLocationDisplayName(
+      LocationsData.migrateLegacyRoomId(currentRoom),
+    );
+    _saveService.autosave();
+  }
+
+  bool _isPiperQuest001GgDealRevealOverlayActive() =>
+      PiperQuest001.ggDealRevealImagePath(_worldState) != null;
+
+  String? _piperQuest001GgDealRevealOverlayPath() =>
+      PiperQuest001.ggDealRevealImagePath(_worldState);
+
+  bool _isPiperQuest001GgDealRevealActive() =>
+      PiperQuest001.isStep2GgDealRevealPending(_worldState);
 
   void _piperQuest001ApplyPunishFromStep2() {
     if (_worldState.piperQuest001Step != 2) return;
@@ -704,14 +848,59 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _saveService.autosave();
   }
 
-  void _startPiperGgVoluntaryPunishFromStep2() {
-    if (_isPiperGgVoluntaryPunishVideoActive()) return;
+  void _clearPiperGgPunishVideoIfShowing() {
+    if (!PiperQuest001.isGgPunishVideoPath(_eventVideoPath)) return;
+    PiperQuest001.resetStep5HarshPunishUi(_worldState);
+    _eventVideoPath = null;
+    _eventVideoOnComplete = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoMinWatchDuration = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+    _eventVideoCloseWhenCompleted = true;
+    _eventVideoFullScreen = false;
+    _eventVideoLoop = false;
+    _eventVideoMuted = false;
+    _eventVideoPlaybackRate = 1.0;
+  }
+
+  void _startPiperGgPunishVideo({bool clearNewsMessage = true}) {
     if (currentZone != 'HOME' || !isInsideRoom) return;
     if (LocationsData.migrateLegacyRoomId(currentRoom) !=
         LocationsData.piperRoom) {
       return;
     }
-    _eventVideoPath = PiperQuest001.ggVoluntaryPunishVideo;
+    if (_isPiperGgHarshPunishSceneActive()) return;
+    if (_worldState.piperQuest001HarshPunishActive) return;
+    final crisisN = _worldState.piperPunishmentCrisisN;
+    final piper = sl<NPCService>().npcById('piper');
+    final videoPath = _worldState.piperQuest001Step == 5 &&
+            PiperQuest001.ggPunishesInsteadOfMom(_worldState)
+        ? PiperQuest001.ggStep5SpankVideoFor(
+            piper: piper,
+            world: _worldState,
+            crisisN: crisisN,
+          )
+        : PiperQuest001.ggVoluntaryPunishVideoFor(
+            piper: piper,
+            world: _worldState,
+            crisisN: crisisN,
+          );
+    final ggPunishContext = PiperQuest001.ggPunishesInsteadOfMom(_worldState) ||
+        _worldState.piperGgPunishmentAnnouncedToPiper;
+    final offerHarsh = ggPunishContext &&
+        videoPath == PiperQuest001.ggVoluntaryPunishVideo3 &&
+        PiperQuest001.shouldShowHarshPunishButton(
+          piper: piper,
+          crisisN: crisisN,
+        );
+    if (_isPiperGgPunishVideoActive() && _eventVideoPath == videoPath) {
+      return;
+    }
+    _worldState.piperQuest001HarshPunishActive = false;
+    _worldState.piperQuest001Step5HarshOfferActive = offerHarsh;
+    _eventVideoPath = videoPath;
+    _eventVideoPlaybackRate = 1.0;
     _eventVideoMuted = false;
     _eventVideoFullScreen = true;
     _eventVideoCloseWhenCompleted = false;
@@ -723,7 +912,23 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     _eventVideoOnButtonPressed = null;
     _ui.setEventImagePath(null);
     _selectedNpcIdInRoom = 'piper';
-    newsMessage = '';
+    if (_shouldShowGgPunishmentDialog()) {
+      if (clearNewsMessage || _worldState.piperQuest001Step != 5) {
+        newsMessage = sl<LocaleController>().t(
+          PiperQuest001.ggPunishmentNewsL10nKey(_worldState),
+        );
+      }
+    } else if (clearNewsMessage) {
+      newsMessage = '';
+    }
+  }
+
+  bool _shouldShowGgPunishmentDialog() =>
+      PiperQuest001.ggPunishesInsteadOfMom(_worldState) ||
+      _worldState.piperGgPunishmentAnnouncedToPiper;
+
+  void _startPiperGgVoluntaryPunishFromStep2() {
+    _startPiperGgPunishVideo();
   }
 
   void _piperQuest001ApplyHomeworkHelp() {
@@ -803,7 +1008,192 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   }
 
   bool _isPiperGgVoluntaryPunishVideoActive() {
-    return _eventVideoPath == PiperQuest001.ggVoluntaryPunishVideo;
+    return PiperQuest001.isGgVoluntaryPunishVideoPath(_eventVideoPath);
+  }
+
+  bool _isPiperGgHarshPunishVideoActive() {
+    return PiperQuest001.isGgHarshPunishVideoPath(_eventVideoPath);
+  }
+
+  bool _isPiperGgHarshPunishSpank4Active() {
+    return PiperQuest001.isGgHarshPunishSpank4Path(_eventVideoPath);
+  }
+
+  bool _isPiperGgHarshPunishSexVideoActive() {
+    return PiperQuest001.isGgHarshPunishSexVideoPath(_eventVideoPath);
+  }
+
+  bool _isPiperGgHarshPunishFinishVideoActive() {
+    return PiperQuest001.isGgHarshPunishFinishVideoPath(_eventVideoPath);
+  }
+
+  bool _isPiperGgHarshPunishSceneActive() {
+    return _isPiperGgHarshPunishVideoActive() ||
+        _isPiperGgHarshPunishFinishVideoActive();
+  }
+
+  bool _isPiperGgPunishVideoActive() {
+    return PiperQuest001.isGgPunishVideoPath(_eventVideoPath);
+  }
+
+  bool _isPiperQuest001HarshPunishOfferActive() =>
+      _worldState.piperQuest001Step5HarshOfferActive &&
+      _isPiperGgVoluntaryPunishVideoActive();
+
+  bool _canShowPiperGgSpreadLegsButton() {
+    if (!PiperQuest001.shouldShowSpreadLegsButton(
+      world: _worldState,
+      piper: sl<NPCService>().npcById('piper'),
+    )) {
+      return false;
+    }
+    if (_isPiperGgHarshPunishSpank4Active()) return true;
+    if (_isPiperGgHarshPunishSexVideoActive()) {
+      return _eventVideoPath != PiperQuest001.ggVoluntaryPunishVideo5Sex;
+    }
+    return false;
+  }
+
+  bool _canShowPiperGgHarshSexDoggyButton() {
+    if (!_isPiperGgHarshPunishSexVideoActive()) return false;
+    return _eventVideoPath != PiperQuest001.ggHarshPunishSexDoggyVideo;
+  }
+
+  bool _canShowPiperGgHarshSexCowgirlButton() {
+    if (!_isPiperGgHarshPunishSexVideoActive()) return false;
+    return _eventVideoPath != PiperQuest001.ggHarshPunishSexCowgirlVideo;
+  }
+
+  void _configurePiperHarshPunishVideo(String path, {double playbackRate = 1.0}) {
+    _eventVideoPath = path;
+    _eventVideoPlaybackRate = playbackRate;
+    _eventVideoMuted = false;
+    _eventVideoFullScreen = true;
+    _eventVideoCloseWhenCompleted = false;
+    _eventVideoLoop = false;
+    _eventVideoOnComplete = null;
+    _eventVideoMinWatchDuration = null;
+    _eventVideoOnMinWatchReached = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+    _ui.setEventImagePath(null);
+    _selectedNpcIdInRoom = 'piper';
+  }
+
+  void _onPiperGgSpreadLegsPressed() {
+    if (!_canShowPiperGgSpreadLegsButton()) return;
+    final piper = sl<NPCService>().npcById('piper');
+    if (!PiperQuest001.canUseSpreadLegsWithVezunchyk(
+      world: _worldState,
+      piper: piper,
+    )) {
+      PiperQuest001.applySpreadLegsRejectedPenalties(piper);
+      newsMessage = sl<LocaleController>().t(
+        'piper_quest_001_spread_legs_rejected_news',
+      );
+      _saveService.autosave();
+      return;
+    }
+    if (!_worldState.piperQuest001HarshSpreadLegsSexCounted) {
+      NpcSexStats.incrementSex(sl<NPCService>().npcById('piper'));
+      _worldState.piperQuest001HarshSpreadLegsSexCounted = true;
+    }
+    if (_isPiperGgHarshPunishSpank4Active()) {
+      _worldState.piperQuest001HarshPunishActive = true;
+    }
+    _configurePiperHarshPunishVideo(PiperQuest001.ggVoluntaryPunishVideo5Sex);
+    newsMessage = sl<LocaleController>().t(
+      'piper_quest_001_spread_legs_news',
+    );
+    _saveService.autosave();
+  }
+
+  void _onPiperGgHarshSexDoggyPressed() {
+    if (!_canShowPiperGgHarshSexDoggyButton()) return;
+    _configurePiperHarshPunishVideo(PiperQuest001.ggHarshPunishSexDoggyVideo);
+    newsMessage = sl<LocaleController>().t(
+      'piper_quest_001_harsh_sex_doggy_news',
+    );
+    _saveService.autosave();
+  }
+
+  void _onPiperGgHarshSexCowgirlPressed() {
+    if (!_canShowPiperGgHarshSexCowgirlButton()) return;
+    _configurePiperHarshPunishVideo(PiperQuest001.ggHarshPunishSexCowgirlVideo);
+    newsMessage = sl<LocaleController>().t(
+      'piper_quest_001_harsh_sex_cowgirl_news',
+    );
+    _saveService.autosave();
+  }
+
+  void _startPiperGgHarshPunish() {
+    if (!_isPiperQuest001HarshPunishOfferActive()) return;
+    final piper = sl<NPCService>().npcById('piper');
+    final crisisN = _worldState.piperPunishmentCrisisN;
+    if (!PiperQuest001.canUseHarshPunishWithVezunchyk(
+      world: _worldState,
+      piper: piper,
+      crisisN: crisisN,
+    )) {
+      PiperQuest001.applyGgDealRevealRejectedPenalties(piper);
+      _worldState.piperQuest001Step5HarshOfferActive = false;
+      newsMessage = sl<LocaleController>().t(
+        'piper_quest_001_step02_gg_deal_rejected_news',
+      );
+      _saveService.autosave();
+      return;
+    }
+    _worldState.piperQuest001Step5HarshOfferActive = false;
+    _worldState.piperQuest001HarshPunishActive = true;
+    _worldState.piperQuest001HarshSpreadLegsSexCounted = false;
+    NpcSexStats.incrementSosala(sl<NPCService>().npcById('piper'));
+    _configurePiperHarshPunishVideo(PiperQuest001.ggVoluntaryPunishVideo4);
+    newsMessage = '';
+    _saveService.autosave();
+  }
+
+  void _finishPiperGgHarshPunish({
+    String? finishVideoPath,
+    double? finishPlaybackRate,
+  }) {
+    if (!_isPiperGgHarshPunishVideoActive()) return;
+    final fromStep5 = _worldState.piperQuest001Step == 5;
+    PiperQuest001.markGgVoluntaryPunishDoneThisCrisis(_worldState);
+    PiperQuest001.applyGgHarshPunishStatRewards(
+      sl<NPCService>().npcById('piper'),
+      _worldState,
+    );
+    _playerStats.changeArousal(-_playerStats.arousal);
+    if (fromStep5) {
+      _worldState.piperQuest001Step5VideoSeen = true;
+    }
+    PiperQuest001.closeAndFinishCrisisPass(_worldState);
+    _configurePiperHarshPunishVideo(
+      finishVideoPath ?? PiperQuest001.ggVoluntaryPunishVideo5Finish,
+      playbackRate:
+          finishPlaybackRate ?? PiperQuest001.ggHarshPunishFinishPlaybackRate,
+    );
+    newsMessage = '';
+    _saveService.autosave();
+  }
+
+  void _finishPiperGgHarshPunishOnAss() {
+    if (!_isPiperGgHarshPunishSexVideoActive()) return;
+    _finishPiperGgHarshPunish(
+      finishVideoPath: PiperQuest001.ggHarshPunishFinishOnAssVideo,
+      finishPlaybackRate: 1.0,
+    );
+  }
+
+  void _leavePiperGgHarshPunish() {
+    if (_isPiperGgHarshPunishFinishVideoActive()) {
+      _dismissPiperGgPunishSceneOnly();
+      return;
+    }
+    if (!_isPiperGgHarshPunishVideoActive()) return;
+    _completePiperQuest001AfterPunish(
+      markStep5VideoSeen: _worldState.piperQuest001Step == 5,
+    );
   }
 
   bool _canShowPiperGgVoluntaryPunishButton() {
@@ -821,54 +1211,63 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   }
 
   void _startPiperGgVoluntaryPunish() {
-    if (_isPiperGgVoluntaryPunishVideoActive()) return;
-    if (currentZone != 'HOME' || !isInsideRoom) return;
-    if (LocationsData.migrateLegacyRoomId(currentRoom) !=
-        LocationsData.piperRoom) {
-      return;
+    _startPiperGgPunishVideo();
+  }
+
+  void _dismissPiperGgPunishSceneOnly() {
+    _piperQuest001PresentationSyncedStep = null;
+    PiperQuest001.resetStep5HarshPunishUi(_worldState);
+    _clearPiperGgPunishVideoIfShowing();
+    newsMessage = LocationsData.getLocationDisplayName(
+      LocationsData.migrateLegacyRoomId(currentRoom),
+    );
+    _saveService.autosave();
+  }
+
+  void _completePiperQuest001AfterPunish({bool markStep5VideoSeen = false}) {
+    if (markStep5VideoSeen) {
+      _worldState.piperQuest001Step5VideoSeen = true;
     }
-    _eventVideoPath = PiperQuest001.ggVoluntaryPunishVideo;
-    _eventVideoMuted = false;
-    _eventVideoFullScreen = true;
-    _eventVideoCloseWhenCompleted = false;
-    _eventVideoLoop = false;
-    _eventVideoOnComplete = null;
-    _eventVideoMinWatchDuration = null;
-    _eventVideoOnMinWatchReached = null;
-    _eventVideoPendingButton = null;
-    _eventVideoOnButtonPressed = null;
-    _ui.setEventImagePath(null);
-    _selectedNpcIdInRoom = 'piper';
-    newsMessage = '';
+    PiperQuest001.closeAndFinishCrisisPass(_worldState);
+    _resetPiperQuest001PresentationSession();
+    _clearPiperGgPunishVideoIfShowing();
+    newsMessage = LocationsData.getLocationDisplayName(
+      LocationsData.migrateLegacyRoomId(currentRoom),
+    );
+    _saveService.autosave();
   }
 
   void _finishPiperGgVoluntaryPunish() {
     if (!_isPiperGgVoluntaryPunishVideoActive()) return;
+    final fromStep5 = _worldState.piperQuest001Step == 5;
+    final videoPath = _eventVideoPath;
+    _worldState.piperQuest001Step5HarshOfferActive = false;
     PiperQuest001.markGgVoluntaryPunishDoneThisCrisis(_worldState);
     PiperQuest001.applyGgVoluntaryPunishStatRewards(
       sl<NPCService>().npcById('piper'),
+      videoPath ?? PiperQuest001.ggVoluntaryPunishVideo,
     );
-    _eventVideoPath = null;
-    _eventVideoOnComplete = null;
-    _eventVideoOnMinWatchReached = null;
-    _eventVideoMinWatchDuration = null;
-    _eventVideoPendingButton = null;
-    _eventVideoOnButtonPressed = null;
-    _eventVideoCloseWhenCompleted = true;
-    _eventVideoFullScreen = false;
-    _eventVideoLoop = false;
-    _ui.setEventImagePath(null);
-    newsMessage = LocationsData.getLocationDisplayName(LocationsData.piperRoom);
-    _saveService.autosave();
+    _playerStats.changeArousal(
+      PiperQuest001.ggVoluntaryPunishGgArousalDelta.toDouble(),
+    );
+    _completePiperQuest001AfterPunish(markStep5VideoSeen: fromStep5);
   }
 
   void _ensurePiperGgVoluntaryPunishUiCoherent() {
-    if (!_isPiperGgVoluntaryPunishVideoActive()) return;
+    if (!_isPiperGgPunishVideoActive()) return;
     if (currentZone != 'HOME' ||
         !isInsideRoom ||
         LocationsData.migrateLegacyRoomId(currentRoom) !=
             LocationsData.piperRoom) {
-      _finishPiperGgVoluntaryPunish();
+      if (_worldState.piperQuest001Step == 5) {
+        _clearPiperGgPunishVideoIfShowing();
+        return;
+      }
+      if (_isPiperGgHarshPunishSceneActive()) {
+        _leavePiperGgHarshPunish();
+      } else {
+        _finishPiperGgVoluntaryPunish();
+      }
     }
   }
 
@@ -936,11 +1335,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
 
   void _piperQuest001FinishStep5() {
     if (_worldState.piperQuest001Step != 5) return;
-    PiperQuest001.closeCrisisPass(_worldState);
-    _resetPiperQuest001PresentationSession();
-    newsMessage = sl<LocaleController>().t('piper_quest_001_step06_after_punish_news');
-    _piperQuest001PresentationSyncedStep = 6;
-    _saveService.autosave();
+    _completePiperQuest001AfterPunish(markStep5VideoSeen: true);
   }
 
   void _piperQuest001FinishStep6() {
@@ -1002,6 +1397,17 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
         );
 
     if (!_isPiperQuest001ScriptedDialogActive()) return null;
+
+    if (_isPiperQuest001GgDealRevealActive()) {
+      return column([
+        _navBtn(t('piper_quest_001_btn_leave').toUpperCase(), () {
+          setState(() {
+            _piperQuest001FinishStep2GgDealReveal();
+          });
+        }),
+      ]);
+    }
+
     final s = _worldState.piperQuest001Step;
 
     if (s == 1) {
@@ -1018,24 +1424,27 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     if (s == 2) {
       if (PiperQuest001.usesGgPunisherStep2Buttons(_worldState)) {
         if (_worldState.piperQuest001Step2GgDealSubmenu) {
+          final piper = sl<NPCService>().npcById('piper');
           return column([
             _navBtn(t('piper_quest_001_btn_deal_show_breasts').toUpperCase(), () {
               setState(() {
-                _piperQuest001ApplyStep2GgDealOutcome(
-                  debtType: PiperQuest001.debtTypeGgDealBreasts,
-                  newsKey: 'piper_quest_001_step02_gg_deal_breasts_news',
-                );
+                _piperQuest001ApplyStep2GgDealBreasts();
               });
             }),
             const SizedBox(height: 8),
             _navBtn(t('piper_quest_001_btn_deal_show_ass').toUpperCase(), () {
               setState(() {
-                _piperQuest001ApplyStep2GgDealOutcome(
-                  debtType: PiperQuest001.debtTypeGgDealAss,
-                  newsKey: 'piper_quest_001_step02_gg_deal_ass_news',
-                );
+                _piperQuest001ApplyStep2GgDealAss();
               });
             }),
+            if (PiperQuest001.isGgDealFullStripButtonVisible(piper)) ...[
+              const SizedBox(height: 8),
+              _navBtn(t('piper_quest_001_btn_deal_strip_full').toUpperCase(), () {
+                setState(() {
+                  _piperQuest001ApplyStep2GgDealFullStrip();
+                });
+              }),
+            ],
             const SizedBox(height: 8),
             _navBtn(t('piper_quest_001_btn_leave').toUpperCase(), () {
               setState(() {
@@ -1147,6 +1556,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
 
     if (s == 5) {
       if (!_isPiperQuest001Step5Scene()) return null;
+      if (_isPiperGgPunishVideoActive()) return null;
       return column([
         _navBtn(t('piper_quest_001_btn_leave').toUpperCase(), () {
           setState(() {
@@ -1158,6 +1568,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
 
     if (s == 6) {
       if (!_isPiperQuest001Step6Scene()) return null;
+      if (_isPiperQuest001GgDealRevealActive()) return null;
       return column([
         _navBtn(t('mom_quest_001_btn_back').toUpperCase(), () {
           setState(() {

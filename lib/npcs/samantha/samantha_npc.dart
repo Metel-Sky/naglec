@@ -12,7 +12,7 @@ NPCModel createSamanthaNpc() {
     gender: NpcGender.female,
     name: 'Samantha',
     fullName: 'Samantha',
-    status: 'Мешканка',
+    status: 'Старша донька Індії',
     biographyType:
         'Живе в домі шефа колцентру в Мажорщині, у кімнаті Samantha.',
     age: 21,

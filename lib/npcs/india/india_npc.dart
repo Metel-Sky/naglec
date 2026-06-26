@@ -15,7 +15,7 @@ NPCModel createIndiaNpc() {
     gender: NpcGender.female,
     name: 'India',
     fullName: 'India',
-    status: 'Дружина власника колцентру',
+    status: 'Дружина Артура',
     age: 43,
     galleryPortraitPath: kIndiaGalleryPortraitPath,
     avatarPath: kIndiaAvatarPath,

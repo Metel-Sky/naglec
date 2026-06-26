@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/npc_economy_config.dart';
+import '../data/npc_gallery_residence.dart';
 import '../models/npc_model.dart';
 import '../services/game_time_controller.dart';
 import '../theme/game_theme.dart';
@@ -50,19 +51,9 @@ class NpcGalleryView extends StatelessWidget {
     'Понеділок', 'Вівторок', 'Середа', 'Четвер', "П'ятниця", 'Субота', 'Неділя'
   ];
 
-  /// Перші три картки завжди: мама, Ельза, Пайпер (якщо є в списку), далі — решта за віком (від старшого до молодшого).
-  static List<NPCModel> sortedForGallery(List<NPCModel> npcs) {
-    const priorityIds = ['mom', 'elsa', 'piper'];
-    final byId = <String, NPCModel>{for (final n in npcs) n.id: n};
-    final head = <NPCModel>[];
-    for (final id in priorityIds) {
-      final n = byId[id];
-      if (n != null) head.add(n);
-    }
-    final tail = npcs.where((n) => !priorityIds.contains(n.id)).toList()
-      ..sort((a, b) => b.age.compareTo(a.age));
-    return [...head, ...tail];
-  }
+  /// Перші три картки — родина ГG; решта — за будинком проживання, у групі — за віком.
+  static List<NPCModel> sortedForGallery(List<NPCModel> npcs) =>
+      NpcGalleryResidence.sortForGallery(npcs);
 
   const NpcGalleryView({
     super.key,

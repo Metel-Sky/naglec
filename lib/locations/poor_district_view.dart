@@ -323,25 +323,10 @@ class _PoorDistrictViewState extends State<PoorDistrictView> {
     );
   }
 
-  /// Сітка 3 квартир у будинку.
+  /// Сітка квартир у будинку (2×2) — та сама логіка, що й кімнати в квартирі.
   Widget _buildApartmentsGrid(String houseId) {
     final apartmentIds = LocationsData.getPoorDistrictApartmentIds(houseId);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        const double spacing = 12.0;
-        const int crossCount = 3;
-        final cellWidth = (constraints.maxWidth - (spacing * (crossCount - 1))) / crossCount;
-        final cellHeight = constraints.maxHeight;
-        return GridView.count(
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: crossCount,
-          mainAxisSpacing: spacing,
-          crossAxisSpacing: spacing,
-          childAspectRatio: cellWidth / cellHeight,
-          children: apartmentIds.map((id) => _roomCard(id)).toList(),
-        );
-      },
-    );
+    return _buildRoomsGridForApartment(apartmentIds);
   }
 
   /// Сітка 4 кімнат у квартирі.

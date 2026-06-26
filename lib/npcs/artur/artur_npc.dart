@@ -14,7 +14,7 @@ NPCModel createArturNpc() {
     gender: NpcGender.male,
     name: 'Artur',
     fullName: 'Artur',
-    status: 'Начальник колл-центру',
+    status: 'Чоловік Індії',
     biographyType:
         'Дуже багатий власник декількох фірм; основна — кол-центр. Періодично літає по всьому світу.',
     age: 47,

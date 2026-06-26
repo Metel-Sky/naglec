@@ -11,6 +11,7 @@ import '../services/player_stats_controller.dart';
 import '../models/npc_model.dart';
 import '../services/game_time_controller.dart';
 import '../widgets/room_npc_scene_template.dart';
+import '../npcs/mom/mom_npc.dart';
 import '../npcs/mom/mom_room_hours.dart';
 import '../npcs/mom/mom_video_func.dart' as mom_vf;
 import '../npcs/piper/piper_shower_videos.dart';
@@ -64,6 +65,30 @@ class _HomeViewState extends State<HomeView> {
   static int _dailySeed(DateTime dt, String location) {
     final dayPart = dt.year * 10000 + dt.month * 100 + dt.day;
     return dayPart * 31 + location.hashCode;
+  }
+
+  static bool _isMomWorkplacePlaceholder(String? path) {
+    if (path == null || path.isEmpty) return false;
+    return path == kMomWorkplacePlaceholderPath;
+  }
+
+  static String? _momKitchenNpcRaster(NPCModel mom, String? overlay) {
+    if (_isMomWorkplacePlaceholder(overlay)) {
+      return mom.avatarPath;
+    }
+    return overlay;
+  }
+
+  /// Кухонне відео/аватар мами — лише коли саме її показують (не іншого обраного NPC).
+  bool _shouldShowMomKitchenPresentation({
+    required bool momOnKitchen,
+    required NPCModel? activeNpcAfterCandidates,
+  }) {
+    if (!momOnKitchen) return false;
+    final selected = widget.selectedNpcIdInRoom;
+    if (selected == 'mom') return true;
+    if (selected != null && selected != 'mom') return false;
+    return activeNpcAfterCandidates?.id == 'mom';
   }
 
   @override
@@ -155,30 +180,63 @@ class _HomeViewState extends State<HomeView> {
       } else if (sp.isNotEmpty && NpcRoomScenePicker.isVideoAssetPath(sp)) {
         specialBackground = sp;
       } else if (sp.isNotEmpty) {
-        npcRasterOverlay = NpcRoomScenePicker.npcRasterOverlayPath(chosen.npc, chosen.point);
+        npcRasterOverlay = NpcRoomScenePicker.npcRasterOverlayPath(
+          chosen.npc,
+          chosen.point,
+        );
+        if (chosen.npc.id == 'mom' &&
+            widget.currentRoom == LocationsData.kitchen) {
+          npcRasterOverlay = _momKitchenNpcRaster(chosen.npc, npcRasterOverlay);
+        }
       }
       activeNPC = chosen.npc;
+    }
+
+    // Обраний у смузі NPC у кімнаті — завжди його аватар (напр. Ельза, коли мама теж на кухні).
+    if (!widget.suppressRoomNpcRaster && widget.selectedNpcIdInRoom != null) {
+      final selectedId = widget.selectedNpcIdInRoom!;
+      if (activeNPC?.id != selectedId &&
+          npcsInRoom.any((n) => n.id == selectedId)) {
+        final selectedNpc =
+            npcsInRoom.firstWhere((n) => n.id == selectedId);
+        activeNPC = selectedNpc;
+        npcRasterOverlay = selectedNpc.avatarPath;
+        if (selectedId != 'mom') {
+          specialBackground = null;
+        }
+      }
     }
 
     // Seed для медіа: один раз на добу для цієї кімнати (календарний день гри).
     final mediaSeed = _dailySeed(dt, widget.currentRoom) + 9999;
     // Мама на кухні: 7 — сніданок; 21 — вечеря (окремий набір від mom_room / pereodevaetsa).
-    if (momNpc != null &&
+    final momOnKitchen = momNpc != null &&
         widget.currentRoom == LocationsData.kitchen &&
         npcService.getCurrentLocationId(momNpc, h, day) ==
-            LocationsData.kitchen) {
+            LocationsData.kitchen;
+    if (_shouldShowMomKitchenPresentation(
+      momOnKitchen: momOnKitchen,
+      activeNpcAfterCandidates: activeNPC,
+    )) {
+      final mom = momNpc!;
       if (h == 7 && !isGgFullyAroused) {
         final kitchenSeed = world.kitchenVisitSeed ?? mediaSeed;
         specialBackground = mom_vf.momKitchenMorningSeeded(kitchenSeed);
-        activeNPC ??= momNpc;
+        npcRasterOverlay = null;
+        activeNPC = mom;
       } else if (h == 7 && isGgFullyAroused) {
         specialBackground = null;
-        npcRasterOverlay = momNpc.avatarPath;
-        activeNPC = momNpc;
+        npcRasterOverlay = mom.avatarPath;
+        activeNPC = mom;
       } else if (h == 21) {
         final kitchenSeed = world.kitchenVisitSeed ?? mediaSeed;
         specialBackground = mom_vf.momKitchenEveningSeeded(kitchenSeed);
-        activeNPC ??= momNpc;
+        npcRasterOverlay = null;
+        activeNPC = mom;
+      } else {
+        specialBackground = null;
+        npcRasterOverlay = mom.avatarPath;
+        activeNPC = mom;
       }
     }
     // Мама у кімнаті: 23–6 — три sleep; 22–23 і 6–7 — два pereodevaetsa.

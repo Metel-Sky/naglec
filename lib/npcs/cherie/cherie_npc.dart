@@ -13,7 +13,7 @@ NPCModel createCherieNpc() {
     gender: NpcGender.female,
     name: 'Cherie',
     fullName: 'Cherie',
-    status: 'Тітка, офіс магазину подарунків (ТРЦ)',
+    status: 'Власниця магазину подарунків',
     age: 41,
     galleryPortraitPath: kCherieGalleryPortraitPath,
     avatarPath: kCherieAvatarPath,

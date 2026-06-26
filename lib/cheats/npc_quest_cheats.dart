@@ -367,6 +367,9 @@ abstract final class NpcQuestCheats {
       case NpcProfileQuestCheatId.piperGgPunishment:
         if (profileNpc.id != 'piper') break;
         if (completed) {
+          PiperQuest001.resetCheatPunishment(world, 1);
+          PiperQuest001.resetCheatPunishment(world, 2);
+          PiperQuest001.resetCheatPunishment(world, 3);
           PiperQuest001.applyCheatGgPunishment(world: world);
         } else {
           PiperQuest001.resetCheatGgPunishment(world);

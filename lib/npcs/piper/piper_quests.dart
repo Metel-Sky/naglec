@@ -32,7 +32,7 @@ abstract final class PiperQuest001 {
 
   /// Крок 1 (бібліотека): **без відео** — аватарки Piper + Emily у [CollegeView].
   ///
-  /// Крок 2 (Piper просить не здавати): лише fullscreen-відео в кімнаті Piper.
+  /// Крок 2 (Piper просить / домовляється): fullscreen-відео в `piper_room` або `room_gg`.
   static const String quest001Step2Video =
       'lib/assets/npcs/piper/video/piper_prosit_ne_zdavat_ee.mp4';
 
@@ -53,6 +53,285 @@ abstract final class PiperQuest001 {
   /// Добровільне покарання ГG у `piper_room` (після 7B, під час кризи з двійкою).
   static const String ggVoluntaryPunishVideo =
       'lib/assets/npcs/piper/video/spank_001.mp4';
+  static const String ggVoluntaryPunishVideoHighBond =
+      'lib/assets/npcs/piper/video/spank_002.mp4';
+  static const String ggVoluntaryPunishVideo3 =
+      'lib/assets/npcs/piper/video/spank_003.mp4';
+  static const String ggVoluntaryPunishVideo4 =
+      'lib/assets/npcs/piper/video/spank_4.mp4';
+  static const String ggVoluntaryPunishVideo5Sex =
+      'lib/assets/npcs/piper/video/spank_5_sex.mp4';
+  static const String ggHarshPunishSexCowgirlVideo =
+      'lib/assets/npcs/piper/video/spank_6_sverhu.mp4';
+  static const String ggHarshPunishSexDoggyVideo =
+      'lib/assets/npcs/piper/video/spank_7_rakom.mp4';
+  static const String ggVoluntaryPunishVideo5Finish =
+      'lib/assets/npcs/piper/video/spank_005_finish.mp4';
+  static const String ggHarshPunishFinishOnAssVideo =
+      'lib/assets/npcs/piper/video/spank_8_finish_on_ass.mp4';
+
+  /// spank_005_finish: на 5 % повільніше за норму (0.95×).
+  static const double ggHarshPunishFinishPlaybackRate = 0.95;
+
+  /// Кризи 3–5: третє spank-відео; з 6-ї — знову 3-тє + опція «Покарати жорстко» → 4-тє.
+  static const int level3SpankVideoFirstCrisisN = 3;
+  static const int level3SpankVideoLastCrisisN = 5;
+  static const int harshPunishOfferFromCrisisN = 6;
+
+  /// Авто-«4-те покарання»: spank_003 + «Покарати жорстко» без очікування кризи 6.
+  static const int harshPunishAutoOfferLustMin = 500;
+  static const int harshPunishAutoOfferRelationshipMin = 550;
+  static const int harshPunishAutoOfferInfluenceMin = 55;
+
+  /// Кнопка «Покарати жорстко» видна на [harshPunishEarlyOfferStatDelta] раніше за поріг використання.
+  static const int harshPunishEarlyOfferStatDelta = 50;
+
+  /// spank_4: «Роздвинути ноги» — використання: хтив ≥ 650, відносини ≥ 650, вплив > 70.
+  static const int spreadLegsOfferLustMin = 650;
+  static const int spreadLegsOfferRelationshipMin = 650;
+  static const int spreadLegsOfferInfluenceMin = 70;
+
+  /// Ранній показ кнопки «Роздвинути ноги» (без права використання).
+  static const int spreadLegsEarlyOfferLustMin = 500;
+  static const int spreadLegsEarlyOfferRelationshipMin = 500;
+  static const int spreadLegsEarlyOfferInfluenceMin = 50;
+
+  /// spank_002: відносини **(300; 449]** і Пайпер уже показала дупу в «Домовитись».
+  static const int ggVoluntaryPunishVideo2RelationshipMin = 300;
+  static const int ggVoluntaryPunishVideo2RelationshipMax = 449;
+  /// spank_003: відносини **≥ 450** і Пайпер уже показала сіськи.
+  static const int ggVoluntaryPunishVideo3RelationshipMin = 450;
+
+  /// Збудження ГG після кожного spank-покарання (001/002/003).
+  static const int ggVoluntaryPunishGgArousalDelta = 20;
+
+  static bool hasGgDealAssBeenShown(GameWorldState world) =>
+      world.piperQuest001GgDealAssShown;
+
+  static void markGgDealAssShown(GameWorldState world) {
+    world.piperQuest001GgDealAssShown = true;
+  }
+
+  static bool hasGgDealBreastsBeenShown(GameWorldState world) =>
+      world.piperQuest001GgDealBreastsShown;
+
+  static void markGgDealBreastsShown(GameWorldState world) {
+    world.piperQuest001GgDealBreastsShown = true;
+  }
+
+  /// Відношення для tier spank (UI показує ціле; порівняння через round).
+  static int voluntaryPunishRelationship(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return 0;
+    return piper.relationship.round();
+  }
+
+  static bool usesSpank002VoluntaryPunishVideo({
+    required NPCModel? piper,
+    required GameWorldState world,
+  }) {
+    if (piper == null || piper.id != 'piper') return false;
+    if (!hasGgDealAssBeenShown(world)) return false;
+    final rel = voluntaryPunishRelationship(piper);
+    return rel > ggVoluntaryPunishVideo2RelationshipMin &&
+        rel <= ggVoluntaryPunishVideo2RelationshipMax;
+  }
+
+  static bool usesSpank003VoluntaryPunishVideo({
+    required NPCModel? piper,
+    required GameWorldState world,
+  }) {
+    if (piper == null || piper.id != 'piper') return false;
+    if (!hasGgDealBreastsBeenShown(world)) return false;
+    return voluntaryPunishRelationship(piper) >=
+        ggVoluntaryPunishVideo3RelationshipMin;
+  }
+
+  static String ggVoluntaryPunishVideoFor({
+    required NPCModel? piper,
+    required GameWorldState world,
+    int? crisisN,
+  }) {
+    final n = crisisN ?? world.piperPunishmentCrisisN;
+    if (usesHarshPunishThirdSpankVideo(piper: piper, crisisN: n)) {
+      return ggVoluntaryPunishVideo3;
+    }
+    if (usesSpank003VoluntaryPunishVideo(piper: piper, world: world)) {
+      return ggVoluntaryPunishVideo3;
+    }
+    if (usesSpank002VoluntaryPunishVideo(piper: piper, world: world)) {
+      return ggVoluntaryPunishVideoHighBond;
+    }
+    return ggVoluntaryPunishVideo;
+  }
+
+  static bool isGgVoluntaryPunishVideoPath(String? path) =>
+      path == ggVoluntaryPunishVideo ||
+      path == ggVoluntaryPunishVideoHighBond ||
+      path == ggVoluntaryPunishVideo3;
+
+  static bool isGgHarshPunishSpank4Path(String? path) =>
+      path == ggVoluntaryPunishVideo4;
+
+  static bool isGgHarshPunishSexVideoPath(String? path) =>
+      path == ggVoluntaryPunishVideo5Sex ||
+      path == ggHarshPunishSexCowgirlVideo ||
+      path == ggHarshPunishSexDoggyVideo;
+
+  static bool isGgHarshPunishVideoPath(String? path) =>
+      isGgHarshPunishSpank4Path(path) || isGgHarshPunishSexVideoPath(path);
+
+  static bool isGgHarshPunishFinishVideoPath(String? path) =>
+      path == ggVoluntaryPunishVideo5Finish ||
+      path == ggHarshPunishFinishOnAssVideo;
+
+  static bool isGgHarshPunishScenePath(String? path) =>
+      isGgHarshPunishVideoPath(path) || isGgHarshPunishFinishVideoPath(path);
+
+  static bool isGgPunishVideoPath(String? path) =>
+      isGgVoluntaryPunishVideoPath(path) || isGgHarshPunishScenePath(path);
+
+  static bool isLevel3SpankVideoCrisis(int crisisN) =>
+      crisisN >= level3SpankVideoFirstCrisisN;
+
+  static bool isHarshPunishOfferCrisis(int crisisN) =>
+      crisisN >= harshPunishOfferFromCrisisN;
+
+  static bool isHarshPunishEarlyOfferCrisis(int crisisN) =>
+      crisisN >= harshPunishOfferFromCrisisN - 1;
+
+  /// Хтив > 500, відносини > 550, вплив ГG > 55 → одразу гілка 4-го покарання.
+  static bool qualifiesForHarshPunishAutoOffer(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return false;
+    return piper.lust > harshPunishAutoOfferLustMin &&
+        voluntaryPunishRelationship(piper) > harshPunishAutoOfferRelationshipMin &&
+        piper.influenceFromGg > harshPunishAutoOfferInfluenceMin;
+  }
+
+  /// Ранній показ кнопки (стати на −50 від порогу використання).
+  static bool qualifiesForHarshPunishEarlyStatOffer(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return false;
+    final lustMin = harshPunishAutoOfferLustMin - harshPunishEarlyOfferStatDelta;
+    final relMin =
+        harshPunishAutoOfferRelationshipMin - harshPunishEarlyOfferStatDelta;
+    final infMin =
+        harshPunishAutoOfferInfluenceMin - harshPunishEarlyOfferStatDelta;
+    return piper.lust > lustMin &&
+        voluntaryPunishRelationship(piper) > relMin &&
+        piper.influenceFromGg > infMin;
+  }
+
+  /// Кнопка «Покарати жорстко» на spank_003 (можна натиснути лише [canUseHarshPunish]).
+  static bool shouldShowHarshPunishButton({
+    required NPCModel? piper,
+    required int crisisN,
+  }) {
+    return shouldOfferHarshPunish(piper: piper, crisisN: crisisN) ||
+        isHarshPunishEarlyOfferCrisis(crisisN) ||
+        qualifiesForHarshPunishEarlyStatOffer(piper);
+  }
+
+  /// Чи можна реально почати spank_004 (без «Ти що, дурний?»).
+  static bool canUseHarshPunish({
+    required NPCModel? piper,
+    required int crisisN,
+  }) =>
+      shouldOfferHarshPunish(piper: piper, crisisN: crisisN);
+
+  static bool qualifiesForSpreadLegsOffer(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return false;
+    return piper.lust >= spreadLegsOfferLustMin &&
+        voluntaryPunishRelationship(piper) >= spreadLegsOfferRelationshipMin &&
+        piper.influenceFromGg > spreadLegsOfferInfluenceMin;
+  }
+
+  static bool qualifiesForSpreadLegsEarlyOffer(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return false;
+    return piper.lust >= spreadLegsEarlyOfferLustMin &&
+        voluntaryPunishRelationship(piper) >= spreadLegsEarlyOfferRelationshipMin &&
+        piper.influenceFromGg > spreadLegsEarlyOfferInfluenceMin;
+  }
+
+  /// Кнопка «Роздвинути ноги» (натискання — [canUseSpreadLegsWithVezunchyk]).
+  static bool shouldShowSpreadLegsButton({
+    required GameWorldState world,
+    required NPCModel? piper,
+  }) =>
+      world.piperQuest001VezunchykActive ||
+      qualifiesForSpreadLegsOffer(piper) ||
+      qualifiesForSpreadLegsEarlyOffer(piper);
+
+  static bool canUseSpreadLegs(NPCModel? piper) =>
+      qualifiesForSpreadLegsOffer(piper);
+
+  /// Штраф за «Роздвинути ноги» до досягнення повних статів.
+  static void applySpreadLegsRejectedPenalties(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return;
+    piper.addRelationship(-25);
+    piper.changeLust(-25);
+    piper.changeBehavior(-5);
+    piper.changeArousal(-piper.arousal);
+    piper.changeInfluence(-10);
+  }
+
+  /// piper_quest_001 «Везунчик»: 3% пройти stat-gate (harsh / spread legs), ніби стати повні.
+  /// Кожне натискання — новий кидок; без збереження між сесіями сцени.
+  static const double vezunchykBypassChance = 0.03;
+
+  static bool rollVezunchykBypass({Random? rng}) =>
+      (rng ?? Random()).nextDouble() < vezunchykBypassChance;
+
+  /// Повні стати, активний «Везунчик» у сесії, або 3% на це натискання.
+  static bool canUseHarshPunishWithVezunchyk({
+    required GameWorldState world,
+    required NPCModel? piper,
+    required int crisisN,
+    Random? rng,
+  }) {
+    if (world.piperQuest001VezunchykActive) return true;
+    if (canUseHarshPunish(piper: piper, crisisN: crisisN)) return true;
+    if (rollVezunchykBypass(rng: rng)) {
+      world.piperQuest001VezunchykActive = true;
+      return true;
+    }
+    return false;
+  }
+
+  static bool canUseSpreadLegsWithVezunchyk({
+    required GameWorldState world,
+    required NPCModel? piper,
+    Random? rng,
+  }) {
+    if (world.piperQuest001VezunchykActive) return true;
+    if (canUseSpreadLegs(piper)) return true;
+    if (rollVezunchykBypass(rng: rng)) {
+      world.piperQuest001VezunchykActive = true;
+      return true;
+    }
+    return false;
+  }
+
+  /// spank_003 + кнопка «Покарати жорстко» (криза ≥ 6 або stat-пороги).
+  static bool shouldOfferHarshPunish({
+    required NPCModel? piper,
+    required int crisisN,
+  }) {
+    return isHarshPunishOfferCrisis(crisisN) ||
+        qualifiesForHarshPunishAutoOffer(piper);
+  }
+
+  /// Четверте покарання завжди починається з spank_003.
+  static bool usesHarshPunishThirdSpankVideo({
+    required NPCModel? piper,
+    required int crisisN,
+  }) =>
+      shouldOfferHarshPunish(piper: piper, crisisN: crisisN);
+
+  static void resetStep5HarshPunishUi(GameWorldState world) {
+    world.piperQuest001Step5HarshOfferActive = false;
+    world.piperQuest001HarshPunishActive = false;
+    world.piperQuest001HarshSpreadLegsSexCounted = false;
+    world.piperQuest001VezunchykActive = false;
+  }
 
   static const List<String> quest001GgPunishmentVideos = [
     quest001GgPunishVideo1,
@@ -316,8 +595,12 @@ abstract final class PiperQuest001 {
     world.piperQuest001Step = 0;
     world.piperQuest001Step2VideoSeen = false;
     world.piperQuest001Step2GgDealSubmenu = false;
+    world.piperQuest001GgDealRevealPending = false;
+    world.piperQuest001GgDealRevealSuccess = false;
+    world.piperQuest001GgDealRevealKind = '';
     world.piperQuest001Step3VideoSeen = false;
     world.piperQuest001Step5VideoSeen = false;
+    resetStep5HarshPunishUi(world);
     world.piperQuest001Step3CallOverheard = false;
     world.piperQuest001Step4ScoldingOverheard = false;
     world.piperQuest001Step4EarliestDayKey = null;
@@ -671,6 +954,11 @@ abstract final class PiperQuest001 {
   static bool usesGgPunisherStep2Buttons(GameWorldState world) =>
       isMomExcludedFromQuestChain(world);
 
+  static String step2NewsL10nKey(GameWorldState world) =>
+      usesGgPunisherStep2Buttons(world)
+          ? 'piper_quest_001_step02_gg_news'
+          : 'piper_quest_001_step02_news';
+
   static bool canGgPunishPiperDuringStep2Approach(GameWorldState world) =>
       usesGgPunisherStep2Buttons(world) &&
       world.piperGradeCrisisActive &&
@@ -680,6 +968,89 @@ abstract final class PiperQuest001 {
   static const String debtTypeGgCoverNoPunish = 'gg_cover_no_punish';
   static const String debtTypeGgDealBreasts = 'gg_deal_breasts';
   static const String debtTypeGgDealAss = 'gg_deal_ass';
+  static const String debtTypeGgDealFullStrip = 'gg_deal_full_strip';
+
+  static const String ggDealBreastsImage =
+      'lib/assets/npcs/piper/piper_tits.png';
+  static const String ggDealAssImage = 'lib/assets/npcs/piper/piper_ass.png';
+  static const String ggDealFullStripImage =
+      'lib/assets/npcs/piper/piper_gola.png';
+
+  static const int ggDealBreastsRelationshipMin = 350;
+  static const int ggDealBreastsInfluenceMin = 30;
+  static const int ggDealAssRelationshipMin = 300;
+  static const int ggDealAssInfluenceMin = 25;
+  static const int ggDealFullStripLustMin = 500;
+
+  static bool canGgDealShowBreasts(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return false;
+    return voluntaryPunishRelationship(piper) >= ggDealBreastsRelationshipMin &&
+        piper.influenceFromGg >= ggDealBreastsInfluenceMin;
+  }
+
+  static bool canGgDealShowAss(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return false;
+    return voluntaryPunishRelationship(piper) >= ggDealAssRelationshipMin &&
+        piper.influenceFromGg >= ggDealAssInfluenceMin;
+  }
+
+  static bool isGgDealFullStripButtonVisible(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return false;
+    return piper.lust.round() >= ggDealFullStripLustMin;
+  }
+
+  static bool canGgDealShowFullStrip(NPCModel? piper) =>
+      isGgDealFullStripButtonVisible(piper);
+
+  static bool canGgDealRevealKind(NPCModel? piper, String kind) {
+    return switch (kind) {
+      'breasts' => canGgDealShowBreasts(piper),
+      'ass' => canGgDealShowAss(piper),
+      'full' => canGgDealShowFullStrip(piper),
+      _ => false,
+    };
+  }
+
+  static String debtTypeForGgDealRevealKind(String kind) {
+    return switch (kind) {
+      'breasts' => debtTypeGgDealBreasts,
+      'ass' => debtTypeGgDealAss,
+      'full' => debtTypeGgDealFullStrip,
+      _ => '',
+    };
+  }
+
+  static bool isStep2GgDealRevealPending(GameWorldState world) =>
+      world.piperQuest001GgDealRevealPending;
+
+  static String? ggDealRevealImagePath(GameWorldState world) {
+    if (!world.piperQuest001GgDealRevealPending ||
+        !world.piperQuest001GgDealRevealSuccess) {
+      return null;
+    }
+    return switch (world.piperQuest001GgDealRevealKind) {
+      'breasts' => ggDealBreastsImage,
+      'ass' => ggDealAssImage,
+      'full' => ggDealFullStripImage,
+      _ => null,
+    };
+  }
+
+  static void markStep2GgDealRevealPending({
+    required GameWorldState world,
+    required String kind,
+    required bool success,
+  }) {
+    world.piperQuest001GgDealRevealPending = true;
+    world.piperQuest001GgDealRevealSuccess = success;
+    world.piperQuest001GgDealRevealKind = kind;
+  }
+
+  static void clearStep2GgDealReveal(GameWorldState world) {
+    world.piperQuest001GgDealRevealPending = false;
+    world.piperQuest001GgDealRevealSuccess = false;
+    world.piperQuest001GgDealRevealKind = '';
+  }
 
   static void resetStep2GgDealSubmenu(GameWorldState world) {
     world.piperQuest001Step2GgDealSubmenu = false;
@@ -689,14 +1060,102 @@ abstract final class PiperQuest001 {
     world.piperGgVoluntaryPunishDoneThisCrisis = true;
   }
 
-  /// Нагорода за «Покарати Пайпер» (spank_001): хтивість +3, відносини +5, поведінка +3, збудження +5, вплив +3.
-  static void applyGgVoluntaryPunishStatRewards(NPCModel? piper) {
+  /// Нагорода за «Покарати Пайпер» залежно від відео (spank_001 / 002 / 003).
+  static void applyGgVoluntaryPunishStatRewards(
+    NPCModel? piper,
+    String videoPath,
+  ) {
     if (piper == null || piper.id != 'piper') return;
+    if (videoPath == ggVoluntaryPunishVideo3) {
+      piper.changeLust(8);
+      piper.addRelationship(10);
+      piper.changeBehavior(4);
+      piper.changeArousal(10);
+      piper.changeInfluence(3);
+      return;
+    }
+    if (videoPath == ggVoluntaryPunishVideoHighBond) {
+      piper.changeLust(3);
+      piper.addRelationship(5);
+      piper.changeBehavior(3);
+      piper.changeArousal(5);
+      piper.changeInfluence(3);
+      return;
+    }
     piper.changeLust(3);
     piper.addRelationship(5);
     piper.changeBehavior(3);
     piper.changeArousal(5);
     piper.changeInfluence(3);
+  }
+
+  /// Нагорода за «Покарати жорстко» (spank_004) — tier за кількістю завершень.
+  static void applyGgHarshPunishStatRewards(
+    NPCModel? piper,
+    GameWorldState world,
+  ) {
+    if (piper == null || piper.id != 'piper') return;
+    final n = world.piperQuest001HarshPunishCount;
+    if (n == 0) {
+      piper.addRelationship(-20);
+      piper.changeLust(-10);
+      piper.changeBehavior(-5);
+      piper.changeArousal(20);
+      piper.changeInfluence(5);
+    } else if (n == 1) {
+      piper.addRelationship(-5);
+      piper.changeBehavior(1);
+      piper.changeArousal(20);
+      piper.changeInfluence(3);
+    } else {
+      piper.addRelationship(5);
+      piper.changeLust(4);
+      piper.changeBehavior(2);
+      piper.changeArousal(20);
+      piper.changeInfluence(3);
+    }
+    world.piperQuest001HarshPunishCount++;
+  }
+
+  /// Нагорода за успішне «Покажи сіськи» / «Покажи дупу» / «Роздягнись повністю».
+  static void applyGgDealRevealStatRewards(
+    NPCModel? piper,
+    String kind,
+    GameWorldState world,
+  ) {
+    if (piper == null || piper.id != 'piper') return;
+    if (kind == 'full') {
+      if (world.piperQuest001GgDealFullStripCount == 0) {
+        piper.addRelationship(10);
+        piper.changeLust(15);
+        piper.changeBehavior(5);
+        piper.changeArousal(10);
+        piper.changeInfluence(2);
+      } else {
+        piper.addRelationship(5);
+        piper.changeLust(5);
+        piper.changeBehavior(3);
+        piper.changeArousal(10);
+        piper.changeInfluence(2);
+      }
+      world.piperQuest001GgDealFullStripCount++;
+      return;
+    }
+    piper.addRelationship(5);
+    piper.changeLust(10);
+    piper.changeBehavior(2);
+    piper.changeArousal(5);
+    piper.changeInfluence(1);
+  }
+
+  /// Штраф, якщо стати не вистачає («Ти що, дурний?»).
+  static void applyGgDealRevealRejectedPenalties(NPCModel? piper) {
+    if (piper == null || piper.id != 'piper') return;
+    piper.addRelationship(-10);
+    piper.changeLust(-5);
+    piper.changeBehavior(-2);
+    piper.changeArousal(-10);
+    piper.changeInfluence(-1);
   }
 
   static bool isGgPunishmentSceneActive({
@@ -857,6 +1316,50 @@ abstract final class PiperQuest001 {
     return 3;
   }
 
+  /// Скільки разів уже відіграло **третє** spank-відео (кризи 3, 4, 5…).
+  static int level3PunishmentOccurrence(int crisisN) =>
+      crisisN >= level3SpankVideoFirstCrisisN
+          ? crisisN - (level3SpankVideoFirstCrisisN - 1)
+          : 0;
+
+  /// Діалог ГG під час 3-го рівня покарання: 1-й / 2-й / 3-й (фінальний) раз.
+  static String level3PunishmentNewsL10nKey(int crisisN) {
+    switch (level3PunishmentOccurrence(crisisN)) {
+      case 1:
+        return 'piper_quest_001_step05_level3_news_1st';
+      case 2:
+        return 'piper_quest_001_step05_level3_news_2nd';
+      default:
+        return 'piper_quest_001_step05_level3_news_3rd_final';
+    }
+  }
+
+  /// Діalogове вікно при покаранні ГG (рівні 1–2 — один текст; рівень 3 — за № разу).
+  static String ggPunishmentNewsL10nKey(GameWorldState world) {
+    final crisisN = world.piperQuest001Step == 5
+        ? world.piperPunishmentCrisisN
+        : world.piperPunishmentCrisisN + 1;
+    final level = punishmentLevelFromCrisisN(crisisN);
+    return switch (level) {
+      1 => 'piper_quest_001_step05_gg_level1_news',
+      2 => 'piper_quest_001_step05_gg_level2_news',
+      _ => level3PunishmentNewsL10nKey(crisisN),
+    };
+  }
+
+  /// На кроці 5 ГG: spank tier; 4-те покарання — завжди spank_003.
+  static String ggStep5SpankVideoFor({
+    required NPCModel? piper,
+    required GameWorldState world,
+    required int crisisN,
+  }) {
+    return ggVoluntaryPunishVideoFor(
+      piper: piper,
+      world: world,
+      crisisN: crisisN,
+    );
+  }
+
   static int nextPunishmentLevel(GameWorldState world) =>
       punishmentLevelFromCrisisN(world.piperPunishmentCrisisN + 1);
 
@@ -867,24 +1370,23 @@ abstract final class PiperQuest001 {
     return quest001PunishmentVideos[index];
   }
 
-  static String? ggPunishmentVideoForCrisisN(int crisisN) {
-    if (crisisN < 3) return null;
-    final index = (crisisN - 3).clamp(0, quest001GgPunishmentVideos.length - 1);
-    return quest001GgPunishmentVideos[index];
-  }
-
   static PiperQuest001Patch patchForStep5(GameWorldState world, int crisisN) {
     if (ggPunishesInsteadOfMom(world)) {
       return patchForGgPunishmentLevel(
         punishmentLevelFromCrisisN(crisisN),
+        crisisN: crisisN,
       );
     }
     return patchForMomPunishmentLevel(
       punishmentLevelFromCrisisN(crisisN),
+      crisisN: crisisN,
     );
   }
 
-  static PiperQuest001Patch patchForMomPunishmentLevel(int level) {
+  static PiperQuest001Patch patchForMomPunishmentLevel(
+    int level, {
+    required int crisisN,
+  }) {
     switch (level) {
       case 1:
         return PiperQuest001Patch(
@@ -899,12 +1401,15 @@ abstract final class PiperQuest001 {
       default:
         return PiperQuest001Patch(
           newsL10nKey: 'piper_quest_001_step05_crisis3_news',
-          videoPath: momPunishmentVideoForCrisisN(level),
+          videoPath: momPunishmentVideoForCrisisN(crisisN),
         );
     }
   }
 
-  static PiperQuest001Patch patchForGgPunishmentLevel(int level) {
+  static PiperQuest001Patch patchForGgPunishmentLevel(
+    int level, {
+    required int crisisN,
+  }) {
     switch (level) {
       case 1:
         return const PiperQuest001Patch(
@@ -916,8 +1421,7 @@ abstract final class PiperQuest001 {
         );
       default:
         return PiperQuest001Patch(
-          newsL10nKey: 'piper_quest_001_step05_gg_level3_news',
-          videoPath: ggPunishmentVideoForCrisisN(level),
+          newsL10nKey: level3PunishmentNewsL10nKey(crisisN),
         );
     }
   }
@@ -963,6 +1467,12 @@ abstract final class PiperQuest001 {
     world.piperQuest001PassesCompleted++;
   }
 
+  /// Закрити кризу без проміжного кроку 6 (одразу фоновий режим).
+  static void closeAndFinishCrisisPass(GameWorldState world) {
+    closeCrisisPass(world);
+    finishCrisisPass(world);
+  }
+
   /// Чит: активна криза з поганою оцінкою сьогодні.
   static bool isCheatCrisisActive(GameWorldState world) =>
       world.piperGradeCrisisActive && !world.piperCrisisResolved;
@@ -973,9 +1483,7 @@ abstract final class PiperQuest001 {
       world.piperPunishmentCrisisN == crisisN;
 
   static bool isCheatGgPunishmentActive(GameWorldState world) =>
-      world.piperQuest001Step == 5 &&
-      world.piperUnderPunishment &&
-      world.piperGgPunishmentThisCrisis;
+      world.piperGgPunishmentGranted;
 
   static void clearCheatPunishmentScene(GameWorldState world) {
     if (world.piperQuest001Step != 5) return;
@@ -1010,19 +1518,19 @@ abstract final class PiperQuest001 {
     }
   }
 
-  /// Чит: покарання від ГG (крок 5, GG-гілка, криза 3+).
+  /// Чит: крок 7A — мама дозволила ГG карати Пайпер (без сцени покарання кроку 5).
   static void applyCheatGgPunishment({required GameWorldState world}) {
-    applyCheatPunishment(world: world, crisisN: 3);
-    world.piperGgPunishmentGranted = true;
-    world.piperGgPunishmentAnnouncedToPiper = true;
-    world.piperGgPunishmentThisCrisis = true;
-    world.piperPunishmentBranch = punishmentBranchGgPunisher;
-    world.piperMomTalkingAboutGrades = false;
+    clearCheatPunishmentScene(world);
+    applyGgCommandsPiperInsteadOfMom(world);
   }
 
   static void resetCheatGgPunishment(GameWorldState world) {
-    if (isCheatGgPunishmentActive(world)) {
-      clearCheatPunishmentScene(world);
+    if (!isCheatGgPunishmentActive(world)) return;
+    world.piperGgPunishmentGranted = false;
+    world.piperGgPunishmentAnnouncedToPiper = false;
+    world.piperGgPunishmentThisCrisis = false;
+    if (world.piperPunishmentBranch == punishmentBranchGgPunisher) {
+      world.piperPunishmentBranch = '';
     }
   }
 
@@ -1040,8 +1548,16 @@ abstract final class PiperQuest001 {
     world.piperQuest001Step = 0;
     world.piperQuest001Step2VideoSeen = false;
     world.piperQuest001Step2GgDealSubmenu = false;
+    world.piperQuest001GgDealRevealPending = false;
+    world.piperQuest001GgDealRevealSuccess = false;
+    world.piperQuest001GgDealRevealKind = '';
+    world.piperQuest001GgDealAssShown = false;
+    world.piperQuest001GgDealBreastsShown = false;
+    world.piperQuest001GgDealFullStripCount = 0;
+    world.piperQuest001HarshPunishCount = 0;
     world.piperQuest001Step3VideoSeen = false;
     world.piperQuest001Step5VideoSeen = false;
+    resetStep5HarshPunishUi(world);
     world.piperQuest001Step3CallOverheard = false;
     world.piperQuest001Step4ScoldingOverheard = false;
     world.piperQuest001Step4EarliestDayKey = null;
