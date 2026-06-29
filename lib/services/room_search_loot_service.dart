@@ -35,11 +35,51 @@ class RoomSearchLootService {
 
   /// Кімнати з окремими таблицями лута. Для інших `null` — обшук без дропу з цього сервісу.
   /// [world] — прапорці одноразового випадіння ключів кімнат.
+  /// [ownerInShower] — власниця кімнати зараз у ванні; тоді телефон може бути в кімнаті.
+  static LootOption? rollNpcBedroom(
+    String roomId,
+    Random rng,
+    GameWorldState world, {
+    bool ownerInShower = false,
+  }) {
+    if (roomId == LocationsData.cityEliteApartment3Bedroom) {
+      return rollShalinaBedroom(rng, world);
+    }
+    return rollHomeFamilyBedroom(
+      roomId,
+      rng,
+      world,
+      ownerInShower: ownerInShower,
+    );
+  }
+
+  static LootOption? rollShalinaBedroom(Random rng, GameWorldState world) {
+    final pool = <LootOption>[];
+    if (!world.shalinaRoomSearchCash100Granted) {
+      pool.add(const LootOption(money: 100, weight: 25));
+    }
+    if (!world.shalinaRoomSearchEcstasyGranted) {
+      pool.add(const LootOption(item: GameItems.ecstasyPackTwo, weight: 20));
+    }
+    if (pool.isEmpty) return null;
+
+    final sumOtherWeights = pool.fold<double>(0, (s, o) => s + o.weight);
+    pool.add(LootOption(weight: sumOtherWeights));
+    return _rollWeighted(pool, rng);
+  }
+
+  static const Map<String, GameItem> _showerPhoneByRoom = {
+    LocationsData.momRoom: GameItems.coryCheapPhone,
+    LocationsData.elsaRoom: GameItems.elsaOldPhone,
+    LocationsData.piperRoom: GameItems.piperOldPhone,
+  };
+
   static LootOption? rollHomeFamilyBedroom(
     String roomId,
     Random rng,
-    GameWorldState world,
-  ) {
+    GameWorldState world, {
+    bool ownerInShower = false,
+  }) {
     if (roomId == LocationsData.elsaRoom &&
         rng.nextDouble() < _elsaLoginDropChance) {
       return const LootOption(item: GameItems.elsaLogin);
@@ -74,6 +114,12 @@ class RoomSearchLootService {
       case LocationsData.momRoom:
         pool.addAll(_momExtra);
         break;
+    }
+    if (ownerInShower) {
+      final phone = _showerPhoneByRoom[roomId];
+      if (phone != null) {
+        pool.add(LootOption(item: phone, weight: 35));
+      }
     }
     // «Нічого не знайдено»: 50% проти суми всіх інших варіантів у цьому пулі.
     final sumOtherWeights = pool.fold<double>(0, (s, o) => s + o.weight);

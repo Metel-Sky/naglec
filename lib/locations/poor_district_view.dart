@@ -80,36 +80,6 @@ class _PoorDistrictViewState extends State<PoorDistrictView> {
     final day = widget.timeController.weekdayIndex;
     final dt = widget.timeController.dateTime;
 
-    final roomNorm = LocationsData.migrateLegacyRoomId(widget.currentRoom);
-    final candidates = npcService.getCandidatesInRoom(widget.currentRoom, h, day);
-    final zazieGeishaPair = roomNorm == LocationsData.poorDistrictH2Apt2Bedroom && !widget.suppressRoomNpcRaster
-        ? NpcRoomScenePicker.zazieGeishaBedroomPair(candidates)
-        : null;
-
-    if (zazieGeishaPair != null) {
-      final leftRaster = NpcRoomScenePicker.npcRasterOverlayPath(
-        zazieGeishaPair.left.npc,
-        zazieGeishaPair.left.point,
-      );
-      final rightRaster = NpcRoomScenePicker.npcRasterOverlayPath(
-        zazieGeishaPair.right.npc,
-        zazieGeishaPair.right.point,
-      );
-      final roomData = LocationsData.poorDistrictRooms[widget.currentRoom];
-      final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
-      if (leftRaster != null && rightRaster != null) {
-        return RoomNpcSceneTemplate.clippedRoomWithDualNpcOverlay(
-          roomBackgroundPath: bg,
-          leftNpcRasterAssetPath: leftRaster,
-          leftNpcRasterFallbackPath: zazieGeishaPair.left.npc.avatarPath,
-          rightNpcRasterAssetPath: rightRaster,
-          rightNpcRasterFallbackPath: zazieGeishaPair.right.npc.avatarPath,
-          onTapLeft: () => widget.onNPCTap(zazieGeishaPair.left.npc),
-          onTapRight: () => widget.onNPCTap(zazieGeishaPair.right.npc),
-        );
-      }
-    }
-
     var chosen = NpcRoomScenePicker.pickDisplayedNpc(
       npcService: npcService,
       roomId: widget.currentRoom,

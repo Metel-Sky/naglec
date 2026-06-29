@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../models/npc_model.dart';
 import '../models/npc_secondary.dart';
 import '../npcs/gg/gg_event_001_stojak.dart';
+import '../npcs/gg/gg_hygiene.dart';
 import '../services/game_time_controller.dart';
+import '../services/game_world_state.dart';
 import '../services/locale_controller.dart';
 import '../services/player_stats_controller.dart';
 import '../services/save_service.dart';
@@ -302,6 +304,20 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
     final stats = sl<PlayerStatsController>();
     final playerArousal = stats.arousal;
     final playerMaxArousal = stats.player.maxArousal;
+    if (GgHygiene.isStinky(sl<GameWorldState>())) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (widget.onBack != null)
+            _elevated(
+              sl<LocaleController>().t('gg_event_001_stojak_btn_leave').toUpperCase(),
+              widget.onBack!,
+            ),
+        ],
+      );
+    }
+
     if (GgEvent001Stojak.stojakDialogApplies(
       widget.npc,
       playerArousal,

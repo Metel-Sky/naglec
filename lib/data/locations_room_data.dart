@@ -18,6 +18,12 @@ class LocationsData {
   static const String yard = 'yard';
   static const String basement = 'basement';
 
+  /// Будь-яка ванна в будь-якому будинку (id містить `bathroom`).
+  static bool isAnyBathroom(String? roomId) {
+    if (roomId == null) return false;
+    return migrateLegacyRoomId(roomId).toLowerCase().contains('bathroom');
+  }
+
   static Map<String, RoomData> get homeRooms => LocationsLoader.homeRooms;
   static List<String> get homeRoomIds => LocationsLoader.homeRoomIds;
 
@@ -238,7 +244,7 @@ class LocationsData {
 
   static const String poorDistrictHouse1 = PoorDistrictHouse1.id;
   static const String poorDistrictHouse2 = PoorDistrictHouse2.id;
-  /// Спальня кв. 2, Бандери 2 (Zazie + Geisha).
+  /// Спальня кв. 2, Бандери 2.
   static const String poorDistrictH2Apt2Bedroom = PoorDistrictHouse2.rA2_4;
 
   static const List<String> poorDistrictResidentialHouseIds = [
@@ -459,6 +465,9 @@ class LocationsData {
   static const String cityEliteApartment2 = 'city_elite_apt_2';
   static const String cityEliteApartment2Bedroom = 'city_elite_apt_2_bedroom';
   static const String cityEliteApartment3 = 'city_elite_apt_3';
+  static const String cityEliteApartment3Bedroom = 'city_elite_apt_3_bedroom';
+  static const String cityEliteApartment3Room = 'city_elite_apt_3_room';
+  static const String cityEliteApartment3Terrace = 'city_elite_apt_3_terrace';
   static const String cityEliteApartment4 = 'city_elite_apt_4';
   static const String cityEliteApartment5 = 'city_elite_apt_5';
   static const String cityEliteApartment6 = 'city_elite_apt_6';

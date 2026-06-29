@@ -275,6 +275,12 @@ class GameWorldState {
   /// gg_event_001_stojak: дата останнього скидання прапорів мами/сестер о 6:00 (`yyyy-M-d`).
   String? ggEvent001StojakLastResetDayKey;
 
+  /// Днів без миття ГГ (0 — сьогодні мився або нова гра; ≥3 — «смердить»).
+  int ggDaysSinceWash = 0;
+
+  /// Останній ігровий день, для якого застосовано [GgHygiene.syncDayTick].
+  String? ggHygieneLastTickGameDayKey;
+
   /// Скільки разів завершено івент (фінал кроку 6 «Піти» або кроку 8 «Піти»).
   int cherieMassageFunCompletions = 0;
 
@@ -321,6 +327,10 @@ class GameWorldState {
   bool homeRoomSearchKeyPiperGranted = false;
   bool homeRoomSearchKeyMomGranted = false;
 
+  /// Обшук спальні Shalina (елітний ЖК, кв. 3): одноразові знахідки.
+  bool shalinaRoomSearchCash100Granted = false;
+  bool shalinaRoomSearchEcstasyGranted = false;
+
   /// Дім друга (Сем): нічні двері кімнат батьків і Саші (23–7), окремий рандом на тиждень.
   int? friendHouseDanielleDoorOpenWeekday;
   int? friendHouseSashaDoorOpenWeekday;
@@ -355,6 +365,22 @@ class GameWorldState {
 
   /// Скільки збудження ГГ додано при завершенні spyOnSemParents (для симетричного відкату).
   double? spyOnSemParentsPlayerArousalDeltaApplied;
+
+  // --- sem_quest_001: арка Juniper (дівчина Sem) ---
+  /// Розмова «про дівчат» біля дверей будинку Sem завершена.
+  bool semJuniperGirlsTalkDone = false;
+
+  /// Дата останньої розмови на тему (dd.MM.yyyy) — для follow-up і 14-денного івенту.
+  String? semJuniperLastTopicTalkDateKey;
+
+  /// Follow-up «як справи з дівчиною» на фасаді пройдено.
+  bool semJuniperFollowUpDone = false;
+
+  /// ГG познайомився з Juniper (сцена в кімнаті Sem).
+  bool semJuniperMet = false;
+
+  /// У коридорі вже показано текст про шум із кімнати Sem (перед входом у кімнату).
+  bool semJuniperCorridorNoiseShown = false;
 
   /// Квест «спалився»: розмова з Danielle після підглядання — відіграно.
   bool danielleSpyCaughtConfrontationDone = false;
@@ -511,6 +537,8 @@ class GameWorldState {
         'piperEvent002Completions': piperEvent002Completions,
         'piperEvent003Completions': piperEvent003Completions,
         'ggEvent001StojakLastResetDayKey': ggEvent001StojakLastResetDayKey,
+        'ggDaysSinceWash': ggDaysSinceWash,
+        'ggHygieneLastTickGameDayKey': ggHygieneLastTickGameDayKey,
         'cherieMassageFunCompletions': cherieMassageFunCompletions,
         'rockefellerNikeOfficeStep': rockefellerNikeOfficeStep,
         'rockefellerNikeWorkStarted': rockefellerNikeWorkStarted,
@@ -534,6 +562,8 @@ class GameWorldState {
         'homeRoomSearchKeyElsaGranted': homeRoomSearchKeyElsaGranted,
         'homeRoomSearchKeyPiperGranted': homeRoomSearchKeyPiperGranted,
         'homeRoomSearchKeyMomGranted': homeRoomSearchKeyMomGranted,
+        'shalinaRoomSearchCash100Granted': shalinaRoomSearchCash100Granted,
+        'shalinaRoomSearchEcstasyGranted': shalinaRoomSearchEcstasyGranted,
         'friendHouseDanielleDoorOpenWeekday':
             friendHouseDanielleDoorOpenWeekday,
         'friendHouseSashaDoorOpenWeekday': friendHouseSashaDoorOpenWeekday,
@@ -549,6 +579,11 @@ class GameWorldState {
         'spyOnSemParentsParentsRoomPeekDone': spyOnSemParentsParentsRoomPeekDone,
         'spyOnSemParentsPlayerArousalDeltaApplied':
             spyOnSemParentsPlayerArousalDeltaApplied,
+        'semJuniperGirlsTalkDone': semJuniperGirlsTalkDone,
+        'semJuniperLastTopicTalkDateKey': semJuniperLastTopicTalkDateKey,
+        'semJuniperFollowUpDone': semJuniperFollowUpDone,
+        'semJuniperMet': semJuniperMet,
+        'semJuniperCorridorNoiseShown': semJuniperCorridorNoiseShown,
         'danielleSpyCaughtConfrontationDone': danielleSpyCaughtConfrontationDone,
         'danielleSpyCaughtConfrontationCount':
             danielleSpyCaughtConfrontationCount,
@@ -799,6 +834,9 @@ class GameWorldState {
             .clamp(0, 9999);
     ggEvent001StojakLastResetDayKey =
         json['ggEvent001StojakLastResetDayKey'] as String?;
+    ggDaysSinceWash = (json['ggDaysSinceWash'] as num?)?.toInt() ?? 0;
+    ggHygieneLastTickGameDayKey =
+        json['ggHygieneLastTickGameDayKey'] as String?;
     cherieMassageFunCompletions =
         ((json['cherieMassageFunCompletions'] as num?)?.toInt() ?? 0).clamp(0, 9999);
     rockefellerNikeOfficeStep =
@@ -834,6 +872,8 @@ class GameWorldState {
     homeRoomSearchKeyElsaGranted = json['homeRoomSearchKeyElsaGranted'] == true;
     homeRoomSearchKeyPiperGranted = json['homeRoomSearchKeyPiperGranted'] == true;
     homeRoomSearchKeyMomGranted = json['homeRoomSearchKeyMomGranted'] == true;
+    shalinaRoomSearchCash100Granted = json['shalinaRoomSearchCash100Granted'] == true;
+    shalinaRoomSearchEcstasyGranted = json['shalinaRoomSearchEcstasyGranted'] == true;
     friendHouseDanielleDoorOpenWeekday =
         json['friendHouseDanielleDoorOpenWeekday'] as int?;
     friendHouseSashaDoorOpenWeekday =
@@ -859,6 +899,12 @@ class GameWorldState {
     spyOnSemParentsPlayerArousalDeltaApplied = arousalDelta is num
         ? arousalDelta.toDouble()
         : null;
+    semJuniperGirlsTalkDone = json['semJuniperGirlsTalkDone'] == true;
+    semJuniperLastTopicTalkDateKey =
+        json['semJuniperLastTopicTalkDateKey'] as String?;
+    semJuniperFollowUpDone = json['semJuniperFollowUpDone'] == true;
+    semJuniperMet = json['semJuniperMet'] == true;
+    semJuniperCorridorNoiseShown = json['semJuniperCorridorNoiseShown'] == true;
     danielleSpyCaughtConfrontationDone =
         json['danielleSpyCaughtConfrontationDone'] == true;
     danielleSpyCaughtConfrontationCount =
@@ -955,6 +1001,8 @@ class GameWorldState {
     momEvent002PendingKitchenRecheck = false;
     PiperQuest001.resetCheat(this);
     ggEvent001StojakLastResetDayKey = null;
+    ggDaysSinceWash = 0;
+    ggHygieneLastTickGameDayKey = null;
     cherieMassageFunCompletions = 0;
     rockefellerNikeOfficeStep = 0;
     rockefellerNikeWorkStarted = false;
@@ -974,6 +1022,8 @@ class GameWorldState {
     homeRoomSearchKeyElsaGranted = false;
     homeRoomSearchKeyPiperGranted = false;
     homeRoomSearchKeyMomGranted = false;
+    shalinaRoomSearchCash100Granted = false;
+    shalinaRoomSearchEcstasyGranted = false;
     friendHouseDanielleDoorOpenWeekday = null;
     friendHouseSashaDoorOpenWeekday = null;
     kitchenVisitSeed = null;
@@ -987,6 +1037,11 @@ class GameWorldState {
     spyOnSemParentsSpottedByDanielle = false;
     spyOnSemParentsParentsRoomPeekDone = false;
     spyOnSemParentsPlayerArousalDeltaApplied = null;
+    semJuniperGirlsTalkDone = false;
+    semJuniperLastTopicTalkDateKey = null;
+    semJuniperFollowUpDone = false;
+    semJuniperMet = false;
+    semJuniperCorridorNoiseShown = false;
     danielleSpyCaughtConfrontationDone = false;
     danielleSpyCaughtConfrontationCount = 0;
     lastNpcEconomyProcessedDateKey = null;

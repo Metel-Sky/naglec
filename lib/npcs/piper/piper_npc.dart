@@ -5,12 +5,25 @@ import '../../data/locations_room_data.dart';
 const String kPiperGalleryPortraitPath = 'lib/assets/npcs/piper/piper_ava.jpg';
 const String kPiperAvatarPath = 'lib/assets/npcs/piper/piper.png';
 
-/// Особисті речі Piper, які можуть дуже рідко випадати при обшуку її кімнати.
+/// Особисті речі Piper, які можуть випадати при обшуку її кімнати.
 const List<LootOption> piperPersonalLoot = [
   LootOption(item: GameItems.panties, weight: 0.1),
   LootOption(item: GameItems.bra, weight: 0.1),
   LootOption(item: GameItems.dildo, weight: 0.05),
   LootOption(item: GameItems.roomKey, weight: 0.05),
+];
+
+const List<NpcOwnedItem> _piperOwnedItems = [
+  NpcOwnedItem(
+    id: 'piper_old_phone',
+    name: 'Старенький телефон',
+    imagePath: 'lib/assets/items/old_samsung.jpg',
+  ),
+  NpcOwnedItem(
+    id: 'piper_old_laptop',
+    name: 'Старенький ноутбук',
+    imagePath: 'lib/assets/items/mac.png',
+  ),
 ];
 
 /// Модель NPC: Piper (статистика, розклад, аватар).
@@ -20,7 +33,35 @@ NPCModel createPiperNpc() {
     name: 'Piper',
     fullName: 'Piper',
     status: 'Молодша сестра',
+    bodyDescription:
+        'Ще одна блондинка в сім\'ї: невисока — метр шістдесят, вредна бунтарка. '
+        'Як у Elsa — дуже гарна фігура, але маленькі груди; завжди десь на своїй хвилі.',
+    biographyType:
+        'Piper — моя молодша сестра, їй шістнадцять. Ще одна блондинка в нашій сім\'ї: '
+        'маленька — метр шістдесят зросту — але вредна бунтарка. Як у Elsa, у неї дуже '
+        'гарна фігура, але маленькі груди; дуже сподівається, що вони ще виростуть, '
+        'хоча більше розраховує на силікон у майбутньому.\n\n'
+        'Погано вчиться в школі і постійно отримує зауваження. Хоч їй і шістнадцять, '
+        'кажуть, що вона вже курить. Періодично прогулює уроки — тоді її можна знайти '
+        'десь у парку або деінде. Завжди літає в хмарах, і ніколи не зрозуміло, про що '
+        'вона думає. Подружок і друзів — безліч.\n\n'
+        'Дуже хоче здати на права, але грошей немає. Постійно скаржиться на свій '
+        'старенький телефон і ноутбук. Мріє про професійний фотоапарат і набір '
+        'килимків для йоги.',
+    biographyAppearance:
+        'Невисока блондинка — метр шістдесят, струнка, з дуже гарною фігурою. '
+        'Груди маленькі; на відміну від Elsa, не соромиться бунтувати й дивитися '
+        'кудись повз усіх. Зазвичай виглядає так, ніби її думки далеко — '
+        'напівусмішка, розпущене або неохайно зібране волосся, одяг «як вийшла».',
+    weaknesses: [
+      'Маленькі груди: сподівається, що виростуть, але більше — на силікон.',
+      'Школа: погано вчиться, зауваження, прогули — часто десь у парку.',
+      'Куріння: ходять чутки, що вже курить.',
+      'Гроші: права, новий телефон і ноутбук — постійно не вистачає.',
+      'Мрія: професійний фотоапарат і набір килимків для йоги.',
+    ],
     age: 16,
+    items: List<NpcOwnedItem>.from(_piperOwnedItems),
     galleryPortraitPath: kPiperGalleryPortraitPath,
     avatarPath: kPiperAvatarPath,
     schedule: [

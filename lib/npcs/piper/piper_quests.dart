@@ -1232,18 +1232,10 @@ abstract final class PiperQuest001 {
     }
     if (s == 5) {
       if (currentZone != 'HOME' || !isInsideRoom) return false;
-      if (ggPunishesInsteadOfMom(world)) {
-        return isGgPunishmentSceneActive(
-          world: world,
-          currentZone: currentZone,
-          isInsideRoom: isInsideRoom,
-          currentRoom: currentRoom,
-        );
-      }
-      return true;
+      return isStep5PunishmentRoom(currentRoom);
     }
     if (s == 6) {
-      return currentZone == 'HOME' && isInsideRoom;
+      return false;
     }
     return false;
   }

@@ -195,11 +195,46 @@ class GameItems {
     imagePath: 'lib/assets/items/keys_mom_room.jpg',
   );
 
+  static const GameItem coryCheapPhone = GameItem(
+    id: 'cory_cheap_phone',
+    name: 'Дешевий телефон Cory',
+    description: 'Простий старий телефон Cory. Коли вона в душі — зазвичай лишає його в кімнаті.',
+    imagePath: 'lib/assets/items/old_samsung.jpg',
+  );
+
+  static const GameItem coryOfficeKey = GameItem(
+    id: 'cory_office_key',
+    name: 'Ключ від офісу Cory',
+    description: 'Ключ від офісу, де Cory працює менеджеркою.',
+    imagePath: 'lib/assets/items/lib_key.png',
+  );
+
   static const GameItem elsaLogin = GameItem(
     id: 'elsa_login',
     name: 'Логін Ельзи',
     description: 'Записка з логіном Ельзи.',
     imagePath: 'lib/assets/items/elsa_login.png',
+  );
+
+  static const GameItem elsaOldPhone = GameItem(
+    id: 'elsa_old_phone',
+    name: 'Старенький телефон Elsa',
+    description: 'Старий простий телефон Elsa — вона давно мріє про новий.',
+    imagePath: 'lib/assets/items/old_samsung.jpg',
+  );
+
+  static const GameItem piperOldPhone = GameItem(
+    id: 'piper_old_phone',
+    name: 'Старенький телефон Piper',
+    description: 'Старий телефон Piper — на нього вона постійно скаржиться.',
+    imagePath: 'lib/assets/items/old_samsung.jpg',
+  );
+
+  static const GameItem piperOldLaptop = GameItem(
+    id: 'piper_old_laptop',
+    name: 'Старенький ноутбук Piper',
+    description: 'Старий ноутбук Piper — теж постійна тема для скарг.',
+    imagePath: 'lib/assets/items/mac.png',
   );
 
   /// ТРЦ general shop, `id: oil` — умова старту cherie_quest_002.
@@ -216,6 +251,22 @@ class GameItems {
     description: 'Снодійне.',
     imagePath: 'lib/assets/items/hypnotic.jpg',
     usesLeft: 10,
+  );
+
+  static const GameItem mercedesKeys = GameItem(
+    id: 'mercedes_keys',
+    name: 'Ключі від «Mercedes»',
+    description: 'Ключі від автомобіля Mercedes.',
+    imagePath: 'lib/assets/items/car.jpg',
+  );
+
+  /// Пакетик з двома таблетками екстазі (обшук кімнати Shalina).
+  static const GameItem ecstasyPackTwo = GameItem(
+    id: 'ecstasy_pack_2',
+    name: 'Пакетик з екстазі',
+    description: 'Пакетик з двома таблетками екстазі.',
+    imagePath: 'lib/assets/items/ecstasy_package.jpg',
+    usesLeft: 2,
   );
 }
 

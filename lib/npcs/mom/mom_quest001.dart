@@ -150,6 +150,18 @@ abstract final class MomQuest001 {
     return currentZone == 'HOME';
   }
 
+  /// Квестовий діалог лише у залі (кроки 1–27); поза залом — назва локації.
+  static bool isScriptedDialogActive({
+    required GameWorldState world,
+    required String currentZone,
+    required bool isInsideRoom,
+    required String currentRoom,
+  }) {
+    if (!isActiveMidFlow(world)) return false;
+    if (currentZone != 'HOME' || !isInsideRoom) return false;
+    return LocationsData.migrateLegacyRoomId(currentRoom) == LocationsData.hall;
+  }
+
   static MomQuest001Patch patchForPresentationStep(int step) {
     switch (step) {
       case 1:

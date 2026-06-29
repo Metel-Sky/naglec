@@ -347,6 +347,10 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
       _clearPiperQuest001Step5VideoIfShowing();
       return;
     }
+    if (!PiperQuest001.isStep5PunishmentRoom(currentRoom)) {
+      _clearPiperQuest001Step5VideoIfShowing();
+      return;
+    }
     if (_isPiperGgHarshPunishSceneActive()) return;
     _applyPiperQuest001Step5Patch();
   }
@@ -431,13 +435,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     if (_worldState.piperQuest001Step5VideoSeen) return false;
     if (currentZone != 'HOME' || !isInsideRoom) return false;
     if (PiperQuest001.ggPunishesInsteadOfMom(_worldState)) return false;
-    if (PiperQuest001.punishmentLevelFromCrisisN(
-          _worldState.piperPunishmentCrisisN,
-        ) >=
-        3) {
-      return PiperQuest001.isStep5PunishmentRoom(currentRoom);
-    }
-    return true;
+    return PiperQuest001.isStep5PunishmentRoom(currentRoom);
   }
 
   void _syncPiperQuest001Step5VideoPresentation(PiperQuest001Patch patch) {
@@ -490,12 +488,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   void _ensurePiperQuest001Step6ClosureUiCoherent() {
     if (_worldState.piperQuest001Step != 6) return;
     if (PiperQuest001.isStep2GgDealRevealPending(_worldState)) return;
-    if (currentZone != 'HOME' || !isInsideRoom) return;
-    final loc = sl<LocaleController>();
-    final fallback = loc.t('piper_quest_001_step06_news');
-    if (newsMessage.trim().isEmpty || newsMessage == fallback) {
-      newsMessage = fallback;
-    }
+    // Крок 6 — пасивне очікування; не тримати квестовий текст поза сценою покарання.
   }
 
   bool _isPiperQuest001Step6Scene() {
@@ -634,6 +627,7 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
   void _tryStartPiperQuest001Step5IfNeeded() {
     if (_worldState.piperQuest001Step >= 5) return;
     if (!PiperQuest001.canStartStep5Punishment(world: _worldState)) return;
+    if (!PiperQuest001.isStep5PunishmentRoom(currentRoom)) return;
     _worldState.piperPunishmentCrisisN++;
     final level = PiperQuest001.punishmentLevelFromCrisisN(
       _worldState.piperPunishmentCrisisN,
@@ -666,7 +660,9 @@ mixin PiperGameFlow on MainGameScreenStateBase, MomGameFlow {
     if (s <= 0) return;
     if (_piperQuest001PresentationSyncedStep == s) return;
     if (s == 5) {
-      _applyPiperQuest001Step5Patch();
+      if (PiperQuest001.isStep5PunishmentRoom(currentRoom)) {
+        _applyPiperQuest001Step5Patch();
+      }
     } else if (s == 2) {
       _applyPiperQuest001Step2Patch();
     } else if (s == 3) {

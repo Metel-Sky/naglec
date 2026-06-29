@@ -14,7 +14,9 @@ import 'danielle/danielle_npc.dart';
 import 'korish_father/korish_father_npc.dart';
 import 'sasha/sasha_npc.dart';
 import 'samantha/samantha_npc.dart';
+import 'shalina/shalina_npc.dart';
 import 'sem/sem_npc.dart';
+import 'juniper/juniper_npc.dart';
 import 'cherie/cherie_npc.dart';
 import 'anya/anya_npc.dart';
 import 'faye/faye_npc.dart';
@@ -73,7 +75,9 @@ List<NPCModel> createAllNpcs() {
     createKorishFatherNpc(),
     createSashaNpc(),
     createSamanthaNpc(),
+    createShalinaNpc(),
     createSemNpc(),
+    createJuniperNpc(),
     createCherieNpc(),
     createAnyaNpc(),
     createAdrianaNpc(),

@@ -85,8 +85,10 @@ class NpcTrcImpulseBuy {
     required int sequence,
     Duration possessionDuration = const Duration(days: 7),
   }) {
-    npc.money = (npc.money - product.price)
-        .clamp(NpcEconomyConfig.moneyMin, NpcEconomyConfig.moneyMax);
+    npc.money = NpcEconomyConfig.clampNpcMoney(
+      npc.id,
+      npc.money - product.price,
+    );
     final expires = gameNow.add(possessionDuration);
     final itemId =
         'trc_impulse_${npc.id}_${gameNow.year}_${gameNow.month}_${gameNow.day}_$sequence';

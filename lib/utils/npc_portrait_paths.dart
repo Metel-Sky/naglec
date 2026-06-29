@@ -16,7 +16,8 @@ void _addScheduleImages(List<String> out, NPCModel npc) {
     if (lower.endsWith('.png') ||
         lower.endsWith('.jpg') ||
         lower.endsWith('.jpeg') ||
-        lower.endsWith('.webp')) {
+        lower.endsWith('.webp') ||
+        lower.endsWith('.ava')) {
       _addUnique(out, s);
     }
   }
@@ -28,7 +29,8 @@ bool _isRasterSpritePath(String path) {
       lower.endsWith('.jpg') ||
       lower.endsWith('.jpeg') ||
       lower.endsWith('.webp') ||
-      lower.endsWith('.gif');
+      lower.endsWith('.gif') ||
+      lower.endsWith('.ava');
 }
 
 /// Растр із поточної точки розкладу (де NPC зараз за часом/днем), напр. офіціантка в кафе.

@@ -80,6 +80,7 @@ flutter:
     - lib/assets/npcs/sasha/sash_video/
     - lib/assets/npcs/samantha/
     - lib/assets/npcs/sem/
+    - lib/assets/npcs/shalina/
     - lib/assets/npcs/cherie/
     # Явно: новий webm інколи не потрапляє в bundle до clean build.
     - lib/assets/npcs/anya/

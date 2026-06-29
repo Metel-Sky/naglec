@@ -705,6 +705,9 @@ final Map<String, String> stringsRu = {
   'gg_event_001_stojak_body':
       'У тебя сейчас из штанов что-то выскочит.',
   'gg_event_001_stojak_btn_leave': 'Уйти',
+  'gg_hygiene_stinky_reply': 'Фу, иди помойся.',
+  'gg_hygiene_wash_btn': 'Помыться',
+  'gg_hygiene_washed': 'Ты помылся.',
   'npc_finance_pick_amount': 'Выбери сумму',
   'npc_finance_npc_no_money': 'У этого персонажа сейчас слишком мало денег.',
   'npc_finance_you_gifted': r'Ты передал персонажу %s $.',
@@ -789,6 +792,7 @@ final Map<String, String> stringsRu = {
   'friend_house_btn_call_sem': 'Позвать Сема',
   'friend_house_btn_enter': 'Зайти в дом',
   'friend_house_btn_leave': 'Уйти',
+  'friend_house_btn_overnight': 'Остаться на ночь',
   'friend_house_summon_news': 'Ты позвал Sem к двери.',
   'friend_house_sem_cannot_call': 'Сем сейчас не может выйти',
   'friend_house_sem_ask_parents': 'Спросить про родителей',
@@ -807,6 +811,24 @@ final Map<String, String> stringsRu = {
       '— Да, нормально! – пожал тот плечами, – мать только пилит, что мол работу мне надо найти.\n'
       '— Ну а в чём проблема? У тебя же дядя вроде при бабле и бизнес какой-то имеет?\n'
       '— Не знаю, мне в лом его просить и быть обязанным. Хотяяя, короче, я пока не решил.',
+  'sem_juniper_btn_talk_girls': 'Поговорить о девушках',
+  'sem_juniper_girls_talk_dialogue':
+      '— Слушай, Sem, ты в последнее время как на похоронах ходишь. Не пора найти кого-нибудь?\n'
+      '— Да блин… Среди знакомых ничего. Все как в стенку — никто не клеится.\n'
+      '— Тю. Попробуй в колледже — другая группа, другой факультет, кто его знает.\n'
+      '— Ну… Может, ты и прав. Гляну, что там можно поймать.',
+  'sem_juniper_btn_ask_girl': 'Как дела с девушкой?',
+  'sem_juniper_follow_up_dialogue':
+      '— Ну что, есть новости? Твой «колледжный план» сработал?\n'
+      '— Сработал! Познакомился с одной — Juniper, с другого факультета. Заходи в гости, познакомлю.\n'
+      '— О, вижу. Не так уж плохо ты развалился, бро.',
+  'sem_juniper_corridor_noise':
+      'Из коридора донеслось что-то странное — будто из комнаты Sem.',
+  'sem_juniper_room_intro_dialogue':
+      'В комнате Sem сидел на кровати с девушкой, которую я раньше не видел.\n'
+      '— Alex, это Juniper, — бросил он. — Juniper, мой кореш Alex.\n'
+      'Она коротко улыбнулась и кивнула — знакомство прошло без напряжения.',
+  'sem_juniper_intro_leave': 'Уйти',
   'danielle_spy_parents_dialogue':
       'Из-за дверей доносятся интересные звуки…\n\nКажется, я зашёл весьма вовремя…',
   'danielle_spy_parents_peek': 'Подглядеть',

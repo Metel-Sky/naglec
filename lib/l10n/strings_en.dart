@@ -699,6 +699,9 @@ final Map<String, String> stringsEn = {
   'gg_event_001_stojak_body':
       'Something is about to burst out of your pants.',
   'gg_event_001_stojak_btn_leave': 'Leave',
+  'gg_hygiene_stinky_reply': 'Ugh, go take a shower.',
+  'gg_hygiene_wash_btn': 'Take a shower',
+  'gg_hygiene_washed': 'You washed up.',
   'npc_finance_pick_amount': 'Choose amount',
   'npc_finance_npc_no_money': 'This character does not have enough money right now.',
   'npc_finance_you_gifted': r'You gave the character %s $.',
@@ -783,6 +786,7 @@ final Map<String, String> stringsEn = {
   'friend_house_btn_call_sem': 'Call Sem out',
   'friend_house_btn_enter': 'Go into the house',
   'friend_house_btn_leave': 'Leave',
+  'friend_house_btn_overnight': 'Stay overnight',
   'friend_house_summon_news': 'You called Sem to the door.',
   'friend_house_sem_cannot_call': 'Sem can\'t come out right now',
   'friend_house_sem_ask_parents': 'Ask about his parents',
@@ -801,6 +805,24 @@ final Map<String, String> stringsEn = {
       '— All right! he shrugged — Mom just keeps nagging that I need to find a job.\n'
       '— So what\'s the problem? Your uncle\'s loaded and has some business, doesn\'t he?\n'
       '— Dunno, I can\'t be bothered to ask him and owe him. Weeell, anyway, I haven\'t decided yet.',
+  'sem_juniper_btn_talk_girls': 'Talk about girls',
+  'sem_juniper_girls_talk_dialogue':
+      '— Listen, Sem, you\'ve been walking around like it\'s a funeral lately. Maybe it\'s time to find someone?\n'
+      '— Man… Nothing among people I know. It\'s like hitting a wall — nobody\'s biting.\n'
+      '— Huh. Try college — different group, different faculty, who knows.\n'
+      '— Well… Maybe you\'re right. I\'ll see what\'s out there.',
+  'sem_juniper_btn_ask_girl': 'How\'s it going with the girl?',
+  'sem_juniper_follow_up_dialogue':
+      '— So, any news? Did that «college plan» work out?\n'
+      '— It did! Met a girl — Juniper, from another faculty. Come by sometime, I\'ll introduce you.\n'
+      '— Huh. Not bad, bro — guess you weren\'t moping for nothing.',
+  'sem_juniper_corridor_noise':
+      'Something odd drifts from the corridor — like it\'s coming from Sem\'s room.',
+  'sem_juniper_room_intro_dialogue':
+      'Sem was on his bed with a girl I\'d never seen before.\n'
+      '— Alex, this is Juniper, he said. — Juniper, my buddy Alex.\n'
+      'She smiled briefly and nodded — the intro went smoothly enough.',
+  'sem_juniper_intro_leave': 'Leave',
   'danielle_spy_parents_dialogue':
       'Interesting sounds are coming from behind the door…\n\nSeems I showed up at just the right moment…',
   'danielle_spy_parents_peek': 'Peek',

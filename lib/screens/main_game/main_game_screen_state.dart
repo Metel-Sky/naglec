@@ -883,7 +883,14 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   world: _worldState,
                                 ) &&
                                     !_isQuestOrEventScriptedDialogForNews();
-                                if (stojakHere) {
+                                final stinkyHere = GgHygiene.isStinky(_worldState) &&
+                                    activeNPCs.isNotEmpty &&
+                                    !_isQuestOrEventScriptedDialogForNews();
+                                if (stinkyHere) {
+                                  combinedMessage =
+                                      locPanel.t('gg_hygiene_stinky_reply');
+                                  dialogueHighlightNames = const [];
+                                } else if (stojakHere) {
                                   combinedMessage =
                                       locPanel.t('gg_event_001_stojak_body');
                                   dialogueHighlightNames = const [];

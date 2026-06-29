@@ -379,10 +379,7 @@ class SaveService {
             if (isSecondaryNpcId(npc.id)) {
               npc.money = 0;
             } else {
-              npc.money = loadedMoney.clamp(
-                NpcEconomyConfig.moneyMin,
-                NpcEconomyConfig.moneyMax,
-              );
+              npc.money = NpcEconomyConfig.clampNpcMoney(npc.id, loadedMoney);
             }
             final inf = npcData['influence'];
             npc.influence = (inf != null ? (inf is int ? inf.toDouble() : (inf as num).toDouble()) : npc.influence);

@@ -321,7 +321,8 @@ class NpcRoomScenePicker {
         lower.endsWith('.jpg') ||
         lower.endsWith('.jpeg') ||
         lower.endsWith('.webp') ||
-        lower.endsWith('.gif');
+        lower.endsWith('.gif') ||
+        lower.endsWith('.ava');
   }
 
   static bool isVideoAssetPath(String path) {
@@ -374,20 +375,5 @@ class NpcRoomScenePicker {
     }
     if (riley == null || lana == null) return null;
     return (left: lana, right: riley);
-  }
-
-  /// Zazie + Geisha у спальні кв. 2 (Бандери 2): Zazie зліва, Geisha справа.
-  static ({({NPCModel npc, SchedulePoint point}) left, ({NPCModel npc, SchedulePoint point}) right})?
-      zazieGeishaBedroomPair(
-    List<({NPCModel npc, SchedulePoint point})> candidates,
-  ) {
-    ({NPCModel npc, SchedulePoint point})? zazie;
-    ({NPCModel npc, SchedulePoint point})? geisha;
-    for (final c in candidates) {
-      if (c.npc.id == 'zazie') zazie = c;
-      if (c.npc.id == 'geisha') geisha = c;
-    }
-    if (zazie == null || geisha == null) return null;
-    return (left: zazie, right: geisha);
   }
 }

@@ -241,6 +241,16 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   bool _semFriendHouseTalkActive = false;
   /// Івент «Розмова про батьків»: діалог + лише «Піти» до виходу на вул. Шевченка.
   bool _semParentsTalkActive = false;
+
+  /// sem_quest_001: діалог «про дівчат» на фасаді.
+  bool _semGirlsTalkActive = false;
+
+  /// sem_quest_001: follow-up «як справи з дівчиною» на фасаді.
+  bool _semGirlsFollowUpActive = false;
+
+  /// sem_quest_001: сцена знайомства з Juniper у кімнаті Sem.
+  bool _semJuniperIntroUiActive = false;
+
   /// Картинка + діалог «spyOnSemParents» біля кімнати батьків.
   bool _spyOnSemParentsUiActive = false;
   DanielleSpyParentsPhase _spyParentsPhase = DanielleSpyParentsPhase.door;
@@ -453,8 +463,8 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     _timeController.addMinutes(30);
   }
 
-  /// Сон у кімнаті ГГ: +8 год, енергія 100%, збудження −20. Якщо енергія >= 50 — лише повідомлення.
-  void _onSleepInRoom() {
+  /// Сон ГG: +8 год, енергія 100%, збудження −20. false — ще не втомився (energy ≥ 50).
+  bool _applyGgNightSleep() {
     final p = _playerStats.player;
     if (p.energy >= 50) {
       if (mounted) {
@@ -465,13 +475,68 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
           ),
         );
       }
-      return;
+      return false;
     }
     _timeController.addMinutes(8 * 60);
     _playerStats.changeEnergy(p.maxEnergy - p.energy);
     _playerStats.changeArousal(-20);
+    return true;
+  }
+
+  /// Сон у кімнаті ГG.
+  void _onSleepInRoom() {
+    if (!_applyGgNightSleep()) return;
     _saveService.autosave();
     setState(() {});
+  }
+
+  bool _canShowFriendHouseOvernightButton() {
+    if (currentZone != 'STREET') return false;
+    if (currentStreetHouse != LocationsData.friendHouse) return false;
+    if (!isInsideRoom) return false;
+    return FriendHouseOvernight.canOffer(
+      npcService: sl<NPCService>(),
+      hour: _timeController.dateTime.hour,
+    );
+  }
+
+  /// Ночівля в гостьовій ([LocationsData.friendLounge]): той самий сон, що в кімнаті ГG.
+  void _onFriendHouseOvernightStay() {
+    if (!_canShowFriendHouseOvernightButton()) return;
+    if (!_applyGgNightSleep()) return;
+    setState(() {
+      currentZone = 'STREET';
+      currentStreetHouse = LocationsData.friendHouse;
+      currentRoom = LocationsData.friendLounge;
+      isInsideRoom = true;
+      _worldState.currentZone = currentZone;
+      _worldState.currentStreetHouse = currentStreetHouse;
+      _worldState.currentRoom = currentRoom;
+      _worldState.isInsideRoom = true;
+      newsMessage = LocationsData.getLocationDisplayName(
+        LocationsData.friendLounge,
+      );
+      isLaptopOpen = false;
+      _isWatchingPornInLaptop = false;
+      _isWatchingElsaVideoInLaptop = false;
+      _selectedNpcIdInRoom = null;
+    });
+    _saveService.autosave();
+  }
+
+  void _finishSemJuniperIntro() {
+    if (!mounted) return;
+    SemQuest001.markJuniperMet(_worldState);
+    final juniper = sl<NPCService>().npcById(kJuniperNpcId);
+    juniper?.setVar('phone_unlocked', true);
+    setState(() {
+      _semJuniperIntroUiActive = false;
+      _ui.setEventImagePath(null);
+      newsMessage = LocationsData.getLocationDisplayName(
+        LocationsData.friendRoom,
+      );
+    });
+    _saveService.autosave();
   }
 
   /// Модальне вікно після знаходження предмета (обшук тощо): картинка, назва, OK.
@@ -615,23 +680,6 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
       }
       for (final c in candidates) {
         if (c.npc.id != 'riley' && c.npc.id != 'lana') {
-          ordered.add(c.npc);
-        }
-      }
-      if (ordered.isNotEmpty) return ordered;
-    }
-    if (currentRoom == LocationsData.poorDistrictH2Apt2Bedroom) {
-      final ordered = <NPCModel>[];
-      for (final id in ['zazie', 'geisha']) {
-        for (final c in candidates) {
-          if (c.npc.id == id) {
-            ordered.add(c.npc);
-            break;
-          }
-        }
-      }
-      for (final c in candidates) {
-        if (c.npc.id != 'zazie' && c.npc.id != 'geisha') {
           ordered.add(c.npc);
         }
       }

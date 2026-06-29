@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:naglec/services/player_stats_controller.dart';
+import '../services/game_world_state.dart';
+import '../services/service_locator.dart';
+import '../npcs/gg/gg_hygiene.dart';
 import '../theme/game_theme.dart';
 
 // Перейменовано на PlayerStatsView для відповідності коду
@@ -10,6 +13,7 @@ class PlayerStatsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final avatarPath = GgHygiene.statsAvatar(sl<GameWorldState>());
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -26,7 +30,7 @@ class PlayerStatsView extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
-                      'lib/assets/gg/pers.png', // Шлях до аватара
+                      avatarPath,
                       fit: BoxFit.cover,
                     ),
                   ),

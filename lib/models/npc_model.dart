@@ -191,8 +191,7 @@ class NPCModel {
       money = 0;
       return;
     }
-    money =
-        (money + amount).clamp(NpcEconomyConfig.moneyMin, NpcEconomyConfig.moneyMax);
+    money = NpcEconomyConfig.clampNpcMoney(id, money + amount);
   }
 
   void changeTrust(num d) => trust = (trust + d).clamp(0.0, 100.0);

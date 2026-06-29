@@ -33,6 +33,7 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
         npcService,
         _timeController.dateTime,
       );
+      GgHygiene.syncDayTick(_worldState, _timeController.dateTime);
       npcService.resetSondoxTriggersAtMorning(_timeController.dateTime);
       if (_collegeToiletUnderwearSaleActive &&
           !_isCollegeToiletGuysBreakWindow()) {
@@ -375,6 +376,9 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
       _maybeAbortMomQuest001WrongLocation();
       _maybeAbortMomEvent002WrongLocation();
       _ensureCherieQuest002HomeHallUiCoherent();
+      _syncSemJuniperArcOnRoomEntry();
+      _ensureSemJuniperIntroUiCoherent();
+      _resetNewsMessageIfOutsideQuestEventContext();
     });
   }
 }

@@ -3,8 +3,12 @@ part of '../../screens/main_game_screen.dart';
 /// Екранний флоу мами: **mom_quest_001** (пляж), **mom_event_002** (басейн).
 mixin MomGameFlow on MainGameScreenStateBase {
   bool _isMomQuest001ScriptedDialogActive() {
-    if (!MomQuest001.isActiveMidFlow(_worldState)) return false;
-    return currentZone == 'HOME';
+    return MomQuest001.isScriptedDialogActive(
+      world: _worldState,
+      currentZone: currentZone,
+      isInsideRoom: isInsideRoom,
+      currentRoom: currentRoom,
+    );
   }
 
   void _resetMomQuest001PresentationSession() {

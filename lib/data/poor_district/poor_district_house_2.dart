@@ -57,9 +57,9 @@ class PoorDistrictHouse2 {
       isLocked: false,
     ),
     apt2: RoomData(
-      displayName: "Квартира 2 — Zazie, Geisha",
+      displayName: "Квартира 2",
       imagePath: "lib/assets/location/houses/hrushchevki-spb.jpg",
-      description: "Квартира 2, Бандери 2. Тут живуть Zazie та Geisha.",
+      description: "Квартира 2, Бандери 2.",
       isLocked: false,
     ),
     apt3: RoomData(
@@ -82,7 +82,7 @@ class PoorDistrictHouse2 {
     rA2_1: RoomData(displayName: "Кухня", imagePath: "lib/assets/location/home_gg/rooms/kitchen.jpg", description: "Кухня.", isLocked: false),
     rA2_2: RoomData(displayName: "Ванна", imagePath: "lib/assets/location/home_gg/rooms/bathroom.jpg", description: "Ванна.", isLocked: false),
     rA2_3: RoomData(displayName: "Зал", imagePath: "lib/assets/location/home_gg/rooms/relax_room.jpg", description: "Зал.", isLocked: false),
-    rA2_4: RoomData(displayName: "Кімната Zazie", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня квартири 2, Бандери 2. Тут живуть Zazie та Geisha.", isLocked: false),
+    rA2_4: RoomData(displayName: "Спальня", imagePath: "lib/assets/location/home_gg/rooms/room_gg.jpg", description: "Спальня квартири 2, Бандери 2.", isLocked: false),
     rA3_1: RoomData(displayName: "Кухня", imagePath: "lib/assets/location/home_gg/rooms/kitchen.jpg", description: "Кухня.", isLocked: false),
     rA3_2: RoomData(displayName: "Ванна", imagePath: "lib/assets/location/home_gg/rooms/bathroom.jpg", description: "Ванна.", isLocked: false),
     rA3_3: RoomData(displayName: "Кімната Nikki", imagePath: "lib/assets/location/houses/rooms/nikki_room.jpg", description: "Кімната Nikki, квартира 3, Бандери 2.", isLocked: false),

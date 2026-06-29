@@ -6,6 +6,25 @@ abstract final class NpcEconomyConfig {
   static const int moneyMin = -1000;
   static const int moneyMax = 10000;
 
+  /// Shalina: без верхньої межі, нижня — −$50 000.
+  static const int shalinaMoneyMin = -50000;
+
+  static int npcMoneyMin(String npcId) =>
+      npcId == 'shalina' ? shalinaMoneyMin : moneyMin;
+
+  /// `null` — без верхньої межі.
+  static int? npcMoneyMax(String npcId) =>
+      npcId == 'shalina' ? null : moneyMax;
+
+  static int clampNpcMoney(String npcId, int value) {
+    final min = npcMoneyMin(npcId);
+    final max = npcMoneyMax(npcId);
+    if (max == null) {
+      return value < min ? min : value;
+    }
+    return value.clamp(min, max);
+  }
+
   /// Працюючі: зарплата (пн) + комуналка (пт). Усі інші NPC у грі — пасивні модель.
   ///
   /// Працюють: Mom, Cherie, Danielle, Manuel (`korish_father`), Sasha, Nicole, Lisa, Amia,
@@ -34,6 +53,7 @@ abstract final class NpcEconomyConfig {
     if (money <= 0) return Colors.deepOrange.shade700;
     if (money <= 500) return Colors.amber.shade700;
     if (money <= 1500) return Colors.lightGreen.shade600;
-    return Colors.green.shade600;
+    if (money <= 10000) return Colors.green.shade600;
+    return Colors.green.shade800;
   }
 }

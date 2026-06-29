@@ -36,7 +36,7 @@ class NpcEconomyService {
   static String _trcImpulseWeekKey(DateTime d) => '${d.year}_${_weekIndexWithinYear(d)}';
 
   static void _clampMoney(NPCModel npc) {
-    npc.money = npc.money.clamp(NpcEconomyConfig.moneyMin, NpcEconomyConfig.moneyMax);
+    npc.money = NpcEconomyConfig.clampNpcMoney(npc.id, npc.money);
   }
 
   /// Працюючі: понеділок — зарплата; п’ятниця — витрати (комуналка тощо).

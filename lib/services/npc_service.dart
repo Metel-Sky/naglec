@@ -6,6 +6,8 @@ import '../data/poor_district/poor_district_house_1.dart';
 import '../data/poor_district/poor_district_house_2.dart';
 import '../models/npc_model.dart';
 import '../npcs/all_npcs.dart';
+import '../npcs/juniper/juniper_npc.dart';
+import '../npcs/sem/sem_quests.dart';
 import 'cherie_quest002_location_pin.dart';
 import 'cherie_quest004_location_pin.dart';
 import 'cherie_quest005_location_pin.dart';
@@ -454,6 +456,17 @@ class NPCService {
     if (npc.id == _sashaNpcId) {
       final club = _sashaSundayClubNightLocation(day, hour);
       if (club != null) return club;
+    }
+    if (npc.id == kJuniperNpcId) {
+      final world = sl<GameWorldState>();
+      if (!SemQuest001.isJuniperVisibleInWorld(world)) return null;
+      final sem = npcById(_semNpcId);
+      if (sem == null) return null;
+      final semLoc = getCurrentLocationId(sem, hour, day);
+      if (semLoc == LocationsData.friendRoom) {
+        return LocationsData.friendRoom;
+      }
+      return null;
     }
     final gameMinute = sl<GameTimeController>().dateTime.minute;
     if (_weekdayCollegeToilet1230SemDenLoshok(
