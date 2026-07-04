@@ -432,7 +432,7 @@ class _NpcStatsDialogState extends State<_NpcStatsDialog> {
             margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             decoration: GameTheme.cardDecoration(),
             child: Text(
-              '${NpcProfileDisplay.cardTitleLine(npc)}',
+              '${NpcProfileDisplay.cardTitleLine(npc, world: sl<GameWorldState>())}',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
             ),

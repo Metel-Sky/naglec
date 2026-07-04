@@ -5,7 +5,9 @@ import '../npcs/mom/mom_quest001.dart';
 import '../npcs/mom/mom_event002_pool.dart';
 import '../npcs/piper/piper_quests.dart';
 import '../npcs/den/den_events.dart';
+import '../npcs/juniper/juniper_npc.dart';
 import '../npcs/sem/sem_events.dart';
+import '../npcs/sem/sem_quests.dart';
 
 /// Ідентифікатори для [NpcProfileQuestLine.cheatId] і [NpcQuestCheats.setQuestCompleted].
 abstract final class NpcProfileQuestCheatId {
@@ -28,6 +30,7 @@ abstract final class NpcProfileQuestCheatId {
   static const piperPunishment2 = 'piper_punishment_2';
   static const piperPunishment3 = 'piper_punishment_3';
   static const piperGgPunishment = 'piper_gg_punishment';
+  static const juniperIntro = 'juniper_intro';
 }
 
 /// Група квестів у картці NPC (другий рівень випадаючого списку).
@@ -262,6 +265,17 @@ List<NpcProfileQuestLine> npcProfileQuestLinesFor(String npcId) {
       ];
     case 'piper':
       return const [];
+    case kJuniperNpcId:
+      return [
+        NpcProfileQuestLine(
+          titleKey: 'npc_quest_juniper_intro',
+          isDone: (w, npc) =>
+              npc.id == kJuniperNpcId && SemQuest001.isIntroDebugReady(w),
+          cheatId: NpcProfileQuestCheatId.juniperIntro,
+          statusDoneKey: 'npc_quest_juniper_intro_ready',
+          statusPendingKey: 'npc_quest_juniper_intro_not_ready',
+        ),
+      ];
     default:
       return const [];
   }

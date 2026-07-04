@@ -30,7 +30,8 @@ alwaysApply: true
 ## Квести NPC (паралельно до івентів)
 
 - Окремий лічильник на кожного NPC: `<npc>_quest_001`, `<npc>_quest_002`, …
-- Файл один на NPC: `lib/npcs/<npc>/<npc>_quests.dart` (див. `npc-quests-events-layout.mdc`).
+- **Нові** квести (новий NNN): один файл у `lib/npcs/<npc>/quests/<npc>_quest_NNN_<slug>.dart` (див. `npc-quests-events-layout.mdc`).
+- Legacy (`*_quests.dart`, `mom_quest001.dart` тощо) — не переносити без запиту; дописувати існуючий квест там же — ок.
 - Маркер біля блоку квесту: `// Квест 1 — cherie_quest_001:` або `/// QUEST: cherie_quest_001`.
 
 ## Винятки

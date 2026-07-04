@@ -227,7 +227,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     fit: StackFit.expand,
                                     clipBehavior: Clip.hardEdge,
                                     children: [
-                                      if (_eventVideoPath == null &&
+                                      if (_overlayEventVideoPath == null &&
                                           _eventVideoPendingButton == null &&
                                           (_eventImagePath == null ||
                                               _danielleSpyCaughtUiActive ||
@@ -447,11 +447,19 @@ class MainGameScreenState extends MainGameScreenStateBase
                                         ),
                                       ] else ...[
                                         EventInteractionOverlay(
-                                          eventVideoPath: _eventVideoPath,
+                                          eventVideoPath: _overlayEventVideoPath,
                                           eventVideoMuted: _eventVideoMuted,
                                           eventVideoFullScreen: _eventVideoFullScreen,
                                           eventVideoCloseWhenCompleted: _eventVideoCloseWhenCompleted,
                                           eventVideoLoop: _eventVideoLoop ||
+                                              SemJuniperRoomIntro.isSceneActive(
+                                                introUiActive:
+                                                    _semJuniperIntroUiActive,
+                                                zone: currentZone,
+                                                streetHouse: currentStreetHouse,
+                                                insideRoom: isInsideRoom,
+                                                room: currentRoom,
+                                              ) ||
                                               (_spyOnSemParentsUiActive &&
                                                   (_spyParentsPhase ==
                                                           DanielleSpyParentsPhase

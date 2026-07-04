@@ -6,6 +6,7 @@ import '../npcs/mom/mom_events.dart';
 import '../npcs/danielle/danielle_events.dart';
 import '../npcs/elsa/elsa_events.dart';
 import '../npcs/piper/piper_events.dart';
+import '../npcs/juniper/juniper_events.dart';
 import '../npcs/rockefeller/rockefeller_events.dart';
 
 export 'npc_interaction_types.dart';
@@ -29,6 +30,7 @@ final List<NpcInteractionSlot> interactionSlots = [
   ...danielleInteractionSlots,
   ...elsaInteractionSlots,
   ...piperInteractionSlots,
+  ...juniperInteractionSlots,
   ...rockefellerInteractionSlots,
   ..._flirtSlots,
 ];

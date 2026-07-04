@@ -56,6 +56,9 @@ final Map<String, String> stringsEn = {
   'quest_status_done': 'Done',
   'quest_status_pending': 'Not done',
   'npc_quest_sem_parents_talk': 'Sem: talk about parents (house facade)',
+  'npc_quest_juniper_intro': 'Juniper: intro (Sem\'s room)',
+  'npc_quest_juniper_intro_ready': 'Ready — enter Sem\'s room',
+  'npc_quest_juniper_intro_not_ready': 'Not active',
   'npc_quest_spy_parents': 'Peeking at parents',
   'npc_quest_spy_caught': 'Caught',
   'npc_quest_cherie_warehouse_002': 'Cherie: Quest (2) Warehouse favor',
@@ -789,6 +792,11 @@ final Map<String, String> stringsEn = {
   'friend_house_btn_overnight': 'Stay overnight',
   'friend_house_summon_news': 'You called Sem to the door.',
   'friend_house_sem_cannot_call': 'Sem can\'t come out right now',
+  'friend_house_sem_away_sleeping': 'Sem is asleep — he doesn\'t hear the doorbell.',
+  'friend_house_sem_away_college': 'Sem isn\'t home — he\'s at college.',
+  'friend_house_sem_away_gym': 'Sem isn\'t home — he\'s at the gym.',
+  'friend_house_sem_away_park': 'Sem isn\'t home — he\'s in the park.',
+  'friend_house_sem_away_city': 'Sem isn\'t home — he\'s out in the city.',
   'friend_house_sem_ask_parents': 'Ask about his parents',
   'friend_house_sem_invite_porn': 'Invite him to watch porn',
   'friend_house_sem_parents_dialogue':
@@ -806,22 +814,48 @@ final Map<String, String> stringsEn = {
       '— So what\'s the problem? Your uncle\'s loaded and has some business, doesn\'t he?\n'
       '— Dunno, I can\'t be bothered to ask him and owe him. Weeell, anyway, I haven\'t decided yet.',
   'sem_juniper_btn_talk_girls': 'Talk about girls',
+  'sem_juniper_btn_hint_girlfriend': 'Hint to Sem that it\'s time to find a girlfriend.',
   'sem_juniper_girls_talk_dialogue':
       '— Listen, Sem, you\'ve been walking around like it\'s a funeral lately. Maybe it\'s time to find someone?\n'
       '— Man… Nothing among people I know. It\'s like hitting a wall — nobody\'s biting.\n'
       '— Huh. Try college — different group, different faculty, who knows.\n'
       '— Well… Maybe you\'re right. I\'ll see what\'s out there.',
-  'sem_juniper_btn_ask_girl': 'How\'s it going with the girl?',
-  'sem_juniper_follow_up_dialogue':
-      '— So, any news? Did that «college plan» work out?\n'
-      '— It did! Met a girl — Juniper, from another faculty. Come by sometime, I\'ll introduce you.\n'
-      '— Huh. Not bad, bro — guess you weren\'t moping for nothing.',
+  'sem_juniper_btn_ask_sister': 'Hey Sem, does your sister have someone?',
+  'sem_juniper_girls_sister_dialogue':
+      '— Not really, I think. Why do you ask?\n'
+      '— Thought I\'d hit on her — maybe she\'ll give in.\n'
+      '— Yeah, right, comedian. She\'s hated you since you were kids — you\'ve got zero chance.\n'
+      '— Zero chance? We\'ll see. Hey, you don\'t happen to have a key to her room?\n'
+      '— Nope. But if I try hard enough, maybe I can get one. What did you already cook up?\n'
+      '— I\'ve got an idea, but I\'ll tell you later.\n'
+      '— Fine — hope she\'s interesting, not like usual.\n\n'
+      'Sem and I burst out laughing.',
+  'sem_juniper_girls_sister_btn_back': 'Back',
+  'sem_juniper_girls_sub_btn_back': 'Back',
+  'sem_juniper_btn_found_someone': 'So, did you find someone?',
+  'sem_juniper_found_someone_dialogue':
+      '— Alex, I\'ve got news!\n'
+      '— Go on.\n'
+      '— Remember you told me to try at college? Three days ago I met someone — Juniper, another faculty. Cool girl, sporty, always rushing somewhere.\n'
+      '— Not bad.\n'
+      '— We\'re already seeing each other. Come by sometime — I\'ll introduce you when she\'s home.',
+  'sem_juniper_btn_sem_news': 'So, did you find someone?',
+  'sem_juniper_sem_news_dialogue':
+      '— Alex, I\'ve got news!\n'
+      '— Go on.\n'
+      '— Remember you told me to try at college? Three days ago I met someone — Juniper, another faculty. Cool girl, sporty, always rushing somewhere.\n'
+      '— Not bad.\n'
+      '— We\'re already seeing each other. Come by sometime — I\'ll introduce you when she\'s home.',
   'sem_juniper_corridor_noise':
       'Something odd drifts from the corridor — like it\'s coming from Sem\'s room.',
+  'sem_juniper_room_intro_skipped_dialogue':
+      '— Oh, we were just talking about you. Meet Juniper — my girlfriend.\n'
+      '— Hi, nice to meet you. Sem, why didn\'t you tell me you had a girlfriend?\n'
+      '— Well, Alex, you never asked and never came over.\n'
+      '— Got it. Okay, I won\'t distract you. Good to meet you.',
   'sem_juniper_room_intro_dialogue':
-      'Sem was on his bed with a girl I\'d never seen before.\n'
-      '— Alex, this is Juniper, he said. — Juniper, my buddy Alex.\n'
-      'She smiled briefly and nodded — the intro went smoothly enough.',
+      '— Oh, hi Alex! Perfect timing. Meet Juniper.\n'
+      '— Hi. Nice to meet you — I\'ve heard a lot about you.',
   'sem_juniper_intro_leave': 'Leave',
   'danielle_spy_parents_dialogue':
       'Interesting sounds are coming from behind the door…\n\nSeems I showed up at just the right moment…',

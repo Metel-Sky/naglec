@@ -1,35 +1,88 @@
 ---
-description: Один файл квестів та один файл івентів на NPC; нумерація всередині
+description: Квести NPC — папка quests/, один файл на квест; івенти окремо
 alwaysApply: true
 ---
 
 # Квести та івенти NPC: файли та нумерація
 
-## Розміщення
+## Legacy — не чіпати без запиту
 
-- Усе в **`lib/npcs/<npc_id>/`** (не розкидати окремі квести по різних іменах файлів для одного NPC).
-- **Рівно один файл квестів:** **`<npc_id>_quests.dart`**  
-  Приклад: `lib/npcs/cherie/cherie_quests.dart`.
-- **Рівно один файл івентів:** **`<npc_id>_events.dart`**  
-  Приклад: `lib/npcs/cherie/cherie_events.dart` (може бути мінімальним, поки івентів немає).
+**Поточні файли залишаються як є** (без масової міграції):
 
-## Нумерація всередині файлу
+- `mom/mom_quest001.dart`
+- `piper/piper_quests.dart`
+- `cherie/cherie_quests.dart` + `part` impl
+- `sem/sem_quests.dart`, `sem_juniper_room_intro.dart`
+- інші існуючі `*_quests.dart`
 
-- Кожен квест у `<npc_id>_quests.dart` виділяти **пронумерованим блоком** і стабільним id **`cherie_quest_001`**, **`cherie_quest_002`**, … (для іншого NPC — `<id>_quest_001` тощо), узгоджено з `.cursor/rules/event-numbering.mdc` для NPC-контенту.
-- У коді бажано мати константу на кшталт `static const String questId = 'cherie_quest_001';` у відповідному класі/просторі імен квесту.
-- Кожен івент у `<npc_id>_events.dart` — **`cherie_event_001`**, … з маркером коментаря `// EVENT: cherie_event_001`.
+Дописувати кроки **вже існуючого** квесту в legacy-файлі — ок, поки його окремо не перенесуть.
 
-## Розділення з UI
+## Нові квести (з наступного номера)
 
-- У файлах квестів/івентів: умови, етапи, змінні, ключі l10n (рядки), зміни світу/NPC — **без** віджетів і **без** `BuildContext`.
-- Екрани гри лише **викликають** API з цих файлів.
+**Кожен новий квест** (`<npc>_quest_NNN`, де NNN ще не існує в legacy) — одразу за схемою нижче: **`lib/npcs/<npc_id>/quests/`**, один файл на квест.
 
-## Екранний флоу (main game)
+## Розміщення (нові квести)
 
-- Місток UI + події кімнати/панелі для NPC — у **`lib/npcs/<npc_id>/`** (mixin як `part` бібліотеки `main_game_screen.dart`, реалізує **`NpcScreenFlow`**). Приклад: `lib/npcs/cherie/cherie_game_flow.dart` → `CherieGameFlow`.
-- Контракт: `lib/npcs/npc_screen_flow.dart`, id: `lib/npcs/npc_screen_flow_ids.dart`.
-- **Не змішувати діалог і кнопки** між квестами/івентами — див. **`quest-ui-isolation.mdc`**.
+- Усе в **`lib/npcs/<npc_id>/`**.
+- **Квести** — підпапка **`lib/npcs/<npc_id>/quests/`** (не один великий `<npc>_quests.dart` на всі квести).
+- **Івенти** — **`lib/npcs/<npc_id>/<npc_id>_events.dart`** (або `events/` якщо івентів багато).
+- **Ізольовані сцени кроку** (відео + текст лише в одному місці) — **`lib/npcs/<npc_id>/quests/scenes/`** або `lib/npcs/<npc_id>/quests/<quest>_step_<n>.dart` (див. `quest-ui-isolation.mdc`).
+
+## Один квест = один файл
+
+Ім'я файлу (slug латиницею, стабільний id у коді):
+
+```text
+lib/npcs/mom/quests/mom_quest_001_beach.dart
+lib/npcs/piper/quests/piper_quest_001_bad_grades.dart
+lib/npcs/sem/quests/sem_quest_001_juniper.dart
+lib/npcs/cherie/quests/cherie_quest_001_animator.dart
+```
+
+На початку файлу — **маркер і людська назва** (укр.):
+
+```dart
+/// QUEST: mom_quest_001 — Пляж
+abstract final class MomQuest001 {
+  static const String questId = 'mom_quest_001';
+  ...
+}
+```
+
+```dart
+/// QUEST: piper_quest_001 — Погані оцінки
+abstract final class PiperQuest001 { ... }
+```
+
+- Id у save/API: **`mom_quest_001`**, **`piper_quest_001`**, … — узгоджено з `.cursor/rules/event-numbering.mdc`.
+- **Не** додавати **нові** квести (новий NNN) блоками в legacy `<npc>_quests.dart` / `part` impl.
+- Legacy Cherie `part` — не розширювати новими квестами; новий номер → окремий файл у `quests/`.
+
+## Що в файлі квесту
+
+- Умови старту/прогресу, прапорці `GameWorldState`, l10n-ключі, шляхи асетів, `mark…Done`.
+- **Без** віджетів і **без** `BuildContext`.
+- Великий квест може мати **окремі файли сцен** у тій самій папці `quests/` (крок з відео — як `sem_juniper_room_intro.dart` → краще `sem/quests/scenes/sem_quest_001_room_intro.dart`).
+
+## Реєстр (опційно)
+
+Якщо потрібен список усіх квестів NPC (галерея, чіти) — тонкий **`lib/npcs/<npc_id>/quests/<npc>_quests_registry.dart`**: лише id + посилання на класи, **без** логіки кроків.
+
+## UI
+
+- **`lib/npcs/<npc_id>/<npc_id>_game_flow.dart`** — mixin `NpcScreenFlow`; **імпортує** API з `quests/*.dart`, не дублює l10n/шляхи.
+- Main game лише викликає game flow / scene API.
+- **Ізоляція кроку** — `quest-ui-isolation.mdc`, `quest-step-spec-format.mdc`.
+
+## Івенти
+
+- Окремо від квестів: `<npc_id>_events.dart` або `events/<npc>_event_001_….dart`.
+- Нумерація: `cherie_event_001`, маркер `// EVENT: cherie_event_001`.
+
+## Міграція legacy (лише за явним запитом)
+
+Переносити старі файли в `quests/` **не обов'язково** і **не робити проактивно**. Якщо колись переносимо — один квест → один файл, id сейву не змінювати.
 
 ## Імпорти асетів
 
-- Шляхи до асетів NPC — `lib/assets/npcs/<id>/...` (див. `npc-assets.mdc`).
+- `lib/assets/npcs/<id>/...` (див. `npc-assets.mdc`).

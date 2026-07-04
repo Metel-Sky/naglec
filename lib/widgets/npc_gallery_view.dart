@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import '../data/npc_profile_display.dart';
 import '../data/npc_economy_config.dart';
 import '../data/npc_gallery_residence.dart';
 import '../models/npc_model.dart';
 import '../services/game_time_controller.dart';
+import '../services/game_world_state.dart';
+import '../services/service_locator.dart';
 import '../theme/game_theme.dart';
 import '../utils/npc_portrait_paths.dart';
 
@@ -200,7 +203,10 @@ class NpcGalleryView extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
-                                          npc.status ?? npc.name,
+                                          NpcProfileDisplay.profileStatus(
+                                            npc,
+                                            world: sl<GameWorldState>(),
+                                          ),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(color: Colors.grey.shade700, fontSize: 11),
                                           maxLines: 1,

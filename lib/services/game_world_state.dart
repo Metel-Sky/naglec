@@ -366,14 +366,20 @@ class GameWorldState {
   /// Скільки збудження ГГ додано при завершенні spyOnSemParents (для симетричного відкату).
   double? spyOnSemParentsPlayerArousalDeltaApplied;
 
-  // --- sem_quest_001: арка Juniper (дівчина Sem) ---
-  /// Розмова «про дівчат» біля дверей будинку Sem завершена.
+  // --- sem_quest_001: арка Juniper (знайомство, стосунки з Sem) ---
+  /// Натяк Sem «пора шукати дівчину» (sem_quest_001) — старт таймера Juniper.
   bool semJuniperGirlsTalkDone = false;
 
-  /// Дата останньої розмови на тему (dd.MM.yyyy) — для follow-up і 14-денного івенту.
+  /// Розмова про сестру Sasha на фасаді (sem_quest_001).
+  bool semGirlsSisterTalkDone = false;
+
+  /// Дата останньої розмови на тему (dd.MM.yyyy) — для «Новин Sem» і 14-денного івенту.
   String? semJuniperLastTopicTalkDateKey;
 
-  /// Follow-up «як справи з дівчиною» на фасаді пройдено.
+  /// Sem познайомився з Juniper у коледжі (через 3 дні після розмови «про дівчат»).
+  bool semJuniperCollegeMeetDone = false;
+
+  /// «Новини Sem» на фасаді пройдено (≈ через тиждень після першої розмови).
   bool semJuniperFollowUpDone = false;
 
   /// ГG познайомився з Juniper (сцена в кімнаті Sem).
@@ -381,6 +387,15 @@ class GameWorldState {
 
   /// У коридорі вже показано текст про шум із кімнати Sem (перед входом у кімнату).
   bool semJuniperCorridorNoiseShown = false;
+
+  /// Juniper і Sem офіційно зустрічаються — у профілі статус «Дівчина Sem».
+  bool semJuniperDating = false;
+
+  /// Дата початку стосунків (dd.MM.yyyy) — для 3-тижневих вечірніх візитів.
+  String? semJuniperDatingStartDateKey;
+
+  /// Дата, коли вечірній кліп Juniper уже показано (dd.MM.yyyy) — один раз на добу.
+  String? semJuniperEveningClipShownDateKey;
 
   /// Квест «спалився»: розмова з Danielle після підглядання — відіграно.
   bool danielleSpyCaughtConfrontationDone = false;
@@ -580,10 +595,15 @@ class GameWorldState {
         'spyOnSemParentsPlayerArousalDeltaApplied':
             spyOnSemParentsPlayerArousalDeltaApplied,
         'semJuniperGirlsTalkDone': semJuniperGirlsTalkDone,
+        'semGirlsSisterTalkDone': semGirlsSisterTalkDone,
         'semJuniperLastTopicTalkDateKey': semJuniperLastTopicTalkDateKey,
+        'semJuniperCollegeMeetDone': semJuniperCollegeMeetDone,
         'semJuniperFollowUpDone': semJuniperFollowUpDone,
         'semJuniperMet': semJuniperMet,
         'semJuniperCorridorNoiseShown': semJuniperCorridorNoiseShown,
+        'semJuniperDating': semJuniperDating,
+        'semJuniperDatingStartDateKey': semJuniperDatingStartDateKey,
+        'semJuniperEveningClipShownDateKey': semJuniperEveningClipShownDateKey,
         'danielleSpyCaughtConfrontationDone': danielleSpyCaughtConfrontationDone,
         'danielleSpyCaughtConfrontationCount':
             danielleSpyCaughtConfrontationCount,
@@ -900,11 +920,21 @@ class GameWorldState {
         ? arousalDelta.toDouble()
         : null;
     semJuniperGirlsTalkDone = json['semJuniperGirlsTalkDone'] == true;
+    semGirlsSisterTalkDone = json['semGirlsSisterTalkDone'] == true;
     semJuniperLastTopicTalkDateKey =
         json['semJuniperLastTopicTalkDateKey'] as String?;
+    semJuniperCollegeMeetDone = json['semJuniperCollegeMeetDone'] == true;
     semJuniperFollowUpDone = json['semJuniperFollowUpDone'] == true;
     semJuniperMet = json['semJuniperMet'] == true;
     semJuniperCorridorNoiseShown = json['semJuniperCorridorNoiseShown'] == true;
+    semJuniperDating = json['semJuniperDating'] == true;
+    semJuniperDatingStartDateKey =
+        json['semJuniperDatingStartDateKey'] as String?;
+    if (semJuniperDating && semJuniperDatingStartDateKey == null) {
+      semJuniperDatingStartDateKey = semJuniperLastTopicTalkDateKey;
+    }
+    semJuniperEveningClipShownDateKey =
+        json['semJuniperEveningClipShownDateKey'] as String?;
     danielleSpyCaughtConfrontationDone =
         json['danielleSpyCaughtConfrontationDone'] == true;
     danielleSpyCaughtConfrontationCount =
@@ -1038,10 +1068,15 @@ class GameWorldState {
     spyOnSemParentsParentsRoomPeekDone = false;
     spyOnSemParentsPlayerArousalDeltaApplied = null;
     semJuniperGirlsTalkDone = false;
+    semGirlsSisterTalkDone = false;
     semJuniperLastTopicTalkDateKey = null;
+    semJuniperCollegeMeetDone = false;
     semJuniperFollowUpDone = false;
     semJuniperMet = false;
     semJuniperCorridorNoiseShown = false;
+    semJuniperDating = false;
+    semJuniperDatingStartDateKey = null;
+    semJuniperEveningClipShownDateKey = null;
     danielleSpyCaughtConfrontationDone = false;
     danielleSpyCaughtConfrontationCount = 0;
     lastNpcEconomyProcessedDateKey = null;

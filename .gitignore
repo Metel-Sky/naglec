@@ -4,6 +4,10 @@
 *.pyc
 *.swp
 
+# Video assets (not in version control; share lib/assets via USB separately)
+*.webm
+*.mp4
+
 .DS_Store
 .atom/
 .build/

@@ -1,313 +1,1632 @@
 {
   "home": {
     "rooms": {
-      "corridor": {"displayName": "Коридор", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Коридор будинку.", "isLocked": false},
-      "kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "На кухні нікого немає", "isLocked": false},
-      "room_gg": {"displayName": "Кімната гг", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Твоя кімната. Тут панує творчий безлад.", "isLocked": false},
-      "bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "У ванній пахне милом, тут пусто.", "isLocked": false},
-      "mom_room": {"displayName": "Кімната мами", "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg", "description": "Кімната мами.", "isLocked": false},
-      "piper_room": {"displayName": "Кімната Piper", "imagePath": "lib/assets/location/home_gg/rooms/piper_room.jpg", "description": "Кімната Piper, тут нікого немає.", "isLocked": false},
-      "elsa_room": {"displayName": "Кімната Elsa", "imagePath": "lib/assets/location/home_gg/rooms/elsa_room.jpg", "description": "Кімната Elsa, тут нікого немає.", "isLocked": false},
-      "hall": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
-      "yard": {"displayName": "Подвірʼя", "imagePath": "lib/assets/location/home_gg/rooms/yard.webp", "description": "Подвірʼя.", "isLocked": false},
-      "basement": {"displayName": "Підвал", "imagePath": "lib/assets/location/home_gg/rooms/closed_door.jpg", "description": "Підвал зараз закритий, ключі у мами.", "isLocked": true}
+      "corridor": {
+        "displayName": "Коридор",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Коридор будинку.",
+        "isLocked": false
+      },
+      "kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "На кухні нікого немає",
+        "isLocked": false
+      },
+      "room_gg": {
+        "displayName": "Кімната гг",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Твоя кімната. Тут панує творчий безлад.",
+        "isLocked": false
+      },
+      "bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "У ванній пахне милом, тут пусто.",
+        "isLocked": false
+      },
+      "mom_room": {
+        "displayName": "Кімната Mom",
+        "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg",
+        "description": "Кімната мами.",
+        "isLocked": false
+      },
+      "piper_room": {
+        "displayName": "Кімната Piper",
+        "imagePath": "lib/assets/location/home_gg/rooms/piper_room.jpg",
+        "description": "Кімната Piper, тут нікого немає.",
+        "isLocked": false
+      },
+      "elsa_room": {
+        "displayName": "Кімната Elsa",
+        "imagePath": "lib/assets/location/home_gg/rooms/elsa_room.jpg",
+        "description": "Кімната Elsa, тут нікого немає.",
+        "isLocked": false
+      },
+      "hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "yard": {
+        "displayName": "Подвірʼя",
+        "imagePath": "lib/assets/location/home_gg/rooms/yard.webp",
+        "description": "Подвірʼя.",
+        "isLocked": false
+      },
+      "basement": {
+        "displayName": "Підвал",
+        "imagePath": "lib/assets/location/home_gg/rooms/closed_door.jpg",
+        "description": "Підвал зараз закритий, ключі у мами.",
+        "isLocked": true
+      }
     },
-    "roomIds": ["room_gg", "kitchen", "bathroom", "mom_room", "piper_room", "elsa_room", "hall", "yard", "basement"]
+    "roomIds": [
+      "room_gg",
+      "kitchen",
+      "bathroom",
+      "mom_room",
+      "piper_room",
+      "elsa_room",
+      "hall",
+      "yard",
+      "basement"
+    ]
   },
   "college": {
     "rooms": {
-      "college_hall": {"displayName": "Хол", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Головний хол коледжу.", "isLocked": false},
-      "auditorium_1": {"displayName": "Англійська", "imagePath": "lib/assets/location/college/rooms/audit_1.jpg", "description": "Лекційна аудиторія.", "isLocked": false},
-      "auditorium_2": {"displayName": "Математика", "imagePath": "lib/assets/location/college/rooms/audit_2.jpeg", "description": "Лекційна аудиторія.", "isLocked": false},
-      "auditorium_3": {"displayName": "Історія", "imagePath": "lib/assets/location/college/rooms/audit_3.jpg", "description": "Лекційна аудиторія.", "isLocked": false},
-      "college_corridor": {"displayName": "Коридор", "imagePath": "lib/assets/location/college/rooms/dining_room.jpg", "description": "Коледжний коридор.", "isLocked": false},
-      "director_office": {"displayName": "Кабінет директора", "imagePath": "lib/assets/location/college/rooms/office.jpg", "description": "Кабінет директора коледжу.", "isLocked": false},
-      "canteen": {"displayName": "Бібліотека", "imagePath": "lib/assets/location/college/rooms/lib.jpg", "description": "Коледжна бібліотека.", "isLocked": false},
-      "gym": {"displayName": "Спортзал", "imagePath": "lib/assets/location/college/rooms/gym_room.jpg", "description": "Спортивний зал.", "isLocked": false},
-      "college_yard": {"displayName": "Двір коледжу", "imagePath": "lib/assets/location/college/rooms/stadion.jpg", "description": "Подвірʼя коледжу.", "isLocked": false},
-      "toilet": {"displayName": "Туалет", "imagePath": "lib/assets/location/college/rooms/tualet.jpg", "description": "Гардеробна.", "isLocked": false}
+      "college_hall": {
+        "displayName": "Хол",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Головний хол коледжу.",
+        "isLocked": false
+      },
+      "auditorium_1": {
+        "displayName": "Англійська",
+        "imagePath": "lib/assets/location/college/rooms/audit_1.jpg",
+        "description": "Лекційна аудиторія.",
+        "isLocked": false
+      },
+      "auditorium_2": {
+        "displayName": "Математика",
+        "imagePath": "lib/assets/location/college/rooms/audit_2.jpeg",
+        "description": "Лекційна аудиторія.",
+        "isLocked": false
+      },
+      "auditorium_3": {
+        "displayName": "Історія",
+        "imagePath": "lib/assets/location/college/rooms/audit_3.jpg",
+        "description": "Лекційна аудиторія.",
+        "isLocked": false
+      },
+      "college_corridor": {
+        "displayName": "Коридор",
+        "imagePath": "lib/assets/location/college/rooms/dining_room.jpg",
+        "description": "Коледжний коридор.",
+        "isLocked": false
+      },
+      "director_office": {
+        "displayName": "Кабінет директора",
+        "imagePath": "lib/assets/location/college/rooms/office.jpg",
+        "description": "Кабінет директора коледжу.",
+        "isLocked": false
+      },
+      "canteen": {
+        "displayName": "Бібліотека",
+        "imagePath": "lib/assets/location/college/rooms/lib.jpg",
+        "description": "Коледжна бібліотека.",
+        "isLocked": false
+      },
+      "gym": {
+        "displayName": "Спортзал",
+        "imagePath": "lib/assets/location/college/rooms/gym_room.jpg",
+        "description": "Спортивний зал.",
+        "isLocked": false
+      },
+      "college_yard": {
+        "displayName": "Двір коледжу",
+        "imagePath": "lib/assets/location/college/rooms/stadion.jpg",
+        "description": "Подвірʼя коледжу.",
+        "isLocked": false
+      },
+      "toilet": {
+        "displayName": "Туалет",
+        "imagePath": "lib/assets/location/college/rooms/tualet.jpg",
+        "description": "Гардеробна.",
+        "isLocked": false
+      }
     },
-    "roomIds": ["auditorium_1", "auditorium_2", "auditorium_3", "college_corridor", "director_office", "canteen", "gym", "college_yard", "toilet"]
+    "roomIds": [
+      "auditorium_1",
+      "auditorium_2",
+      "auditorium_3",
+      "college_corridor",
+      "director_office",
+      "canteen",
+      "gym",
+      "college_yard",
+      "toilet"
+    ]
   },
   "street": {
     "rooms": {
-      "street": {"displayName": "Вулиця", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Вулиця.", "isLocked": false},
-      "friend_house": {"displayName": "Дім кориша", "imagePath": "lib/assets/location/houses/friend_home.jpg", "description": "Будинок кориша.", "isLocked": false},
-      "aunt_house": {"displayName": "Дім тітки", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Будинок тітки.", "isLocked": false},
-      "neighbor_house": {"displayName": "Сусідський дім", "imagePath": "lib/assets/location/houses/neighbor.jpg", "description": "Будинок сусідів.", "isLocked": false},
-      "classmate_house": {"displayName": "Дім однокласниці", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Будинок на вулиці однокласниць.", "isLocked": false}
-    },
-    "roomIds": ["friend_house", "aunt_house", "neighbor_house", "classmate_house"],
-    "houseRooms": {
+      "street": {
+        "displayName": "Вулиця",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Вулиця.",
+        "isLocked": false
+      },
       "friend_house": {
-        "friend_corridor": {"displayName": "Коридор", "imagePath": "lib/assets/location/houses/friend_home.jpg", "description": "Коридор будинку кориша.", "isLocked": false},
-        "friend_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/korish_home_kitchen.jpg", "description": "Кухня в будинку кориша.", "isLocked": false},
-        "friend_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/korish_home_zal.jpg", "description": "Зал.", "isLocked": false},
-        "friend_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/korish_home_bathroom.jpg", "description": "Ванна.", "isLocked": false},
-        "friend_parents_room": {"displayName": "Кімната батьків", "imagePath": "lib/assets/location/houses/korish_home_perents.jpg", "description": "Кімната батьків.", "isLocked": false},
-        "friend_room": {"displayName": "Кімната Сема", "imagePath": "lib/assets/location/houses/korish_home_sem_room.jpg", "description": "Кімната Semа.", "isLocked": false},
-        "friend_sister_room": {"displayName": "Sasha", "imagePath": "lib/assets/location/houses/korish_home_sash_room.webp", "description": "Кімната Sasha.", "isLocked": false},
-        "friend_lounge": {"displayName": "Гостинна", "imagePath": "lib/assets/location/houses/korish_home_gostinna.jpeg", "description": "Гостинна.", "isLocked": false},
-        "friend_sauna": {"displayName": "Сауна", "imagePath": "lib/assets/location/houses/korish_home_sauna.jpg", "description": "Сауна.", "isLocked": false},
-        "friend_pool": {"displayName": "Басейн", "imagePath": "lib/assets/location/houses/korish_home_pool.jpg", "description": "Басейн.", "isLocked": false}
+        "displayName": "Дім кориша",
+        "imagePath": "lib/assets/location/houses/friend_home.jpg",
+        "description": "Будинок кориша.",
+        "isLocked": false
       },
       "aunt_house": {
-        "aunt_corridor": {"displayName": "Коридор", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Коридор будинку тітки.", "isLocked": false},
-        "aunt_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Кухня в будинку тітки.", "isLocked": false},
-        "aunt_room": {"displayName": "Кімната тітки", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Кімната тітки.", "isLocked": false},
-        "aunt_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Ванна.", "isLocked": false},
-        "aunt_guest_room": {"displayName": "Гостьова", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Гостьова кімната.", "isLocked": false},
-        "aunt_niece_room": {"displayName": "Кімната Flaxy", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Кімната Flaxy.", "isLocked": false},
-        "aunt_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/aunt_home.jpg", "description": "Зал.", "isLocked": false}
+        "displayName": "Дім тітки",
+        "imagePath": "lib/assets/location/houses/aunt_home.jpg",
+        "description": "Будинок тітки.",
+        "isLocked": false
       },
       "neighbor_house": {
-        "neighbor_corridor": {"displayName": "Коридор", "imagePath": "lib/assets/location/houses/neighbor.jpg", "description": "Коридор сусідського будинку.", "isLocked": false},
-        "neighbor_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/neighbor.jpg", "description": "Кухня у сусідів.", "isLocked": false},
-        "neighbor_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/neighbor.jpg", "description": "Ванна.", "isLocked": false},
-        "neighbor_parents_room": {"displayName": "Спальня", "imagePath": "lib/assets/location/houses/neighbor.jpg", "description": "Спальня.", "isLocked": false},
-        "neighbor_child_1": {"displayName": "Кімната Ariana", "imagePath": "lib/assets/location/houses/neighbor.jpg", "description": "Кімната Ariana.", "isLocked": false},
-        "neighbor_child_2": {"displayName": "Дитяча 2", "imagePath": "lib/assets/location/houses/neighbor.jpg", "description": "Дитяча кімната.", "isLocked": false},
-        "neighbor_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/neighbor.jpg", "description": "Зал.", "isLocked": false}
+        "displayName": "Сусідський дім",
+        "imagePath": "lib/assets/location/houses/neighbor.jpg",
+        "description": "Будинок сусідів.",
+        "isLocked": false
       },
       "classmate_house": {
-        "classmate_corridor": {"displayName": "Коридор", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Коридор будинку однокласниці.", "isLocked": false},
-        "classmate_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кухня.", "isLocked": false},
-        "classmate_room": {"displayName": "Кімната Alyssa", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кімната Alyssa.", "isLocked": false},
-        "classmate_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Ванна.", "isLocked": false},
-        "classmate_parents_room": {"displayName": "Кімната Lexi", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кімната Lexi.", "isLocked": false},
-        "classmate_sister_room": {"displayName": "Кімната Candee", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Кімната Candee.", "isLocked": false},
-        "classmate_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/classmate_home.jpg", "description": "Зал.", "isLocked": false}
+        "displayName": "Дім однокласниці",
+        "imagePath": "lib/assets/location/houses/classmate_home.jpg",
+        "description": "Будинок на вулиці однокласниць.",
+        "isLocked": false
+      }
+    },
+    "roomIds": [
+      "friend_house",
+      "aunt_house",
+      "neighbor_house",
+      "classmate_house"
+    ],
+    "houseRooms": {
+      "friend_house": {
+        "friend_corridor": {
+          "displayName": "Коридор",
+          "imagePath": "lib/assets/location/houses/friend_home.jpg",
+          "description": "Коридор будинку кориша.",
+          "isLocked": false
+        },
+        "friend_kitchen": {
+          "displayName": "Кухня",
+          "imagePath": "lib/assets/location/houses/korish_home_kitchen.jpg",
+          "description": "Кухня в будинку кориша.",
+          "isLocked": false
+        },
+        "friend_hall": {
+          "displayName": "Зал",
+          "imagePath": "lib/assets/location/houses/korish_home_zal.jpg",
+          "description": "Зал.",
+          "isLocked": false
+        },
+        "friend_bathroom": {
+          "displayName": "Ванна",
+          "imagePath": "lib/assets/location/houses/korish_home_bathroom.jpg",
+          "description": "Ванна.",
+          "isLocked": false
+        },
+        "friend_parents_room": {
+          "displayName": "Кімната батьків",
+          "imagePath": "lib/assets/location/houses/korish_home_perents.jpg",
+          "description": "Кімната батьків.",
+          "isLocked": false
+        },
+        "friend_room": {
+          "displayName": "Кімната Sem",
+          "imagePath": "lib/assets/location/houses/korish_home_sem_room.jpg",
+          "description": "Кімната Semа.",
+          "isLocked": false
+        },
+        "friend_sister_room": {
+          "displayName": "Кімната Sasha",
+          "imagePath": "lib/assets/location/houses/korish_home_sash_room.webp",
+          "description": "Кімната Sasha.",
+          "isLocked": false
+        },
+        "friend_lounge": {
+          "displayName": "Гостинна",
+          "imagePath": "lib/assets/location/houses/korish_home_gostinna.jpeg",
+          "description": "Гостинна.",
+          "isLocked": false
+        },
+        "friend_sauna": {
+          "displayName": "Сауна",
+          "imagePath": "lib/assets/location/houses/korish_home_sauna.jpg",
+          "description": "Сауна.",
+          "isLocked": false
+        },
+        "friend_pool": {
+          "displayName": "Басейн",
+          "imagePath": "lib/assets/location/houses/korish_home_pool.jpg",
+          "description": "Басейн.",
+          "isLocked": false
+        }
+      },
+      "aunt_house": {
+        "aunt_corridor": {
+          "displayName": "Коридор",
+          "imagePath": "lib/assets/location/houses/aunt_home.jpg",
+          "description": "Коридор будинку тітки.",
+          "isLocked": false
+        },
+        "aunt_kitchen": {
+          "displayName": "Кухня",
+          "imagePath": "lib/assets/location/houses/ount_kitchen.jpg",
+          "description": "Кухня в будинку тітки.",
+          "isLocked": false
+        },
+        "aunt_room": {
+          "displayName": "Спальня Alexis",
+          "imagePath": "lib/assets/location/houses/ount_bedroom.jpeg",
+          "description": "Кімната тітки.",
+          "isLocked": false
+        },
+        "aunt_bathroom": {
+          "displayName": "Ванна",
+          "imagePath": "lib/assets/location/houses/ount_bathroom.webp",
+          "description": "Ванна.",
+          "isLocked": false
+        },
+        "aunt_guest_room": {
+          "displayName": "Гостьова",
+          "imagePath": "lib/assets/location/houses/ount_gostinnaya.jpg",
+          "description": "Гостьова кімната.",
+          "isLocked": false
+        },
+        "aunt_niece_room": {
+          "displayName": "Кімната Flaxy",
+          "imagePath": "lib/assets/location/houses/ount_flaxy_badroom.jpeg",
+          "description": "Кімната Flaxy.",
+          "isLocked": false
+        },
+        "aunt_hall": {
+          "displayName": "Зал",
+          "imagePath": "lib/assets/location/houses/ount_zal.jpg",
+          "description": "Зал.",
+          "isLocked": false
+        }
+      },
+      "neighbor_house": {
+        "neighbor_corridor": {
+          "displayName": "Коридор",
+          "imagePath": "lib/assets/location/houses/neighbor.jpg",
+          "description": "Коридор сусідського будинку.",
+          "isLocked": false
+        },
+        "neighbor_kitchen": {
+          "displayName": "Кухня",
+          "imagePath": "lib/assets/location/houses/neighbor.jpg",
+          "description": "Кухня у сусідів.",
+          "isLocked": false
+        },
+        "neighbor_bathroom": {
+          "displayName": "Ванна",
+          "imagePath": "lib/assets/location/houses/neighbor.jpg",
+          "description": "Ванна.",
+          "isLocked": false
+        },
+        "neighbor_parents_room": {
+          "displayName": "Спальня",
+          "imagePath": "lib/assets/location/houses/neighbor.jpg",
+          "description": "Спальня.",
+          "isLocked": false
+        },
+        "neighbor_child_1": {
+          "displayName": "Кімната Ariana",
+          "imagePath": "lib/assets/location/houses/neighbor.jpg",
+          "description": "Кімната Ariana.",
+          "isLocked": false
+        },
+        "neighbor_child_2": {
+          "displayName": "Дитяча 2",
+          "imagePath": "lib/assets/location/houses/neighbor.jpg",
+          "description": "Дитяча кімната.",
+          "isLocked": false
+        },
+        "neighbor_hall": {
+          "displayName": "Зал",
+          "imagePath": "lib/assets/location/houses/neighbor.jpg",
+          "description": "Зал.",
+          "isLocked": false
+        }
+      },
+      "classmate_house": {
+        "classmate_corridor": {
+          "displayName": "Коридор",
+          "imagePath": "lib/assets/location/houses/classmate_home.jpg",
+          "description": "Коридор будинку однокласниці.",
+          "isLocked": false
+        },
+        "classmate_kitchen": {
+          "displayName": "Кухня",
+          "imagePath": "lib/assets/location/houses/classmate_home.jpg",
+          "description": "Кухня.",
+          "isLocked": false
+        },
+        "classmate_room": {
+          "displayName": "Кімната Alyssa",
+          "imagePath": "lib/assets/location/houses/classmate_home.jpg",
+          "description": "Кімната Alyssa.",
+          "isLocked": false
+        },
+        "classmate_bathroom": {
+          "displayName": "Ванна",
+          "imagePath": "lib/assets/location/houses/classmate_home.jpg",
+          "description": "Ванна.",
+          "isLocked": false
+        },
+        "classmate_parents_room": {
+          "displayName": "Кімната Lexi",
+          "imagePath": "lib/assets/location/houses/classmate_home.jpg",
+          "description": "Кімната Lexi.",
+          "isLocked": false
+        },
+        "classmate_sister_room": {
+          "displayName": "Кімната Candee",
+          "imagePath": "lib/assets/location/houses/classmate_home.jpg",
+          "description": "Кімната Candee.",
+          "isLocked": false
+        },
+        "classmate_hall": {
+          "displayName": "Зал",
+          "imagePath": "lib/assets/location/houses/classmate_home.jpg",
+          "description": "Зал.",
+          "isLocked": false
+        }
       }
     },
     "roomIdsForHouse": {
-      "friend_house": ["friend_kitchen", "friend_hall", "friend_bathroom", "friend_parents_room", "friend_room", "friend_sister_room", "friend_lounge", "friend_pool", "friend_sauna"],
-      "aunt_house": ["aunt_kitchen", "aunt_room", "aunt_bathroom", "aunt_guest_room", "aunt_niece_room", "aunt_hall"],
-      "neighbor_house": ["neighbor_kitchen", "neighbor_bathroom", "neighbor_parents_room", "neighbor_child_1", "neighbor_child_2", "neighbor_hall"],
-      "classmate_house": ["classmate_kitchen", "classmate_room", "classmate_bathroom", "classmate_parents_room", "classmate_sister_room", "classmate_hall"]
+      "friend_house": [
+        "friend_kitchen",
+        "friend_hall",
+        "friend_bathroom",
+        "friend_parents_room",
+        "friend_room",
+        "friend_sister_room",
+        "friend_lounge",
+        "friend_pool",
+        "friend_sauna"
+      ],
+      "aunt_house": [
+        "aunt_kitchen",
+        "aunt_hall",
+        "aunt_bathroom",
+        "aunt_room",
+        "aunt_niece_room",
+        "aunt_guest_room"
+      ],
+      "neighbor_house": [
+        "neighbor_kitchen",
+        "neighbor_bathroom",
+        "neighbor_parents_room",
+        "neighbor_child_1",
+        "neighbor_child_2",
+        "neighbor_hall"
+      ],
+      "classmate_house": [
+        "classmate_kitchen",
+        "classmate_room",
+        "classmate_bathroom",
+        "classmate_parents_room",
+        "classmate_sister_room",
+        "classmate_hall"
+      ]
     },
-    "firstRoomIdForHouse": {"friend_house": "friend_corridor", "aunt_house": "aunt_corridor", "neighbor_house": "neighbor_corridor", "classmate_house": "classmate_corridor"}
+    "firstRoomIdForHouse": {
+      "friend_house": "friend_corridor",
+      "aunt_house": "aunt_corridor",
+      "neighbor_house": "neighbor_corridor",
+      "classmate_house": "classmate_corridor"
+    }
   },
   "city": {
     "rooms": {
-      "city": {"displayName": "Місто", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Центр міста.", "isLocked": false},
-      "city_business_center": {"displayName": "Бізнес-центр", "imagePath": "lib/assets/location/houses/biznes_centr.jpg", "description": "Бізнес-центр.", "isLocked": false},
-      "city_bc_logistics": {"displayName": "Логістична компанія", "imagePath": "lib/assets/location/houses/company/logistic.png", "description": "Логістична компанія. Робоче місце Людмили.", "isLocked": false},
-      "city_bc_logistics_mom_office": {"displayName": "Кабінет мами", "imagePath": "lib/assets/location/biznes_centr/logistic/cab_mom.jpg", "description": "Кабінет мами в логістичній компанії.", "isLocked": false},
-      "city_bc_logistics_boss_office": {"displayName": "Офіс шефа", "imagePath": "lib/assets/location/biznes_centr/logistic/cab_boss.jpg", "description": "Офіс шефа логістичної компанії.", "isLocked": false},
-      "city_bc_gleam_team": {"displayName": "Gleam Team", "imagePath": "lib/assets/location/houses/company/clining.png", "description": "Клінінгова компанія Gleam Team.", "isLocked": false},
-      "city_bc_gleam_team_projects": {"displayName": "Проєкти", "imagePath": "lib/assets/location/houses/company/clining.png", "description": "Відділ проєктів Gleam Team.", "isLocked": false},
-      "city_bc_gleam_team_cabinet": {"displayName": "Кабінет", "imagePath": "lib/assets/location/houses/company/clining.png", "description": "Кабінет у Gleam Team.", "isLocked": false},
-      "city_bc_call_center": {"displayName": "Колл-центр", "imagePath": "lib/assets/location/houses/company/coll-centr.png", "description": "Колл-центр.", "isLocked": false},
-      "city_bc_call_center_operators_hall": {"displayName": "Зал операторів", "imagePath": "lib/assets/location/houses/company/coll-centr.png", "description": "Зал операторів у колл-центрі.", "isLocked": false},
-      "city_bc_call_center_boss_office": {"displayName": "Кімната керівника", "imagePath": "lib/assets/location/houses/company/coll-centr.png", "description": "Кімната керівника в колл-центрі.", "isLocked": false},
-      "city_bc_rockefeller_office": {"displayName": "Rockefeller Group", "imagePath": "lib/assets/location/houses/company/rockfeller.png", "description": "Офіс компанії Rockefeller Group у бізнес-центрі.", "isLocked": false},
-      "city_mall": {"displayName": "ТРЦ", "imagePath": "lib/assets/location/houses/trc.jpg", "description": "Торгово-розважальний центр.", "isLocked": false},
-      "city_mall_shop": {"displayName": "МАГАЗИН", "imagePath": "lib/assets/location/trc/shop.jpg", "description": "Магазин.", "isLocked": false},
-      "city_mall_pharmacy": {"displayName": "АПТЕКА", "imagePath": "lib/assets/location/trc/farmaci.jpeg", "description": "Аптека.", "isLocked": false},
-      "city_mall_gift_shop": {"displayName": "МАГАЗИН ПОДАРУНКІВ", "imagePath": "lib/assets/location/trc/gift_shop.jpg", "description": "Магазин подарунків у ТРЦ.", "isLocked": false},
-      "city_mall_gift_shop_office": {"displayName": "Office Cherie", "imagePath": "lib/assets/location/college/rooms/office.jpg", "description": "Office Cherie у магазині подарунків (ТРЦ).", "isLocked": false},
-      "city_mall_gift_shop_warehouse": {"displayName": "Склад", "imagePath": "lib/assets/location/trc/shop.jpg", "description": "Склад магазину подарунків у ТРЦ.", "isLocked": false},
-      "city_mall_sex_shop": {"displayName": "СЕКС-ШОП", "imagePath": "lib/assets/location/trc/sex-shop.jpg", "description": "Секс-шоп.", "isLocked": false},
-      "city_mall_electronics": {"displayName": "МАГАЗИН ЕЛЕКТРОНІКИ", "imagePath": "lib/assets/location/trc/electronic_shop.jpg", "description": "Магазин електроніки.", "isLocked": false},
-      "city_mall_cinema": {"displayName": "РЕСТОРАН", "imagePath": "lib/assets/location/houses/restoran.jpg", "description": "Ресторан у ТРЦ.", "isLocked": false},
-      "city_mall_restaurant_hall": {"displayName": "ЗАЛ", "imagePath": "lib/assets/location/houses/restoran_zal.jpg", "description": "Зал ресторану.", "isLocked": false},
-      "city_mall_restaurant_vip": {"displayName": "VIP", "imagePath": "lib/assets/location/houses/restoran_vip_zal.jpg", "description": "VIP кімната ресторану.", "isLocked": false},
-      "city_car_dealership": {"displayName": "Автосалон", "imagePath": "lib/assets/location/houses/auto_centr.jpeg", "description": "Автосалон.", "isLocked": false},
-      "city_car_dealership_showroom": {"displayName": "Торговий зал", "imagePath": "lib/assets/location/houses/auto_centr.jpeg", "description": "Торговий зал автосалону.", "isLocked": false},
-      "city_car_dealership_workshop": {"displayName": "Майстерня", "imagePath": "lib/assets/location/auto_repair.jpg", "description": "Майстерня автосалону.", "isLocked": false},
-      "city_park": {"displayName": "Парк", "imagePath": "lib/assets/location/houses/park.jpg", "description": "Міський парк.", "isLocked": false},
-      "city_park_cafe": {"displayName": "Кафе", "imagePath": "lib/assets/location/houses/park.jpg", "description": "Кафе в парку.", "isLocked": false},
-      "city_park_coffee": {"displayName": "Кав'ярня", "imagePath": "lib/assets/location/houses/park.jpg", "description": "Кав'ярня в парку.", "isLocked": false},
-      "city_elite_residential": {"displayName": "Елітний ЖК", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Елітний житловий комплекс.", "isLocked": false},
-      "city_elite_apt_1": {"displayName": "Квартира Jennifer", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Квартира Jennifer.", "isLocked": false},
-      "city_elite_apt_2": {"displayName": "Квартира Riley", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Квартира Riley.", "isLocked": false},
-      "city_elite_apt_3": {"displayName": "Квартира Shalina", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Квартира Shalina. Разом живуть Zazie та Geisha.", "isLocked": false},
-      "city_elite_apt_4": {"displayName": "Квартира 4", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Квартира 4.", "isLocked": false},
-      "city_elite_apt_5": {"displayName": "Квартира 5", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Квартира 5.", "isLocked": false},
-      "city_elite_apt_6": {"displayName": "Квартира 6", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Квартира 6 в елітному ЖК.", "isLocked": false},
-      "city_elite_apt_1_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня, квартира 1.", "isLocked": false},
-      "city_elite_apt_1_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна, квартира 1.", "isLocked": false},
-      "city_elite_apt_1_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал, квартира 1.", "isLocked": false},
-      "city_elite_apt_1_bedroom": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg", "description": "Спальня, квартира Jennifer.", "isLocked": false},
-      "city_elite_apt_1_room": {"displayName": "Кімната", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Кімната, квартира 1.", "isLocked": false},
-      "city_elite_apt_1_terrace": {"displayName": "Тераса", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Тераса, квартира 1.", "isLocked": false},
-      "city_elite_apt_2_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня, квартира 2.", "isLocked": false},
-      "city_elite_apt_2_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна, квартира 2.", "isLocked": false},
-      "city_elite_apt_2_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал, квартира 2.", "isLocked": false},
-      "city_elite_apt_2_bedroom": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg", "description": "Спальня, квартира Riley.", "isLocked": false},
-      "city_elite_apt_2_room": {"displayName": "Кімната", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Кімната, квартира 2.", "isLocked": false},
-      "city_elite_apt_2_terrace": {"displayName": "Тераса", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Тераса, квартира 2.", "isLocked": false},
-      "city_elite_apt_3_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня, квартира 3.", "isLocked": false},
-      "city_elite_apt_3_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна, квартира 3.", "isLocked": false},
-      "city_elite_apt_3_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал, квартира 3.", "isLocked": false},
-      "city_elite_apt_3_bedroom": {"displayName": "Спальня Shalina", "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg", "description": "Спальня Shalina, квартира 3.", "isLocked": false},
-      "city_elite_apt_3_room": {"displayName": "Кімната Zazie", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Кімната Zazie, квартира Shalina.", "isLocked": false},
-      "city_elite_apt_3_terrace": {"displayName": "Кімната Geisha", "imagePath": "lib/assets/location/houses/elit_gk.jpg", "description": "Кімната Geisha (тераса), квартира Shalina.", "isLocked": false},
-      "city_elite_apt_4_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня, квартира 4.", "isLocked": false},
-      "city_elite_apt_4_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна, квартира 4.", "isLocked": false},
-      "city_elite_apt_4_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал, квартира 4.", "isLocked": false},
-      "city_elite_apt_4_bedroom": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg", "description": "Спальня, квартира 4.", "isLocked": false},
-      "city_elite_apt_4_room": {"displayName": "Кімната", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Кімната, квартира 4.", "isLocked": false},
-      "city_elite_apt_4_sauna": {"displayName": "Сауна", "imagePath": "lib/assets/location/houses/gym.jpg", "description": "Сауна, квартира 4.", "isLocked": false},
-      "city_elite_apt_5_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня, квартира 5.", "isLocked": false},
-      "city_elite_apt_5_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна, квартира 5.", "isLocked": false},
-      "city_elite_apt_5_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал, квартира 5.", "isLocked": false},
-      "city_elite_apt_5_bedroom": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg", "description": "Спальня, квартира 5.", "isLocked": false},
-      "city_elite_apt_5_room": {"displayName": "Кімната", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Кімната, квартира 5.", "isLocked": false},
-      "city_elite_apt_5_pool": {"displayName": "Басейн", "imagePath": "lib/assets/location/home_gg/rooms/yard.webp", "description": "Басейн, квартира 5.", "isLocked": false},
-      "city_elite_apt_6_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня, квартира 6.", "isLocked": false},
-      "city_elite_apt_6_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна, квартира 6.", "isLocked": false},
-      "city_elite_apt_6_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал, квартира 6.", "isLocked": false},
-      "city_elite_apt_6_bedroom": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg", "description": "Спальня, квартира 6.", "isLocked": false},
-      "city_elite_apt_6_room": {"displayName": "Кімната", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Кімната, квартира 6.", "isLocked": false},
-      "city_elite_apt_6_office": {"displayName": "Офіс", "imagePath": "lib/assets/location/college/rooms/office.jpg", "description": "Офіс, квартира 6.", "isLocked": false},
-      "city_vip_gym": {"displayName": "VIP тренажерний зал", "imagePath": "lib/assets/location/houses/gym.jpg", "description": "VIP тренажерний зал.", "isLocked": false},
-      "city_vip_gym_reception": {"displayName": "Рецепція", "imagePath": "lib/assets/location/houses/gym.jpg", "description": "Рецепція VIP тренажерного залу.", "isLocked": false},
-      "city_vip_gym_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/gym.jpg", "description": "Зал.", "isLocked": false},
-      "city_vip_gym_wrestling": {"displayName": "Секція боротьби", "imagePath": "lib/assets/location/houses/gym.jpg", "description": "Секція боротьби.", "isLocked": false},
-      "city_vip_gym_spa": {"displayName": "Спа", "imagePath": "lib/assets/location/houses/gym.jpg", "description": "Спа.", "isLocked": false},
-      "city_vip_gym_sauna": {"displayName": "Сауна", "imagePath": "lib/assets/location/houses/gym.jpg", "description": "Сауна.", "isLocked": false},
-      "city_vip_gym_massage": {"displayName": "Массажний кабінет", "imagePath": "lib/assets/location/houses/gym.jpg", "description": "Массажний кабінет.", "isLocked": false}
+      "city": {
+        "displayName": "Місто",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Центр міста.",
+        "isLocked": false
+      },
+      "city_business_center": {
+        "displayName": "Бізнес-центр",
+        "imagePath": "lib/assets/location/houses/biznes_centr.jpg",
+        "description": "Бізнес-центр.",
+        "isLocked": false
+      },
+      "city_bc_logistics": {
+        "displayName": "Логістична компанія",
+        "imagePath": "lib/assets/location/houses/company/logistic.png",
+        "description": "Логістична компанія. Робоче місце Людмили.",
+        "isLocked": false
+      },
+      "city_bc_logistics_mom_office": {
+        "displayName": "Офіс Mom",
+        "imagePath": "lib/assets/location/biznes_centr/logistic/cab_mom.jpg",
+        "description": "Кабінет мами в логістичній компанії.",
+        "isLocked": false
+      },
+      "city_bc_logistics_boss_office": {
+        "displayName": "Офіс Oleksandr",
+        "imagePath": "lib/assets/location/biznes_centr/logistic/cab_boss.jpg",
+        "description": "Офіс шефа логістичної компанії.",
+        "isLocked": false
+      },
+      "city_bc_gleam_team": {
+        "displayName": "Gleam Team",
+        "imagePath": "lib/assets/location/houses/company/clining.png",
+        "description": "Клінінгова компанія Gleam Team.",
+        "isLocked": false
+      },
+      "city_bc_gleam_team_projects": {
+        "displayName": "Проєкти",
+        "imagePath": "lib/assets/location/houses/company/clining.png",
+        "description": "Відділ проєктів Gleam Team.",
+        "isLocked": false
+      },
+      "city_bc_gleam_team_cabinet": {
+        "displayName": "Кабінет",
+        "imagePath": "lib/assets/location/houses/company/clining.png",
+        "description": "Кабінет у Gleam Team.",
+        "isLocked": false
+      },
+      "city_bc_call_center": {
+        "displayName": "Колл-центр",
+        "imagePath": "lib/assets/location/houses/company/coll-centr.png",
+        "description": "Колл-центр.",
+        "isLocked": false
+      },
+      "city_bc_call_center_operators_hall": {
+        "displayName": "Зал операторів",
+        "imagePath": "lib/assets/location/houses/company/coll-centr.png",
+        "description": "Зал операторів у колл-центрі.",
+        "isLocked": false
+      },
+      "city_bc_call_center_boss_office": {
+        "displayName": "Офіс Artur",
+        "imagePath": "lib/assets/location/houses/company/coll-centr.png",
+        "description": "Кімната керівника в колл-центрі.",
+        "isLocked": false
+      },
+      "city_bc_rockefeller_office": {
+        "displayName": "Офіс Rockefeller",
+        "imagePath": "lib/assets/location/houses/company/rockfeller.png",
+        "description": "Офіс компанії Rockefeller Group у бізнес-центрі.",
+        "isLocked": false
+      },
+      "city_mall": {
+        "displayName": "ТРЦ",
+        "imagePath": "lib/assets/location/houses/trc.jpg",
+        "description": "Торгово-розважальний центр.",
+        "isLocked": false
+      },
+      "city_mall_shop": {
+        "displayName": "МАГАЗИН",
+        "imagePath": "lib/assets/location/trc/shop.jpg",
+        "description": "Магазин.",
+        "isLocked": false
+      },
+      "city_mall_pharmacy": {
+        "displayName": "АПТЕКА",
+        "imagePath": "lib/assets/location/trc/farmaci.jpeg",
+        "description": "Аптека.",
+        "isLocked": false
+      },
+      "city_mall_gift_shop": {
+        "displayName": "МАГАЗИН ПОДАРУНКІВ",
+        "imagePath": "lib/assets/location/trc/gift_shop.jpg",
+        "description": "Магазин подарунків у ТРЦ.",
+        "isLocked": false
+      },
+      "city_mall_gift_shop_office": {
+        "displayName": "Офіс Cherie",
+        "imagePath": "lib/assets/location/college/rooms/office.jpg",
+        "description": "Office Cherie у магазині подарунків (ТРЦ).",
+        "isLocked": false
+      },
+      "city_mall_gift_shop_warehouse": {
+        "displayName": "Склад",
+        "imagePath": "lib/assets/location/trc/shop.jpg",
+        "description": "Склад магазину подарунків у ТРЦ.",
+        "isLocked": false
+      },
+      "city_mall_sex_shop": {
+        "displayName": "СЕКС-ШОП",
+        "imagePath": "lib/assets/location/trc/sex-shop.jpg",
+        "description": "Секс-шоп.",
+        "isLocked": false
+      },
+      "city_mall_electronics": {
+        "displayName": "МАГАЗИН ЕЛЕКТРОНІКИ",
+        "imagePath": "lib/assets/location/trc/electronic_shop.jpg",
+        "description": "Магазин електроніки.",
+        "isLocked": false
+      },
+      "city_mall_cinema": {
+        "displayName": "РЕСТОРАН",
+        "imagePath": "lib/assets/location/houses/restoran.jpg",
+        "description": "Ресторан у ТРЦ.",
+        "isLocked": false
+      },
+      "city_mall_restaurant_hall": {
+        "displayName": "ЗАЛ",
+        "imagePath": "lib/assets/location/houses/restoran_zal.jpg",
+        "description": "Зал ресторану.",
+        "isLocked": false
+      },
+      "city_mall_restaurant_vip": {
+        "displayName": "VIP",
+        "imagePath": "lib/assets/location/houses/restoran_vip_zal.jpg",
+        "description": "VIP кімната ресторану.",
+        "isLocked": false
+      },
+      "city_car_dealership": {
+        "displayName": "Автосалон",
+        "imagePath": "lib/assets/location/houses/auto_centr.jpeg",
+        "description": "Автосалон.",
+        "isLocked": false
+      },
+      "city_car_dealership_showroom": {
+        "displayName": "Торговий зал",
+        "imagePath": "lib/assets/location/houses/auto_centr.jpeg",
+        "description": "Торговий зал автосалону.",
+        "isLocked": false
+      },
+      "city_car_dealership_workshop": {
+        "displayName": "Майстерня",
+        "imagePath": "lib/assets/location/auto_repair.jpg",
+        "description": "Майстерня автосалону.",
+        "isLocked": false
+      },
+      "city_park": {
+        "displayName": "Парк",
+        "imagePath": "lib/assets/location/houses/park.jpg",
+        "description": "Міський парк.",
+        "isLocked": false
+      },
+      "city_park_cafe": {
+        "displayName": "Кафе",
+        "imagePath": "lib/assets/location/houses/park.jpg",
+        "description": "Кафе в парку.",
+        "isLocked": false
+      },
+      "city_park_coffee": {
+        "displayName": "Кав'ярня",
+        "imagePath": "lib/assets/location/houses/park.jpg",
+        "description": "Кав'ярня в парку.",
+        "isLocked": false
+      },
+      "city_elite_residential": {
+        "displayName": "Елітний ЖК",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Елітний житловий комплекс.",
+        "isLocked": false
+      },
+      "city_elite_apt_1": {
+        "displayName": "Квартира Jennifer",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Квартира Jennifer.",
+        "isLocked": false
+      },
+      "city_elite_apt_2": {
+        "displayName": "Квартира Riley",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Квартира Riley.",
+        "isLocked": false
+      },
+      "city_elite_apt_3": {
+        "displayName": "Квартира Shalina",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Квартира Shalina. Разом живуть Zazie та Geisha.",
+        "isLocked": false
+      },
+      "city_elite_apt_4": {
+        "displayName": "Квартира 4",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Квартира 4.",
+        "isLocked": false
+      },
+      "city_elite_apt_5": {
+        "displayName": "Квартира 5",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Квартира 5.",
+        "isLocked": false
+      },
+      "city_elite_apt_6": {
+        "displayName": "Квартира 6",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Квартира 6 в елітному ЖК.",
+        "isLocked": false
+      },
+      "city_elite_apt_1_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня, квартира 1.",
+        "isLocked": false
+      },
+      "city_elite_apt_1_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна, квартира 1.",
+        "isLocked": false
+      },
+      "city_elite_apt_1_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал, квартира 1.",
+        "isLocked": false
+      },
+      "city_elite_apt_1_bedroom": {
+        "displayName": "Спальня Jennifer",
+        "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg",
+        "description": "Спальня, квартира Jennifer.",
+        "isLocked": false
+      },
+      "city_elite_apt_1_room": {
+        "displayName": "Кімната",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Кімната, квартира 1.",
+        "isLocked": false
+      },
+      "city_elite_apt_1_terrace": {
+        "displayName": "Тераса",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Тераса, квартира 1.",
+        "isLocked": false
+      },
+      "city_elite_apt_2_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня, квартира 2.",
+        "isLocked": false
+      },
+      "city_elite_apt_2_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна, квартира 2.",
+        "isLocked": false
+      },
+      "city_elite_apt_2_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал, квартира 2.",
+        "isLocked": false
+      },
+      "city_elite_apt_2_bedroom": {
+        "displayName": "Спальня Riley",
+        "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg",
+        "description": "Спальня, квартира Riley.",
+        "isLocked": false
+      },
+      "city_elite_apt_2_room": {
+        "displayName": "Кімната",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Кімната, квартира 2.",
+        "isLocked": false
+      },
+      "city_elite_apt_2_terrace": {
+        "displayName": "Тераса",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Тераса, квартира 2.",
+        "isLocked": false
+      },
+      "city_elite_apt_3_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня, квартира 3.",
+        "isLocked": false
+      },
+      "city_elite_apt_3_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна, квартира 3.",
+        "isLocked": false
+      },
+      "city_elite_apt_3_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал, квартира 3.",
+        "isLocked": false
+      },
+      "city_elite_apt_3_bedroom": {
+        "displayName": "Спальня Shalina",
+        "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg",
+        "description": "Спальня Shalina, квартира 3.",
+        "isLocked": false
+      },
+      "city_elite_apt_3_room": {
+        "displayName": "Кімната Zazie",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Кімната Zazie, квартира Shalina.",
+        "isLocked": false
+      },
+      "city_elite_apt_3_terrace": {
+        "displayName": "Кімната Geisha",
+        "imagePath": "lib/assets/location/houses/elit_gk.jpg",
+        "description": "Кімната Geisha (тераса), квартира Shalina.",
+        "isLocked": false
+      },
+      "city_elite_apt_4_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня, квартира 4.",
+        "isLocked": false
+      },
+      "city_elite_apt_4_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна, квартира 4.",
+        "isLocked": false
+      },
+      "city_elite_apt_4_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал, квартира 4.",
+        "isLocked": false
+      },
+      "city_elite_apt_4_bedroom": {
+        "displayName": "Спальня",
+        "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg",
+        "description": "Спальня, квартира 4.",
+        "isLocked": false
+      },
+      "city_elite_apt_4_room": {
+        "displayName": "Кімната",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Кімната, квартира 4.",
+        "isLocked": false
+      },
+      "city_elite_apt_4_sauna": {
+        "displayName": "Сауна",
+        "imagePath": "lib/assets/location/houses/gym.jpg",
+        "description": "Сауна, квартира 4.",
+        "isLocked": false
+      },
+      "city_elite_apt_5_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня, квартира 5.",
+        "isLocked": false
+      },
+      "city_elite_apt_5_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна, квартира 5.",
+        "isLocked": false
+      },
+      "city_elite_apt_5_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал, квартира 5.",
+        "isLocked": false
+      },
+      "city_elite_apt_5_bedroom": {
+        "displayName": "Спальня",
+        "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg",
+        "description": "Спальня, квартира 5.",
+        "isLocked": false
+      },
+      "city_elite_apt_5_room": {
+        "displayName": "Кімната",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Кімната, квартира 5.",
+        "isLocked": false
+      },
+      "city_elite_apt_5_pool": {
+        "displayName": "Басейн",
+        "imagePath": "lib/assets/location/home_gg/rooms/yard.webp",
+        "description": "Басейн, квартира 5.",
+        "isLocked": false
+      },
+      "city_elite_apt_6_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня, квартира 6.",
+        "isLocked": false
+      },
+      "city_elite_apt_6_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна, квартира 6.",
+        "isLocked": false
+      },
+      "city_elite_apt_6_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал, квартира 6.",
+        "isLocked": false
+      },
+      "city_elite_apt_6_bedroom": {
+        "displayName": "Спальня",
+        "imagePath": "lib/assets/location/home_gg/rooms/mom_room.jpg",
+        "description": "Спальня, квартира 6.",
+        "isLocked": false
+      },
+      "city_elite_apt_6_room": {
+        "displayName": "Кімната",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Кімната, квартира 6.",
+        "isLocked": false
+      },
+      "city_elite_apt_6_office": {
+        "displayName": "Офіс",
+        "imagePath": "lib/assets/location/college/rooms/office.jpg",
+        "description": "Офіс, квартира 6.",
+        "isLocked": false
+      },
+      "city_vip_gym": {
+        "displayName": "VIP тренажерний зал",
+        "imagePath": "lib/assets/location/houses/gym.jpg",
+        "description": "VIP тренажерний зал.",
+        "isLocked": false
+      },
+      "city_vip_gym_reception": {
+        "displayName": "Рецепція",
+        "imagePath": "lib/assets/location/houses/gym.jpg",
+        "description": "Рецепція VIP тренажерного залу.",
+        "isLocked": false
+      },
+      "city_vip_gym_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/houses/gym.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "city_vip_gym_wrestling": {
+        "displayName": "Секція боротьби",
+        "imagePath": "lib/assets/location/houses/gym.jpg",
+        "description": "Секція боротьби.",
+        "isLocked": false
+      },
+      "city_vip_gym_spa": {
+        "displayName": "Спа",
+        "imagePath": "lib/assets/location/houses/gym.jpg",
+        "description": "Спа.",
+        "isLocked": false
+      },
+      "city_vip_gym_sauna": {
+        "displayName": "Сауна",
+        "imagePath": "lib/assets/location/houses/gym.jpg",
+        "description": "Сауна.",
+        "isLocked": false
+      },
+      "city_vip_gym_massage": {
+        "displayName": "Массажний кабінет",
+        "imagePath": "lib/assets/location/houses/gym.jpg",
+        "description": "Массажний кабінет.",
+        "isLocked": false
+      }
     },
-    "cityRoomIds": ["city_business_center", "city_mall", "city_car_dealership", "city_park", "city_elite_residential", "city_vip_gym"],
-    "cityBusinessCenterRoomIds": ["city_bc_logistics", "city_bc_gleam_team", "city_bc_call_center", "city_bc_rockefeller_office"],
-    "cityGleamTeamRoomIds": ["city_bc_gleam_team_projects", "city_bc_gleam_team_cabinet"],
-    "cityLogisticsRoomIds": ["city_bc_logistics_boss_office"],
-    "cityMallRoomIds": ["city_mall_shop", "city_mall_pharmacy", "city_mall_gift_shop", "city_mall_sex_shop", "city_mall_electronics", "city_mall_cinema"],
-    "cityParkRoomIds": ["city_park_cafe", "city_park_coffee"],
-    "cityEliteResidentialRoomIds": ["city_elite_apt_1", "city_elite_apt_2", "city_elite_apt_3", "city_elite_apt_4", "city_elite_apt_5", "city_elite_apt_6"],
-    "cityVipGymRoomIds": ["city_vip_gym_reception", "city_vip_gym_hall", "city_vip_gym_wrestling", "city_vip_gym_spa", "city_vip_gym_sauna", "city_vip_gym_massage"],
-    "cityCarDealershipRoomIds": ["city_car_dealership_showroom", "city_car_dealership_workshop"]
+    "cityRoomIds": [
+      "city_business_center",
+      "city_mall",
+      "city_car_dealership",
+      "city_park",
+      "city_elite_residential",
+      "city_vip_gym"
+    ],
+    "cityBusinessCenterRoomIds": [
+      "city_bc_logistics",
+      "city_bc_gleam_team",
+      "city_bc_call_center",
+      "city_bc_rockefeller_office"
+    ],
+    "cityGleamTeamRoomIds": [
+      "city_bc_gleam_team_projects",
+      "city_bc_gleam_team_cabinet"
+    ],
+    "cityLogisticsRoomIds": [
+      "city_bc_logistics_boss_office"
+    ],
+    "cityMallRoomIds": [
+      "city_mall_shop",
+      "city_mall_pharmacy",
+      "city_mall_gift_shop",
+      "city_mall_sex_shop",
+      "city_mall_electronics",
+      "city_mall_cinema"
+    ],
+    "cityParkRoomIds": [
+      "city_park_cafe",
+      "city_park_coffee"
+    ],
+    "cityEliteResidentialRoomIds": [
+      "city_elite_apt_1",
+      "city_elite_apt_2",
+      "city_elite_apt_3",
+      "city_elite_apt_4",
+      "city_elite_apt_5",
+      "city_elite_apt_6"
+    ],
+    "cityVipGymRoomIds": [
+      "city_vip_gym_reception",
+      "city_vip_gym_hall",
+      "city_vip_gym_wrestling",
+      "city_vip_gym_spa",
+      "city_vip_gym_sauna",
+      "city_vip_gym_massage"
+    ],
+    "cityCarDealershipRoomIds": [
+      "city_car_dealership_showroom",
+      "city_car_dealership_workshop"
+    ]
   },
   "poorDistrict": {
     "rooms": {
-      "poor_district_overview": {"displayName": "Бідний р-н", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Бідний район.", "isLocked": false},
-      "poor_district_gym": {"displayName": "Качалка", "imagePath": "lib/assets/location/houses/old_gym.jpg", "description": "Качалка.", "isLocked": false},
-      "poor_district_shop": {"displayName": "Магазин", "imagePath": "lib/assets/location/houses/store.jpg", "description": "Магазин.", "isLocked": false},
-      "poor_district_strip_bar": {"displayName": "Стріп бар", "imagePath": "lib/assets/location/houses/strip_bar.jpg", "description": "Стріп бар.", "isLocked": false},
-      "poor_district_strip_bar_vip": {"displayName": "VIP зал", "imagePath": "lib/assets/location/houses/strip_bar.jpg", "description": "VIP зал стріп-бару.", "isLocked": false},
-      "poor_district_strip_bar_toilet": {"displayName": "Туалет", "imagePath": "lib/assets/location/houses/strip_bar.jpg", "description": "Туалет стріп-бару.", "isLocked": false},
-      "poor_district_dark_alley": {"displayName": "Темний провулок", "imagePath": "lib/assets/location/houses/dark_alley.jpg", "description": "Темний провулок.", "isLocked": false},
-      "poor_district_residential": {"displayName": "Спальні будинки", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Спальні будинки.", "isLocked": false},
-      "poor_district_residential_overview": {"displayName": "Спальні будинки", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Огляд будинків.", "isLocked": false},
-      "poor_district_house_1": {"displayName": "Бандери 1", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Бандери 1.", "isLocked": false},
-      "poor_district_h1_apt_1": {"displayName": "Квартира 1 — Luda", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 1, Бандери 1. Тут живе Luda.", "isLocked": false},
-      "poor_district_h1_apt_2": {"displayName": "Квартира 2 — Katrin", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 2, Бандери 1. Тут живе Katrin.", "isLocked": false},
-      "poor_district_h1_apt_3": {"displayName": "Квартира 3 — Peta", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 3, Бандери 1. Тут живе Peta.", "isLocked": false},
-      "poor_district_h1_a1_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_district_h1_a1_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_district_h1_a1_room_3": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
-      "poor_district_h1_a1_room_4": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня.", "isLocked": false},
-      "poor_district_h1_a2_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_district_h1_a2_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_district_h1_a2_room_3": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
-      "poor_district_h1_a2_room_4": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня.", "isLocked": false},
-      "poor_district_h1_a3_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_district_h1_a3_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_district_h1_a3_room_3": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
-      "poor_district_h1_a3_room_4": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня.", "isLocked": false},
-      "poor_district_h1_apt_4": {"displayName": "Квартира 4", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 4, Бандери 1.", "isLocked": false},
-      "poor_district_h1_a4_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_district_h1_a4_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_district_h1_a4_room_3": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
-      "poor_district_h1_a4_room_4": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня.", "isLocked": false},
-      "poor_district_house_2": {"displayName": "Бандери 2", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Будинок 2.", "isLocked": false},
-      "poor_district_h2_apt_1": {"displayName": "Квартира 1 — Kyler", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 1, Бандери 2. Тут живе Kyler.", "isLocked": false},
-      "poor_district_h2_apt_2": {"displayName": "Квартира 2", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 2, Бандери 2.", "isLocked": false},
-      "poor_district_h2_apt_3": {"displayName": "Квартира 3 — Foxy, Nikki", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 3, Бандери 2. Тут живуть Foxy та Nikki.", "isLocked": false},
-      "poor_district_h2_a1_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_district_h2_a1_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_district_h2_a1_room_3": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
-      "poor_district_h2_a1_room_4": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня.", "isLocked": false},
-      "poor_district_h2_a2_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_district_h2_a2_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_district_h2_a2_room_3": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
-      "poor_district_h2_a2_room_4": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня квартири 2, Бандери 2.", "isLocked": false},
-      "poor_district_h2_a3_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_district_h2_a3_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_district_h2_a3_room_3": {"displayName": "Кімната Nikki", "imagePath": "lib/assets/location/houses/rooms/nikki_room.jpg", "description": "Кімната Nikki, квартира 3, Бандери 2.", "isLocked": false},
-      "poor_district_h2_a3_room_4": {"displayName": "Кімната Foxy", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня квартири 3, Бандери 2. Тут живе Foxy.", "isLocked": false},
-      "poor_district_h2_apt_4": {"displayName": "Квартира 4", "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg", "description": "Квартира 4, Бандери 2.", "isLocked": false},
-      "poor_district_h2_a4_room_1": {"displayName": "Кухня", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_district_h2_a4_room_2": {"displayName": "Ванна", "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_district_h2_a4_room_3": {"displayName": "Зал", "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg", "description": "Зал.", "isLocked": false},
-      "poor_district_h2_a4_room_4": {"displayName": "Спальня", "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg", "description": "Спальня.", "isLocked": false},
-      "poor_district_hotel": {"displayName": "Готель", "imagePath": "lib/assets/location/houses/hotel.jpg", "description": "Готель.", "isLocked": false}
+      "poor_district_overview": {
+        "displayName": "Бідний р-н",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Бідний район.",
+        "isLocked": false
+      },
+      "poor_district_gym": {
+        "displayName": "Качалка",
+        "imagePath": "lib/assets/location/houses/old_gym.jpg",
+        "description": "Качалка.",
+        "isLocked": false
+      },
+      "poor_district_shop": {
+        "displayName": "Магазин",
+        "imagePath": "lib/assets/location/houses/store.jpg",
+        "description": "Магазин.",
+        "isLocked": false
+      },
+      "poor_district_strip_bar": {
+        "displayName": "Стріп бар",
+        "imagePath": "lib/assets/location/houses/strip_bar.jpg",
+        "description": "Стріп бар.",
+        "isLocked": false
+      },
+      "poor_district_strip_bar_vip": {
+        "displayName": "VIP зал",
+        "imagePath": "lib/assets/location/houses/strip_bar.jpg",
+        "description": "VIP зал стріп-бару.",
+        "isLocked": false
+      },
+      "poor_district_strip_bar_toilet": {
+        "displayName": "Туалет",
+        "imagePath": "lib/assets/location/houses/strip_bar.jpg",
+        "description": "Туалет стріп-бару.",
+        "isLocked": false
+      },
+      "poor_district_dark_alley": {
+        "displayName": "Темний провулок",
+        "imagePath": "lib/assets/location/houses/dark_alley.jpg",
+        "description": "Темний провулок.",
+        "isLocked": false
+      },
+      "poor_district_residential": {
+        "displayName": "Спальні будинки",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Спальні будинки.",
+        "isLocked": false
+      },
+      "poor_district_residential_overview": {
+        "displayName": "Спальні будинки",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Огляд будинків.",
+        "isLocked": false
+      },
+      "poor_district_house_1": {
+        "displayName": "Бандери 1",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Бандери 1.",
+        "isLocked": false
+      },
+      "poor_district_h1_apt_1": {
+        "displayName": "Квартира 1 — Luda",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Квартира 1, Бандери 1. Тут живе Luda.",
+        "isLocked": false
+      },
+      "poor_district_h1_apt_2": {
+        "displayName": "Квартира 2 — Flaxy",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Квартира 2, Бандери 1. Тут живе Flaxy.",
+        "isLocked": false
+      },
+      "poor_district_h1_apt_3": {
+        "displayName": "Квартира 3 — Peta",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Квартира 3, Бандери 1. Тут живе Peta.",
+        "isLocked": false
+      },
+      "poor_district_h1_a1_room_1": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_district_h1_a1_room_2": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_district_h1_a1_room_3": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_district_h1_a1_room_4": {
+        "displayName": "Спальня Luda",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Спальня.",
+        "isLocked": false
+      },
+      "poor_district_h1_a2_room_1": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_district_h1_a2_room_2": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_district_h1_a2_room_3": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_district_h1_a2_room_4": {
+        "displayName": "Спальня Flaxy",
+        "imagePath": "lib/assets/location/houses/ount_flaxy_badroom.jpeg",
+        "description": "Спальня Flaxy.",
+        "isLocked": false
+      },
+      "poor_district_h1_a3_room_1": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_district_h1_a3_room_2": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_district_h1_a3_room_3": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_district_h1_a3_room_4": {
+        "displayName": "Спальня Peta",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Спальня.",
+        "isLocked": false
+      },
+      "poor_district_h1_apt_4": {
+        "displayName": "Квартира 4",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Квартира 4, Бандери 1.",
+        "isLocked": false
+      },
+      "poor_district_h1_a4_room_1": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_district_h1_a4_room_2": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_district_h1_a4_room_3": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_district_h1_a4_room_4": {
+        "displayName": "Спальня",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Спальня.",
+        "isLocked": false
+      },
+      "poor_district_house_2": {
+        "displayName": "Бандери 2",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Будинок 2.",
+        "isLocked": false
+      },
+      "poor_district_h2_apt_1": {
+        "displayName": "Квартира 1 — Kyler",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Квартира 1, Бандери 2. Тут живе Kyler.",
+        "isLocked": false
+      },
+      "poor_district_h2_apt_2": {
+        "displayName": "Квартира 2",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Квартира 2, Бандери 2.",
+        "isLocked": false
+      },
+      "poor_district_h2_apt_3": {
+        "displayName": "Квартира 3 — Foxy, Nikki",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Квартира 3, Бандери 2. Тут живуть Foxy та Nikki.",
+        "isLocked": false
+      },
+      "poor_district_h2_a1_room_1": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_district_h2_a1_room_2": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_district_h2_a1_room_3": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_district_h2_a1_room_4": {
+        "displayName": "Спальня Kyler",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Спальня.",
+        "isLocked": false
+      },
+      "poor_district_h2_a2_room_1": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_district_h2_a2_room_2": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_district_h2_a2_room_3": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_district_h2_a2_room_4": {
+        "displayName": "Спальня",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Спальня квартири 2, Бандери 2.",
+        "isLocked": false
+      },
+      "poor_district_h2_a3_room_1": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_district_h2_a3_room_2": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_district_h2_a3_room_3": {
+        "displayName": "Кімната Nikki",
+        "imagePath": "lib/assets/location/houses/rooms/nikki_room.jpg",
+        "description": "Кімната Nikki, квартира 3, Бандери 2.",
+        "isLocked": false
+      },
+      "poor_district_h2_a3_room_4": {
+        "displayName": "Спальня Foxy",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Спальня квартири 3, Бандери 2. Тут живе Foxy.",
+        "isLocked": false
+      },
+      "poor_district_h2_apt_4": {
+        "displayName": "Квартира 4",
+        "imagePath": "lib/assets/location/houses/hrushchevki-spb.jpg",
+        "description": "Квартира 4, Бандери 2.",
+        "isLocked": false
+      },
+      "poor_district_h2_a4_room_1": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_district_h2_a4_room_2": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/home_gg/rooms/bathroom.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_district_h2_a4_room_3": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/home_gg/rooms/relax_room.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_district_h2_a4_room_4": {
+        "displayName": "Спальня",
+        "imagePath": "lib/assets/location/home_gg/rooms/room_gg.jpg",
+        "description": "Спальня.",
+        "isLocked": false
+      },
+      "poor_district_hotel": {
+        "displayName": "Готель",
+        "imagePath": "lib/assets/location/houses/hotel.jpg",
+        "description": "Готель.",
+        "isLocked": false
+      }
     },
-    "roomIds": ["poor_district_gym", "poor_district_shop", "poor_district_strip_bar", "poor_district_dark_alley", "poor_district_residential", "poor_district_hotel"],
-    "poorDistrictStripBarRoomIds": ["poor_district_strip_bar_vip", "poor_district_strip_bar_toilet"]
+    "roomIds": [
+      "poor_district_gym",
+      "poor_district_shop",
+      "poor_district_strip_bar",
+      "poor_district_dark_alley",
+      "poor_district_residential",
+      "poor_district_hotel"
+    ],
+    "poorDistrictStripBarRoomIds": [
+      "poor_district_strip_bar_vip",
+      "poor_district_strip_bar_toilet"
+    ]
   },
   "poorVillage": {
     "rooms": {
-      "poor_village_overview": {"displayName": "Мажорщина", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "Мажорщина.", "isLocked": false},
-      "poor_village_house_head_teacher": {"displayName": "ДІМ ДЕКАНА", "imagePath": "lib/assets/location/houses/zavuch.webp", "description": "Дім декана.", "isLocked": false},
-      "poor_village_house_katy": {"displayName": "Дім Blanche", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Дім Blanche.", "isLocked": false},
-      "poor_village_house_englishwoman": {"displayName": "Дім Amia", "imagePath": "lib/assets/location/houses/english_teach.jpg", "description": "Дім Amia.", "isLocked": false},
-      "poor_village_house_logistics_boss": {"displayName": "ДІМ НАЧАЛЬНИКА ЛОГІСТИЧНОЇ КОМПАНІЇ", "imagePath": "lib/assets/location/houses/chef_logist.webp", "description": "Дім начальника логістичної компанії.", "isLocked": false},
-      "poor_village_house_gift_shop_owner": {"displayName": "Будинок Cherie", "imagePath": "lib/assets/location/houses/flowers_chef.jpeg", "description": "Будинок Cherie.", "isLocked": false},
-      "poor_village_house_call_center_boss": {"displayName": "Дім Артура", "imagePath": "lib/assets/location/houses/loft5.jpg", "description": "Дім Artur, начальника колл-центру.", "isLocked": false},
-
-      "poor_village_head_teacher_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/rooms/dekan_kitchen.jpg", "description": "Кухня будинку декана.", "isLocked": false},
-      "poor_village_head_teacher_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/rooms/dekan_bath.webp", "description": "Ванна будинку декана.", "isLocked": false},
-      "poor_village_head_teacher_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/rooms/dekan_zal.jpg", "description": "Зал будинку декана.", "isLocked": false},
-      "poor_village_head_teacher_bedroom": {"displayName": "Спальня", "imagePath": "lib/assets/location/houses/rooms/dekan_bedroom.jpeg", "description": "Спальня декана.", "isLocked": false},
-      "poor_village_head_teacher_yard": {"displayName": "Двір", "imagePath": "lib/assets/location/houses/rooms/dekan_garden.jpg", "description": "Двір будинку декана.", "isLocked": false},
-      "poor_village_head_teacher_room": {"displayName": "Кімната Naomi", "imagePath": "lib/assets/location/houses/rooms/naomi_room.jpg", "description": "Кімната Naomi в будинку декана.", "isLocked": false},
-
-      "poor_village_katy_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/rooms/blanche_kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_village_katy_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/rooms/blanche_bath.webp", "description": "Ванна.", "isLocked": false},
-      "poor_village_katy_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/rooms/blanche_zal.jpg", "description": "Зал.", "isLocked": false},
-      "poor_village_katy_room_1": {"displayName": "Кімната Blanche", "imagePath": "lib/assets/location/houses/rooms/blanche_room.jpg", "description": "Кімната Blanche.", "isLocked": false},
-      "poor_village_katy_room_2": {"displayName": "Кімната Caprice", "imagePath": "lib/assets/location/houses/rooms/caprice_room.jpg", "description": "Кімната Caprice.", "isLocked": false},
-      "poor_village_katy_room_3": {"displayName": "Кімната 3", "imagePath": "lib/assets/location/houses/home_katia.jpg", "description": "Кімната.", "isLocked": false},
-
-      "poor_village_englishwoman_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/rooms/amia_kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_village_englishwoman_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/rooms/amia_bath.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_village_englishwoman_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/rooms/mia_zal.jpg", "description": "Зал.", "isLocked": false},
-      "poor_village_englishwoman_room_1": {"displayName": "Спальня Мія", "imagePath": "lib/assets/location/houses/rooms/mia_room.jpeg", "description": "Спальня Amia (Мія).", "isLocked": false},
-      "poor_village_englishwoman_room_2": {"displayName": "Кімната Cecilia", "imagePath": "lib/assets/location/houses/rooms/cecilia_room.jpg", "description": "Кімната Cecilia, дім Amia.", "isLocked": false},
-      "poor_village_englishwoman_room_3": {"displayName": "Спальня Тіффані", "imagePath": "lib/assets/location/houses/rooms/tiffani_room.png", "description": "Спальня Tiffany, дім Amia.", "isLocked": false},
-
-      "poor_village_logistics_boss_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/rooms/oleksandr_kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_village_logistics_boss_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/rooms/oleksandr_bath.webp", "description": "Ванна.", "isLocked": false},
-      "poor_village_logistics_boss_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/rooms/oleksandr_zal.png", "description": "Зал.", "isLocked": false},
-      "poor_village_logistics_boss_room_1": {"displayName": "Спальня", "imagePath": "lib/assets/location/houses/rooms/oleksandr_room.webp", "description": "Спальня Oleksandr та Hanna.", "isLocked": false},
-      "poor_village_logistics_boss_room_2": {"displayName": "Кімната Faye", "imagePath": "lib/assets/location/houses/rooms/faye_room.jpg", "description": "Кімната Faye.", "isLocked": false},
-      "poor_village_logistics_boss_room_3": {"displayName": "Кімната Den", "imagePath": "lib/assets/location/houses/rooms/den_room.jpg", "description": "Кімната Den.", "isLocked": false},
-
-      "poor_village_gift_shop_owner_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/npcs/cherie/kitchen.webp", "description": "Кухня.", "isLocked": false},
-      "poor_village_gift_shop_owner_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/npcs/cherie/cherie_bathroom.webp", "description": "Ванна.", "isLocked": false},
-      "poor_village_gift_shop_owner_hall": {"displayName": "Зал", "imagePath": "lib/assets/npcs/cherie/cherie_zal.jpg", "description": "Зал.", "isLocked": false},
-      "poor_village_gift_shop_owner_room_1": {"displayName": "Спальня Cherie", "imagePath": "lib/assets/npcs/cherie/cherie_room.png", "description": "Спальня Cherie, будинок Cherie.", "isLocked": false},
-      "poor_village_gift_shop_owner_room_2": {"displayName": "Кімната Anya", "imagePath": "lib/assets/npcs/cherie/anya_room.jpg", "description": "Кімната Anya, будинок Cherie.", "isLocked": false},
-      "poor_village_gift_shop_owner_room_3": {"displayName": "Кімната Adriana", "imagePath": "lib/assets/npcs/cherie/cherie_room_3.jpg", "description": "Кімната Adriana, будинок Cherie.", "isLocked": false},
-
-      "poor_village_call_center_boss_kitchen": {"displayName": "Кухня", "imagePath": "lib/assets/location/houses/rooms/artur_kitchen.jpg", "description": "Кухня.", "isLocked": false},
-      "poor_village_call_center_boss_bathroom": {"displayName": "Ванна", "imagePath": "lib/assets/location/houses/rooms/artur_bath.jpg", "description": "Ванна.", "isLocked": false},
-      "poor_village_call_center_boss_hall": {"displayName": "Зал", "imagePath": "lib/assets/location/houses/rooms/artur_zal.webp", "description": "Зал.", "isLocked": false},
-      "poor_village_call_center_boss_room_1": {"displayName": "Спальня", "imagePath": "lib/assets/location/houses/rooms/artoor_bedroom.jpeg", "description": "Спальня Artur та India.", "isLocked": false},
-      "poor_village_call_center_boss_room_2": {"displayName": "Кімната Emily", "imagePath": "lib/assets/location/houses/rooms/emily_room.jpg", "description": "Кімната Emily.", "isLocked": false},
-      "poor_village_call_center_boss_room_3": {"displayName": "Кімната Samantha", "imagePath": "lib/assets/location/houses/rooms/samantha_room.jpg", "description": "Кімната Samantha, дім Artur.", "isLocked": false}
+      "poor_village_overview": {
+        "displayName": "Мажорщина",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "Мажорщина.",
+        "isLocked": false
+      },
+      "poor_village_house_head_teacher": {
+        "displayName": "ДІМ ДЕКАНА",
+        "imagePath": "lib/assets/location/houses/zavuch.webp",
+        "description": "Дім декана.",
+        "isLocked": false
+      },
+      "poor_village_house_katy": {
+        "displayName": "Дім Blanche",
+        "imagePath": "lib/assets/location/houses/home_katia.jpg",
+        "description": "Дім Blanche.",
+        "isLocked": false
+      },
+      "poor_village_house_englishwoman": {
+        "displayName": "Дім Amia",
+        "imagePath": "lib/assets/location/houses/english_teach.jpg",
+        "description": "Дім Amia.",
+        "isLocked": false
+      },
+      "poor_village_house_logistics_boss": {
+        "displayName": "ДІМ НАЧАЛЬНИКА ЛОГІСТИЧНОЇ КОМПАНІЇ",
+        "imagePath": "lib/assets/location/houses/chef_logist.webp",
+        "description": "Дім начальника логістичної компанії.",
+        "isLocked": false
+      },
+      "poor_village_house_gift_shop_owner": {
+        "displayName": "Будинок Cherie",
+        "imagePath": "lib/assets/location/houses/flowers_chef.jpeg",
+        "description": "Будинок Cherie.",
+        "isLocked": false
+      },
+      "poor_village_house_call_center_boss": {
+        "displayName": "Дім Артура",
+        "imagePath": "lib/assets/location/houses/loft5.jpg",
+        "description": "Дім Artur, начальника колл-центру.",
+        "isLocked": false
+      },
+      "poor_village_head_teacher_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/houses/rooms/dekan_kitchen.jpg",
+        "description": "Кухня будинку декана.",
+        "isLocked": false
+      },
+      "poor_village_head_teacher_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/houses/rooms/dekan_bath.webp",
+        "description": "Ванна будинку декана.",
+        "isLocked": false
+      },
+      "poor_village_head_teacher_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/houses/rooms/dekan_zal.jpg",
+        "description": "Зал будинку декана.",
+        "isLocked": false
+      },
+      "poor_village_head_teacher_bedroom": {
+        "displayName": "Спальня Nicole",
+        "imagePath": "lib/assets/location/houses/rooms/dekan_bedroom.jpeg",
+        "description": "Спальня декана.",
+        "isLocked": false
+      },
+      "poor_village_head_teacher_yard": {
+        "displayName": "Двір",
+        "imagePath": "lib/assets/location/houses/rooms/dekan_garden.jpg",
+        "description": "Двір будинку декана.",
+        "isLocked": false
+      },
+      "poor_village_head_teacher_room": {
+        "displayName": "Кімната Naomi",
+        "imagePath": "lib/assets/location/houses/rooms/naomi_room.jpg",
+        "description": "Кімната Naomi в будинку декана.",
+        "isLocked": false
+      },
+      "poor_village_katy_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/houses/rooms/blanche_kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_village_katy_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/houses/rooms/blanche_bath.webp",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_village_katy_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/houses/rooms/blanche_zal.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_village_katy_room_1": {
+        "displayName": "Кімната Blanche",
+        "imagePath": "lib/assets/location/houses/rooms/blanche_room.jpg",
+        "description": "Кімната Blanche.",
+        "isLocked": false
+      },
+      "poor_village_katy_room_2": {
+        "displayName": "Кімната Caprice",
+        "imagePath": "lib/assets/location/houses/rooms/caprice_room.jpg",
+        "description": "Кімната Caprice.",
+        "isLocked": false
+      },
+      "poor_village_katy_room_3": {
+        "displayName": "Кімната 3",
+        "imagePath": "lib/assets/location/houses/home_katia.jpg",
+        "description": "Кімната.",
+        "isLocked": false
+      },
+      "poor_village_englishwoman_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/houses/rooms/amia_kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_village_englishwoman_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/houses/rooms/amia_bath.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_village_englishwoman_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/houses/rooms/mia_zal.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_village_englishwoman_room_1": {
+        "displayName": "Спальня Amia",
+        "imagePath": "lib/assets/location/houses/rooms/mia_room.jpeg",
+        "description": "Спальня Amia (Мія).",
+        "isLocked": false
+      },
+      "poor_village_englishwoman_room_2": {
+        "displayName": "Кімната Cecilia",
+        "imagePath": "lib/assets/location/houses/rooms/cecilia_room.jpg",
+        "description": "Кімната Cecilia, дім Amia.",
+        "isLocked": false
+      },
+      "poor_village_englishwoman_room_3": {
+        "displayName": "Спальня Tiffany",
+        "imagePath": "lib/assets/location/houses/rooms/tiffani_room.png",
+        "description": "Спальня Tiffany, дім Amia.",
+        "isLocked": false
+      },
+      "poor_village_logistics_boss_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/houses/rooms/oleksandr_kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_village_logistics_boss_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/houses/rooms/oleksandr_bath.webp",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_village_logistics_boss_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/houses/rooms/oleksandr_zal.png",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_village_logistics_boss_room_1": {
+        "displayName": "Спальня Oleksandr",
+        "imagePath": "lib/assets/location/houses/rooms/oleksandr_room.webp",
+        "description": "Спальня Oleksandr та Hanna.",
+        "isLocked": false
+      },
+      "poor_village_logistics_boss_room_2": {
+        "displayName": "Кімната Faye",
+        "imagePath": "lib/assets/location/houses/rooms/faye_room.jpg",
+        "description": "Кімната Faye.",
+        "isLocked": false
+      },
+      "poor_village_logistics_boss_room_3": {
+        "displayName": "Кімната Den",
+        "imagePath": "lib/assets/location/houses/rooms/den_room.jpg",
+        "description": "Кімната Den.",
+        "isLocked": false
+      },
+      "poor_village_gift_shop_owner_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/npcs/cherie/kitchen.webp",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_village_gift_shop_owner_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/npcs/cherie/cherie_bathroom.webp",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_village_gift_shop_owner_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/npcs/cherie/cherie_zal.jpg",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_village_gift_shop_owner_room_1": {
+        "displayName": "Спальня Cherie",
+        "imagePath": "lib/assets/npcs/cherie/cherie_room.png",
+        "description": "Спальня Cherie, будинок Cherie.",
+        "isLocked": false
+      },
+      "poor_village_gift_shop_owner_room_2": {
+        "displayName": "Кімната Anya",
+        "imagePath": "lib/assets/npcs/cherie/anya_room.jpg",
+        "description": "Кімната Anya, будинок Cherie.",
+        "isLocked": false
+      },
+      "poor_village_gift_shop_owner_room_3": {
+        "displayName": "Кімната Adriana",
+        "imagePath": "lib/assets/npcs/cherie/cherie_room_3.jpg",
+        "description": "Кімната Adriana, будинок Cherie.",
+        "isLocked": false
+      },
+      "poor_village_call_center_boss_kitchen": {
+        "displayName": "Кухня",
+        "imagePath": "lib/assets/location/houses/rooms/artur_kitchen.jpg",
+        "description": "Кухня.",
+        "isLocked": false
+      },
+      "poor_village_call_center_boss_bathroom": {
+        "displayName": "Ванна",
+        "imagePath": "lib/assets/location/houses/rooms/artur_bath.jpg",
+        "description": "Ванна.",
+        "isLocked": false
+      },
+      "poor_village_call_center_boss_hall": {
+        "displayName": "Зал",
+        "imagePath": "lib/assets/location/houses/rooms/artur_zal.webp",
+        "description": "Зал.",
+        "isLocked": false
+      },
+      "poor_village_call_center_boss_room_1": {
+        "displayName": "Спальня Artur",
+        "imagePath": "lib/assets/location/houses/rooms/artoor_bedroom.jpeg",
+        "description": "Спальня Artur та India.",
+        "isLocked": false
+      },
+      "poor_village_call_center_boss_room_2": {
+        "displayName": "Кімната Emily",
+        "imagePath": "lib/assets/location/houses/rooms/emily_room.jpg",
+        "description": "Кімната Emily.",
+        "isLocked": false
+      },
+      "poor_village_call_center_boss_room_3": {
+        "displayName": "Кімната Samantha",
+        "imagePath": "lib/assets/location/houses/rooms/samantha_room.jpg",
+        "description": "Кімната Samantha, дім Artur.",
+        "isLocked": false
+      }
     },
-    "roomIds": ["poor_village_house_head_teacher", "poor_village_house_katy", "poor_village_house_englishwoman", "poor_village_house_logistics_boss", "poor_village_house_gift_shop_owner", "poor_village_house_call_center_boss"]
+    "roomIds": [
+      "poor_village_house_head_teacher",
+      "poor_village_house_katy",
+      "poor_village_house_englishwoman",
+      "poor_village_house_logistics_boss",
+      "poor_village_house_gift_shop_owner",
+      "poor_village_house_call_center_boss"
+    ]
   },
   "outOfTown": {
     "rooms": {
-      "out_of_town_overview": {"displayName": "На море", "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg", "description": "На море.", "isLocked": false},
-      "out_of_town_promenade": {"displayName": "Набережна", "imagePath": "lib/assets/location/houses/naberezhna-alikante.jpeg", "description": "Набережна.", "isLocked": false},
-      "out_of_town_beach": {"displayName": "Пляж", "imagePath": "lib/assets/location/houses/plyagh.jpg", "description": "Пляж.", "isLocked": false},
-      "out_of_town_club": {"displayName": "Клуб", "imagePath": "lib/assets/location/houses/club.jpg", "description": "Клуб.", "isLocked": false},
-      "out_of_town_club_bar": {"displayName": "Бар", "imagePath": "lib/assets/location/houses/club.jpg", "description": "Бар у клубі.", "isLocked": false},
-      "out_of_town_club_toilet": {"displayName": "Туалет", "imagePath": "lib/assets/location/houses/club.jpg", "description": "Туалет у клубі.", "isLocked": false},
-      "out_of_town_pier": {"displayName": "Пристань", "imagePath": "lib/assets/location/houses/titulnaja.jpg", "description": "Пристань.", "isLocked": false}
+      "out_of_town_overview": {
+        "displayName": "На море",
+        "imagePath": "lib/assets/location/home_gg/rooms/kitchen.jpg",
+        "description": "На море.",
+        "isLocked": false
+      },
+      "out_of_town_promenade": {
+        "displayName": "Набережна",
+        "imagePath": "lib/assets/location/houses/naberezhna-alikante.jpeg",
+        "description": "Набережна.",
+        "isLocked": false
+      },
+      "out_of_town_beach": {
+        "displayName": "Пляж",
+        "imagePath": "lib/assets/location/houses/plyagh.jpg",
+        "description": "Пляж.",
+        "isLocked": false
+      },
+      "out_of_town_club": {
+        "displayName": "Клуб",
+        "imagePath": "lib/assets/location/houses/club.jpg",
+        "description": "Клуб.",
+        "isLocked": false
+      },
+      "out_of_town_club_bar": {
+        "displayName": "Бар",
+        "imagePath": "lib/assets/location/houses/club.jpg",
+        "description": "Бар у клубі.",
+        "isLocked": false
+      },
+      "out_of_town_club_toilet": {
+        "displayName": "Туалет",
+        "imagePath": "lib/assets/location/houses/club.jpg",
+        "description": "Туалет у клубі.",
+        "isLocked": false
+      },
+      "out_of_town_pier": {
+        "displayName": "Пристань",
+        "imagePath": "lib/assets/location/houses/titulnaja.jpg",
+        "description": "Пристань.",
+        "isLocked": false
+      }
     },
-    "roomIds": ["out_of_town_promenade", "out_of_town_beach", "out_of_town_club", "out_of_town_pier"],
-    "outOfTownClubRoomIds": ["out_of_town_club_bar", "out_of_town_club_toilet"]
+    "roomIds": [
+      "out_of_town_promenade",
+      "out_of_town_beach",
+      "out_of_town_club",
+      "out_of_town_pier"
+    ],
+    "outOfTownClubRoomIds": [
+      "out_of_town_club_bar",
+      "out_of_town_club_toilet"
+    ]
   },
   "office": {
     "rooms": {
-      "office": {"displayName": "Офіс", "imagePath": "assets/rooms/office.jpg", "description": "Робочий простір.", "isLocked": false},
-      "mom_office": {"displayName": "Камера в офісі мами", "imagePath": "lib/assets/location/biznes_centr/logistic/cab_mom.jpg", "description": "Прихована камера в кабінеті мами.", "isLocked": false}
+      "office": {
+        "displayName": "Офіс",
+        "imagePath": "assets/rooms/office.jpg",
+        "description": "Робочий простір.",
+        "isLocked": false
+      },
+      "mom_office": {
+        "displayName": "Камера в офісі мами",
+        "imagePath": "lib/assets/location/biznes_centr/logistic/cab_mom.jpg",
+        "description": "Прихована камера в кабінеті мами.",
+        "isLocked": false
+      }
     }
   }
 }

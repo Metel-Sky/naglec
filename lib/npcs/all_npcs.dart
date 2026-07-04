@@ -37,7 +37,7 @@ import 'blanche/blanche_npc.dart';
 import 'zazie/zazie_npc.dart';
 import 'geisha/geisha_npc.dart';
 import 'foxy/foxy_npc.dart';
-import 'katrin/katrin_npc.dart';
+// import 'katrin/katrin_npc.dart'; // NPC визначено в lib/npcs/katrin/, тимчасово не в грі
 import 'caprice/caprice_npc.dart';
 import 'peta/peta_npc.dart';
 import 'jennifer/jennifer_npc.dart';
@@ -90,7 +90,7 @@ List<NPCModel> createAllNpcs() {
     createZazieNpc(),
     createGeishaNpc(),
     createFoxyNpc(),
-    createKatrinNpc(),
+    // createKatrinNpc(), // тимчасово не в грі — див. lib/npcs/katrin/katrin_npc.dart
     createCapriceNpc(),
     createPetaNpc(),
     createJenniferNpc(),

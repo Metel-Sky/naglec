@@ -5,8 +5,13 @@ import '../services/npc_service.dart';
 import '../services/service_locator.dart';
 import '../models/npc_model.dart';
 import '../models/room_models.dart';
+import '../npcs/juniper/juniper_npc.dart';
+import '../npcs/sem/sem_juniper_room_intro.dart';
+import '../npcs/sem/sem_juniper_evening_visits.dart';
 import '../services/game_time_controller.dart';
+import '../services/game_world_state.dart';
 import '../widgets/room_npc_scene_template.dart';
+import '../widgets/video_scene_widget.dart';
 
 class StreetView extends StatelessWidget {
   /// Якщо не null — ми всередині одного з 4 будинків (показуємо 9 слотів як у домі гг)
@@ -22,9 +27,15 @@ class StreetView extends StatelessWidget {
   /// Під час авто-сцени — без растру NPC у кімнаті, лише фон.
   final bool suppressRoomNpcRaster;
 
+  /// Вечірній кліп Juniper (1 раз на добу) — лише на поточному заході в кімнату.
+  final bool semJuniperEveningClipShowOnThisVisit;
+
   /// Екран «біля дверей» дому кориша (лише фото; кнопки — у локаційному меню).
   final bool friendHouseStreetFacade;
   final ValueChanged<bool> onFriendHouseStreetFacadeChanged;
+
+  /// Сцена intro Alex ↔ Juniper у кімнаті Sem (відео через [StreetView], не EventInteractionOverlay).
+  final bool semJuniperIntroActive;
 
   const StreetView({
     super.key,
@@ -37,6 +48,8 @@ class StreetView extends StatelessWidget {
     required this.onNPCTap,
     this.selectedNpcIdInRoom,
     this.suppressRoomNpcRaster = false,
+    this.semJuniperEveningClipShowOnThisVisit = false,
+    this.semJuniperIntroActive = false,
     required this.friendHouseStreetFacade,
     required this.onFriendHouseStreetFacadeChanged,
   });
@@ -93,9 +106,79 @@ class StreetView extends StatelessWidget {
 
   Widget _buildRoomContent(RoomData? roomData) {
     final npcService = sl<NPCService>();
+    final world = sl<GameWorldState>();
+    final dateKey = timeController.onlyDate;
     final h = timeController.dateTime.hour;
     final day = timeController.weekdayIndex;
     final dt = timeController.dateTime;
+    final roomNorm = LocationsData.migrateLegacyRoomId(currentRoom);
+
+    final candidates = suppressRoomNpcRaster
+        ? <({NPCModel npc, SchedulePoint point})>[]
+        : npcService.getCandidatesInRoom(currentRoom, h, day);
+
+    final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
+
+    if (semJuniperIntroActive &&
+        currentStreetHouse == LocationsData.friendHouse &&
+        roomNorm == LocationsData.friendRoom) {
+      return ClipRRect(
+        borderRadius:
+            BorderRadius.circular(RoomNpcSceneTemplate.defaultClipRadius),
+        child: VideoSceneWidget(
+          videoPath: SemJuniperRoomIntro.videoPath,
+          loop: true,
+          fallbackImagePath: roomData?.imagePath,
+        ),
+      );
+    }
+
+    if (semJuniperEveningClipShowOnThisVisit &&
+        currentStreetHouse == LocationsData.friendHouse) {
+      final visitRoom = SemJuniperEveningVisits.visitRoomId(dateKey);
+      if (visitRoom != null && visitRoom == roomNorm) {
+        final clip = SemJuniperEveningVisits.dailyClipPath(dateKey, visitRoom);
+        NPCModel? juniperNpc;
+        for (final c in candidates) {
+          if (c.npc.id == kJuniperNpcId) {
+            juniperNpc = c.npc;
+            break;
+          }
+        }
+        return GestureDetector(
+          onTap: () {
+            if (juniperNpc != null) onNPCTap(juniperNpc);
+          },
+          child: ClipRRect(
+            borderRadius:
+                BorderRadius.circular(RoomNpcSceneTemplate.defaultClipRadius),
+            child: RoomNpcSceneTemplate.layerBackground(
+              clip,
+              fallbackImagePath: roomData?.imagePath,
+            ),
+          ),
+        );
+      }
+    }
+
+    if (!suppressRoomNpcRaster &&
+        SemJuniperEveningVisits.isSemJuniperDualAvatarRoom(
+          world: world,
+          gameDateKey: dateKey,
+          weekdayIndex: day,
+          hour: h,
+          roomId: roomNorm,
+        )) {
+      // Лише фон кімнати — Sem і Juniper у лівій смузі ([MainGameNpcAvatarStrip]).
+      return ClipRRect(
+        borderRadius:
+            BorderRadius.circular(RoomNpcSceneTemplate.defaultClipRadius),
+        child: RoomNpcSceneTemplate.layerBackground(
+          bg,
+          fallbackImagePath: roomData?.imagePath,
+        ),
+      );
+    }
 
     var chosen = NpcRoomScenePicker.pickDisplayedNpc(
       npcService: npcService,
@@ -107,7 +190,33 @@ class StreetView extends StatelessWidget {
     );
     if (suppressRoomNpcRaster) chosen = null;
 
-    final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
+    String? specialBackground;
+    NPCModel? activeNpc;
+    if (chosen != null) {
+      final sp = chosen.point.spritePath.trim();
+      if (sp.isNotEmpty && NpcRoomScenePicker.isVideoAssetPath(sp)) {
+        specialBackground = sp;
+        activeNpc = chosen.npc;
+      }
+    }
+
+    final finalMedia = specialBackground ?? bg;
+    if (NpcRoomScenePicker.isVideoAssetPath(finalMedia)) {
+      return GestureDetector(
+        onTap: () {
+          if (activeNpc != null) onNPCTap(activeNpc);
+        },
+        child: ClipRRect(
+          borderRadius:
+              BorderRadius.circular(RoomNpcSceneTemplate.defaultClipRadius),
+          child: RoomNpcSceneTemplate.layerBackground(
+            finalMedia,
+            fallbackImagePath: roomData?.imagePath,
+          ),
+        ),
+      );
+    }
+
     final npcRaster = chosen == null
         ? null
         : NpcRoomScenePicker.npcRasterOverlayPath(chosen.npc, chosen.point);

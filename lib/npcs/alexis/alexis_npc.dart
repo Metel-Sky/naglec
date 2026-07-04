@@ -14,7 +14,7 @@ NPCModel createAlexisNpc() {
     fullName: 'Alexis',
     status: 'Тітка',
     biographyType:
-        'Старша сестра Cory, мамина тітка для ГG. Живе у власному будинку на вул. Шевченка і виховує доньку.',
+        'Старша сестра Cory, мамина тітка для ГG. Живе у власному будинку на вул. Шевченка.',
     age: 42,
     galleryPortraitPath: kAlexisGalleryPortraitPath,
     avatarPath: kAlexisAvatarPath,

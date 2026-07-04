@@ -6,6 +6,8 @@ import '../npcs/piper/piper_quests.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/danielle/danielle_spy_parents_quest.dart';
 import '../npcs/sem/sem_events.dart';
+import '../npcs/sem/sem_quests.dart';
+import '../npcs/juniper/juniper_npc.dart';
 import '../models/item_model.dart';
 import '../models/npc_model.dart';
 import '../services/game_world_state.dart';
@@ -373,6 +375,17 @@ abstract final class NpcQuestCheats {
           PiperQuest001.applyCheatGgPunishment(world: world);
         } else {
           PiperQuest001.resetCheatGgPunishment(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperIntro:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          final dateKey = sl<GameTimeController>().onlyDate;
+          SemQuest001.applyIntroDebugReady(world, dateKey);
+          profileNpc.setVar('phone_unlocked', false);
+        } else {
+          SemQuest001.resetIntroDebugArc(world);
+          profileNpc.setVar('phone_unlocked', false);
         }
         break;
     }

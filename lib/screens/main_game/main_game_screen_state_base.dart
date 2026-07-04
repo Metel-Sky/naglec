@@ -94,6 +94,15 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
 
   String? get _eventVideoPath => _ui.eventVideoPath;
   set _eventVideoPath(String? v) => _ui.setEventVideoPath(v);
+
+  /// Відео intro Juniper — у [StreetView] через [VideoSceneWidget], не тут.
+  String? get _overlayEventVideoPath {
+    final path = _eventVideoPath;
+    if (path == null) return null;
+    if (SemJuniperRoomIntro.ownsEventVideo(path)) return null;
+    return path;
+  }
+
   VoidCallback? get _eventVideoOnComplete => _ui.eventVideoOnComplete;
   set _eventVideoOnComplete(VoidCallback? v) => _ui.setEventVideoOnComplete(v);
   String? get _eventVideoPendingButton => _ui.eventVideoPendingButton;
@@ -244,12 +253,20 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
 
   /// sem_quest_001: діалог «про дівчат» на фасаді.
   bool _semGirlsTalkActive = false;
+  /// sem_quest_001: підрозділ «про сестру» під час розмови «про дівчат».
+  bool _semGirlsSisterTalkActive = false;
+  /// sem_quest_001: підрозділ «натякнути шукати дівчину».
+  bool _semGirlsHintTalkActive = false;
 
-  /// sem_quest_001: follow-up «як справи з дівчиною» на фасаді.
+  /// sem_quest_001: follow-up «ну шо, знайшов когось?» на фасаді.
   bool _semGirlsFollowUpActive = false;
 
   /// sem_quest_001: сцена знайомства з Juniper у кімнаті Sem.
   bool _semJuniperIntroUiActive = false;
+  bool _semJuniperIntroSkippedPath = false;
+
+  /// sem_quest_001: показати вечірній кліп Juniper при цьому заході в кімнату (1 раз/добу).
+  bool _semJuniperEveningClipShowOnThisVisit = false;
 
   /// Картинка + діалог «spyOnSemParents» біля кімнати батьків.
   bool _spyOnSemParentsUiActive = false;
@@ -468,10 +485,15 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     final p = _playerStats.player;
     if (p.energy >= 50) {
       if (mounted) {
+        final snackWidth = MediaQuery.sizeOf(context).width / 3;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(sl<LocaleController>().t('room_sleep_not_tired')),
+            content: Text(
+              sl<LocaleController>().t('room_sleep_not_tired'),
+              textAlign: TextAlign.center,
+            ),
             behavior: SnackBarBehavior.floating,
+            width: snackWidth,
           ),
         );
       }
@@ -526,11 +548,16 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
 
   void _finishSemJuniperIntro() {
     if (!mounted) return;
-    SemQuest001.markJuniperMet(_worldState);
+    SemJuniperRoomIntro.markComplete(
+      _worldState,
+      sl<GameTimeController>().onlyDate,
+      skippedFacadePath: _semJuniperIntroSkippedPath,
+    );
     final juniper = sl<NPCService>().npcById(kJuniperNpcId);
     juniper?.setVar('phone_unlocked', true);
     setState(() {
       _semJuniperIntroUiActive = false;
+      _semJuniperIntroSkippedPath = false;
       _ui.setEventImagePath(null);
       newsMessage = LocationsData.getLocationDisplayName(
         LocationsData.friendRoom,
@@ -668,6 +695,25 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     final candidates = npcService.getCandidatesInRoom(currentRoom, hour, day);
     if (candidates.isEmpty) return [];
     if (candidates.length == 1) return [candidates.first.npc];
+    if (currentStreetHouse == LocationsData.friendHouse &&
+        (currentRoom == LocationsData.friendKitchen ||
+            currentRoom == LocationsData.friendRoom)) {
+      final ordered = <NPCModel>[];
+      for (final id in [kSemNpcId, kJuniperNpcId]) {
+        for (final c in candidates) {
+          if (c.npc.id == id) {
+            ordered.add(c.npc);
+            break;
+          }
+        }
+      }
+      for (final c in candidates) {
+        if (c.npc.id != kSemNpcId && c.npc.id != kJuniperNpcId) {
+          ordered.add(c.npc);
+        }
+      }
+      if (ordered.isNotEmpty) return ordered;
+    }
     if (currentRoom == LocationsData.cityEliteApartment2Bedroom) {
       final ordered = <NPCModel>[];
       for (final id in ['lana', 'riley']) {

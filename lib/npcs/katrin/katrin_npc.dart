@@ -6,7 +6,8 @@ const String kKatrinGalleryPortraitPath = 'lib/assets/npcs/katrin/katrin.jpg';
 const String kKatrinAvatarPath = 'lib/assets/npcs/katrin/katrin_ava.png';
 
 /// Katrin — мешканка бідного району, Бандери 1, кв. 2.
-/// Тимчасовий розклад: вдень — випадкова кімната; вночі — спальня (детальний графік — пізніше).
+/// Тимчасово не в грі: не реєструється в [createAllNpcs] (lib/npcs/all_npcs.dart).
+/// Квартиру зайняла Flaxy.
 NPCModel createKatrinNpc() {
   return NPCModel(
     id: 'katrin',

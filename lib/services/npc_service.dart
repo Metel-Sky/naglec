@@ -7,6 +7,8 @@ import '../data/poor_district/poor_district_house_2.dart';
 import '../models/npc_model.dart';
 import '../npcs/all_npcs.dart';
 import '../npcs/juniper/juniper_npc.dart';
+import '../npcs/sem/sem_npc.dart' show kSemAvatarPath;
+import '../npcs/sem/sem_juniper_evening_visits.dart';
 import '../npcs/sem/sem_quests.dart';
 import 'cherie_quest002_location_pin.dart';
 import 'cherie_quest004_location_pin.dart';
@@ -95,7 +97,8 @@ class NPCService {
   static const String _flaxyNpcId = 'flaxy';
   static const String _alyssaNpcId = 'alyssa';
   static const String _candeeNpcId = 'candee';
-  static const String _katrinNpcId = 'katrin';
+  // Katrin тимчасово не в грі (createAllNpcs).
+  // static const String _katrinNpcId = 'katrin';
   static const String _kylerNpcId = 'kyler';
   static const String _rileyNpcId = 'riley';
 
@@ -130,12 +133,10 @@ class NPCService {
   }
 
   static const List<String> _flaxyHomeRoomIds = [
-    LocationsData.auntKitchen,
-    LocationsData.auntRoom,
-    LocationsData.auntBathroom,
-    LocationsData.auntGuestRoom,
-    LocationsData.auntNieceRoom,
-    LocationsData.auntHall,
+    PoorDistrictHouse1.rA2_1,
+    PoorDistrictHouse1.rA2_2,
+    PoorDistrictHouse1.rA2_3,
+    PoorDistrictHouse1.rA2_4,
   ];
 
   static String _flaxyHomeRoom(int weekdayIndex, int hour) {
@@ -174,18 +175,19 @@ class NPCService {
     return _candeeHomeRoomIds[i];
   }
 
-  static const List<String> _katrinHomeRoomIds = [
-    PoorDistrictHouse1.rA2_1,
-    PoorDistrictHouse1.rA2_2,
-    PoorDistrictHouse1.rA2_3,
-    PoorDistrictHouse1.rA2_4,
-  ];
-
-  static String _katrinHomeRoom(int weekdayIndex, int hour) {
-    final seed = (weekdayIndex * 24 + hour) * 31 + 'katrin_home'.hashCode;
-    final i = Random(seed).nextInt(_katrinHomeRoomIds.length);
-    return _katrinHomeRoomIds[i];
-  }
+  // Katrin тимчасово не в грі (createAllNpcs).
+  // static const List<String> _katrinHomeRoomIds = [
+  //   PoorDistrictHouse1.rA2_1,
+  //   PoorDistrictHouse1.rA2_2,
+  //   PoorDistrictHouse1.rA2_3,
+  //   PoorDistrictHouse1.rA2_4,
+  // ];
+  //
+  // static String _katrinHomeRoom(int weekdayIndex, int hour) {
+  //   final seed = (weekdayIndex * 24 + hour) * 31 + 'katrin_home'.hashCode;
+  //   final i = Random(seed).nextInt(_katrinHomeRoomIds.length);
+  //   return _katrinHomeRoomIds[i];
+  // }
 
   static const List<String> _kylerHomeRoomIds = [
     PoorDistrictHouse2.rA1_1,
@@ -459,6 +461,23 @@ class NPCService {
     }
     if (npc.id == kJuniperNpcId) {
       final world = sl<GameWorldState>();
+      final dateKey = sl<GameTimeController>().onlyDate;
+      if (SemJuniperEveningVisits.isActive(
+        world,
+        dateKey,
+        effectiveDay,
+        hour,
+      )) {
+        return SemJuniperEveningVisits.visitRoomId(dateKey);
+      }
+      if (SemJuniperEarlyVisits.isActive(
+        world,
+        dateKey,
+        effectiveDay,
+        hour,
+      )) {
+        return SemJuniperEveningVisits.visitRoomId(dateKey);
+      }
       if (!SemQuest001.isJuniperVisibleInWorld(world)) return null;
       final sem = npcById(_semNpcId);
       if (sem == null) return null;
@@ -467,6 +486,18 @@ class NPCService {
         return LocationsData.friendRoom;
       }
       return null;
+    }
+    if (npc.id == _semNpcId) {
+      final world = sl<GameWorldState>();
+      final dateKey = sl<GameTimeController>().onlyDate;
+      if (SemJuniperEveningVisits.isActive(
+        world,
+        dateKey,
+        effectiveDay,
+        hour,
+      )) {
+        return SemJuniperEveningVisits.visitRoomId(dateKey);
+      }
     }
     final gameMinute = sl<GameTimeController>().dateTime.minute;
     if (_weekdayCollegeToilet1230SemDenLoshok(
@@ -554,7 +585,7 @@ class NPCService {
         return _lexiHomeRoom(effectiveDay, hour);
       }
       if (npc.id == _flaxyNpcId &&
-          best.location == LocationsData.auntHomeFlaxyRoam) {
+          best.location == LocationsData.poorDistrictH1Apt2FlaxyRoam) {
         return _flaxyHomeRoom(effectiveDay, hour);
       }
       if (npc.id == _alyssaNpcId &&
@@ -565,10 +596,11 @@ class NPCService {
           best.location == LocationsData.classmateHomeCandeeRoam) {
         return _candeeHomeRoom(effectiveDay, hour);
       }
-      if (npc.id == _katrinNpcId &&
-          best.location == LocationsData.poorDistrictH1Apt2KatrinRoam) {
-        return _katrinHomeRoom(effectiveDay, hour);
-      }
+      // Katrin тимчасово не в грі (createAllNpcs).
+      // if (npc.id == _katrinNpcId &&
+      //     best.location == LocationsData.poorDistrictH1Apt2KatrinRoam) {
+      //   return _katrinHomeRoom(effectiveDay, hour);
+      // }
       if (npc.id == _kylerNpcId &&
           best.location == LocationsData.poorDistrictH2Apt1KylerRoam) {
         return _kylerHomeRoom(effectiveDay, hour);
@@ -585,21 +617,6 @@ class NPCService {
       weekdayIndex: effectiveDay,
       hour: hour,
     );
-  }
-
-  /// Sem на годинах 8–22 у кімнаті дому кориша (фасад «покликати»).
-  bool isSemAtFriendHouseForDoorSummon(int hour, int weekdayIndex) {
-    if (hour < 8 || hour > 22) return false;
-    NPCModel? sem;
-    for (final n in allNPCs) {
-      if (n.id == _semNpcId) {
-        sem = n;
-        break;
-      }
-    }
-    if (sem == null) return false;
-    final loc = getCurrentLocationId(sem, hour, weekdayIndex);
-    return LocationsData.isFriendHouseInteriorRoom(loc);
   }
 
   /// Точка розкладу для UI (спрайт/підпис), коли [getCurrentLocationId] уже збігся з [roomName].
@@ -631,6 +648,108 @@ class NPCService {
     final sondoxSleepPoint = _sondoxSleepPoint(npc, hour);
     if (sondoxSleepPoint != null && sondoxSleepPoint.location == normRoom) {
       return sondoxSleepPoint;
+    }
+
+    if (npc.id == kJuniperNpcId) {
+      final world = sl<GameWorldState>();
+      final dateKey = sl<GameTimeController>().onlyDate;
+      if (SemJuniperEarlyVisits.isActive(
+        world,
+        dateKey,
+        effectiveDay,
+        hour,
+      )) {
+        final visitRoom = SemJuniperEveningVisits.visitRoomId(dateKey);
+        if (visitRoom != null && visitRoom == normRoom) {
+          return SchedulePoint(
+            hourStart: SemJuniperEveningVisits.visitHourStart,
+            hourEnd: SemJuniperEveningVisits.visitHourEnd,
+            location: visitRoom,
+            actionLabel: visitRoom == LocationsData.friendKitchen
+                ? 'На кухні'
+                : 'У кімнаті Sem',
+            spritePath: npc.avatarPath ?? '',
+            days: SemJuniperEveningVisits.week1Weekdays,
+          );
+        }
+      }
+      if (SemJuniperEveningVisits.isActive(
+        world,
+        dateKey,
+        effectiveDay,
+        hour,
+      )) {
+        final visitRoom = SemJuniperEveningVisits.visitRoomId(dateKey);
+        if (visitRoom != null && visitRoom == normRoom) {
+          final showClip =
+              !SemJuniperEveningVisits.isClipShownToday(world, dateKey);
+          return SchedulePoint(
+            hourStart: SemJuniperEveningVisits.visitHourStart,
+            hourEnd: SemJuniperEveningVisits.visitHourEnd,
+            location: visitRoom,
+            actionLabel: visitRoom == LocationsData.friendKitchen
+                ? 'На кухні'
+                : 'У кімнаті Sem',
+            spritePath: showClip
+                ? SemJuniperEveningVisits.dailyClipPath(dateKey, visitRoom)
+                : (npc.avatarPath ?? ''),
+            days: SemJuniperEveningVisits.weekdaysForWeek(
+              SemJuniperEveningVisits.datingWeekIndex(world, dateKey)!,
+            ),
+          );
+        }
+      }
+      if (normRoom == LocationsData.friendRoom &&
+          SemQuest001.isJuniperVisibleInWorld(world)) {
+        final av = npc.avatarPath ?? '';
+        if (av.isNotEmpty) {
+          return SchedulePoint(
+            hourStart: 0,
+            hourEnd: 23,
+            location: LocationsData.friendRoom,
+            actionLabel: 'У кімнаті Sem',
+            spritePath: av,
+          );
+        }
+      }
+    }
+
+    if (npc.id == _semNpcId) {
+      final world = sl<GameWorldState>();
+      final dateKey = sl<GameTimeController>().onlyDate;
+      if (SemJuniperEarlyVisits.isActiveInRoom(
+        world: world,
+        gameDateKey: dateKey,
+        weekdayIndex: effectiveDay,
+        hour: hour,
+        zone: 'STREET',
+        streetHouse: LocationsData.friendHouse,
+        insideRoom: true,
+        room: normRoom,
+      )) {
+        return SchedulePoint(
+          hourStart: SemJuniperEveningVisits.visitHourStart,
+          hourEnd: SemJuniperEveningVisits.visitHourEnd,
+          location: normRoom,
+          actionLabel: 'З Juniper',
+          spritePath: kSemAvatarPath,
+        );
+      }
+      if (SemJuniperEveningVisits.isSemJuniperDualAvatarRoom(
+        world: world,
+        gameDateKey: dateKey,
+        weekdayIndex: effectiveDay,
+        hour: hour,
+        roomId: normRoom,
+      )) {
+        return SchedulePoint(
+          hourStart: SemJuniperEveningVisits.visitHourStart,
+          hourEnd: SemJuniperEveningVisits.visitHourEnd,
+          location: normRoom,
+          actionLabel: 'З Juniper',
+          spritePath: kSemAvatarPath,
+        );
+      }
     }
 
     if (npc.id == 'nicole') {
@@ -839,7 +958,9 @@ class NPCService {
     if (npc.id == _flaxyNpcId && _flaxyHomeRoomIds.contains(normRoom)) {
       try {
         return npc.schedule.firstWhere((p) {
-          if (p.location != LocationsData.auntHomeFlaxyRoam) return false;
+          if (p.location != LocationsData.poorDistrictH1Apt2FlaxyRoam) {
+            return false;
+          }
           return _timeMatchesPoint(p, hour);
         });
       } catch (_) {}
@@ -863,16 +984,17 @@ class NPCService {
       } catch (_) {}
     }
 
-    if (npc.id == _katrinNpcId && _katrinHomeRoomIds.contains(normRoom)) {
-      try {
-        return npc.schedule.firstWhere((p) {
-          if (p.location != LocationsData.poorDistrictH1Apt2KatrinRoam) {
-            return false;
-          }
-          return _timeMatchesPoint(p, hour);
-        });
-      } catch (_) {}
-    }
+    // Katrin тимчасово не в грі (createAllNpcs).
+    // if (npc.id == _katrinNpcId && _katrinHomeRoomIds.contains(normRoom)) {
+    //   try {
+    //     return npc.schedule.firstWhere((p) {
+    //       if (p.location != LocationsData.poorDistrictH1Apt2KatrinRoam) {
+    //         return false;
+    //       }
+    //       return _timeMatchesPoint(p, hour);
+    //     });
+    //   } catch (_) {}
+    // }
 
     if (npc.id == _kylerNpcId && _kylerHomeRoomIds.contains(normRoom)) {
       try {

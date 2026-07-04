@@ -93,7 +93,7 @@ class LocationsData {
   /// Маркер: Lexi — вдома, випадкова кімната будинку однокласниці.
   static const String classmateHomeLexiRoam = 'classmate_home_lexi_roam';
 
-  /// Маркер: Flaxy — вдома, випадкова кімната будинку тітки.
+  /// Маркер: Flaxy — вдома, випадкова кімната будинку тітки (застаріло: переїхала на Бандери 1).
   static const String auntHomeFlaxyRoam = 'aunt_home_flaxy_roam';
 
   /// Маркер: Alyssa — вдома, випадкова кімната будинку однокласниці.
@@ -102,7 +102,11 @@ class LocationsData {
   /// Маркер: Candee — вдома, випадкова кімната будинку однокласниці.
   static const String classmateHomeCandeeRoam = 'classmate_home_candee_roam';
 
-  /// Маркер: Katrin — вдома, випадкова кімната кв. 2 (Бандери 1).
+  /// Маркер: Flaxy — вдома, випадкова кімната кв. 2 (Бандери 1).
+  static const String poorDistrictH1Apt2FlaxyRoam =
+      'poor_district_h1_apt2_flaxy_roam';
+
+  /// Katrin тимчасово не в грі; маркер залишено для [katrin_npc.dart].
   static const String poorDistrictH1Apt2KatrinRoam =
       'poor_district_h1_apt2_katrin_roam';
 

@@ -67,7 +67,7 @@ class NpcProfileView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        NpcProfileDisplay.cardTitleLine(npc),
+                        NpcProfileDisplay.cardTitleLine(npc, world: gameWorld),
                         style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -82,6 +82,20 @@ class NpcProfileView extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
+
+            if (gameWorld != null) ...[
+              _collapsibleSection(
+                context,
+                title: sl<LocaleController>().t('profile_quests_section'),
+                children: [
+                  _NpcProfileQuestsList(
+                    npc: npc,
+                    world: gameWorld!,
+                    npcService: npcService,
+                  ),
+                ],
+              ),
+            ],
 
             if (npc.biographyType != null && npc.biographyType!.isNotEmpty) ...[
               _sectionLabel('Біографія та Характер', highlight: true),
@@ -103,20 +117,6 @@ class NpcProfileView extends StatelessWidget {
                 style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
               ),
               const SizedBox(height: 16),
-            ],
-
-            if (gameWorld != null) ...[
-              _collapsibleSection(
-                context,
-                title: sl<LocaleController>().t('profile_quests_section'),
-                children: [
-                  _NpcProfileQuestsList(
-                    npc: npc,
-                    world: gameWorld!,
-                    npcService: npcService,
-                  ),
-                ],
-              ),
             ],
 
             _collapsibleSection(

@@ -6,11 +6,9 @@ class Assets {
   Assets._();
 
   static const AssetGenImage giftShop = AssetGenImage(
-    'lib/assets/location/trc/gift_shop.jpg',
-  );
+      'lib/assets/location/trc/gift_shop.jpg');
   static const String location = 'assets/data/location.json';
-  static const String locationDisplayEn =
-      'assets/data/location_display_en.json';
+  static const String locationDisplayEn = 'assets/data/location_display_en.json';
   static const String shopProducts = 'assets/data/shop_products.json';
   static const $AssetsLibGen lib = $AssetsLibGen();
 }
@@ -36,419 +34,301 @@ class $AssetsGgGen {
   const $AssetsGgGen();
 
   final AssetGenImage cleanPool = const AssetGenImage(
-    'lib/assets/gg/clean_pool.jpg',
-  );
+      'lib/assets/gg/clean_pool.jpg');
   final String ganteli = 'lib/assets/gg/ganteli.mp4';
+  final AssetGenImage ggStinky = const AssetGenImage(
+      'lib/assets/gg/gg_stinky.png');
   final String girya = 'lib/assets/gg/girya.mp4';
   final String mapCity = 'lib/assets/gg/map_city.md';
   final AssetGenImage pers = const AssetGenImage('lib/assets/gg/pers.png');
   final AssetGenImage startScreen = const AssetGenImage(
-    'lib/assets/gg/start_screen.jpg',
-  );
+      'lib/assets/gg/start_screen.jpg');
   final String test = 'lib/assets/gg/test.webm';
   final String upsFirst1 = 'lib/assets/gg/ups_first_1.webm';
   final AssetGenImage usdt = const AssetGenImage('lib/assets/gg/usdt.gif');
   final AssetGenImage windows = const AssetGenImage(
-    'lib/assets/gg/windows.jpeg',
-  );
+      'lib/assets/gg/windows.jpeg');
   final AssetGenImage zaglushka = const AssetGenImage(
-    'lib/assets/gg/zaglushka.jpg',
-  );
+      'lib/assets/gg/zaglushka.jpg');
 }
 
 class $AssetsItemsGen {
   const $AssetsItemsGen();
 
   final AssetGenImage abFitness = const AssetGenImage(
-    'lib/assets/items/ab_fitness.jpg',
-  );
+      'lib/assets/items/ab_fitness.jpg');
   final AssetGenImage analLubricant = const AssetGenImage(
-    'lib/assets/items/anal_lubricant.jpg',
-  );
+      'lib/assets/items/anal_lubricant.jpg');
   final AssetGenImage analPlug = const AssetGenImage(
-    'lib/assets/items/anal_plug.jpg',
-  );
+      'lib/assets/items/anal_plug.jpg');
   final AssetGenImage analgel = const AssetGenImage(
-    'lib/assets/items/analgel.png',
-  );
+      'lib/assets/items/analgel.png');
   final AssetGenImage ball = const AssetGenImage('lib/assets/items/ball.jpg');
   final AssetGenImage bdsm = const AssetGenImage('lib/assets/items/bdsm.jpg');
   final AssetGenImage bdsmSuit = const AssetGenImage(
-    'lib/assets/items/bdsm_suit.jpg',
-  );
+      'lib/assets/items/bdsm_suit.jpg');
   final AssetGenImage beer = const AssetGenImage('lib/assets/items/beer.png');
   final AssetGenImage bicycle2 = const AssetGenImage(
-    'lib/assets/items/bicycle_2.jpg',
-  );
+      'lib/assets/items/bicycle_2.jpg');
   final AssetGenImage binoculars = const AssetGenImage(
-    'lib/assets/items/binoculars.png',
-  );
+      'lib/assets/items/binoculars.png');
   final AssetGenImage bluedress = const AssetGenImage(
-    'lib/assets/items/bluedress.jpg',
-  );
+      'lib/assets/items/bluedress.jpg');
   final AssetGenImage book = const AssetGenImage('lib/assets/items/book.png');
   final AssetGenImage braBlack = const AssetGenImage(
-    'lib/assets/items/bra_black.webp',
-  );
+      'lib/assets/items/bra_black.webp');
   final AssetGenImage braBlue = const AssetGenImage(
-    'lib/assets/items/bra_blue.webp',
-  );
+      'lib/assets/items/bra_blue.webp');
   final AssetGenImage braRed = const AssetGenImage(
-    'lib/assets/items/bra_red.jpeg',
-  );
+      'lib/assets/items/bra_red.jpeg');
   final AssetGenImage brandy = const AssetGenImage(
-    'lib/assets/items/brandy.jpg',
-  );
+      'lib/assets/items/brandy.jpg');
   final AssetGenImage buket1 = const AssetGenImage(
-    'lib/assets/items/buket_1.png',
-  );
+      'lib/assets/items/buket_1.png');
   final AssetGenImage burn = const AssetGenImage('lib/assets/items/burn.png');
   final AssetGenImage businessCards = const AssetGenImage(
-    'lib/assets/items/business_cards.jpg',
-  );
+      'lib/assets/items/business_cards.jpg');
   final AssetGenImage canon = const AssetGenImage('lib/assets/items/canon.jpg');
   final AssetGenImage canon2 = const AssetGenImage(
-    'lib/assets/items/canon_2.jpg',
-  );
+      'lib/assets/items/canon_2.jpg');
   final AssetGenImage car = const AssetGenImage('lib/assets/items/car.jpg');
   final AssetGenImage cardKristina = const AssetGenImage(
-    'lib/assets/items/card_kristina.jpg',
-  );
+      'lib/assets/items/card_kristina.jpg');
   final AssetGenImage champagne = const AssetGenImage(
-    'lib/assets/items/champagne.jpg',
-  );
+      'lib/assets/items/champagne.jpg');
   final AssetGenImage chanel = const AssetGenImage(
-    'lib/assets/items/chanel.jpg',
-  );
+      'lib/assets/items/chanel.jpg');
   final AssetGenImage chocolate = const AssetGenImage(
-    'lib/assets/items/chocolate.jpg',
-  );
+      'lib/assets/items/chocolate.jpg');
   final AssetGenImage clonidine = const AssetGenImage(
-    'lib/assets/items/clonidine.jpg',
-  );
+      'lib/assets/items/clonidine.jpg');
   final AssetGenImage cocaine = const AssetGenImage(
-    'lib/assets/items/cocaine.jpg',
-  );
+      'lib/assets/items/cocaine.jpg');
   final AssetGenImage condom = const AssetGenImage(
-    'lib/assets/items/condom.jpg',
-  );
+      'lib/assets/items/condom.jpg');
   final AssetGenImage creamForTits = const AssetGenImage(
-    'lib/assets/items/cream_for_tits.jpg',
-  );
+      'lib/assets/items/cream_for_tits.jpg');
   final AssetGenImage cvet = const AssetGenImage('lib/assets/items/cvet.jpg');
   final AssetGenImage darDuhi = const AssetGenImage(
-    'lib/assets/items/dar_duhi.png',
-  );
+      'lib/assets/items/dar_duhi.png');
   final AssetGenImage darKonfet = const AssetGenImage(
-    'lib/assets/items/dar_konfet.png',
-  );
+      'lib/assets/items/dar_konfet.png');
   final AssetGenImage darKosmetik = const AssetGenImage(
-    'lib/assets/items/dar_kosmetik.png',
-  );
+      'lib/assets/items/dar_kosmetik.png');
   final AssetGenImage dictaphone = const AssetGenImage(
-    'lib/assets/items/dictaphone.jpg',
-  );
+      'lib/assets/items/dictaphone.jpg');
   final AssetGenImage dildoJpg = const AssetGenImage(
-    'lib/assets/items/dildo.jpg',
-  );
+      'lib/assets/items/dildo.jpg');
   final AssetGenImage dildoPng = const AssetGenImage(
-    'lib/assets/items/dildo.png',
-  );
+      'lib/assets/items/dildo.png');
   final AssetGenImage donor = const AssetGenImage('lib/assets/items/donor.jpg');
   final AssetGenImage dress = const AssetGenImage('lib/assets/items/dress.jpg');
   final AssetGenImage dress2 = const AssetGenImage(
-    'lib/assets/items/dress_2.jpg',
-  );
+      'lib/assets/items/dress_2.jpg');
   final AssetGenImage ecstasy = const AssetGenImage(
-    'lib/assets/items/ecstasy.png',
-  );
+      'lib/assets/items/ecstasy.png');
   final AssetGenImage ecstasyPackage = const AssetGenImage(
-    'lib/assets/items/ecstasy_package.jpg',
-  );
+      'lib/assets/items/ecstasy_package.jpg');
   final AssetGenImage eda = const AssetGenImage('lib/assets/items/eda.jpg');
   final AssetGenImage elsaLogin = const AssetGenImage(
-    'lib/assets/items/elsa_login.png',
-  );
+      'lib/assets/items/elsa_login.png');
   final AssetGenImage energy = const AssetGenImage(
-    'lib/assets/items/energy.jpg',
-  );
+      'lib/assets/items/energy.jpg');
   final AssetGenImage eroBook = const AssetGenImage(
-    'lib/assets/items/ero_book.jpg',
-  );
+      'lib/assets/items/ero_book.jpg');
   final AssetGenImage eroticCard = const AssetGenImage(
-    'lib/assets/items/erotic_card.jpg',
-  );
+      'lib/assets/items/erotic_card.jpg');
   final AssetGenImage exciter = const AssetGenImage(
-    'lib/assets/items/exciter.jpg',
-  );
+      'lib/assets/items/exciter.jpg');
   final AssetGenImage feromon = const AssetGenImage(
-    'lib/assets/items/feromon.png',
-  );
+      'lib/assets/items/feromon.png');
   final AssetGenImage finasteride = const AssetGenImage(
-    'lib/assets/items/finasteride.jpg',
-  );
+      'lib/assets/items/finasteride.jpg');
   final AssetGenImage fitnes = const AssetGenImage(
-    'lib/assets/items/fitnes.png',
-  );
+      'lib/assets/items/fitnes.png');
   final AssetGenImage foldingMassageTable = const AssetGenImage(
-    'lib/assets/items/folding_massage_table.jpg',
-  );
+      'lib/assets/items/folding_massage_table.jpg');
   final AssetGenImage fotic = const AssetGenImage('lib/assets/items/fotic.png');
   final AssetGenImage furCoats = const AssetGenImage(
-    'lib/assets/items/fur_coats.jpg',
-  );
+      'lib/assets/items/fur_coats.jpg');
   final AssetGenImage gan = const AssetGenImage('lib/assets/items/gan.png');
   final AssetGenImage ganteli = const AssetGenImage(
-    'lib/assets/items/ganteli.png',
-  );
+      'lib/assets/items/ganteli.png');
   final AssetGenImage girlJur = const AssetGenImage(
-    'lib/assets/items/girl_jur.png',
-  );
+      'lib/assets/items/girl_jur.png');
   final AssetGenImage girya = const AssetGenImage('lib/assets/items/girya.png');
   final AssetGenImage gvozdika = const AssetGenImage(
-    'lib/assets/items/gvozdika.png',
-  );
+      'lib/assets/items/gvozdika.png');
   final AssetGenImage hairbrush = const AssetGenImage(
-    'lib/assets/items/hairbrush.png',
-  );
+      'lib/assets/items/hairbrush.png');
   final AssetGenImage handbag = const AssetGenImage(
-    'lib/assets/items/handbag.jpg',
-  );
+      'lib/assets/items/handbag.jpg');
   final AssetGenImage hennessy = const AssetGenImage(
-    'lib/assets/items/hennessy.png',
-  );
+      'lib/assets/items/hennessy.png');
   final AssetGenImage hypnotic = const AssetGenImage(
-    'lib/assets/items/hypnotic.jpg',
-  );
+      'lib/assets/items/hypnotic.jpg');
   final AssetGenImage iceCream = const AssetGenImage(
-    'lib/assets/items/ice_cream.jpg',
-  );
+      'lib/assets/items/ice_cream.jpg');
   final AssetGenImage illumination = const AssetGenImage(
-    'lib/assets/items/illumination.png',
-  );
+      'lib/assets/items/illumination.png');
   final AssetGenImage iphone = const AssetGenImage(
-    'lib/assets/items/iphone.jpg',
-  );
+      'lib/assets/items/iphone.jpg');
   final AssetGenImage journalFootball = const AssetGenImage(
-    'lib/assets/items/journal_football.jpg',
-  );
+      'lib/assets/items/journal_football.jpg');
   final AssetGenImage journalWom = const AssetGenImage(
-    'lib/assets/items/journal_wom.jpg',
-  );
+      'lib/assets/items/journal_wom.jpg');
   final AssetGenImage kenzo = const AssetGenImage('lib/assets/items/kenzo.png');
   final AssetGenImage keyElsaRoom = const AssetGenImage(
-    'lib/assets/items/key_elsa_room.webp',
-  );
+      'lib/assets/items/key_elsa_room.webp');
   final AssetGenImage keyPiperRoom = const AssetGenImage(
-    'lib/assets/items/key_piper_room.jpeg',
-  );
+      'lib/assets/items/key_piper_room.jpeg');
   final AssetGenImage keysMomRoom = const AssetGenImage(
-    'lib/assets/items/keys_mom_room.jpg',
-  );
+      'lib/assets/items/keys_mom_room.jpg');
   final AssetGenImage kosmetic = const AssetGenImage(
-    'lib/assets/items/kosmetic.png',
-  );
+      'lib/assets/items/kosmetic.png');
   final AssetGenImage kupalnik = const AssetGenImage(
-    'lib/assets/items/kupalnik.png',
-  );
+      'lib/assets/items/kupalnik.png');
   final AssetGenImage lak = const AssetGenImage('lib/assets/items/lak.png');
   final AssetGenImage legginsForKira = const AssetGenImage(
-    'lib/assets/items/legginsForKira.png',
-  );
+      'lib/assets/items/legginsForKira.png');
   final AssetGenImage lesbiDisk = const AssetGenImage(
-    'lib/assets/items/lesbi_disk.jpg',
-  );
+      'lib/assets/items/lesbi_disk.jpg');
   final AssetGenImage lesboJur = const AssetGenImage(
-    'lib/assets/items/lesbo_jur.png',
-  );
+      'lib/assets/items/lesbo_jur.png');
   final AssetGenImage libKey = const AssetGenImage(
-    'lib/assets/items/lib_key.png',
-  );
+      'lib/assets/items/lib_key.png');
   final AssetGenImage lubricationBanana = const AssetGenImage(
-    'lib/assets/items/lubrication_banana.jpg',
-  );
+      'lib/assets/items/lubrication_banana.jpg');
   final AssetGenImage lubricationVanilla = const AssetGenImage(
-    'lib/assets/items/lubrication_vanilla.jpg',
-  );
+      'lib/assets/items/lubrication_vanilla.jpg');
   final AssetGenImage mac = const AssetGenImage('lib/assets/items/mac.png');
   final AssetGenImage maidCostume = const AssetGenImage(
-    'lib/assets/items/maid_costume.jpg',
-  );
+      'lib/assets/items/maid_costume.jpg');
   final AssetGenImage maidSuit = const AssetGenImage(
-    'lib/assets/items/maid_suit.webp',
-  );
+      'lib/assets/items/maid_suit.webp');
   final AssetGenImage manicure = const AssetGenImage(
-    'lib/assets/items/manicure.png',
-  );
+      'lib/assets/items/manicure.png');
   final AssetGenImage markedCards = const AssetGenImage(
-    'lib/assets/items/marked_cards.jpg',
-  );
+      'lib/assets/items/marked_cards.jpg');
   final AssetGenImage martini = const AssetGenImage(
-    'lib/assets/items/martini.jpg',
-  );
+      'lib/assets/items/martini.jpg');
   final AssetGenImage mask = const AssetGenImage('lib/assets/items/mask.jpg');
   final AssetGenImage maslo = const AssetGenImage('lib/assets/items/maslo.jpg');
   final AssetGenImage massage = const AssetGenImage(
-    'lib/assets/items/massage.jpg',
-  );
+      'lib/assets/items/massage.jpg');
   final AssetGenImage massageTable = const AssetGenImage(
-    'lib/assets/items/massage_table.jpg',
-  );
+      'lib/assets/items/massage_table.jpg');
   final AssetGenImage miracleOintment = const AssetGenImage(
-    'lib/assets/items/miracle_ointment.jpg',
-  );
+      'lib/assets/items/miracle_ointment.jpg');
   final AssetGenImage notCumTabs = const AssetGenImage(
-    'lib/assets/items/notCumTabs.png',
-  );
+      'lib/assets/items/notCumTabs.png');
   final AssetGenImage ola = const AssetGenImage('lib/assets/items/ola.png');
+  final AssetGenImage oldSamsung = const AssetGenImage(
+      'lib/assets/items/old_samsung.jpg');
   final AssetGenImage otmichka = const AssetGenImage(
-    'lib/assets/items/otmichka.png',
-  );
+      'lib/assets/items/otmichka.png');
   final AssetGenImage palatka = const AssetGenImage(
-    'lib/assets/items/palatka.jpg',
-  );
+      'lib/assets/items/palatka.jpg');
   final AssetGenImage panties = const AssetGenImage(
-    'lib/assets/items/panties.jpeg',
-  );
+      'lib/assets/items/panties.jpeg');
   final AssetGenImage panties1 = const AssetGenImage(
-    'lib/assets/items/panties_1.jpg',
-  );
+      'lib/assets/items/panties_1.jpg');
   final AssetGenImage pantiesVibro = const AssetGenImage(
-    'lib/assets/items/panties_vibro.jpg',
-  );
+      'lib/assets/items/panties_vibro.jpg');
   final AssetGenImage perfumeAphrodisiac = const AssetGenImage(
-    'lib/assets/items/perfume_aphrodisiac.jpg',
-  );
+      'lib/assets/items/perfume_aphrodisiac.jpg');
   final AssetGenImage phoneOld = const AssetGenImage(
-    'lib/assets/items/phone_old.jpg',
-  );
+      'lib/assets/items/phone_old.jpg');
   final AssetGenImage pills = const AssetGenImage('lib/assets/items/pills.jpg');
   final AssetGenImage pinkStrapon = const AssetGenImage(
-    'lib/assets/items/pink_strapon.jpg',
-  );
+      'lib/assets/items/pink_strapon.jpg');
   final AssetGenImage plavki = const AssetGenImage(
-    'lib/assets/items/plavki.png',
-  );
+      'lib/assets/items/plavki.png');
   final AssetGenImage playboy = const AssetGenImage(
-    'lib/assets/items/playboy.png',
-  );
+      'lib/assets/items/playboy.png');
   final AssetGenImage pokerCards = const AssetGenImage(
-    'lib/assets/items/poker_cards.jpg',
-  );
+      'lib/assets/items/poker_cards.jpg');
   final AssetGenImage pornJur = const AssetGenImage(
-    'lib/assets/items/porn_jur.png',
-  );
+      'lib/assets/items/porn_jur.png');
   final AssetGenImage professional = const AssetGenImage(
-    'lib/assets/items/professional.jpg',
-  );
+      'lib/assets/items/professional.jpg');
   final AssetGenImage radaSport = const AssetGenImage(
-    'lib/assets/items/rada_sport.jpg',
-  );
+      'lib/assets/items/rada_sport.jpg');
   final AssetGenImage ritualCandles = const AssetGenImage(
-    'lib/assets/items/ritual_candles.png',
-  );
+      'lib/assets/items/ritual_candles.png');
   final AssetGenImage romanBook = const AssetGenImage(
-    'lib/assets/items/roman_book.jpg',
-  );
+      'lib/assets/items/roman_book.jpg');
   final AssetGenImage romanHard = const AssetGenImage(
-    'lib/assets/items/roman_hard.png',
-  );
+      'lib/assets/items/roman_hard.png');
   final AssetGenImage romanLite = const AssetGenImage(
-    'lib/assets/items/roman_lite.png',
-  );
+      'lib/assets/items/roman_lite.png');
   final AssetGenImage roses = const AssetGenImage('lib/assets/items/roses.jpg');
   final AssetGenImage rugby = const AssetGenImage('lib/assets/items/rugby.jpg');
   final AssetGenImage sancream = const AssetGenImage(
-    'lib/assets/items/sancream.png',
-  );
+      'lib/assets/items/sancream.png');
   final AssetGenImage sausage = const AssetGenImage(
-    'lib/assets/items/sausage.jpg',
-  );
+      'lib/assets/items/sausage.jpg');
   final AssetGenImage setForMassage = const AssetGenImage(
-    'lib/assets/items/set_for_massage.jpg',
-  );
+      'lib/assets/items/set_for_massage.jpg');
   final AssetGenImage sexStudent = const AssetGenImage(
-    'lib/assets/items/sex_student.jpg',
-  );
+      'lib/assets/items/sex_student.jpg');
   final AssetGenImage snickers = const AssetGenImage(
-    'lib/assets/items/snickers.png',
-  );
+      'lib/assets/items/snickers.png');
   final AssetGenImage sportG = const AssetGenImage(
-    'lib/assets/items/sport_g.png',
-  );
+      'lib/assets/items/sport_g.png');
   final AssetGenImage sportM = const AssetGenImage(
-    'lib/assets/items/sport_m.png',
-  );
+      'lib/assets/items/sport_m.png');
   final AssetGenImage sprats = const AssetGenImage(
-    'lib/assets/items/sprats.jpg',
-  );
+      'lib/assets/items/sprats.jpg');
   final AssetGenImage spyCamera = const AssetGenImage(
-    'lib/assets/items/spy_camera.jpg',
-  );
+      'lib/assets/items/spy_camera.jpg');
   final AssetGenImage stylishsuitSuit = const AssetGenImage(
-    'lib/assets/items/stylishsuit_suit.jpg',
-  );
+      'lib/assets/items/stylishsuit_suit.jpg');
   final AssetGenImage suit = const AssetGenImage('lib/assets/items/suit.jpg');
   final AssetGenImage sun = const AssetGenImage('lib/assets/items/sun.jpg');
   final AssetGenImage swimsuit = const AssetGenImage(
-    'lib/assets/items/swimsuit.jpg',
-  );
+      'lib/assets/items/swimsuit.jpg');
   final AssetGenImage table = const AssetGenImage('lib/assets/items/table.jpg');
   final AssetGenImage teaPuer = const AssetGenImage(
-    'lib/assets/items/tea_puer.jpg',
-  );
+      'lib/assets/items/tea_puer.jpg');
   final AssetGenImage teleskop = const AssetGenImage(
-    'lib/assets/items/teleskop.jpg',
-  );
+      'lib/assets/items/teleskop.jpg');
   final AssetGenImage tequila = const AssetGenImage(
-    'lib/assets/items/tequila.jpg',
-  );
+      'lib/assets/items/tequila.jpg');
   final AssetGenImage usb = const AssetGenImage('lib/assets/items/usb.png');
   final AssetGenImage venus = const AssetGenImage('lib/assets/items/venus.png');
   final AssetGenImage viagra = const AssetGenImage(
-    'lib/assets/items/viagra.jpg',
-  );
+      'lib/assets/items/viagra.jpg');
   final AssetGenImage vibratorRed = const AssetGenImage(
-    'lib/assets/items/vibrator-red.jpg',
-  );
+      'lib/assets/items/vibrator-red.jpg');
   final AssetGenImage vipGym = const AssetGenImage(
-    'lib/assets/items/vip_gym.jpeg',
-  );
+      'lib/assets/items/vip_gym.jpeg');
   final AssetGenImage vodka = const AssetGenImage('lib/assets/items/vodka.jpg');
   final AssetGenImage webcam = const AssetGenImage(
-    'lib/assets/items/webcam.png',
-  );
+      'lib/assets/items/webcam.png');
   final AssetGenImage wine = const AssetGenImage('lib/assets/items/wine.jpg');
   final AssetGenImage wineRedGood = const AssetGenImage(
-    'lib/assets/items/wine_red_good.jpg',
-  );
+      'lib/assets/items/wine_red_good.jpg');
   final AssetGenImage womensWigs = const AssetGenImage(
-    'lib/assets/items/womens_wigs.jpg',
-  );
+      'lib/assets/items/womens_wigs.jpg');
   final AssetGenImage yogaMats = const AssetGenImage(
-    'lib/assets/items/yogaMats.png',
-  );
+      'lib/assets/items/yogaMats.png');
 }
 
 class $AssetsLeftPanelGen {
   const $AssetsLeftPanelGen();
 
   final AssetGenImage bag = const AssetGenImage(
-    'lib/assets/left_panel/bag.png',
-  );
+      'lib/assets/left_panel/bag.png');
   final AssetGenImage gg = const AssetGenImage('lib/assets/left_panel/gg.png');
   final AssetGenImage girls = const AssetGenImage(
-    'lib/assets/left_panel/girls.png',
-  );
+      'lib/assets/left_panel/girls.png');
   final AssetGenImage iphone = const AssetGenImage(
-    'lib/assets/left_panel/iphone.png',
-  );
+      'lib/assets/left_panel/iphone.png');
   final AssetGenImage setting = const AssetGenImage(
-    'lib/assets/left_panel/setting.png',
-  );
+      'lib/assets/left_panel/setting.png');
   final AssetGenImage setting2 = const AssetGenImage(
-    'lib/assets/left_panel/setting_2.png',
-  );
+      'lib/assets/left_panel/setting_2.png');
 }
 
 class $AssetsLocationGen {
@@ -460,6 +340,8 @@ class $AssetsLocationGen {
   final $AssetsHousesGen houses = const $AssetsHousesGen();
   final $AssetsPoorDistrictGen poorDistrict = const $AssetsPoorDistrictGen();
   final $AssetsTrcGen trc = const $AssetsTrcGen();
+  final AssetGenImage autoRepair = const AssetGenImage(
+      'lib/assets/location/auto_repair.jpg');
 }
 
 class $AssetsBiznesCentrGen {
@@ -467,339 +349,319 @@ class $AssetsBiznesCentrGen {
 
   final $AssetsLogisticGen logistic = const $AssetsLogisticGen();
   final AssetGenImage rockffellerOffice = const AssetGenImage(
-    'lib/assets/location/biznes_centr/rockffeller_office.jpg',
-  );
+      'lib/assets/location/biznes_centr/rockffeller_office.jpg');
   final AssetGenImage rockffellerReceptionJpg = const AssetGenImage(
-    'lib/assets/location/biznes_centr/rockffeller_reception.jpg',
-  );
+      'lib/assets/location/biznes_centr/rockffeller_reception.jpg');
   final AssetGenImage rockffellerReceptionPng = const AssetGenImage(
-    'lib/assets/location/biznes_centr/rockffeller_reception.png',
-  );
+      'lib/assets/location/biznes_centr/rockffeller_reception.png');
   final AssetGenImage rokfellerCamera = const AssetGenImage(
-    'lib/assets/location/biznes_centr/rokfeller_camera.jpg',
-  );
+      'lib/assets/location/biznes_centr/rokfeller_camera.jpg');
   final AssetGenImage rokfellerFirst = const AssetGenImage(
-    'lib/assets/location/biznes_centr/rokfeller_first.jpg',
-  );
+      'lib/assets/location/biznes_centr/rokfeller_first.jpg');
 }
 
 class $AssetsLogisticGen {
   const $AssetsLogisticGen();
 
   final AssetGenImage boss = const AssetGenImage(
-    'lib/assets/location/biznes_centr/logistic/boss.jpg',
-  );
+      'lib/assets/location/biznes_centr/logistic/boss.jpg');
   final AssetGenImage cabBoss = const AssetGenImage(
-    'lib/assets/location/biznes_centr/logistic/cab_boss.jpg',
-  );
+      'lib/assets/location/biznes_centr/logistic/cab_boss.jpg');
   final AssetGenImage cabMom = const AssetGenImage(
-    'lib/assets/location/biznes_centr/logistic/cab_mom.jpg',
-  );
+      'lib/assets/location/biznes_centr/logistic/cab_mom.jpg');
   final AssetGenImage stroiCity = const AssetGenImage(
-    'lib/assets/location/biznes_centr/logistic/stroi_city.jpg',
-  );
+      'lib/assets/location/biznes_centr/logistic/stroi_city.jpg');
 }
 
 class $AssetsCollegeGen {
   const $AssetsCollegeGen();
 
-  final $AssetsCollegeRoomsGen rooms = const $AssetsCollegeRoomsGen();
+  final $AssetsRoomsGen rooms = const $AssetsRoomsGen();
 }
 
-class $AssetsCollegeRoomsGen {
-  const $AssetsCollegeRoomsGen();
+class $AssetsRoomsGen {
+  const $AssetsRoomsGen();
 
   final AssetGenImage audit1 = const AssetGenImage(
-    'lib/assets/location/college/rooms/audit_1.jpg',
-  );
+      'lib/assets/location/college/rooms/audit_1.jpg');
   final AssetGenImage audit2 = const AssetGenImage(
-    'lib/assets/location/college/rooms/audit_2.jpeg',
-  );
+      'lib/assets/location/college/rooms/audit_2.jpeg');
   final AssetGenImage audit3 = const AssetGenImage(
-    'lib/assets/location/college/rooms/audit_3.jpg',
-  );
+      'lib/assets/location/college/rooms/audit_3.jpg');
   final AssetGenImage diningRoom = const AssetGenImage(
-    'lib/assets/location/college/rooms/dining_room.jpg',
-  );
+      'lib/assets/location/college/rooms/dining_room.jpg');
   final AssetGenImage gymRoom = const AssetGenImage(
-    'lib/assets/location/college/rooms/gym_room.jpg',
-  );
+      'lib/assets/location/college/rooms/gym_room.jpg');
   final AssetGenImage lib = const AssetGenImage(
-    'lib/assets/location/college/rooms/lib.jpg',
-  );
+      'lib/assets/location/college/rooms/lib.jpg');
   final AssetGenImage office = const AssetGenImage(
-    'lib/assets/location/college/rooms/office.jpg',
-  );
+      'lib/assets/location/college/rooms/office.jpg');
   final AssetGenImage stadion = const AssetGenImage(
-    'lib/assets/location/college/rooms/stadion.jpg',
-  );
+      'lib/assets/location/college/rooms/stadion.jpg');
   final AssetGenImage tualet = const AssetGenImage(
-    'lib/assets/location/college/rooms/tualet.jpg',
-  );
+      'lib/assets/location/college/rooms/tualet.jpg');
 }
 
 class $AssetsHomeGgGen {
   const $AssetsHomeGgGen();
 
-  final $AssetsHomeGgRoomsGen rooms = const $AssetsHomeGgRoomsGen();
+  final $AssetsRoomsGen rooms = const $AssetsRoomsGen();
   final AssetGenImage a8 = const AssetGenImage(
-    'lib/assets/location/home_gg/8.jpg',
-  );
+      'lib/assets/location/home_gg/8.jpg');
   final AssetGenImage homeGg = const AssetGenImage(
-    'lib/assets/location/home_gg/home_gg.jpg',
-  );
+      'lib/assets/location/home_gg/home_gg.jpg');
 }
 
-class $AssetsHomeGgRoomsGen {
-  const $AssetsHomeGgRoomsGen();
+class $AssetsRoomsGen {
+  const $AssetsRoomsGen();
 
   final AssetGenImage basement = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/basement.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/basement.jpg');
   final AssetGenImage bathroom = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/bathroom.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/bathroom.jpg');
   final AssetGenImage closedDoor = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/closed_door.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/closed_door.jpg');
   final AssetGenImage elsaRoom = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/elsa_room.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/elsa_room.jpg');
   final AssetGenImage kitchen = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/kitchen.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/kitchen.jpg');
   final AssetGenImage momRoom = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/mom_room.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/mom_room.jpg');
   final AssetGenImage piperRoom = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/piper_room.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/piper_room.jpg');
   final AssetGenImage relaxRoom = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/relax_room.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/relax_room.jpg');
   final AssetGenImage roomGg = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/room_gg.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/room_gg.jpg');
   final AssetGenImage roomYard = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/room_yard.jpg',
-  );
+      'lib/assets/location/home_gg/rooms/room_yard.jpg');
   final AssetGenImage yard = const AssetGenImage(
-    'lib/assets/location/home_gg/rooms/yard.webp',
-  );
+      'lib/assets/location/home_gg/rooms/yard.webp');
 }
 
 class $AssetsHousesGen {
   const $AssetsHousesGen();
 
   final $AssetsCompanyGen company = const $AssetsCompanyGen();
-  final AssetGenImage
-  geminiGeneratedImage7r49gz7r49gz7r49 = const AssetGenImage(
-    'lib/assets/location/houses/Gemini_Generated_Image_7r49gz7r49gz7r49.png',
-  );
+  final $AssetsRoomsGen rooms = const $AssetsRoomsGen();
+  final AssetGenImage geminiGeneratedImage7r49gz7r49gz7r49 = const AssetGenImage(
+      'lib/assets/location/houses/Gemini_Generated_Image_7r49gz7r49gz7r49.png');
   final AssetGenImage auntHome = const AssetGenImage(
-    'lib/assets/location/houses/aunt_home.jpg',
-  );
+      'lib/assets/location/houses/aunt_home.jpg');
   final AssetGenImage autoCentr = const AssetGenImage(
-    'lib/assets/location/houses/auto_centr.jpeg',
-  );
+      'lib/assets/location/houses/auto_centr.jpeg');
   final AssetGenImage berns = const AssetGenImage(
-    'lib/assets/location/houses/berns.jpg',
-  );
+      'lib/assets/location/houses/berns.jpg');
   final AssetGenImage biznesCentr = const AssetGenImage(
-    'lib/assets/location/houses/biznes_centr.jpg',
-  );
+      'lib/assets/location/houses/biznes_centr.jpg');
   final AssetGenImage chefLogist = const AssetGenImage(
-    'lib/assets/location/houses/chef_logist.webp',
-  );
+      'lib/assets/location/houses/chef_logist.webp');
   final AssetGenImage classmateHome = const AssetGenImage(
-    'lib/assets/location/houses/classmate_home.jpg',
-  );
+      'lib/assets/location/houses/classmate_home.jpg');
   final AssetGenImage club = const AssetGenImage(
-    'lib/assets/location/houses/club.jpg',
-  );
+      'lib/assets/location/houses/club.jpg');
   final AssetGenImage darkAlley = const AssetGenImage(
-    'lib/assets/location/houses/dark_alley.jpg',
-  );
+      'lib/assets/location/houses/dark_alley.jpg');
   final AssetGenImage elitGk = const AssetGenImage(
-    'lib/assets/location/houses/elit_gk.jpg',
-  );
+      'lib/assets/location/houses/elit_gk.jpg');
   final AssetGenImage englishTeach = const AssetGenImage(
-    'lib/assets/location/houses/english_teach.jpg',
-  );
+      'lib/assets/location/houses/english_teach.jpg');
   final AssetGenImage flowersChef = const AssetGenImage(
-    'lib/assets/location/houses/flowers_chef.jpeg',
-  );
+      'lib/assets/location/houses/flowers_chef.jpeg');
   final AssetGenImage friendHome = const AssetGenImage(
-    'lib/assets/location/houses/friend_home.jpg',
-  );
+      'lib/assets/location/houses/friend_home.jpg');
   final AssetGenImage gym = const AssetGenImage(
-    'lib/assets/location/houses/gym.jpg',
-  );
+      'lib/assets/location/houses/gym.jpg');
   final AssetGenImage hedOfTechers = const AssetGenImage(
-    'lib/assets/location/houses/hed_of_techers.jpg',
-  );
+      'lib/assets/location/houses/hed_of_techers.jpg');
   final AssetGenImage homeKatia = const AssetGenImage(
-    'lib/assets/location/houses/home_katia.jpg',
-  );
+      'lib/assets/location/houses/home_katia.jpg');
   final AssetGenImage hotel = const AssetGenImage(
-    'lib/assets/location/houses/hotel.jpg',
-  );
+      'lib/assets/location/houses/hotel.jpg');
   final AssetGenImage hruschevki = const AssetGenImage(
-    'lib/assets/location/houses/hruschevki.jpg',
-  );
+      'lib/assets/location/houses/hruschevki.jpg');
   final AssetGenImage hrushchevkiSpb = const AssetGenImage(
-    'lib/assets/location/houses/hrushchevki-spb.jpg',
-  );
+      'lib/assets/location/houses/hrushchevki-spb.jpg');
   final AssetGenImage image = const AssetGenImage(
-    'lib/assets/location/houses/image.webp',
-  );
+      'lib/assets/location/houses/image.webp');
   final AssetGenImage korishHomeBathroom = const AssetGenImage(
-    'lib/assets/location/houses/korish_home_bathroom.jpg',
-  );
+      'lib/assets/location/houses/korish_home_bathroom.jpg');
   final AssetGenImage korishHomeGostinna = const AssetGenImage(
-    'lib/assets/location/houses/korish_home_gostinna.jpeg',
-  );
+      'lib/assets/location/houses/korish_home_gostinna.jpeg');
   final AssetGenImage korishHomeKitchen = const AssetGenImage(
-    'lib/assets/location/houses/korish_home_kitchen.jpg',
-  );
+      'lib/assets/location/houses/korish_home_kitchen.jpg');
   final AssetGenImage korishHomePerents = const AssetGenImage(
-    'lib/assets/location/houses/korish_home_perents.jpg',
-  );
+      'lib/assets/location/houses/korish_home_perents.jpg');
   final AssetGenImage korishHomePool = const AssetGenImage(
-    'lib/assets/location/houses/korish_home_pool.jpg',
-  );
+      'lib/assets/location/houses/korish_home_pool.jpg');
   final AssetGenImage korishHomeSashRoom = const AssetGenImage(
-    'lib/assets/location/houses/korish_home_sash_room.webp',
-  );
+      'lib/assets/location/houses/korish_home_sash_room.webp');
   final AssetGenImage korishHomeSauna = const AssetGenImage(
-    'lib/assets/location/houses/korish_home_sauna.jpg',
-  );
+      'lib/assets/location/houses/korish_home_sauna.jpg');
   final AssetGenImage korishHomeSemRoom = const AssetGenImage(
-    'lib/assets/location/houses/korish_home_sem_room.jpg',
-  );
+      'lib/assets/location/houses/korish_home_sem_room.jpg');
   final AssetGenImage korishHomeZal = const AssetGenImage(
-    'lib/assets/location/houses/korish_home_zal.jpg',
-  );
+      'lib/assets/location/houses/korish_home_zal.jpg');
   final AssetGenImage loft5 = const AssetGenImage(
-    'lib/assets/location/houses/loft5.jpg',
-  );
+      'lib/assets/location/houses/loft5.jpg');
   final AssetGenImage mainOptimized = const AssetGenImage(
-    'lib/assets/location/houses/main-optimized.png',
-  );
+      'lib/assets/location/houses/main-optimized.png');
   final AssetGenImage naberezhnaAlikante = const AssetGenImage(
-    'lib/assets/location/houses/naberezhna-alikante.jpeg',
-  );
+      'lib/assets/location/houses/naberezhna-alikante.jpeg');
   final AssetGenImage neighbor = const AssetGenImage(
-    'lib/assets/location/houses/neighbor.jpg',
-  );
+      'lib/assets/location/houses/neighbor.jpg');
   final AssetGenImage oldGym = const AssetGenImage(
-    'lib/assets/location/houses/old_gym.jpg',
-  );
+      'lib/assets/location/houses/old_gym.jpg');
   final AssetGenImage openDor = const AssetGenImage(
-    'lib/assets/location/houses/open_dor.jpg',
-  );
+      'lib/assets/location/houses/open_dor.jpg');
   final AssetGenImage orig = const AssetGenImage(
-    'lib/assets/location/houses/orig.webp',
-  );
+      'lib/assets/location/houses/orig.webp');
+  final AssetGenImage ountBathroom = const AssetGenImage(
+      'lib/assets/location/houses/ount_bathroom.webp');
+  final AssetGenImage ountBedroom = const AssetGenImage(
+      'lib/assets/location/houses/ount_bedroom.jpeg');
+  final AssetGenImage ountFlaxyBadroom = const AssetGenImage(
+      'lib/assets/location/houses/ount_flaxy_badroom.jpeg');
+  final AssetGenImage ountGostinnaya = const AssetGenImage(
+      'lib/assets/location/houses/ount_gostinnaya.jpg');
+  final AssetGenImage ountKitchen = const AssetGenImage(
+      'lib/assets/location/houses/ount_kitchen.jpg');
+  final AssetGenImage ountZal = const AssetGenImage(
+      'lib/assets/location/houses/ount_zal.jpg');
   final AssetGenImage park = const AssetGenImage(
-    'lib/assets/location/houses/park.jpg',
-  );
+      'lib/assets/location/houses/park.jpg');
   final AssetGenImage plyagh = const AssetGenImage(
-    'lib/assets/location/houses/plyagh.jpg',
-  );
+      'lib/assets/location/houses/plyagh.jpg');
   final AssetGenImage restoran = const AssetGenImage(
-    'lib/assets/location/houses/restoran.jpg',
-  );
+      'lib/assets/location/houses/restoran.jpg');
   final AssetGenImage restoranVipZal = const AssetGenImage(
-    'lib/assets/location/houses/restoran_vip_zal.jpg',
-  );
+      'lib/assets/location/houses/restoran_vip_zal.jpg');
   final AssetGenImage restoranZal = const AssetGenImage(
-    'lib/assets/location/houses/restoran_zal.jpg',
-  );
+      'lib/assets/location/houses/restoran_zal.jpg');
   final AssetGenImage store = const AssetGenImage(
-    'lib/assets/location/houses/store.jpg',
-  );
+      'lib/assets/location/houses/store.jpg');
   final AssetGenImage stripBar = const AssetGenImage(
-    'lib/assets/location/houses/strip_bar.jpg',
-  );
+      'lib/assets/location/houses/strip_bar.jpg');
   final AssetGenImage titulnaja = const AssetGenImage(
-    'lib/assets/location/houses/titulnaja.jpg',
-  );
+      'lib/assets/location/houses/titulnaja.jpg');
   final AssetGenImage trc = const AssetGenImage(
-    'lib/assets/location/houses/trc.jpg',
-  );
+      'lib/assets/location/houses/trc.jpg');
   final AssetGenImage unnamed = const AssetGenImage(
-    'lib/assets/location/houses/unnamed.jpg',
-  );
-  final AssetGenImage
-  vid1ProjektBudinokUTielimakhG2891000x1000R = const AssetGenImage(
-    'lib/assets/location/houses/vid-1-projekt-budinok-u-tielimakh-g-289-1000x1000-r.jpg',
-  );
-  final AssetGenImage
-  vid1ProjektBudinokVGhlidiVier22891000x1000R = const AssetGenImage(
-    'lib/assets/location/houses/vid-1-projekt-budinok-v-ghlidi-vier-2-289-1000x1000-r.jpg',
-  );
-  final AssetGenImage
-  vid1ProjektBudinokVShishkovikakh8G2eVdie289 = const AssetGenImage(
-    'lib/assets/location/houses/vid-1-projekt-budinok-v-shishkovikakh-8-g2e-vdie__289.jpg',
-  );
+      'lib/assets/location/houses/unnamed.jpg');
+  final AssetGenImage vid1ProjektBudinokUTielimakhG2891000x1000R = const AssetGenImage(
+      'lib/assets/location/houses/vid-1-projekt-budinok-u-tielimakh-g-289-1000x1000-r.jpg');
+  final AssetGenImage vid1ProjektBudinokVGhlidiVier22891000x1000R = const AssetGenImage(
+      'lib/assets/location/houses/vid-1-projekt-budinok-v-ghlidi-vier-2-289-1000x1000-r.jpg');
+  final AssetGenImage vid1ProjektBudinokVShishkovikakh8G2eVdie289 = const AssetGenImage(
+      'lib/assets/location/houses/vid-1-projekt-budinok-v-shishkovikakh-8-g2e-vdie__289.jpg');
   final AssetGenImage z3100TlNormal = const AssetGenImage(
-    'lib/assets/location/houses/z3_1_0_0_tl_normal.jpg',
-  );
+      'lib/assets/location/houses/z3_1_0_0_tl_normal.jpg');
   final AssetGenImage zavuch = const AssetGenImage(
-    'lib/assets/location/houses/zavuch.webp',
-  );
+      'lib/assets/location/houses/zavuch.webp');
+}
+
+class $AssetsRoomsGen {
+  const $AssetsRoomsGen();
+
+  final AssetGenImage amiaBath = const AssetGenImage(
+      'lib/assets/location/houses/rooms/amia_bath.jpg');
+  final AssetGenImage amiaKitchen = const AssetGenImage(
+      'lib/assets/location/houses/rooms/amia_kitchen.jpg');
+  final AssetGenImage artoorBedroom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/artoor_bedroom.jpeg');
+  final AssetGenImage arturBath = const AssetGenImage(
+      'lib/assets/location/houses/rooms/artur_bath.jpg');
+  final AssetGenImage arturKitchen = const AssetGenImage(
+      'lib/assets/location/houses/rooms/artur_kitchen.jpg');
+  final AssetGenImage arturZal = const AssetGenImage(
+      'lib/assets/location/houses/rooms/artur_zal.webp');
+  final AssetGenImage blancheBath = const AssetGenImage(
+      'lib/assets/location/houses/rooms/blanche_bath.webp');
+  final AssetGenImage blancheKitchen = const AssetGenImage(
+      'lib/assets/location/houses/rooms/blanche_kitchen.jpg');
+  final AssetGenImage blancheRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/blanche_room.jpg');
+  final AssetGenImage blancheZal = const AssetGenImage(
+      'lib/assets/location/houses/rooms/blanche_zal.jpg');
+  final AssetGenImage capriceRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/caprice_room.jpg');
+  final AssetGenImage ceciliaRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/cecilia_room.jpg');
+  final AssetGenImage dekanBath = const AssetGenImage(
+      'lib/assets/location/houses/rooms/dekan_bath.webp');
+  final AssetGenImage dekanBedroom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/dekan_bedroom.jpeg');
+  final AssetGenImage dekanGarden = const AssetGenImage(
+      'lib/assets/location/houses/rooms/dekan_garden.jpg');
+  final AssetGenImage dekanKitchen = const AssetGenImage(
+      'lib/assets/location/houses/rooms/dekan_kitchen.jpg');
+  final AssetGenImage dekanZal = const AssetGenImage(
+      'lib/assets/location/houses/rooms/dekan_zal.jpg');
+  final AssetGenImage denRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/den_room.jpg');
+  final AssetGenImage emilyRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/emily_room.jpg');
+  final AssetGenImage fayeRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/faye_room.jpg');
+  final AssetGenImage miaRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/mia_room.jpeg');
+  final AssetGenImage miaZal = const AssetGenImage(
+      'lib/assets/location/houses/rooms/mia_zal.jpg');
+  final AssetGenImage naomiRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/naomi_room.jpg');
+  final AssetGenImage nikkiRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/nikki_room.jpg');
+  final AssetGenImage oleksandrBath = const AssetGenImage(
+      'lib/assets/location/houses/rooms/oleksandr_bath.webp');
+  final AssetGenImage oleksandrKitchen = const AssetGenImage(
+      'lib/assets/location/houses/rooms/oleksandr_kitchen.jpg');
+  final AssetGenImage oleksandrRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/oleksandr_room.webp');
+  final AssetGenImage oleksandrZal = const AssetGenImage(
+      'lib/assets/location/houses/rooms/oleksandr_zal.png');
+  final AssetGenImage samanthaRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/samantha_room.jpg');
+  final AssetGenImage tiffaniRoom = const AssetGenImage(
+      'lib/assets/location/houses/rooms/tiffani_room.png');
 }
 
 class $AssetsCompanyGen {
   const $AssetsCompanyGen();
 
   final AssetGenImage budSam = const AssetGenImage(
-    'lib/assets/location/houses/company/bud_sam.png',
-  );
+      'lib/assets/location/houses/company/bud_sam.png');
   final AssetGenImage clining = const AssetGenImage(
-    'lib/assets/location/houses/company/clining.png',
-  );
+      'lib/assets/location/houses/company/clining.png');
   final AssetGenImage collCentr = const AssetGenImage(
-    'lib/assets/location/houses/company/coll-centr.png',
-  );
+      'lib/assets/location/houses/company/coll-centr.png');
   final AssetGenImage logistic = const AssetGenImage(
-    'lib/assets/location/houses/company/logistic.png',
-  );
+      'lib/assets/location/houses/company/logistic.png');
   final AssetGenImage rockfeller = const AssetGenImage(
-    'lib/assets/location/houses/company/rockfeller.png',
-  );
+      'lib/assets/location/houses/company/rockfeller.png');
 }
 
 class $AssetsPoorDistrictGen {
   const $AssetsPoorDistrictGen();
 
   final AssetGenImage zhimLezha = const AssetGenImage(
-    'lib/assets/location/poor_district/zhim_lezha.jpg',
-  );
+      'lib/assets/location/poor_district/zhim_lezha.jpg');
 }
 
 class $AssetsTrcGen {
   const $AssetsTrcGen();
 
   final AssetGenImage cinema = const AssetGenImage(
-    'lib/assets/location/trc/cinema.jpg',
-  );
+      'lib/assets/location/trc/cinema.jpg');
   final AssetGenImage electronicShop = const AssetGenImage(
-    'lib/assets/location/trc/electronic_shop.jpg',
-  );
+      'lib/assets/location/trc/electronic_shop.jpg');
   final AssetGenImage farmaci = const AssetGenImage(
-    'lib/assets/location/trc/farmaci.jpeg',
-  );
+      'lib/assets/location/trc/farmaci.jpeg');
   final AssetGenImage giftShop = const AssetGenImage(
-    'lib/assets/location/trc/gift_shop.jpg',
-  );
+      'lib/assets/location/trc/gift_shop.jpg');
   final AssetGenImage sexShop = const AssetGenImage(
-    'lib/assets/location/trc/sex-shop.jpg',
-  );
+      'lib/assets/location/trc/sex-shop.jpg');
   final AssetGenImage shop = const AssetGenImage(
-    'lib/assets/location/trc/shop.jpg',
-  );
+      'lib/assets/location/trc/shop.jpg');
 }
 
 class $AssetsLaptopGen {
@@ -830,8 +692,7 @@ class $AssetsMassageGen {
   const $AssetsMassageGen();
 
   final String eroMassage = 'lib/assets/laptop/study/massage/ero_massage.webm';
-  final String eroMassage1 =
-      'lib/assets/laptop/study/massage/ero_massage_1.webm';
+  final String eroMassage1 = 'lib/assets/laptop/study/massage/ero_massage_1.webm';
   final String massage1 = 'lib/assets/laptop/study/massage/massage_1.webm';
   final String massage2 = 'lib/assets/laptop/study/massage/massage_2.webm';
   final String massage3 = 'lib/assets/laptop/study/massage/massage_3.webm';
@@ -856,10 +717,17 @@ class $AssetsPornGen {
 class $AssetsNpcsGen {
   const $AssetsNpcsGen();
 
+  final $AssetsAdrianaGen adriana = const $AssetsAdrianaGen();
   final $AssetsAlexisGen alexis = const $AssetsAlexisGen();
+  final $AssetsAlyssaGen alyssa = const $AssetsAlyssaGen();
   final $AssetsAmiaGen amia = const $AssetsAmiaGen();
   final $AssetsAnyaGen anya = const $AssetsAnyaGen();
   final $AssetsArianaGen ariana = const $AssetsArianaGen();
+  final $AssetsArturGen artur = const $AssetsArturGen();
+  final $AssetsBlancheGen blanche = const $AssetsBlancheGen();
+  final $AssetsCandeeGen candee = const $AssetsCandeeGen();
+  final $AssetsCapriceGen caprice = const $AssetsCapriceGen();
+  final $AssetsCeciliaGen cecilia = const $AssetsCeciliaGen();
   final $AssetsCherieGen cherie = const $AssetsCherieGen();
   final $AssetsDanielleGen danielle = const $AssetsDanielleGen();
   final $AssetsDekanGen dekan = const $AssetsDekanGen();
@@ -867,86 +735,109 @@ class $AssetsNpcsGen {
   final $AssetsElsaGen elsa = const $AssetsElsaGen();
   final $AssetsEmilyGen emily = const $AssetsEmilyGen();
   final $AssetsFayeGen faye = const $AssetsFayeGen();
+  final $AssetsFlaxyGen flaxy = const $AssetsFlaxyGen();
+  final $AssetsFoxyGen foxy = const $AssetsFoxyGen();
+  final $AssetsGeishaGen geisha = const $AssetsGeishaGen();
+  final $AssetsHannaGen hanna = const $AssetsHannaGen();
   final $AssetsIndiaGen india = const $AssetsIndiaGen();
+  final $AssetsJenniferGen jennifer = const $AssetsJenniferGen();
   final $AssetsJessaGen jessa = const $AssetsJessaGen();
+  final $AssetsJuniperGen juniper = const $AssetsJuniperGen();
+  final $AssetsKatrinGen katrin = const $AssetsKatrinGen();
   final $AssetsKorishFatherGen korishFather = const $AssetsKorishFatherGen();
+  final $AssetsKylerGen kyler = const $AssetsKylerGen();
+  final $AssetsLanaGen lana = const $AssetsLanaGen();
   final $AssetsLexiGen lexi = const $AssetsLexiGen();
   final $AssetsLisaGen lisa = const $AssetsLisaGen();
   final $AssetsLohGen loh = const $AssetsLohGen();
   final $AssetsLudaGen luda = const $AssetsLudaGen();
   final $AssetsMomGen mom = const $AssetsMomGen();
+  final $AssetsNaomiGen naomi = const $AssetsNaomiGen();
   final $AssetsNicoleGen nicole = const $AssetsNicoleGen();
+  final $AssetsNikkiGen nikki = const $AssetsNikkiGen();
+  final $AssetsOleksandrGen oleksandr = const $AssetsOleksandrGen();
+  final $AssetsPetaGen peta = const $AssetsPetaGen();
   final $AssetsPiperGen piper = const $AssetsPiperGen();
+  final $AssetsRileyGen riley = const $AssetsRileyGen();
   final $AssetsRitaGen rita = const $AssetsRitaGen();
   final $AssetsRockefellerGen rockefeller = const $AssetsRockefellerGen();
+  final $AssetsSamanthaGen samantha = const $AssetsSamanthaGen();
   final $AssetsSashaGen sasha = const $AssetsSashaGen();
   final $AssetsSemGen sem = const $AssetsSemGen();
+  final $AssetsShalinaGen shalina = const $AssetsShalinaGen();
+  final $AssetsTiffanyGen tiffany = const $AssetsTiffanyGen();
+  final $AssetsZazieGen zazie = const $AssetsZazieGen();
 }
 
 class $AssetsAmiaGen {
   const $AssetsAmiaGen();
 
+  final AssetGenImage a13132614NnsAmiamileyPics11880x660 = const AssetGenImage(
+      'lib/assets/npcs/amia/13132614-nns-amiamiley-pics-11_880x660.jpg');
   final AssetGenImage amia = const AssetGenImage(
-    'lib/assets/npcs/amia/amia.png',
-  );
+      'lib/assets/npcs/amia/amia.png');
+  final AssetGenImage amia1 = const AssetGenImage(
+      'lib/assets/npcs/amia/amia1.png');
   final AssetGenImage amiaAva = const AssetGenImage(
-    'lib/assets/npcs/amia/amia_ava.jpg',
-  );
-  final AssetGenImage miamiley = const AssetGenImage(
-    'lib/assets/npcs/amia/miamiley.png',
-  );
+      'lib/assets/npcs/amia/amia_ava.jpg');
 }
 
 class $AssetsPiperGen {
   const $AssetsPiperGen();
 
-  final $AssetsPiperVideoGen video = const $AssetsPiperVideoGen();
+  final $AssetsVideoGen video = const $AssetsVideoGen();
+  final AssetGenImage a1619290291690071880x660 = const AssetGenImage(
+      'lib/assets/npcs/piper/16192902-91690-071_880x660.png');
+  final AssetGenImage a35204392Eporner90Nude880x660 = const AssetGenImage(
+      'lib/assets/npcs/piper/35204392-eporner-90-nude_880x660.jpg');
   final AssetGenImage piper = const AssetGenImage(
-    'lib/assets/npcs/piper/piper.png',
-  );
+      'lib/assets/npcs/piper/piper.png');
+  final AssetGenImage piperAss = const AssetGenImage(
+      'lib/assets/npcs/piper/piper_ass.png');
   final AssetGenImage piperAva = const AssetGenImage(
-    'lib/assets/npcs/piper/piper_ava.jpg',
-  );
+      'lib/assets/npcs/piper/piper_ava.jpg');
+  final AssetGenImage piperGola = const AssetGenImage(
+      'lib/assets/npcs/piper/piper_gola.png');
+  final AssetGenImage piperTits = const AssetGenImage(
+      'lib/assets/npcs/piper/piper_tits.png');
   final AssetGenImage piperZaglushka = const AssetGenImage(
-    'lib/assets/npcs/piper/piper_zaglushka.jpg',
-  );
+      'lib/assets/npcs/piper/piper_zaglushka.jpg');
 }
 
-class $AssetsPiperVideoGen {
-  const $AssetsPiperVideoGen();
+class $AssetsVideoGen {
+  const $AssetsVideoGen();
 
-  final String ggPunishPiper1 =
-      'lib/assets/npcs/piper/video/gg_punish_piper_1.webm';
-  final String ggPunishPiper2 =
-      'lib/assets/npcs/piper/video/gg_punish_piper_2.webm';
-  final String ggPunishPiper3 =
-      'lib/assets/npcs/piper/video/gg_punish_piper_3.webm';
-  final String piperPrositNeZdavatEe =
-      'lib/assets/npcs/piper/video/piper_prosit_ne_zdavat_ee.mp4';
+  final String ggPunishPiper1 = 'lib/assets/npcs/piper/video/gg_punish_piper_1.webm';
+  final String ggPunishPiper2 = 'lib/assets/npcs/piper/video/gg_punish_piper_2.webm';
+  final String ggPunishPiper3 = 'lib/assets/npcs/piper/video/gg_punish_piper_3.webm';
+  final String piperPrositNeZdavatEe = 'lib/assets/npcs/piper/video/piper_prosit_ne_zdavat_ee.mp4';
   final String shavesPussy = 'lib/assets/npcs/piper/video/shaves_pussy.webm';
   final String shavesPussy1 = 'lib/assets/npcs/piper/video/shaves_pussy1.webm';
   final String shower = 'lib/assets/npcs/piper/video/shower.webm';
   final String shower2 = 'lib/assets/npcs/piper/video/shower2.webm';
-  final String spankedPiper1 =
-      'lib/assets/npcs/piper/video/spanked_piper_1.mp4';
-  final String spankedPiper2 =
-      'lib/assets/npcs/piper/video/spanked_piper_2.mp4';
-  final String spankedPiper3 =
-      'lib/assets/npcs/piper/video/spanked_piper_3.mp4';
+  final String spank001 = 'lib/assets/npcs/piper/video/spank_001.mp4';
+  final String spank002 = 'lib/assets/npcs/piper/video/spank_002.mp4';
+  final String spank003 = 'lib/assets/npcs/piper/video/spank_003.mp4';
+  final String spank005Finish = 'lib/assets/npcs/piper/video/spank_005_finish.mp4';
+  final String spank4 = 'lib/assets/npcs/piper/video/spank_4.mp4';
+  final String spank5Sex = 'lib/assets/npcs/piper/video/spank_5_sex.mp4';
+  final String spank6Sverhu = 'lib/assets/npcs/piper/video/spank_6_sverhu.mp4';
+  final String spank7Rakom = 'lib/assets/npcs/piper/video/spank_7_rakom.mp4';
+  final String spank8FinishOnAss = 'lib/assets/npcs/piper/video/spank_8_finish_on_ass.mp4';
+  final String spankedPiper1 = 'lib/assets/npcs/piper/video/spanked_piper_1.mp4';
+  final String spankedPiper2 = 'lib/assets/npcs/piper/video/spanked_piper_2.mp4';
+  final String spankedPiper3 = 'lib/assets/npcs/piper/video/spanked_piper_3.mp4';
 }
 
 class $AssetsLudaGen {
   const $AssetsLudaGen();
 
   final AssetGenImage kortney = const AssetGenImage(
-    'lib/assets/npcs/luda/kortney.jpg',
-  );
+      'lib/assets/npcs/luda/kortney.jpg');
   final AssetGenImage luda = const AssetGenImage(
-    'lib/assets/npcs/luda/luda.png',
-  );
+      'lib/assets/npcs/luda/luda.png');
   final AssetGenImage ludaAva = const AssetGenImage(
-    'lib/assets/npcs/luda/luda_ava.jpg',
-  );
+      'lib/assets/npcs/luda/luda_ava.jpg');
   final String work = 'lib/assets/npcs/luda/work.webm';
 }
 
@@ -954,94 +845,65 @@ class $AssetsLisaGen {
   const $AssetsLisaGen();
 
   final AssetGenImage lisa = const AssetGenImage(
-    'lib/assets/npcs/lisa/lisa.png',
-  );
+      'lib/assets/npcs/lisa/lisa.png');
   final AssetGenImage lisa1 = const AssetGenImage(
-    'lib/assets/npcs/lisa/lisa_1.png',
-  );
+      'lib/assets/npcs/lisa/lisa_1.png');
   final AssetGenImage lisaAva = const AssetGenImage(
-    'lib/assets/npcs/lisa/lisa_ava.jpg',
-  );
+      'lib/assets/npcs/lisa/lisa_ava.jpg');
 }
 
 class $AssetsMomGen {
   const $AssetsMomGen();
 
-  final $AssetsMomVideoGen video = const $AssetsMomVideoGen();
+  final $AssetsVideoGen video = const $AssetsVideoGen();
   final AssetGenImage a9568826Img6122880x660 = const AssetGenImage(
-    'lib/assets/npcs/mom/9568826-img-6122_880x660.jpg',
-  );
+      'lib/assets/npcs/mom/9568826-img-6122_880x660.jpg');
   final AssetGenImage cabMom = const AssetGenImage(
-    'lib/assets/npcs/mom/cab_mom.jpg',
-  );
+      'lib/assets/npcs/mom/cab_mom.jpg');
   final AssetGenImage huliganMomKitch = const AssetGenImage(
-    'lib/assets/npcs/mom/huligan_mom_kitch.jpeg',
-  );
+      'lib/assets/npcs/mom/huligan_mom_kitch.jpeg');
   final AssetGenImage mom = const AssetGenImage('lib/assets/npcs/mom/mom.jpg');
   final AssetGenImage momAva = const AssetGenImage(
-    'lib/assets/npcs/mom/mom_ava.png',
-  );
+      'lib/assets/npcs/mom/mom_ava.png');
   final AssetGenImage momAva1 = const AssetGenImage(
-    'lib/assets/npcs/mom/mom_ava1.jpg',
-  );
+      'lib/assets/npcs/mom/mom_ava1.jpg');
   final AssetGenImage momKoffe = const AssetGenImage(
-    'lib/assets/npcs/mom/mom_koffe.jpg',
-  );
+      'lib/assets/npcs/mom/mom_koffe.jpg');
   final AssetGenImage momPool = const AssetGenImage(
-    'lib/assets/npcs/mom/mom_pool.jpg',
-  );
+      'lib/assets/npcs/mom/mom_pool.jpg');
   final AssetGenImage momRelax = const AssetGenImage(
-    'lib/assets/npcs/mom/mom_relax.jpg',
-  );
+      'lib/assets/npcs/mom/mom_relax.jpg');
   final AssetGenImage momWalk = const AssetGenImage(
-    'lib/assets/npcs/mom/mom_walk.jpg',
-  );
+      'lib/assets/npcs/mom/mom_walk.jpg');
   final AssetGenImage momWorkPlace = const AssetGenImage(
-    'lib/assets/npcs/mom/mom_work_place.jpg',
-  );
+      'lib/assets/npcs/mom/mom_work_place.jpg');
   final AssetGenImage momWorkPlace1 = const AssetGenImage(
-    'lib/assets/npcs/mom/mom_work_place_1.jpg',
-  );
+      'lib/assets/npcs/mom/mom_work_place_1.jpg');
   final AssetGenImage momZaglushka = const AssetGenImage(
-    'lib/assets/npcs/mom/mom_zaglushka.jpg',
-  );
+      'lib/assets/npcs/mom/mom_zaglushka.jpg');
   final AssetGenImage workSpace = const AssetGenImage(
-    'lib/assets/npcs/mom/work_space.jpg',
-  );
+      'lib/assets/npcs/mom/work_space.jpg');
   final AssetGenImage zalBook = const AssetGenImage(
-    'lib/assets/npcs/mom/zal_book.png',
-  );
+      'lib/assets/npcs/mom/zal_book.png');
 }
 
-class $AssetsMomVideoGen {
-  const $AssetsMomVideoGen();
+class $AssetsVideoGen {
+  const $AssetsVideoGen();
 
-  final String beach02Pereodevalka =
-      'lib/assets/npcs/mom/video/Beach_02_pereodevalka.webm';
-  final String beach06Pereodevalka03 =
-      'lib/assets/npcs/mom/video/Beach_06_pereodevalka_03.webm';
+  final String beach02Pereodevalka = 'lib/assets/npcs/mom/video/Beach_02_pereodevalka.webm';
+  final String beach06Pereodevalka03 = 'lib/assets/npcs/mom/video/Beach_06_pereodevalka_03.webm';
   final String beach07Finish = 'lib/assets/npcs/mom/video/Beach_07_finish.webm';
-  final String beach01PriglosNaPlyazh =
-      'lib/assets/npcs/mom/video/beach_01_priglos_na_plyazh.webm';
-  final String beach03Pereodevalka1 =
-      'lib/assets/npcs/mom/video/beach_03_pereodevalka_1.mp4';
-  final String beach03Pereodevalka2 =
-      'lib/assets/npcs/mom/video/beach_03_pereodevalka_2.mp4';
-  final String beach04Pereodevalka1 =
-      'lib/assets/npcs/mom/video/beach_04_pereodevalka_1.mp4';
-  final String beach04Pereodevalka2 =
-      'lib/assets/npcs/mom/video/beach_04_pereodevalka_2.mp4';
-  final String beach05Pereodevalka1 =
-      'lib/assets/npcs/mom/video/beach_05_pereodevalka_1.mp4';
-  final String beach05Pereodevalka2 =
-      'lib/assets/npcs/mom/video/beach_05_pereodevalka_2.mp4';
-  final String beach06Pereodevalka01 =
-      'lib/assets/npcs/mom/video/beach_06_pereodevalka_01.mp4';
-  final String beach06Pereodevalka02 =
-      'lib/assets/npcs/mom/video/beach_06_pereodevalka_02.mp4';
+  final String beach01PriglosNaPlyazh = 'lib/assets/npcs/mom/video/beach_01_priglos_na_plyazh.webm';
+  final String beach03Pereodevalka1 = 'lib/assets/npcs/mom/video/beach_03_pereodevalka_1.mp4';
+  final String beach03Pereodevalka2 = 'lib/assets/npcs/mom/video/beach_03_pereodevalka_2.mp4';
+  final String beach04Pereodevalka1 = 'lib/assets/npcs/mom/video/beach_04_pereodevalka_1.mp4';
+  final String beach04Pereodevalka2 = 'lib/assets/npcs/mom/video/beach_04_pereodevalka_2.mp4';
+  final String beach05Pereodevalka1 = 'lib/assets/npcs/mom/video/beach_05_pereodevalka_1.mp4';
+  final String beach05Pereodevalka2 = 'lib/assets/npcs/mom/video/beach_05_pereodevalka_2.mp4';
+  final String beach06Pereodevalka01 = 'lib/assets/npcs/mom/video/beach_06_pereodevalka_01.mp4';
+  final String beach06Pereodevalka02 = 'lib/assets/npcs/mom/video/beach_06_pereodevalka_02.mp4';
   final String beach0Prolog = 'lib/assets/npcs/mom/video/beach_0_prolog.webm';
-  final String beach0Prolog1 =
-      'lib/assets/npcs/mom/video/beach_0_prolog_1.webm';
+  final String beach0Prolog1 = 'lib/assets/npcs/mom/video/beach_0_prolog_1.webm';
   final String momKitch1 = 'lib/assets/npcs/mom/video/mom_kitch_1.mp4';
   final String momKitchRed1 = 'lib/assets/npcs/mom/video/mom_kitch_red_1.mp4';
   final String momPhone = 'lib/assets/npcs/mom/video/mom_phone.mp4';
@@ -1059,27 +921,22 @@ class $AssetsMomVideoGen {
 class $AssetsElsaGen {
   const $AssetsElsaGen();
 
+  final AssetGenImage a38446977Els004jsp338511005880x660 = const AssetGenImage(
+      'lib/assets/npcs/elsa/38446977-els004jsp-338511005_880x660.jpg');
   final AssetGenImage compromisingPhone1 = const AssetGenImage(
-    'lib/assets/npcs/elsa/compromising_phone_1.jpg',
-  );
+      'lib/assets/npcs/elsa/compromising_phone_1.jpg');
   final AssetGenImage compromisingPhone2 = const AssetGenImage(
-    'lib/assets/npcs/elsa/compromising_phone_2.jpg',
-  );
+      'lib/assets/npcs/elsa/compromising_phone_2.jpg');
   final AssetGenImage doorElsa = const AssetGenImage(
-    'lib/assets/npcs/elsa/door_elsa.jpg',
-  );
+      'lib/assets/npcs/elsa/door_elsa.jpg');
   final AssetGenImage elsaJpg = const AssetGenImage(
-    'lib/assets/npcs/elsa/elsa.jpg',
-  );
+      'lib/assets/npcs/elsa/elsa.jpg');
   final AssetGenImage elsaPng = const AssetGenImage(
-    'lib/assets/npcs/elsa/elsa.png',
-  );
+      'lib/assets/npcs/elsa/elsa.png');
   final AssetGenImage elsaAva = const AssetGenImage(
-    'lib/assets/npcs/elsa/elsa_ava.jpg',
-  );
+      'lib/assets/npcs/elsa/elsa_ava.jpg');
   final AssetGenImage elsaZaglushka = const AssetGenImage(
-    'lib/assets/npcs/elsa/elsa_zaglushka.jpg',
-  );
+      'lib/assets/npcs/elsa/elsa_zaglushka.jpg');
 }
 
 class $AssetsDenGen {
@@ -1088,32 +945,42 @@ class $AssetsDenGen {
   final String college2 = 'lib/assets/npcs/den/college_2.mp4';
   final AssetGenImage den = const AssetGenImage('lib/assets/npcs/den/den.jpg');
   final AssetGenImage denAva = const AssetGenImage(
-    'lib/assets/npcs/den/den_ava.png',
-  );
+      'lib/assets/npcs/den/den_ava.png');
   final String firstPrincipal = 'lib/assets/npcs/den/first_principal.mp4';
   final AssetGenImage test1 = const AssetGenImage(
-    'lib/assets/npcs/den/test_1.jpg',
-  );
+      'lib/assets/npcs/den/test_1.jpg');
   final String test2Mp4 = 'lib/assets/npcs/den/test_2.mp4';
   final String test2Webm = 'lib/assets/npcs/den/test_2.webm';
   final String test23 = 'lib/assets/npcs/den/test_23.webm';
   final AssetGenImage univerBusy = const AssetGenImage(
-    'lib/assets/npcs/den/univer_busy.jpg',
-  );
+      'lib/assets/npcs/den/univer_busy.jpg');
 }
 
 class $AssetsDekanGen {
   const $AssetsDekanGen();
 
+  final AssetGenImage geminiGeneratedImage6ahnid6ahnid6ahn = const AssetGenImage(
+      'lib/assets/npcs/dekan/Gemini_Generated_Image_6ahnid6ahnid6ahn.png');
+  final AssetGenImage geminiGeneratedImage6ahnid6ahnid6ahn1 = const AssetGenImage(
+      'lib/assets/npcs/dekan/Gemini_Generated_Image_6ahnid6ahnid6ahn (1).png');
+  final AssetGenImage geminiGeneratedImageKybl9ukybl9ukybl = const AssetGenImage(
+      'lib/assets/npcs/dekan/Gemini_Generated_Image_kybl9ukybl9ukybl.png');
+  final AssetGenImage geminiGeneratedImageW0hv1kw0hv1kw0hv = const AssetGenImage(
+      'lib/assets/npcs/dekan/Gemini_Generated_Image_w0hv1kw0hv1kw0hv.png');
+  final AssetGenImage geminiGeneratedImageX4ndc2x4ndc2x4nd = const AssetGenImage(
+      'lib/assets/npcs/dekan/Gemini_Generated_Image_x4ndc2x4ndc2x4nd.png');
+  final AssetGenImage geminiGeneratedImageYm8rfnym8rfnym8r = const AssetGenImage(
+      'lib/assets/npcs/dekan/Gemini_Generated_Image_ym8rfnym8rfnym8r.png');
   final AssetGenImage dekan = const AssetGenImage(
-    'lib/assets/npcs/dekan/dekan.jpg',
-  );
+      'lib/assets/npcs/dekan/dekan.png');
   final AssetGenImage dekan1 = const AssetGenImage(
-    'lib/assets/npcs/dekan/dekan_1.jpg',
-  );
+      'lib/assets/npcs/dekan/dekan_1.jpg');
   final AssetGenImage dekanAva = const AssetGenImage(
-    'lib/assets/npcs/dekan/dekan_ava.png',
-  );
+      'lib/assets/npcs/dekan/dekan_ava.png');
+  final AssetGenImage dekanAva1 = const AssetGenImage(
+      'lib/assets/npcs/dekan/dekan_ava1.png');
+  final AssetGenImage dekanq = const AssetGenImage(
+      'lib/assets/npcs/dekan/dekanq.jpg');
 }
 
 class $AssetsRockefellerGen {
@@ -1121,223 +988,135 @@ class $AssetsRockefellerGen {
 
   final String reklama = 'lib/assets/npcs/rockefeller/reklama.webm';
   final AssetGenImage rockefellerAva = const AssetGenImage(
-    'lib/assets/npcs/rockefeller/rockefeller_ava.png',
-  );
+      'lib/assets/npcs/rockefeller/rockefeller_ava.png');
   final AssetGenImage videoRecording = const AssetGenImage(
-    'lib/assets/npcs/rockefeller/video_recording.jpg',
-  );
+      'lib/assets/npcs/rockefeller/video_recording.jpg');
 }
 
 class $AssetsDanielleGen {
   const $AssetsDanielleGen();
 
-  final String daniela1MinetPerents =
-      'lib/assets/npcs/danielle/daniela_1_minet_perents.webm';
-  final String daniela2SexPerents =
-      'lib/assets/npcs/danielle/daniela_2_sex_perents.webm';
-  final String danielaAnalPerents =
-      'lib/assets/npcs/danielle/daniela_anal_perents.webm';
+  final String daniela1MinetPerents = 'lib/assets/npcs/danielle/daniela_1_minet_perents.webm';
+  final String daniela2SexPerents = 'lib/assets/npcs/danielle/daniela_2_sex_perents.webm';
+  final String danielaAnalPerents = 'lib/assets/npcs/danielle/daniela_anal_perents.webm';
   final AssetGenImage danielle = const AssetGenImage(
-    'lib/assets/npcs/danielle/danielle.png',
-  );
+      'lib/assets/npcs/danielle/danielle.png');
   final AssetGenImage danielleAva = const AssetGenImage(
-    'lib/assets/npcs/danielle/danielle_ava.jpg',
-  );
+      'lib/assets/npcs/danielle/danielle_ava.jpg');
   final AssetGenImage razgovorKogdaSpalila = const AssetGenImage(
-    'lib/assets/npcs/danielle/razgovor_kogda_spalila.png',
-  );
+      'lib/assets/npcs/danielle/razgovor_kogda_spalila.png');
 }
 
 class $AssetsKorishFatherGen {
   const $AssetsKorishFatherGen();
 
   final AssetGenImage korishFatherPng = const AssetGenImage(
-    'lib/assets/npcs/korish_father/korish_father.png',
-  );
+      'lib/assets/npcs/korish_father/korish_father.png');
   final AssetGenImage korishFatherWebp = const AssetGenImage(
-    'lib/assets/npcs/korish_father/korish_father.webp',
-  );
+      'lib/assets/npcs/korish_father/korish_father.webp');
   final AssetGenImage korishFatherAva = const AssetGenImage(
-    'lib/assets/npcs/korish_father/korish_father_ava.png',
-  );
+      'lib/assets/npcs/korish_father/korish_father_ava.png');
 }
 
 class $AssetsNicoleGen {
   const $AssetsNicoleGen();
 
-  final $AssetsNicoleImgGen img = const $AssetsNicoleImgGen();
+  final $AssetsImgGen img = const $AssetsImgGen();
   final AssetGenImage a20208345Image0880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/20208345-image-0_880x660.png',
-  );
-  final String conversationHelpingNerd =
-      'lib/assets/npcs/nicole/conversation_helping_nerd.mp4';
+      'lib/assets/npcs/nicole/20208345-image-0_880x660.png');
+  final String conversationHelpingNerd = 'lib/assets/npcs/nicole/conversation_helping_nerd.mp4';
   final String correctBadGrade = 'lib/assets/npcs/nicole/correct_bad_grade.mp4';
   final String firstMinet = 'lib/assets/npcs/nicole/first_minet.mp4';
   final String firstMinetFin = 'lib/assets/npcs/nicole/first_minet_fin.mp4';
   final String moveCompromat = 'lib/assets/npcs/nicole/move_compromat.mp4';
   final AssetGenImage nicole = const AssetGenImage(
-    'lib/assets/npcs/nicole/nicole.png',
-  );
-  final String viewVideoComprom =
-      'lib/assets/npcs/nicole/view_video_comprom.mp4';
+      'lib/assets/npcs/nicole/nicole.png');
+  final String viewVideoComprom = 'lib/assets/npcs/nicole/view_video_comprom.mp4';
   final String zauch = 'lib/assets/npcs/nicole/zauch.mp4';
 }
 
-class $AssetsNicoleImgGen {
-  const $AssetsNicoleImgGen();
+class $AssetsImgGen {
+  const $AssetsImgGen();
 
   final AssetGenImage a136074233912780880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/13607423-3912780_880x660.jpg',
-  );
+      'lib/assets/npcs/nicole/img/13607423-3912780_880x660.jpg');
   final AssetGenImage a136074263912793880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/13607426-3912793_880x660.jpg',
-  );
+      'lib/assets/npcs/nicole/img/13607426-3912793_880x660.jpg');
   final AssetGenImage a136074273912795880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/13607427-3912795_880x660.jpg',
-  );
+      'lib/assets/npcs/nicole/img/13607427-3912795_880x660.jpg');
   final AssetGenImage a136074293912802880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/13607429-3912802_880x660.jpg',
-  );
+      'lib/assets/npcs/nicole/img/13607429-3912802_880x660.jpg');
   final AssetGenImage a136074593912915880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/13607459-3912915_880x660.jpg',
-  );
+      'lib/assets/npcs/nicole/img/13607459-3912915_880x660.jpg');
   final AssetGenImage a20208346Image1880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/20208346-image-1_880x660.jpg',
-  );
+      'lib/assets/npcs/nicole/img/20208346-image-1_880x660.jpg');
   final AssetGenImage a20208362Image18880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/20208362-image-18_880x660.jpg',
-  );
+      'lib/assets/npcs/nicole/img/20208362-image-18_880x660.jpg');
   final AssetGenImage a20208363Image19880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/20208363-image-19_880x660.jpg',
-  );
+      'lib/assets/npcs/nicole/img/20208363-image-19_880x660.jpg');
   final AssetGenImage a20208364Image20880x660 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/20208364-image-20_880x660.jpg',
-  );
+      'lib/assets/npcs/nicole/img/20208364-image-20_880x660.jpg');
   final AssetGenImage a41378323003Cbb0 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/41378323_003_cbb0.jpg',
-  );
+      'lib/assets/npcs/nicole/img/41378323_003_cbb0.jpg');
   final AssetGenImage a712233650328aeb = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/71223365_032_8aeb.jpg',
-  );
-  final AssetGenImage
-  a9898305BrazzersNicoleAnistonTeamPlayer145Ed50e474660319a035a41268ba1e199e880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898305-brazzers-nicole-aniston-team-player-145-ed50e474660319a035a41268ba1e199e_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898306BrazzersNicoleAnistonTeamPlayer146220de4ff13b1dce7efeeaa2084d7de9b880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898306-brazzers-nicole-aniston-team-player-146-220de4ff13b1dce7efeeaa2084d7de9b_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898307BrazzersNicoleAnistonTeamPlayer147E7ac14466bcc2f61ffbb79c668d0e23c880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898307-brazzers-nicole-aniston-team-player-147-e7ac14466bcc2f61ffbb79c668d0e23c_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898308BrazzersNicoleAnistonTeamPlayer = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/9898308-brazzers-nicole-aniston-team-player.jpg',
-  );
-  final AssetGenImage
-  a9898308BrazzersNicoleAnistonTeamPlayer14828924f67d8db24800efa4a8b1e115bf3880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898308-brazzers-nicole-aniston-team-player-148-28924f67d8db24800efa4a8b1e115bf3_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898309BrazzersNicoleAnistonTeamPlayer149F77790b8cef7535c3ab034c942503306880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898309-brazzers-nicole-aniston-team-player-149-f77790b8cef7535c3ab034c942503306_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898310BrazzersNicoleAnistonTeamPlayer1500216e7b878ec629f175fd3a331e27b86880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898310-brazzers-nicole-aniston-team-player-150-0216e7b878ec629f175fd3a331e27b86_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898311BrazzersNicoleAnistonTeamPlayer = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/9898311-brazzers-nicole-aniston-team-player.jpg',
-  );
-  final AssetGenImage
-  a9898311BrazzersNicoleAnistonTeamPlayer15108abc69bf9d1b5fe1c30e6cb0e0da031880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898311-brazzers-nicole-aniston-team-player-151-08abc69bf9d1b5fe1c30e6cb0e0da031_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898312BrazzersNicoleAnistonTeamPlayer152956a2c0ed78e084aef3327facc709802880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898312-brazzers-nicole-aniston-team-player-152-956a2c0ed78e084aef3327facc709802_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898313BrazzersNicoleAnistonTeamPlayer153 = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/9898313-brazzers-nicole-aniston-team-player-153.jpg',
-  );
-  final AssetGenImage
-  a9898313BrazzersNicoleAnistonTeamPlayer1536507012b5b9d3242abbf0988e2ac295f880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898313-brazzers-nicole-aniston-team-player-153-6507012b5b9d3242abbf0988e2ac295f_880x660.jpg',
-      );
+      'lib/assets/npcs/nicole/img/71223365_032_8aeb.jpg');
+  final AssetGenImage a9898305BrazzersNicoleAnistonTeamPlayer145Ed50e474660319a035a41268ba1e199e880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898305-brazzers-nicole-aniston-team-player-145-ed50e474660319a035a41268ba1e199e_880x660.jpg');
+  final AssetGenImage a9898306BrazzersNicoleAnistonTeamPlayer146220de4ff13b1dce7efeeaa2084d7de9b880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898306-brazzers-nicole-aniston-team-player-146-220de4ff13b1dce7efeeaa2084d7de9b_880x660.jpg');
+  final AssetGenImage a9898307BrazzersNicoleAnistonTeamPlayer147E7ac14466bcc2f61ffbb79c668d0e23c880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898307-brazzers-nicole-aniston-team-player-147-e7ac14466bcc2f61ffbb79c668d0e23c_880x660.jpg');
+  final AssetGenImage a9898308BrazzersNicoleAnistonTeamPlayer = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898308-brazzers-nicole-aniston-team-player.jpg');
+  final AssetGenImage a9898308BrazzersNicoleAnistonTeamPlayer14828924f67d8db24800efa4a8b1e115bf3880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898308-brazzers-nicole-aniston-team-player-148-28924f67d8db24800efa4a8b1e115bf3_880x660.jpg');
+  final AssetGenImage a9898309BrazzersNicoleAnistonTeamPlayer149F77790b8cef7535c3ab034c942503306880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898309-brazzers-nicole-aniston-team-player-149-f77790b8cef7535c3ab034c942503306_880x660.jpg');
+  final AssetGenImage a9898310BrazzersNicoleAnistonTeamPlayer1500216e7b878ec629f175fd3a331e27b86880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898310-brazzers-nicole-aniston-team-player-150-0216e7b878ec629f175fd3a331e27b86_880x660.jpg');
+  final AssetGenImage a9898311BrazzersNicoleAnistonTeamPlayer = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898311-brazzers-nicole-aniston-team-player.jpg');
+  final AssetGenImage a9898311BrazzersNicoleAnistonTeamPlayer15108abc69bf9d1b5fe1c30e6cb0e0da031880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898311-brazzers-nicole-aniston-team-player-151-08abc69bf9d1b5fe1c30e6cb0e0da031_880x660.jpg');
+  final AssetGenImage a9898312BrazzersNicoleAnistonTeamPlayer152956a2c0ed78e084aef3327facc709802880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898312-brazzers-nicole-aniston-team-player-152-956a2c0ed78e084aef3327facc709802_880x660.jpg');
+  final AssetGenImage a9898313BrazzersNicoleAnistonTeamPlayer153 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898313-brazzers-nicole-aniston-team-player-153.jpg');
+  final AssetGenImage a9898313BrazzersNicoleAnistonTeamPlayer1536507012b5b9d3242abbf0988e2ac295f880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898313-brazzers-nicole-aniston-team-player-153-6507012b5b9d3242abbf0988e2ac295f_880x660.jpg');
   final AssetGenImage a9898315BrazzersNicoleAniston = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/9898315-brazzers-nicole-aniston.jpg',
-  );
-  final AssetGenImage
-  a9898315BrazzersNicoleAnistonTeamPlayer154A2c476a39b80f6eed65f1a17645ceb62880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898315-brazzers-nicole-aniston-team-player-154-a2c476a39b80f6eed65f1a17645ceb62_880x660.jpg',
-      );
+      'lib/assets/npcs/nicole/img/9898315-brazzers-nicole-aniston.jpg');
+  final AssetGenImage a9898315BrazzersNicoleAnistonTeamPlayer154A2c476a39b80f6eed65f1a17645ceb62880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898315-brazzers-nicole-aniston-team-player-154-a2c476a39b80f6eed65f1a17645ceb62_880x660.jpg');
   final AssetGenImage a9898333BrazzersNicoleAniston = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/9898333-brazzers-nicole-aniston.jpg',
-  );
-  final AssetGenImage
-  a9898333BrazzersNicoleAnistonTeamPlayer1720ae17c2b20fcdfed9d89e22bd78c20f5880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898333-brazzers-nicole-aniston-team-player-172-0ae17c2b20fcdfed9d89e22bd78c20f5_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898334BrazzersNicoleAnistonTeamPlayer17375624e213da23ffcec458c32d2aabceb880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898334-brazzers-nicole-aniston-team-player-173-75624e213da23ffcec458c32d2aabceb_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898340BrazzersNicoleAnistonTeamPlayer178E7a88c5cde4849d0d9fcecd99038e159880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898340-brazzers-nicole-aniston-team-player-178-e7a88c5cde4849d0d9fcecd99038e159_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898343BrazzersNicoleAnistonTeamPlayer18126f07a7ca6aa1ce621c71909d744490c880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898343-brazzers-nicole-aniston-team-player-181-26f07a7ca6aa1ce621c71909d744490c_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898351BrazzersNicoleAnistonTeamPlayer18716e3d1ffd7eaf6eb985499b09f9f2d5b880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898351-brazzers-nicole-aniston-team-player-187-16e3d1ffd7eaf6eb985499b09f9f2d5b_880x660.jpg',
-      );
-  final AssetGenImage
-  a9898354BrazzersNicoleAnistonTeamPlayer188F47bb9b09e0f35119af0ee8f021efaba880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/nicole/img/9898354-brazzers-nicole-aniston-team-player-188-f47bb9b09e0f35119af0ee8f021efaba_880x660.jpg',
-      );
-  final AssetGenImage
-  nicoleAnistonPornstarGirlOfficeStockingsShirtDevushka = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/nicole-aniston-pornstar-girl-office-stockings-shirt-devushka.jpg',
-  );
+      'lib/assets/npcs/nicole/img/9898333-brazzers-nicole-aniston.jpg');
+  final AssetGenImage a9898333BrazzersNicoleAnistonTeamPlayer1720ae17c2b20fcdfed9d89e22bd78c20f5880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898333-brazzers-nicole-aniston-team-player-172-0ae17c2b20fcdfed9d89e22bd78c20f5_880x660.jpg');
+  final AssetGenImage a9898334BrazzersNicoleAnistonTeamPlayer17375624e213da23ffcec458c32d2aabceb880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898334-brazzers-nicole-aniston-team-player-173-75624e213da23ffcec458c32d2aabceb_880x660.jpg');
+  final AssetGenImage a9898340BrazzersNicoleAnistonTeamPlayer178E7a88c5cde4849d0d9fcecd99038e159880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898340-brazzers-nicole-aniston-team-player-178-e7a88c5cde4849d0d9fcecd99038e159_880x660.jpg');
+  final AssetGenImage a9898343BrazzersNicoleAnistonTeamPlayer18126f07a7ca6aa1ce621c71909d744490c880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898343-brazzers-nicole-aniston-team-player-181-26f07a7ca6aa1ce621c71909d744490c_880x660.jpg');
+  final AssetGenImage a9898351BrazzersNicoleAnistonTeamPlayer18716e3d1ffd7eaf6eb985499b09f9f2d5b880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898351-brazzers-nicole-aniston-team-player-187-16e3d1ffd7eaf6eb985499b09f9f2d5b_880x660.jpg');
+  final AssetGenImage a9898354BrazzersNicoleAnistonTeamPlayer188F47bb9b09e0f35119af0ee8f021efaba880x660 = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/9898354-brazzers-nicole-aniston-team-player-188-f47bb9b09e0f35119af0ee8f021efaba_880x660.jpg');
+  final AssetGenImage nicoleAnistonPornstarGirlOfficeStockingsShirtDevushka = const AssetGenImage(
+      'lib/assets/npcs/nicole/img/nicole-aniston-pornstar-girl-office-stockings-shirt-devushka.jpg');
   final AssetGenImage nicoleAva = const AssetGenImage(
-    'lib/assets/npcs/nicole/img/nicole_ava.jpg',
-  );
+      'lib/assets/npcs/nicole/img/nicole_ava.jpg');
 }
 
 class $AssetsLohGen {
   const $AssetsLohGen();
 
   final AssetGenImage icon = const AssetGenImage(
-    'lib/assets/npcs/loh/icon.png',
-  );
+      'lib/assets/npcs/loh/icon.png');
   final AssetGenImage loshok = const AssetGenImage(
-    'lib/assets/npcs/loh/loshok.png',
-  );
+      'lib/assets/npcs/loh/loshok.png');
   final AssetGenImage loshokAva = const AssetGenImage(
-    'lib/assets/npcs/loh/loshok_ava.png',
-  );
+      'lib/assets/npcs/loh/loshok_ava.png');
 }
 
 class $AssetsSashaGen {
@@ -1345,23 +1124,35 @@ class $AssetsSashaGen {
 
   final $AssetsSashVideoGen sashVideo = const $AssetsSashVideoGen();
   final AssetGenImage a13590397Sasha005880x660 = const AssetGenImage(
-    'lib/assets/npcs/sasha/13590397-sasha005_880x660.jpg',
-  );
+      'lib/assets/npcs/sasha/13590397-sasha005_880x660.jpg');
+  final AssetGenImage a1933682772022008880x660 = const AssetGenImage(
+      'lib/assets/npcs/sasha/19336827-72022-008_880x660.jpg');
+  final AssetGenImage a1933682972022010880x660 = const AssetGenImage(
+      'lib/assets/npcs/sasha/19336829-72022-010_880x660.jpg');
+  final AssetGenImage a1933683072022011880x660 = const AssetGenImage(
+      'lib/assets/npcs/sasha/19336830-72022-011_880x660.jpg');
+  final AssetGenImage a1933683672022017880x660 = const AssetGenImage(
+      'lib/assets/npcs/sasha/19336836-72022-017_880x660.jpg');
+  final AssetGenImage a1933683872022019880x660 = const AssetGenImage(
+      'lib/assets/npcs/sasha/19336838-72022-019_880x660.jpg');
+  final AssetGenImage a19569801SashaRoseDrilledSweeties023880x660 = const AssetGenImage(
+      'lib/assets/npcs/sasha/19569801-sasha-rose-drilled-sweeties-023_880x660.jpg');
   final AssetGenImage sasha = const AssetGenImage(
-    'lib/assets/npcs/sasha/sasha.png',
-  );
+      'lib/assets/npcs/sasha/sasha.png');
+  final AssetGenImage sasha1 = const AssetGenImage(
+      'lib/assets/npcs/sasha/sasha1.png');
   final AssetGenImage sashaAva = const AssetGenImage(
-    'lib/assets/npcs/sasha/sasha_ava.jpg',
-  );
+      'lib/assets/npcs/sasha/sasha_ava.jpg');
   final AssetGenImage sashaAva1 = const AssetGenImage(
-    'lib/assets/npcs/sasha/sasha_ava1.jpeg',
-  );
+      'lib/assets/npcs/sasha/sasha_ava1.jpeg');
   final AssetGenImage sashaWaiter = const AssetGenImage(
-    'lib/assets/npcs/sasha/sasha_waiter.png',
-  );
+      'lib/assets/npcs/sasha/sasha_waiter.png');
   final AssetGenImage sashaWashing = const AssetGenImage(
-    'lib/assets/npcs/sasha/sasha_washing.png',
-  );
+      'lib/assets/npcs/sasha/sasha_washing.png');
+  final AssetGenImage showTits = const AssetGenImage(
+      'lib/assets/npcs/sasha/show_tits.jpg');
+  final AssetGenImage touchTits = const AssetGenImage(
+      'lib/assets/npcs/sasha/touch_tits.jpg');
 }
 
 class $AssetsSashVideoGen {
@@ -1372,16 +1163,35 @@ class $AssetsSashVideoGen {
   final String run2 = 'lib/assets/npcs/sasha/sash_video/run_2.webm';
 }
 
+class $AssetsSamanthaGen {
+  const $AssetsSamanthaGen();
+
+  final AssetGenImage a160352556541380001A733296x1000 = const AssetGenImage(
+      'lib/assets/npcs/samantha/1603525-56541380-001-a733_296x1000.webp');
+  final AssetGenImage samantha = const AssetGenImage(
+      'lib/assets/npcs/samantha/samantha.jpg');
+  final AssetGenImage samanthaAva = const AssetGenImage(
+      'lib/assets/npcs/samantha/samantha_ava.png');
+}
+
 class $AssetsSemGen {
   const $AssetsSemGen();
 
   final AssetGenImage sem = const AssetGenImage('lib/assets/npcs/sem/sem.png');
   final AssetGenImage sem1 = const AssetGenImage(
-    'lib/assets/npcs/sem/sem1.jpg',
-  );
+      'lib/assets/npcs/sem/sem1.jpg');
   final AssetGenImage semAva = const AssetGenImage(
-    'lib/assets/npcs/sem/sem_ava.jpg',
-  );
+      'lib/assets/npcs/sem/sem_ava.jpg');
+}
+
+class $AssetsShalinaGen {
+  const $AssetsShalinaGen();
+
+  final AssetGenImage a27308050OnlyfansShalinaDivine02092020819076542880x660 = const AssetGenImage(
+      'lib/assets/npcs/shalina/27308050-onlyfans-shalina-divine-02-09-2020-819076542_880x660.jpg');
+  final String shaileneAva = 'lib/assets/npcs/shalina/Shailene.ava';
+  final AssetGenImage shaileneJpeg = const AssetGenImage(
+      'lib/assets/npcs/shalina/Shailene.jpeg');
 }
 
 class $AssetsCherieGen {
@@ -1389,45 +1199,32 @@ class $AssetsCherieGen {
 
   final String afterMassage1 = 'lib/assets/npcs/cherie/after_massage_1.webm';
   final String afterMassage2 = 'lib/assets/npcs/cherie/after_massage_2.webm';
-  final String afterMassageFuck =
-      'lib/assets/npcs/cherie/after_massage_fuck.webm';
-  final String afterMassageFuck2End2 =
-      'lib/assets/npcs/cherie/after_massage_fuck_2_end_2.webm';
+  final String afterMassageFuck = 'lib/assets/npcs/cherie/after_massage_fuck.webm';
+  final String afterMassageFuck2End2 = 'lib/assets/npcs/cherie/after_massage_fuck_2_end_2.webm';
   final AssetGenImage afterSwimming = const AssetGenImage(
-    'lib/assets/npcs/cherie/after_swimming.jpg',
-  );
+      'lib/assets/npcs/cherie/after_swimming.jpg');
   final String animator = 'lib/assets/npcs/cherie/animator.webm';
   final AssetGenImage anyaRoom = const AssetGenImage(
-    'lib/assets/npcs/cherie/anya_room.jpg',
-  );
+      'lib/assets/npcs/cherie/anya_room.jpg');
   final String box1 = 'lib/assets/npcs/cherie/box_1.webm';
   final String box2 = 'lib/assets/npcs/cherie/box_2.webm';
   final AssetGenImage cherieAvaJpg = const AssetGenImage(
-    'lib/assets/npcs/cherie/cherie_ava.jpg',
-  );
+      'lib/assets/npcs/cherie/cherie_ava.jpg');
   final AssetGenImage cherieAvaPng = const AssetGenImage(
-    'lib/assets/npcs/cherie/cherie_ava.png',
-  );
+      'lib/assets/npcs/cherie/cherie_ava.png');
   final AssetGenImage cherieBathroom = const AssetGenImage(
-    'lib/assets/npcs/cherie/cherie_bathroom.webp',
-  );
+      'lib/assets/npcs/cherie/cherie_bathroom.webp');
   final AssetGenImage cherieRoom = const AssetGenImage(
-    'lib/assets/npcs/cherie/cherie_room.png',
-  );
+      'lib/assets/npcs/cherie/cherie_room.png');
   final AssetGenImage cherieRoom3 = const AssetGenImage(
-    'lib/assets/npcs/cherie/cherie_room_3.jpg',
-  );
+      'lib/assets/npcs/cherie/cherie_room_3.jpg');
   final AssetGenImage cherieZal = const AssetGenImage(
-    'lib/assets/npcs/cherie/cherie_zal.jpg',
-  );
+      'lib/assets/npcs/cherie/cherie_zal.jpg');
   final String homeContract = 'lib/assets/npcs/cherie/home_contract.webm';
-  final String homeContractStart =
-      'lib/assets/npcs/cherie/home_contract_start.webm';
-  final String homeContractTalk =
-      'lib/assets/npcs/cherie/home_contract_talk.webm';
+  final String homeContractStart = 'lib/assets/npcs/cherie/home_contract_start.webm';
+  final String homeContractTalk = 'lib/assets/npcs/cherie/home_contract_talk.webm';
   final AssetGenImage kitchen = const AssetGenImage(
-    'lib/assets/npcs/cherie/kitchen.webp',
-  );
+      'lib/assets/npcs/cherie/kitchen.webp');
   final String lick = 'lib/assets/npcs/cherie/lick.webm';
   final String massage = 'lib/assets/npcs/cherie/massage.webm';
   final String massage2 = 'lib/assets/npcs/cherie/massage_2.webm';
@@ -1442,58 +1239,88 @@ class $AssetsCherieGen {
   final String massageNo1 = 'lib/assets/npcs/cherie/massage_no_1.webm';
   final String massageNo2 = 'lib/assets/npcs/cherie/massage_no_2.webm';
   final AssetGenImage pants = const AssetGenImage(
-    'lib/assets/npcs/cherie/pants.jpg',
-  );
+      'lib/assets/npcs/cherie/pants.jpg');
   final AssetGenImage pants1Stoyak = const AssetGenImage(
-    'lib/assets/npcs/cherie/pants_1_stoyak.jpg',
-  );
+      'lib/assets/npcs/cherie/pants_1_stoyak.jpg');
   final AssetGenImage pantsRek = const AssetGenImage(
-    'lib/assets/npcs/cherie/pants_rek.jpg',
-  );
-  final String pantsStoyakWatch =
-      'lib/assets/npcs/cherie/pants_stoyak_watch.webm';
+      'lib/assets/npcs/cherie/pants_rek.jpg');
+  final String pantsStoyakWatch = 'lib/assets/npcs/cherie/pants_stoyak_watch.webm';
   final AssetGenImage sklad = const AssetGenImage(
-    'lib/assets/npcs/cherie/sklad.png',
-  );
+      'lib/assets/npcs/cherie/sklad.png');
   final AssetGenImage sklad1 = const AssetGenImage(
-    'lib/assets/npcs/cherie/sklad_1.png',
-  );
+      'lib/assets/npcs/cherie/sklad_1.png');
   final String swimming = 'lib/assets/npcs/cherie/swimming.webm';
   final String tc1 = 'lib/assets/npcs/cherie/tc_1.webm';
   final String tc2 = 'lib/assets/npcs/cherie/tc_2.webm';
   final String tc3 = 'lib/assets/npcs/cherie/tc_3.webm';
-  final String tcChangeClothes =
-      'lib/assets/npcs/cherie/tc_change_clothes.webm';
-  final String workAnimContract1 =
-      'lib/assets/npcs/cherie/work_anim_contract_1.webm';
-  final String workAnimContract2 =
-      'lib/assets/npcs/cherie/work_anim_contract_2.webm';
-  final String workSexRiserDoggy =
-      'lib/assets/npcs/cherie/work_sex_riser_doggy.webm';
-  final String workSexRiserEnd =
-      'lib/assets/npcs/cherie/work_sex_riser_end.webm';
+  final String tcChangeClothes = 'lib/assets/npcs/cherie/tc_change_clothes.webm';
+  final String workAnimContract1 = 'lib/assets/npcs/cherie/work_anim_contract_1.webm';
+  final String workAnimContract2 = 'lib/assets/npcs/cherie/work_anim_contract_2.webm';
+  final String workSexRiserDoggy = 'lib/assets/npcs/cherie/work_sex_riser_doggy.webm';
+  final String workSexRiserEnd = 'lib/assets/npcs/cherie/work_sex_riser_end.webm';
 }
 
 class $AssetsAnyaGen {
   const $AssetsAnyaGen();
 
   final AssetGenImage anya = const AssetGenImage(
-    'lib/assets/npcs/anya/anya.png',
-  );
+      'lib/assets/npcs/anya/anya.png');
   final AssetGenImage anyaOlsen = const AssetGenImage(
-    'lib/assets/npcs/anya/anya-olsen.jpg',
-  );
+      'lib/assets/npcs/anya/anya-olsen.jpg');
   final AssetGenImage anyaOlsenStepsisters = const AssetGenImage(
-    'lib/assets/npcs/anya/anya-olsen-stepsisters.jpg',
-  );
+      'lib/assets/npcs/anya/anya-olsen-stepsisters.jpg');
   final AssetGenImage anyaOlsenYoungCollege = const AssetGenImage(
-    'lib/assets/npcs/anya/anya-olsen-young-college.jpg',
-  );
+      'lib/assets/npcs/anya/anya-olsen-young-college.jpg');
   final AssetGenImage anyaAva = const AssetGenImage(
-    'lib/assets/npcs/anya/anya_ava.jpg',
-  );
+      'lib/assets/npcs/anya/anya_ava.jpg');
   final AssetGenImage anyaolsen = const AssetGenImage(
-    'lib/assets/npcs/anya/anyaolsen.jpg',
+      'lib/assets/npcs/anya/anyaolsen.jpg');
+}
+
+class $AssetsArturGen {
+  const $AssetsArturGen();
+
+  final AssetGenImage geminiGeneratedImageOscdwmoscdwmoscd = const AssetGenImage(
+      'lib/assets/npcs/artur/Gemini_Generated_Image_oscdwmoscdwmoscd.png');
+  final AssetGenImage geminiGeneratedImageOscdwmoscdwmoscd
+
+  К
+
+  о
+
+  п
+
+  і
+
+  я
+
+  =
+
+  const AssetGenImage
+
+  (
+
+  '
+
+  lib/assets/npcs/artur/Gemini_Generated_Image_oscdwmoscdwmoscd копія.png
+
+  '
+
+  );
+
+  final AssetGenImage geminiGeneratedImagePyanatpyanatpyan = const AssetGenImage('lib/assets/npcs/artur/Gemini_Generated_Image_pyanatpyanatpyan.png');
+  final AssetGenImage geminiGeneratedImagePzcnktpzcnktpzcn = const AssetGenImage('lib/assets/npcs/artur/Gemini_Generated_Image_pzcnktpzcnktpzcn.png');
+  final AssetGenImage artur = const AssetGenImage('lib/assets/npcs/artur/artur.png');
+  final AssetGenImage arturAva = const AssetGenImage
+
+  (
+
+  '
+
+  lib/assets/npcs/artur/artur_ava.png
+
+  '
+
   );
 }
 
@@ -1501,174 +1328,545 @@ class $AssetsArianaGen {
   const $AssetsArianaGen();
 
   final AssetGenImage a01 = const AssetGenImage(
-    'lib/assets/npcs/ariana/01.jpg',
-  );
+      'lib/assets/npcs/ariana/01.jpg');
   final AssetGenImage ariana = const AssetGenImage(
-    'lib/assets/npcs/ariana/ariana.jpg',
-  );
+      'lib/assets/npcs/ariana/ariana.jpg');
   final AssetGenImage arianaAva = const AssetGenImage(
-    'lib/assets/npcs/ariana/ariana_ava.png',
-  );
-  final AssetGenImage
-  cuteArianaMarieWithGlassesAndAShortDress02 = const AssetGenImage(
-    'lib/assets/npcs/ariana/cute-ariana-marie-with-glasses-and-a-short-dress-02.jpg',
-  );
+      'lib/assets/npcs/ariana/ariana_ava.png');
+  final AssetGenImage cuteArianaMarieWithGlassesAndAShortDress02 = const AssetGenImage(
+      'lib/assets/npcs/ariana/cute-ariana-marie-with-glasses-and-a-short-dress-02.jpg');
 }
 
 class $AssetsEmilyGen {
   const $AssetsEmilyGen();
 
   final AssetGenImage emily = const AssetGenImage(
-    'lib/assets/npcs/emily/emily.jpg',
-  );
+      'lib/assets/npcs/emily/emily.jpg');
   final AssetGenImage emilyAva = const AssetGenImage(
-    'lib/assets/npcs/emily/emily_ava.png',
-  );
+      'lib/assets/npcs/emily/emily_ava.png');
 }
 
 class $AssetsFayeGen {
   const $AssetsFayeGen();
 
   final AssetGenImage a07 = const AssetGenImage('lib/assets/npcs/faye/07.jpg');
-  final AssetGenImage
-  a308162A56ce421008cffa9d1d71b65e386e29cPostSingleBig = const AssetGenImage(
-    'lib/assets/npcs/faye/308162-a56ce421008cffa9d1d71b65e386e29c-post_single_big.png',
-  );
+  final AssetGenImage a308162A56ce421008cffa9d1d71b65e386e29cPostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/faye/308162-a56ce421008cffa9d1d71b65e386e29c-post_single_big.png');
   final AssetGenImage faye = const AssetGenImage(
-    'lib/assets/npcs/faye/faye.jpg',
-  );
+      'lib/assets/npcs/faye/faye.jpg');
   final AssetGenImage faye1 = const AssetGenImage(
-    'lib/assets/npcs/faye/faye1.jpg',
-  );
-  final AssetGenImage faye2 = const AssetGenImage(
-    'lib/assets/npcs/faye/faye2.jpg',
-  );
+      'lib/assets/npcs/faye/faye1.jpg');
   final AssetGenImage fayeAva = const AssetGenImage(
-    'lib/assets/npcs/faye/faye_ava.png',
-  );
+      'lib/assets/npcs/faye/faye_ava.png');
+  final AssetGenImage fayeAva1 = const AssetGenImage(
+      'lib/assets/npcs/faye/faye_ava1.png');
   final AssetGenImage images = const AssetGenImage(
-    'lib/assets/npcs/faye/images.jpeg',
-  );
+      'lib/assets/npcs/faye/images.jpeg');
+}
+
+class $AssetsHannaGen {
+  const $AssetsHannaGen();
+
+  final AssetGenImage a14000446Dsc0002880x660 = const AssetGenImage(
+      'lib/assets/npcs/hanna/14000446-dsc-0002_880x660.jpg');
+  final AssetGenImage a14000985HannaHilton001880x660 = const AssetGenImage(
+      'lib/assets/npcs/hanna/14000985-hanna-hilton-001_880x660.jpg');
+  final AssetGenImage a23375414HannaHilton001880x660 = const AssetGenImage(
+      'lib/assets/npcs/hanna/23375414-hanna-hilton-001_880x660.jpg');
+  final AssetGenImage a23375537C6974055Jpg880x660 = const AssetGenImage(
+      'lib/assets/npcs/hanna/23375537-c6974-055-jpg_880x660.jpg');
+  final AssetGenImage a38945328HhPic119880x660 = const AssetGenImage(
+      'lib/assets/npcs/hanna/38945328-hh-pic-119_880x660.jpg');
+  final AssetGenImage a40560096Amateur299880x660 = const AssetGenImage(
+      'lib/assets/npcs/hanna/40560096-amateur-299_880x660.jpg');
+  final AssetGenImage a40560809Amateur7880x660 = const AssetGenImage(
+      'lib/assets/npcs/hanna/40560809-amateur-7_880x660.jpg');
+  final AssetGenImage a40560818Amateur17HannahHiltonHannahHunter880x660 = const AssetGenImage(
+      'lib/assets/npcs/hanna/40560818-amateur-17-hannah-hilton-hannah-hunter_880x660.jpg');
+  final AssetGenImage hanna = const AssetGenImage(
+      'lib/assets/npcs/hanna/hanna.png');
+  final AssetGenImage hanna1 = const AssetGenImage(
+      'lib/assets/npcs/hanna/hanna1.jpg');
+  final AssetGenImage hannaAva = const AssetGenImage(
+      'lib/assets/npcs/hanna/hanna_ava.png');
 }
 
 class $AssetsIndiaGen {
   const $AssetsIndiaGen();
 
   final AssetGenImage india = const AssetGenImage(
-    'lib/assets/npcs/india/india.png',
-  );
+      'lib/assets/npcs/india/india.png');
   final AssetGenImage indiaAva = const AssetGenImage(
-    'lib/assets/npcs/india/india_ava.jpg',
-  );
+      'lib/assets/npcs/india/india_ava.jpg');
 }
 
 class $AssetsJessaGen {
   const $AssetsJessaGen();
 
   final AssetGenImage a17863509Gp1458004880x660 = const AssetGenImage(
-    'lib/assets/npcs/jessa/17863509-gp1458-004_880x660.jpg',
-  );
+      'lib/assets/npcs/jessa/17863509-gp1458-004_880x660.jpg');
   final AssetGenImage a22844353JessaRhodesAnal0017880x660 = const AssetGenImage(
-    'lib/assets/npcs/jessa/22844353-jessa-rhodes-anal-0017_880x660.jpg',
-  );
+      'lib/assets/npcs/jessa/22844353-jessa-rhodes-anal-0017_880x660.jpg');
   final AssetGenImage a22852945Image003880x660 = const AssetGenImage(
-    'lib/assets/npcs/jessa/22852945-image-003_880x660.jpg',
-  );
-  final AssetGenImage
-  a22871592BlodeJessaRhodesInAnalAction0001880x660 = const AssetGenImage(
-    'lib/assets/npcs/jessa/22871592-blode-jessa-rhodes-in-anal-action-0001_880x660.jpg',
-  );
+      'lib/assets/npcs/jessa/22852945-image-003_880x660.jpg');
+  final AssetGenImage a22871592BlodeJessaRhodesInAnalAction0001880x660 = const AssetGenImage(
+      'lib/assets/npcs/jessa/22871592-blode-jessa-rhodes-in-anal-action-0001_880x660.jpg');
   final AssetGenImage jessa = const AssetGenImage(
-    'lib/assets/npcs/jessa/jessa.png',
-  );
+      'lib/assets/npcs/jessa/jessa.png');
   final AssetGenImage jessaAva = const AssetGenImage(
-    'lib/assets/npcs/jessa/jessa_ava.jpg',
-  );
+      'lib/assets/npcs/jessa/jessa_ava.jpg');
+}
+
+class $AssetsJuniperGen {
+  const $AssetsJuniperGen();
+
+  final $AssetsImgGen img = const $AssetsImgGen();
+  final String junipKitchn = 'lib/assets/npcs/juniper/junip_kitchn.mp4';
+  final String junipSemRoom01 = 'lib/assets/npcs/juniper/junip_sem_room_01.mp4';
+  final String junipSemRoom02 = 'lib/assets/npcs/juniper/junip_sem_room_02.mp4';
+  final String junipSemRoom030 = 'lib/assets/npcs/juniper/junip_sem_room_03.0.mp4';
+}
+
+class $AssetsImgGen {
+  const $AssetsImgGen();
+
+  final AssetGenImage a34093776Jun013atk415132008880x660 = const AssetGenImage(
+      'lib/assets/npcs/juniper/img/34093776-jun013atk-415132008_880x660.jpg');
+  final AssetGenImage a37731812Jun013atk415132002880x660 = const AssetGenImage(
+      'lib/assets/npcs/juniper/img/37731812-jun013atk-415132002_880x660.jpg');
+  final AssetGenImage a39089025Jun013atk412928288880x660 = const AssetGenImage(
+      'lib/assets/npcs/juniper/img/39089025-jun013atk-412928288_880x660.jpg');
+  final AssetGenImage juniper = const AssetGenImage(
+      'lib/assets/npcs/juniper/img/juniper.jpg');
+  final AssetGenImage juniperAva = const AssetGenImage(
+      'lib/assets/npcs/juniper/img/juniper_ava.png');
+}
+
+class $AssetsKatrinGen {
+  const $AssetsKatrinGen();
+
+  final AssetGenImage a40510026Amateur79880x660 = const AssetGenImage(
+      'lib/assets/npcs/katrin/40510026-amateur-79_880x660.jpg');
+  final AssetGenImage katrin = const AssetGenImage(
+      'lib/assets/npcs/katrin/katrin.jpg');
+  final AssetGenImage katrinAva = const AssetGenImage(
+      'lib/assets/npcs/katrin/katrin_ava.png');
+}
+
+class $AssetsAdrianaGen {
+  const $AssetsAdrianaGen();
+
+  final AssetGenImage a12814908Aaat10307001Lg880x660 = const AssetGenImage(
+      'lib/assets/npcs/adriana/12814908-aaat-10307-001-lg_880x660.jpg');
+  final AssetGenImage a15475107BlackLove7412880x660 = const AssetGenImage(
+      'lib/assets/npcs/adriana/15475107-black-love-74-12_880x660.jpg');
+  final AssetGenImage a37920431KendraLustAdrianaChechik0002880x660 = const AssetGenImage(
+      'lib/assets/npcs/adriana/37920431-kendra-lust-adriana-chechik-0002_880x660.jpg');
+  final AssetGenImage adriana = const AssetGenImage(
+      'lib/assets/npcs/adriana/adriana.jpg');
+  final AssetGenImage adrianaAva = const AssetGenImage(
+      'lib/assets/npcs/adriana/adriana_ava.png');
 }
 
 class $AssetsAlexisGen {
   const $AssetsAlexisGen();
 
-  final AssetGenImage
-  a3874785620170107PornstarslikeitbigComAlexisFawx0004880x660 = const AssetGenImage(
-    'lib/assets/npcs/alexis/38747856-2017-01-07-pornstarslikeitbig-com-alexis-fawx-0004_880x660.jpg',
-  );
+  final AssetGenImage a3874785620170107PornstarslikeitbigComAlexisFawx0004880x660 = const AssetGenImage(
+      'lib/assets/npcs/alexis/38747856-2017-01-07-pornstarslikeitbig-com-alexis-fawx-0004_880x660.jpg');
   final AssetGenImage alexis = const AssetGenImage(
-    'lib/assets/npcs/alexis/alexis.jpg',
-  );
+      'lib/assets/npcs/alexis/alexis.jpg');
   final AssetGenImage alexisAva = const AssetGenImage(
-    'lib/assets/npcs/alexis/alexis_ava.png',
-  );
+      'lib/assets/npcs/alexis/alexis_ava.png');
 }
 
 class $AssetsLexiGen {
   const $AssetsLexiGen();
 
-  final AssetGenImage
-  a18425620HustlerLesbianTeachersSchoolgirlsHustlerHigh880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/lexi/18425620-hustler-lesbian-teachers-schoolgirls-hustler-high_880x660.jpg',
-      );
-  final AssetGenImage
-  a18425621HustlerLesbianTeachersSchoolgirlsHustlerHigh880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/lexi/18425621-hustler-lesbian-teachers-schoolgirls-hustler-high_880x660.jpg',
-      );
-  final AssetGenImage
-  a18425625HustlerLesbianTeachersSchoolgirlsHustlerHigh880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/lexi/18425625-hustler-lesbian-teachers-schoolgirls-hustler-high_880x660.jpg',
-      );
+  final AssetGenImage a18425620HustlerLesbianTeachersSchoolgirlsHustlerHigh880x660 = const AssetGenImage(
+      'lib/assets/npcs/lexi/18425620-hustler-lesbian-teachers-schoolgirls-hustler-high_880x660.jpg');
+  final AssetGenImage a18425621HustlerLesbianTeachersSchoolgirlsHustlerHigh880x660 = const AssetGenImage(
+      'lib/assets/npcs/lexi/18425621-hustler-lesbian-teachers-schoolgirls-hustler-high_880x660.jpg');
+  final AssetGenImage a18425625HustlerLesbianTeachersSchoolgirlsHustlerHigh880x660 = const AssetGenImage(
+      'lib/assets/npcs/lexi/18425625-hustler-lesbian-teachers-schoolgirls-hustler-high_880x660.jpg');
   final AssetGenImage a1910375371556007006Aadb880x660 = const AssetGenImage(
-    'lib/assets/npcs/lexi/19103753-71556007-006-aadb_880x660.jpg',
-  );
-  final AssetGenImage
-  a25896281Aad429a7ee5bc9f21c8008592fb1516d880x660 = const AssetGenImage(
-    'lib/assets/npcs/lexi/25896281-aad429a7ee5bc9f21c8008592fb1516d_880x660.jpg',
-  );
-  final AssetGenImage
-  a25897868CherrypimpsLexiLunaSchoolIsBackInSessionAn40cf254d01b4c3a051ff5f3ffa6b731d880x660 =
-      const AssetGenImage(
-        'lib/assets/npcs/lexi/25897868-cherrypimps-lexi-luna-school-is-back-in-session-an-40cf254d01b4c3a051ff5f3ffa6b731d_880x660.jpg',
-      );
+      'lib/assets/npcs/lexi/19103753-71556007-006-aadb_880x660.jpg');
+  final AssetGenImage a25896281Aad429a7ee5bc9f21c8008592fb1516d880x660 = const AssetGenImage(
+      'lib/assets/npcs/lexi/25896281-aad429a7ee5bc9f21c8008592fb1516d_880x660.jpg');
+  final AssetGenImage a25897868CherrypimpsLexiLunaSchoolIsBackInSessionAn40cf254d01b4c3a051ff5f3ffa6b731d880x660 = const AssetGenImage(
+      'lib/assets/npcs/lexi/25897868-cherrypimps-lexi-luna-school-is-back-in-session-an-40cf254d01b4c3a051ff5f3ffa6b731d_880x660.jpg');
   final AssetGenImage a35308428Image3880x660 = const AssetGenImage(
-    'lib/assets/npcs/lexi/35308428-image-3_880x660.jpg',
-  );
+      'lib/assets/npcs/lexi/35308428-image-3_880x660.jpg');
   final AssetGenImage lexi = const AssetGenImage(
-    'lib/assets/npcs/lexi/lexi.jpg',
-  );
+      'lib/assets/npcs/lexi/lexi.jpg');
   final AssetGenImage lexiAva = const AssetGenImage(
-    'lib/assets/npcs/lexi/lexi_ava.png',
+      'lib/assets/npcs/lexi/lexi_ava.png');
+}
+
+class $AssetsFlaxyGen {
+  const $AssetsFlaxyGen();
+
+  final AssetGenImage a22696878RoccosiffrediMiaSplitAlexaFlexyAaronRock155551001880x660 = const AssetGenImage(
+      'lib/assets/npcs/flaxy/22696878-roccosiffredi-mia-split-alexa-flexy-aaron-rock-155551-001_880x660.jpg');
+  final AssetGenImage a267491105871523880x660 = const AssetGenImage(
+      'lib/assets/npcs/flaxy/26749110-5871523_880x660.jpg');
+  final AssetGenImage a267491135871541880x660 = const AssetGenImage(
+      'lib/assets/npcs/flaxy/26749113-5871541_880x660.jpg');
+  final AssetGenImage a3148443531484435880x660 = const AssetGenImage(
+      'lib/assets/npcs/flaxy/31484435-31484435_880x660.jpg');
+  final AssetGenImage a31622417AnalOutdoorTeenSluttyBlondeAlexaFlexy02880x660 = const AssetGenImage(
+      'lib/assets/npcs/flaxy/31622417-anal-outdoor-teen-slutty-blonde-alexa-flexy-02_880x660.jpg');
+  final AssetGenImage flaxy = const AssetGenImage(
+      'lib/assets/npcs/flaxy/flaxy.jpg');
+  final AssetGenImage flaxyAva = const AssetGenImage(
+      'lib/assets/npcs/flaxy/flaxy_ava.png');
+}
+
+class $AssetsAlyssaGen {
+  const $AssetsAlyssaGen();
+
+  final AssetGenImage a2649041ee655a4623b973631922e94f1267711PostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/alyssa/264904-1ee655a4623b973631922e94f1267711-post_single_big.jpg');
+  final AssetGenImage a264904D3f10883835953210083e95912c39e7dPostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/alyssa/264904-d3f10883835953210083e95912c39e7d-post_single_big.jpg');
+  final AssetGenImage a275326dd53d687ee561cf0810f4624daf3963PostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/alyssa/27532-6dd53d687ee561cf0810f4624daf3963-post_single_big.jpg');
+  final AssetGenImage a48795827e97a7a56f296e38187235ab2049b29PostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/alyssa/487958-27e97a7a56f296e38187235ab2049b29-post_single_big.jpg');
+  final AssetGenImage a5786F54f3ac8beaa7b8ca0d02522b3d9cbedPostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/alyssa/5786-f54f3ac8beaa7b8ca0d02522b3d9cbed-post_single_big.jpg');
+  final AssetGenImage a6039114237564948508108245883478467094623817N = const AssetGenImage(
+      'lib/assets/npcs/alyssa/603911423_756494850810824_5883478467094623817_n.png');
+  final AssetGenImage a6617006548362469795022777096391862262562300N = const AssetGenImage(
+      'lib/assets/npcs/alyssa/661700654_836246979502277_7096391862262562300_n.jpg');
+  final AssetGenImage a714667861fd057ef3c64b8035c0edd5d958bcPostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/alyssa/71466-7861fd057ef3c64b8035c0edd5d958bc-post_single_big.jpg');
+  final AssetGenImage a7753313ae57a1a19bf1481596d6c8b4163584PostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/alyssa/77533-13ae57a1a19bf1481596d6c8b4163584-post_single_big.jpg');
+  final AssetGenImage alyssa = const AssetGenImage(
+      'lib/assets/npcs/alyssa/alyssa.jpg');
+  final AssetGenImage alyssaAva = const AssetGenImage(
+      'lib/assets/npcs/alyssa/alyssa_ava.png');
+  final AssetGenImage pic1 = const AssetGenImage(
+      'lib/assets/npcs/alyssa/pic1.jpg');
+}
+
+class $AssetsBlancheGen {
+  const $AssetsBlancheGen();
+
+  final AssetGenImage a24044022BlancheBradburry0001880x660 = const AssetGenImage(
+      'lib/assets/npcs/blanche/24044022-blanche-bradburry-0001_880x660.jpg');
+  final AssetGenImage a24044023BlancheBradburry0002880x660 = const AssetGenImage(
+      'lib/assets/npcs/blanche/24044023-blanche-bradburry-0002_880x660.jpg');
+  final AssetGenImage a32272357MixBlondeHornyMilfBigBootyPawgBlancheBradb003880x660 = const AssetGenImage(
+      'lib/assets/npcs/blanche/32272357-mix-blonde-horny-milf-big-booty-pawg-blanche-bradb-003_880x660.jpg');
+  final AssetGenImage a32276300BlancheBradburry43000014880x660 = const AssetGenImage(
+      'lib/assets/npcs/blanche/32276300-blanche-bradburry-4-3000-014_880x660.jpg');
+  final AssetGenImage a38448501BlancheBradburryKeiranLeeMaidForAnal0006880x660 = const AssetGenImage(
+      'lib/assets/npcs/blanche/38448501-blanche-bradburry-keiran-lee-maid-for-anal-0006_880x660.jpg');
+  final AssetGenImage blanche = const AssetGenImage(
+      'lib/assets/npcs/blanche/Blanche.jpg');
+  final AssetGenImage blancheAva = const AssetGenImage(
+      'lib/assets/npcs/blanche/Blanche_ava.png');
+}
+
+class $AssetsCandeeGen {
+  const $AssetsCandeeGen();
+
+  final AssetGenImage a1834808518348085880x660 = const AssetGenImage(
+      'lib/assets/npcs/candee/18348085-18348085_880x660.jpg');
+  final AssetGenImage a352429146222c82d911ba6f95380faf0529591b3880x660 = const AssetGenImage(
+      'lib/assets/npcs/candee/35242914-6222c82d911ba6f95380faf0529591b3_880x660.jpg');
+  final AssetGenImage candee = const AssetGenImage(
+      'lib/assets/npcs/candee/candee.jpg');
+  final AssetGenImage candeeAva = const AssetGenImage(
+      'lib/assets/npcs/candee/candee_ava.png');
+}
+
+class $AssetsCapriceGen {
+  const $AssetsCapriceGen();
+
+  final AssetGenImage a26717899Wd4195007880x660 = const AssetGenImage(
+      'lib/assets/npcs/caprice/26717899-wd4195-007_880x660.jpg');
+  final AssetGenImage caprice = const AssetGenImage(
+      'lib/assets/npcs/caprice/Caprice.webp');
+  final AssetGenImage capriceAva = const AssetGenImage(
+      'lib/assets/npcs/caprice/caprice_ava.png');
+}
+
+class $AssetsCeciliaGen {
+  const $AssetsCeciliaGen();
+
+  final AssetGenImage a364476961000062180880x660 = const AssetGenImage(
+      'lib/assets/npcs/cecilia/36447696-1000062180_880x660.jpg');
+  final AssetGenImage a38062136CeciliaLion5301880x660
+
+  К
+
+  о
+
+  п
+
+  і
+
+  я
+
+  =
+
+  const AssetGenImage
+
+  (
+
+  '
+
+  lib/assets/npcs/cecilia/38062136-cecilia-lion-53-01_880x660 копія.jpg
+
+  '
+
   );
+
+  final AssetGenImage a38062204CeciliaLionU403880x660 = const AssetGenImage('lib/assets/npcs/cecilia/38062204-cecilia-lion-u4-03_880x660.jpg');
+  final AssetGenImage a38062219CeciliaLionU503880x660 = const AssetGenImage('lib/assets/npcs/cecilia/38062219-cecilia-lion-u5-03_880x660.jpg');
+  final AssetGenImage cecilia = const AssetGenImage('lib/assets/npcs/cecilia/cecilia.jpg');
+  final AssetGenImage ceciliaAva = const AssetGenImage
+
+  (
+
+  '
+
+  lib/assets/npcs/cecilia/cecilia_ava.png
+
+  '
+
+  );
+}
+
+class $AssetsTiffanyGen {
+  const $AssetsTiffanyGen();
+
+  final AssetGenImage a31685020TiffanyTatumRedWhite030725008880x660 = const AssetGenImage(
+      'lib/assets/npcs/tiffany/31685020-tiffany-tatum-red-white-03-07-25-008_880x660.jpg');
+  final AssetGenImage a60690db5e5492a50dc2b47d2959556074e9dPostArchiveThumb = const AssetGenImage(
+      'lib/assets/npcs/tiffany/6069-0db5e5492a50dc2b47d2959556074e9d-post_archive_thumb.jpg');
+  final AssetGenImage a664436de71e2b05b960282758612cdfb22cePostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/tiffany/6644-36de71e2b05b960282758612cdfb22ce-post_single_big.jpg');
+  final AssetGenImage a7745745a0dcb4cf44e013505213236aa5ffc88PostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/tiffany/774574-5a0dcb4cf44e013505213236aa5ffc88-post_single_big.jpg');
+  final AssetGenImage a952Ee8b66faf1f3fc0d84ea9be1a456b66b = const AssetGenImage(
+      'lib/assets/npcs/tiffany/952-ee8b66faf1f3fc0d84ea9be1a456b66b.jpg');
+  final AssetGenImage tiffany = const AssetGenImage(
+      'lib/assets/npcs/tiffany/tiffany.jpg');
+  final AssetGenImage tiffanyAva = const AssetGenImage(
+      'lib/assets/npcs/tiffany/tiffany_ava.png');
+}
+
+class $AssetsFoxyGen {
+  const $AssetsFoxyGen();
+
+  final AssetGenImage a5488757867713038257415078649252553226742275N = const AssetGenImage(
+      'lib/assets/npcs/foxy/548875786_771303825741507_8649252553226742275_n.jpg');
+  final AssetGenImage a5521524686833511747918593392411530622712230N = const AssetGenImage(
+      'lib/assets/npcs/foxy/552152468_683351174791859_3392411530622712230_n.jpg');
+  final AssetGenImage a6590749178368690194400736902514033685718636N = const AssetGenImage(
+      'lib/assets/npcs/foxy/659074917_836869019440073_6902514033685718636_n.jpg');
+  final AssetGenImage foxy = const AssetGenImage(
+      'lib/assets/npcs/foxy/foxy.jpeg');
+  final AssetGenImage foxyDi = const AssetGenImage(
+      'lib/assets/npcs/foxy/foxy-di.jpg');
+  final AssetGenImage foxyAva = const AssetGenImage(
+      'lib/assets/npcs/foxy/foxy_ava.png');
+  final AssetGenImage lFoxyDi02865 = const AssetGenImage(
+      'lib/assets/npcs/foxy/l-foxy-di-02865.jpg');
+}
+
+class $AssetsGeishaGen {
+  const $AssetsGeishaGen();
+
+  final AssetGenImage a02 = const AssetGenImage(
+      'lib/assets/npcs/geisha/02.jpg');
+  final AssetGenImage a40956E48d31e50c392780f40698d583aaeb2ePostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/geisha/40956-e48d31e50c392780f40698d583aaeb2e-post_single_big.jpg');
+  final AssetGenImage a48a5f008fc3063f85dba1de0f453c9c8 = const AssetGenImage(
+      'lib/assets/npcs/geisha/48a5f008fc3063f85dba1de0f453c9c8.jpg');
+  final AssetGenImage geisha = const AssetGenImage(
+      'lib/assets/npcs/geisha/geisha.jpg');
+  final AssetGenImage geishaAva = const AssetGenImage(
+      'lib/assets/npcs/geisha/geisha_ava.png');
+}
+
+class $AssetsJenniferGen {
+  const $AssetsJenniferGen();
+
+  final AssetGenImage a12056290Gp2802001880x660 = const AssetGenImage(
+      'lib/assets/npcs/jennifer/12056290-gp2802-001_880x660.jpg');
+  final AssetGenImage jennifer = const AssetGenImage(
+      'lib/assets/npcs/jennifer/jennifer.jpg');
+  final AssetGenImage jenniferAva = const AssetGenImage(
+      'lib/assets/npcs/jennifer/jennifer_ava.png');
+}
+
+class $AssetsKylerGen {
+  const $AssetsKylerGen();
+
+  final AssetGenImage a20835620KylerQuinn0005Nude880x660 = const AssetGenImage(
+      'lib/assets/npcs/kyler/20835620-kyler-quinn-0005-nude_880x660.jpg');
+  final AssetGenImage kyler = const AssetGenImage(
+      'lib/assets/npcs/kyler/kyler.jpg');
+  final AssetGenImage kylerAva = const AssetGenImage(
+      'lib/assets/npcs/kyler/kyler_ava.png');
+}
+
+class $AssetsLanaGen {
+  const $AssetsLanaGen();
+
+  final AssetGenImage lana = const AssetGenImage(
+      'lib/assets/npcs/lana/Lana.jpg');
+  final AssetGenImage lanaAva = const AssetGenImage(
+      'lib/assets/npcs/lana/Lana_ava.png');
+}
+
+class $AssetsNaomiGen {
+  const $AssetsNaomiGen();
+
+  final AssetGenImage a35012580NaomiWoodsLevando0032880x660 = const AssetGenImage(
+      'lib/assets/npcs/naomi/35012580-naomi-woods-levando-0032_880x660.jpg');
+  final AssetGenImage a36716887Hih14660054880x660 = const AssetGenImage(
+      'lib/assets/npcs/naomi/36716887-hih14660054_880x660.jpg');
+  final AssetGenImage naomi = const AssetGenImage(
+      'lib/assets/npcs/naomi/naomi.jpg');
+  final AssetGenImage naomiAva = const AssetGenImage(
+      'lib/assets/npcs/naomi/naomi_ava.png');
+}
+
+class $AssetsNikkiGen {
+  const $AssetsNikkiGen();
+
+  final AssetGenImage eMJyRX0AIwzK3 = const AssetGenImage(
+      'lib/assets/npcs/nikki/E-m-jyRX0AIwzK3.jpg');
+  final AssetGenImage geminiGeneratedImage627m5q627m5q627m = const AssetGenImage(
+      'lib/assets/npcs/nikki/Gemini_Generated_Image_627m5q627m5q627m.png');
+  final AssetGenImage geminiGeneratedImageW5r4yw5r4yw5r4yw = const AssetGenImage(
+      'lib/assets/npcs/nikki/Gemini_Generated_Image_w5r4yw5r4yw5r4yw.png');
+  final AssetGenImage geminiGeneratedImageZe4hihze4hihze4h = const AssetGenImage(
+      'lib/assets/npcs/nikki/Gemini_Generated_Image_ze4hihze4hihze4h.png');
+  final AssetGenImage nikki = const AssetGenImage(
+      'lib/assets/npcs/nikki/nikki.webp');
+  final AssetGenImage nikkiBrooks0077 = const AssetGenImage(
+      'lib/assets/npcs/nikki/nikki-brooks_0077.jpg');
+  final AssetGenImage nikkiAva = const AssetGenImage(
+      'lib/assets/npcs/nikki/nikki_ava.png');
+}
+
+class $AssetsOleksandrGen {
+  const $AssetsOleksandrGen();
+
+  final AssetGenImage geminiGeneratedImageD628gud628gud628 = const AssetGenImage(
+      'lib/assets/npcs/oleksandr/Gemini_Generated_Image_d628gud628gud628.png');
+  final AssetGenImage geminiGeneratedImageF9h2zpf9h2zpf9h2
+
+  К
+
+  о
+
+  п
+
+  і
+
+  я
+
+  =
+
+  const AssetGenImage
+
+  (
+
+  '
+
+  lib/assets/npcs/oleksandr/Gemini_Generated_Image_f9h2zpf9h2zpf9h2 копія.png
+
+  '
+
+  );
+
+  final AssetGenImage geminiGeneratedImageJjpkqejjpkqejjpk = const AssetGenImage('lib/assets/npcs/oleksandr/Gemini_Generated_Image_jjpkqejjpkqejjpk.png');
+  final AssetGenImage geminiGeneratedImageYkuuwcykuuwcykuuКопія = const AssetGenImage('lib/assets/npcs/oleksandr/Gemini_Generated_Image_ykuuwcykuuwcykuu копія.png');
+  final AssetGenImage oleksandr = const AssetGenImage('lib/assets/npcs/oleksandr/oleksandr.png');
+  final AssetGenImage oleksandrAva = const AssetGenImage('lib/assets/npcs/oleksandr/oleksandr_ava.png');
+  final AssetGenImage oleksandrAva1 = const AssetGenImage('lib/assets/npcs/oleksandr/oleksandr_ava1.png
+
+  '
+
+  );
+}
+
+class $AssetsPetaGen {
+  const $AssetsPetaGen();
+
+  final AssetGenImage a47113316713345248079612494911394379253807242N = const AssetGenImage(
+      'lib/assets/npcs/peta/471133167_1334524807961249_4911394379253807242_n.jpg');
+  final AssetGenImage a7285956487ea40db2fe3f3a848e119cb66c7eePostSingleBig = const AssetGenImage(
+      'lib/assets/npcs/peta/728595-6487ea40db2fe3f3a848e119cb66c7ee-post_single_big.jpg');
+  final AssetGenImage devushkaLitsoModelVolosyBriunetkaGirlPoziruetBrunette = const AssetGenImage(
+      'lib/assets/npcs/peta/devushka-litso-model-volosy-briunetka-girl-poziruet-brunette.webp');
+  final AssetGenImage peta = const AssetGenImage(
+      'lib/assets/npcs/peta/peta.jpg');
+  final AssetGenImage petaJensenV0Rih87dpdkd2c1 = const AssetGenImage(
+      'lib/assets/npcs/peta/peta-jensen-v0-rih87dpdkd2c1.webp');
+  final AssetGenImage petaAva = const AssetGenImage(
+      'lib/assets/npcs/peta/peta_ava.png');
+}
+
+class $AssetsRileyGen {
+  const $AssetsRileyGen();
+
+  final AssetGenImage a23364535PaigeRiley73000002880x660 = const AssetGenImage(
+      'lib/assets/npcs/riley/23364535-paige-riley-7-3000-002_880x660.jpg');
+  final AssetGenImage a24729781RileyReidSwallowThisCumAiEnhanced26954005Topaz880x660 = const AssetGenImage(
+      'lib/assets/npcs/riley/24729781-riley-reid-swallow-this-cum-ai-enhanced-26954-005-topaz_880x660.png');
+  final AssetGenImage a33618435RileyreidSc002880x660 = const AssetGenImage(
+      'lib/assets/npcs/riley/33618435-rileyreid-sc002_880x660.jpg');
+  final AssetGenImage a33618439RileyreidSc006880x660 = const AssetGenImage(
+      'lib/assets/npcs/riley/33618439-rileyreid-sc006_880x660.jpg');
+  final AssetGenImage riley = const AssetGenImage(
+      'lib/assets/npcs/riley/Riley.jpg');
+  final AssetGenImage rileyAva = const AssetGenImage(
+      'lib/assets/npcs/riley/Riley_ava.png');
+}
+
+class $AssetsZazieGen {
+  const $AssetsZazieGen();
+
+  final AssetGenImage a1613601612770710034c29880x660 = const AssetGenImage(
+      'lib/assets/npcs/zazie/1613601-61277071-003-4c29_880x660.jpg');
+  final AssetGenImage zazie = const AssetGenImage(
+      'lib/assets/npcs/zazie/zazie.jpg');
+  final AssetGenImage zazieAva = const AssetGenImage(
+      'lib/assets/npcs/zazie/zazie_ava.png');
 }
 
 class $AssetsRitaGen {
   const $AssetsRitaGen();
 
-  final $AssetsRitaImgGen img = const $AssetsRitaImgGen();
+  final $AssetsImgGen img = const $AssetsImgGen();
 }
 
-class $AssetsRitaImgGen {
-  const $AssetsRitaImgGen();
+class $AssetsImgGen {
+  const $AssetsImgGen();
 
   final AssetGenImage compromisingPhone1 = const AssetGenImage(
-    'lib/assets/npcs/rita/img/compromising_phone_1.jpg',
-  );
+      'lib/assets/npcs/rita/img/compromising_phone_1.jpg');
   final AssetGenImage compromisingPhone2 = const AssetGenImage(
-    'lib/assets/npcs/rita/img/compromising_phone_2.jpg',
-  );
+      'lib/assets/npcs/rita/img/compromising_phone_2.jpg');
   final AssetGenImage doorElsa = const AssetGenImage(
-    'lib/assets/npcs/rita/img/door_elsa.jpg',
-  );
+      'lib/assets/npcs/rita/img/door_elsa.jpg');
   final AssetGenImage ritaAva = const AssetGenImage(
-    'lib/assets/npcs/rita/img/rita_ava.jpg',
-  );
+      'lib/assets/npcs/rita/img/rita_ava.jpg');
 }
 
 class AssetGenImage {
   const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
 
   final String _assetName;
+
 
   final Size? size;
   final Set<String> flavors;
@@ -1726,8 +1924,15 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({AssetBundle? bundle, String? package}) {
-    return AssetImage(_assetName, bundle: bundle, package: package);
+  ImageProvider provider({
+    AssetBundle? bundle,
+    String? package,
+  }) {
+    return AssetImage(
+      _assetName,
+      bundle: bundle,
+      package: package,
+    );
   }
 
   Widget custom({
@@ -1744,3 +1949,4 @@ class AssetGenImage {
 
   String get keyName => _assetName;
 }
+

@@ -91,6 +91,8 @@ flutter:
     - lib/assets/npcs/hanna/
     - lib/assets/npcs/india/
     - lib/assets/npcs/jessa/
+    - lib/assets/npcs/juniper/
+    - lib/assets/npcs/juniper/img/
     - lib/assets/npcs/katrin/
     - lib/assets/npcs/adriana/
     - lib/assets/npcs/alexis/
