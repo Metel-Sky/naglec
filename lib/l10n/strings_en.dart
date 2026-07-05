@@ -69,7 +69,7 @@ final Map<String, String> stringsEn = {
   'npc_quest_juniper_palivo_apology_talk': 'Talk with Juniper (apology)',
   'npc_quest_juniper_kompromat_step1': 'Kompromat step 1 (Sem bathroom)',
   'npc_quest_juniper_kompromat_skip_five_days': 'Skip five days',
-  'npc_quest_juniper_kompromat_step2': 'Kompromat step 2 (parents\' room)',
+  'npc_quest_juniper_kompromat_step2': 'Kompromat step 2 (Sem hall)',
   'npc_ask_how_are_you_dialogue':
       '— Hi, how are you?\n'
       '— Hi! All good, thanks. And you?\n'
@@ -940,9 +940,13 @@ final Map<String, String> stringsEn = {
       '— Damn, I didn\'t make it — they locked themselves in the bathroom. That sucks!\n'
       '— I\'ll have to keep an eye on them and definitely record it if this happens again.',
   'juniper_quest_001_step2_intro':
-      '— Wait… Manuel and Juniper? In the parents\' room?\n'
-      '— He handles her like she doesn\'t belong here. And she… doesn\'t look away.\n'
-      '— Someone moved in the hallway — they might have spotted me. I need to vanish before it\'s too late.',
+      'Damn, I can\'t believe my eyes. Manuel is fucking Juniper doggy-style. Holy shit!\n\n'
+      'That\'s some serious kompromat on them — if I had it on video. I don\'t. I need to film them.\n\n'
+      'While I was getting the camera, something moved in the hallway. I knew I had to run before they caught me.',
+  'juniper_quest_001_step2_after_flee':
+      'Damn — if I get them on camera, I can get absolutely anything I want from them. That could open up huge opportunities.\n\n'
+      'Damn, having that kind of power over people must feel great.\n\n'
+      'I definitely have to get them on video.',
   'juniper_quest_001_btn_flee': 'Run',
   'danielle_spy_parents_continue_watching': 'Keep watching',
   'danielle_spy_parents_next': 'Next',

@@ -295,7 +295,7 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   int _juniperSemRoomSexPlaybackTick = 0;
   String? _juniperSemRoomSexVideoPath;
 
-  /// QUEST: juniper_quest_001 — in-room kompromat (крок 1 ванна / крок 2 батьків).
+  /// QUEST: juniper_quest_001 — in-room kompromat (крок 1 ванна / крок 2 зал / after flee вітальня).
   JuniperManuelKompromatPhase _juniperManuelKompromatPhase =
       JuniperManuelKompromatPhase.inactive;
   int _juniperManuelKompromatPlaybackTick = 0;
@@ -314,6 +314,10 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   bool get _juniperManuelKompromatStep2UiActive =>
       _juniperManuelKompromatPhase ==
       JuniperManuelKompromatPhase.step2Video;
+
+  bool get _juniperManuelKompromatStep2AfterFleeUiActive =>
+      _juniperManuelKompromatPhase ==
+      JuniperManuelKompromatPhase.step2AfterFlee;
 
   /// Картинка + діалог «spyOnSemParents» біля кімнати батьків.
   bool _spyOnSemParentsUiActive = false;

@@ -51,6 +51,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _juniperSemRoomSexUiActive ||
       _isJuniperManuelKompromatStep1UiCoherent() ||
       _isJuniperManuelKompromatStep2UiCoherent() ||
+      _isJuniperManuelKompromatStep2AfterFleeUiCoherent() ||
       SemJuniperRoomIntro.isSceneActive(
         introUiActive: _semJuniperIntroUiActive,
         zone: currentZone,
@@ -170,7 +171,8 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         _juniperShowerUiActive ||
         _juniperSemRoomSexUiActive ||
         _isJuniperManuelKompromatStep1UiCoherent() ||
-        _isJuniperManuelKompromatStep2UiCoherent();
+        _isJuniperManuelKompromatStep2UiCoherent() ||
+        _isJuniperManuelKompromatStep2AfterFleeUiCoherent();
   }
 
   bool _isJuniperManuelKompromatStep1UiCoherent() =>
@@ -184,6 +186,15 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
 
   bool _isJuniperManuelKompromatStep2UiCoherent() =>
       JuniperManuelKompromatInRoomScene.isStep2UiCoherent(
+        phase: _juniperManuelKompromatPhase,
+        zone: currentZone,
+        streetHouse: currentStreetHouse,
+        insideRoom: isInsideRoom,
+        room: currentRoom,
+      );
+
+  bool _isJuniperManuelKompromatStep2AfterFleeUiCoherent() =>
+      JuniperManuelKompromatInRoomScene.isStep2AfterFleeUiCoherent(
         phase: _juniperManuelKompromatPhase,
         zone: currentZone,
         streetHouse: currentStreetHouse,
@@ -207,6 +218,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   void _purgeJuniperManuelKompromatIfMisplaced() {
     final step1Ok = _isJuniperManuelKompromatStep1UiCoherent();
     final step2Ok = _isJuniperManuelKompromatStep2UiCoherent();
+    final step2AfterFleeOk = _isJuniperManuelKompromatStep2AfterFleeUiCoherent();
 
     if (!step1Ok && _juniperManuelKompromatUiActive) {
       _juniperManuelKompromatPhase = JuniperManuelKompromatPhase.inactive;
@@ -215,9 +227,12 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     } else if (!step2Ok && _juniperManuelKompromatStep2UiActive) {
       _juniperManuelKompromatPhase = JuniperManuelKompromatPhase.inactive;
       _juniperManuelKompromatVideoPath = null;
+    } else if (!step2AfterFleeOk &&
+        _juniperManuelKompromatStep2AfterFleeUiActive) {
+      _juniperManuelKompromatPhase = JuniperManuelKompromatPhase.inactive;
     }
 
-    if (!step1Ok && !step2Ok) {
+    if (!step1Ok && !step2Ok && !step2AfterFleeOk) {
       _resetJuniperManuelKompromatDialogNewsIfPresent();
     }
   }
@@ -225,6 +240,10 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   void _ensureJuniperManuelKompromatUiCoherent() {
     _purgeJuniperManuelKompromatIfMisplaced();
     final t = sl<LocaleController>().t;
+    if (_isJuniperManuelKompromatStep2AfterFleeUiCoherent()) {
+      newsMessage = t(JuniperQuest001.l10nStep2AfterFlee);
+      return;
+    }
     if (_isJuniperManuelKompromatStep2UiCoherent()) {
       newsMessage = t(JuniperQuest001.l10nStep2Intro);
       return;
@@ -272,6 +291,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     if (_juniperSemRoomSexUiActive) return;
     if (_isJuniperManuelKompromatStep1UiCoherent()) return;
     if (_isJuniperManuelKompromatStep2UiCoherent()) return;
+    if (_isJuniperManuelKompromatStep2AfterFleeUiCoherent()) return;
     if (_collegeToiletUnderwearSaleActive) return;
     if (_semTalkSubmenuActive ||
         _semParentsTalkActive ||
@@ -1130,6 +1150,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   bool _blocksDanielleSpyParentsAutoStart() =>
       _isJuniperManuelKompromatStep1UiCoherent() ||
       _isJuniperManuelKompromatStep2UiCoherent() ||
+      _isJuniperManuelKompromatStep2AfterFleeUiCoherent() ||
       _juniperShowerUiActive ||
       _juniperSemRoomSexUiActive ||
       JuniperManuelKompromatInRoomScene.canTriggerStep2(
@@ -1289,19 +1310,29 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     final dt = _timeController.dateTime;
     final h = dt.hour;
     final minute = dt.minute;
-    final inParents = JuniperQuest001.isInFriendParentsRoom(
+    final inHall = JuniperQuest001.isInFriendHall(
+      zone: currentZone,
+      streetHouse: currentStreetHouse,
+      insideRoom: isInsideRoom,
+      room: currentRoom,
+    );
+    final inLounge = JuniperQuest001.isInFriendLounge(
       zone: currentZone,
       streetHouse: currentStreetHouse,
       insideRoom: isInsideRoom,
       room: currentRoom,
     );
 
-    if (_juniperManuelKompromatStep2UiActive && !inParents) {
+    if (_juniperManuelKompromatStep2UiActive && !inHall) {
       _purgeJuniperManuelKompromatIfMisplaced();
     }
-    if (!inParents) return;
+    if (_juniperManuelKompromatStep2AfterFleeUiActive && !inLounge) {
+      _purgeJuniperManuelKompromatIfMisplaced();
+    }
+    if (!inHall) return;
 
     if (_juniperManuelKompromatStep2UiActive) return;
+    if (_juniperManuelKompromatStep2AfterFleeUiActive) return;
     if (_juniperManuelKompromatUiActive ||
         _spyOnSemParentsUiActive ||
         _juniperShowerUiActive ||
@@ -1351,7 +1382,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     _saveService.autosave();
   }
 
-  /// Старт кроку 2 kompromat: відео у кімнаті батьків Sem.
+  /// Старт кроку 2 kompromat: відео у залі Sem.
   void _beginJuniperManuelKompromatStep2() {
     if (_spyOnSemParentsUiActive) {
       _clearDanielleSpyParentsUiOnly();
@@ -1370,7 +1401,9 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       playerStats: _playerStats,
     );
     setState(() {
-      _clearJuniperManuelKompromatStep2UiOnly();
+      _juniperManuelKompromatVideoPath = null;
+      _juniperManuelKompromatPhase =
+          JuniperManuelKompromatPhase.step2AfterFlee;
       currentZone = 'STREET';
       currentStreetHouse = LocationsData.friendHouse;
       currentRoom = JuniperQuest001.step2EscapeRoomId;
@@ -1380,6 +1413,15 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _worldState.currentRoom = currentRoom;
       _worldState.isInsideRoom = true;
       _selectedNpcIdInRoom = null;
+      _ensureJuniperManuelKompromatUiCoherent();
+    });
+    _saveService.autosave();
+  }
+
+  void _finishJuniperManuelKompromatStep2AfterFleeScene() {
+    if (!mounted) return;
+    setState(() {
+      _juniperManuelKompromatPhase = JuniperManuelKompromatPhase.inactive;
       newsMessage = LocationsData.getLocationDisplayName(
         JuniperQuest001.step2EscapeRoomId,
       );
@@ -2590,6 +2632,10 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     }
     if (_juniperSemRoomSexUiActive) {
       _finishJuniperSemRoomSexScene();
+      return;
+    }
+    if (_juniperManuelKompromatStep2AfterFleeUiActive) {
+      _finishJuniperManuelKompromatStep2AfterFleeScene();
       return;
     }
     if (_juniperManuelKompromatStep2UiActive) {

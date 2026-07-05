@@ -1,0 +1,50 @@
+---
+description: Відео в кімнаті — VideoSceneWidget у view зони, не EventInteractionOverlay
+alwaysApply: true
+---
+
+# Відео в локації (фон кімнати)
+
+Нові сцени з **повноекранним відео в кімнаті** робити **як intro Juniper** (`SemJuniperRoomIntro`, душ `JuniperShowerVideos`), а **не** через `_eventVideoPath` / `EventInteractionOverlay` / `playFullScreenLoopVideo`.
+
+`EventInteractionOverlay` ховає основний view і часто дає **чорний екран**; `VideoSceneWidget` у view зони відтворює стабільно.
+
+## Канонічний патерн
+
+**Запуск:** `InRoomVideoSceneLauncher.launch(videoPath: 'lib/assets/...', …)` → [InRoomVideoSceneHandle].  
+**Показ у view зони:** `InRoomVideoSceneLauncher.buildZoneLayer(videoPath: …, playbackTick: …, keyPrefix: …)`.
+
+1. **Шлях і умови** — у файлі квесту/івенту NPC (`lib/npcs/<id>/`), без віджетів:
+   - `static const String videoPath = 'lib/assets/npcs/...';`
+   - `static bool isSceneActive(...)` — зона, кімната, крок квесту
+   - за потреби `static bool ownsEventVideo(String? path)` — щоб виключити з оверлею
+
+2. **Показ** — у view поточної зони через [InRoomVideoSceneLauncher.buildZoneLayer] (або параметр шляху + tick у StreetView).
+
+3. **Не** ставити `_eventVideoPath`, `playFullScreenLoopVideo`, `MasturbateVideoOverlay` для фону кімнати.
+
+4. **`_overlayEventVideoPath`** — [InRoomVideoPlayback.ownsKnownEventVideoPath]; нові шляхи додавати туди.
+
+5. **UI кроку** — діалог і кнопки лише в `GameDialogPanel` / `_buildActionPanel` (див. `quest-step-spec-format.mdc`), не на шарі відео.
+
+6. **`suppressRoomNpcRaster`** — увімкнути на час сцени, щоб не накладати растр NPC поверх відео.
+
+## Еталони в коді
+
+- **Launcher:** `lib/widgets/in_room_video_scene_launcher.dart` — `launch` + `buildZoneLayer`
+- **Перевірка шару:** `lib/npcs/in_room_video_playback.dart` — `usesZoneRoomContentLayer`, `assertVideoUsesZoneRoomLayer`
+- Kompromat крок 1: `_launchInRoomVideo(...)` у `main_game_quest_and_zone.dart`
+- Intro / душ / sex — той самий launcher при наступних рефакторах
+- Віджет: `lib/widgets/video_scene_widget.dart`
+
+## При старті сцени (обов’язково)
+
+1. Виклик **`InRoomVideoSceneLauncher.launch`** (або `_launchInRoomVideo` на екрані) — скидає overlay, перевіряє шар, повертає handle з `videoPath` і `playbackTick`.
+2. Зберегти handle у стані сцени; у view зони — **`buildZoneLayer`** з тим самим шляхом і tick.
+3. **`_usesStreetViewRoomContentLayer`** — поки активне in-room відео, не ховати StreetView під overlay.
+4. У `_buildRoomContent` — відео **першим** для цієї кімнати.
+
+## Винятки
+
+- **Маленьке вікно поверх UI** (ноутбук, masturbate overlay) — окремий `MasturbateVideoOverlay`, не фон кімнати.
+- **Legacy** квести на `EventInteractionOverlay` — не переписувати масово без запиту; **нові** сцени — лише патерн вище.

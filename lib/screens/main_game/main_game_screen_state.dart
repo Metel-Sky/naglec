@@ -811,6 +811,23 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     );
                                 }
                               }
+                              if (_isJuniperManuelKompromatStep2AfterFleeUiCoherent()) {
+                                final tK = sl<LocaleController>().t;
+                                return GameDialogPanel(
+                                  message: tK(JuniperQuest001.l10nStep2AfterFlee),
+                                  highlightNames: const [
+                                    'Juniper',
+                                    'Manuel',
+                                    'Джуніпер',
+                                  ],
+                                  navButtons: [
+                                    _navBtn(
+                                      tK('danielle_spy_parents_leave'),
+                                      _finishJuniperManuelKompromatStep2AfterFleeScene,
+                                    ),
+                                  ],
+                                );
+                              }
                               if (_isJuniperManuelKompromatStep2UiCoherent()) {
                                 final tK = sl<LocaleController>().t;
                                 return GameDialogPanel(

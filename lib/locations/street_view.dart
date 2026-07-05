@@ -147,7 +147,7 @@ class StreetView extends StatelessWidget {
         manuelKompromatPath.isNotEmpty &&
         currentStreetHouse == LocationsData.friendHouse &&
         (roomNorm == LocationsData.friendBathroom ||
-            roomNorm == LocationsData.friendParentsRoom)) {
+            roomNorm == LocationsData.friendHall)) {
       return InRoomVideoSceneLauncher.buildZoneLayer(
         videoPath: manuelKompromatPath,
         playbackTick: semJuniperManuelKompromatPlaybackTick,
