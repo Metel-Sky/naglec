@@ -7,9 +7,7 @@ import '../data/poor_district/poor_district_house_2.dart';
 import '../models/npc_model.dart';
 import '../npcs/all_npcs.dart';
 import '../npcs/juniper/juniper_npc.dart';
-import '../npcs/sem/sem_npc.dart' show kSemAvatarPath;
 import '../npcs/sem/sem_juniper_evening_visits.dart';
-import '../npcs/sem/sem_quests.dart';
 import 'cherie_quest002_location_pin.dart';
 import 'cherie_quest004_location_pin.dart';
 import 'cherie_quest005_location_pin.dart';
@@ -468,7 +466,11 @@ class NPCService {
         effectiveDay,
         hour,
       )) {
-        return SemJuniperEveningVisits.visitRoomId(dateKey);
+        return SemJuniperEveningVisits.locationAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+        );
       }
       if (SemJuniperEarlyVisits.isActive(
         world,
@@ -476,28 +478,13 @@ class NPCService {
         effectiveDay,
         hour,
       )) {
-        return SemJuniperEveningVisits.visitRoomId(dateKey);
-      }
-      if (!SemQuest001.isJuniperVisibleInWorld(world)) return null;
-      final sem = npcById(_semNpcId);
-      if (sem == null) return null;
-      final semLoc = getCurrentLocationId(sem, hour, day);
-      if (semLoc == LocationsData.friendRoom) {
-        return LocationsData.friendRoom;
+        return SemJuniperEveningVisits.locationAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+        );
       }
       return null;
-    }
-    if (npc.id == _semNpcId) {
-      final world = sl<GameWorldState>();
-      final dateKey = sl<GameTimeController>().onlyDate;
-      if (SemJuniperEveningVisits.isActive(
-        world,
-        dateKey,
-        effectiveDay,
-        hour,
-      )) {
-        return SemJuniperEveningVisits.visitRoomId(dateKey);
-      }
     }
     final gameMinute = sl<GameTimeController>().dateTime.minute;
     if (_weekdayCollegeToilet1230SemDenLoshok(
@@ -659,15 +646,17 @@ class NPCService {
         effectiveDay,
         hour,
       )) {
-        final visitRoom = SemJuniperEveningVisits.visitRoomId(dateKey);
+        final visitRoom = SemJuniperEveningVisits.locationAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+        );
         if (visitRoom != null && visitRoom == normRoom) {
           return SchedulePoint(
             hourStart: SemJuniperEveningVisits.visitHourStart,
-            hourEnd: SemJuniperEveningVisits.visitHourEnd,
+            hourEnd: SemJuniperEveningVisits.visitHourEndFor(effectiveDay),
             location: visitRoom,
-            actionLabel: visitRoom == LocationsData.friendKitchen
-                ? 'На кухні'
-                : 'У кімнаті Sem',
+            actionLabel: SemJuniperEveningVisits.actionLabelForRoom(visitRoom),
             spritePath: npc.avatarPath ?? '',
             days: SemJuniperEveningVisits.week1Weekdays,
           );
@@ -679,76 +668,23 @@ class NPCService {
         effectiveDay,
         hour,
       )) {
-        final visitRoom = SemJuniperEveningVisits.visitRoomId(dateKey);
+        final visitRoom = SemJuniperEveningVisits.locationAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+        );
         if (visitRoom != null && visitRoom == normRoom) {
-          final showClip =
-              !SemJuniperEveningVisits.isClipShownToday(world, dateKey);
           return SchedulePoint(
             hourStart: SemJuniperEveningVisits.visitHourStart,
-            hourEnd: SemJuniperEveningVisits.visitHourEnd,
+            hourEnd: SemJuniperEveningVisits.visitHourEndFor(effectiveDay),
             location: visitRoom,
-            actionLabel: visitRoom == LocationsData.friendKitchen
-                ? 'На кухні'
-                : 'У кімнаті Sem',
-            spritePath: showClip
-                ? SemJuniperEveningVisits.dailyClipPath(dateKey, visitRoom)
-                : (npc.avatarPath ?? ''),
+            actionLabel: SemJuniperEveningVisits.actionLabelForRoom(visitRoom),
+            spritePath: npc.avatarPath ?? '',
             days: SemJuniperEveningVisits.weekdaysForWeek(
               SemJuniperEveningVisits.datingWeekIndex(world, dateKey)!,
             ),
           );
         }
-      }
-      if (normRoom == LocationsData.friendRoom &&
-          SemQuest001.isJuniperVisibleInWorld(world)) {
-        final av = npc.avatarPath ?? '';
-        if (av.isNotEmpty) {
-          return SchedulePoint(
-            hourStart: 0,
-            hourEnd: 23,
-            location: LocationsData.friendRoom,
-            actionLabel: 'У кімнаті Sem',
-            spritePath: av,
-          );
-        }
-      }
-    }
-
-    if (npc.id == _semNpcId) {
-      final world = sl<GameWorldState>();
-      final dateKey = sl<GameTimeController>().onlyDate;
-      if (SemJuniperEarlyVisits.isActiveInRoom(
-        world: world,
-        gameDateKey: dateKey,
-        weekdayIndex: effectiveDay,
-        hour: hour,
-        zone: 'STREET',
-        streetHouse: LocationsData.friendHouse,
-        insideRoom: true,
-        room: normRoom,
-      )) {
-        return SchedulePoint(
-          hourStart: SemJuniperEveningVisits.visitHourStart,
-          hourEnd: SemJuniperEveningVisits.visitHourEnd,
-          location: normRoom,
-          actionLabel: 'З Juniper',
-          spritePath: kSemAvatarPath,
-        );
-      }
-      if (SemJuniperEveningVisits.isSemJuniperDualAvatarRoom(
-        world: world,
-        gameDateKey: dateKey,
-        weekdayIndex: effectiveDay,
-        hour: hour,
-        roomId: normRoom,
-      )) {
-        return SchedulePoint(
-          hourStart: SemJuniperEveningVisits.visitHourStart,
-          hourEnd: SemJuniperEveningVisits.visitHourEnd,
-          location: normRoom,
-          actionLabel: 'З Juniper',
-          spritePath: kSemAvatarPath,
-        );
       }
     }
 

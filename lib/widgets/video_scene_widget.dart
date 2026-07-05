@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+
+import '../npcs/juniper/juniper_video_rewards.dart';
 import 'unified_video_controls.dart';
 
 class VideoSceneWidget extends StatefulWidget {
@@ -28,11 +32,18 @@ class _VideoSceneWidgetState extends State<VideoSceneWidget> {
   late final Player player = Player();
   late final VideoController controller = VideoController(player);
   bool _loadFailed = false;
+  bool _rewardGranted = false;
+  StreamSubscription<bool>? _playingSubscription;
+
+  bool get _isJuniperVideo => JuniperVideoRewards.isJuniperAssetPath(widget.videoPath);
 
   @override
   void initState() {
     super.initState();
     player.setVolume(0);
+    _playingSubscription = player.stream.playing.listen((playing) {
+      if (playing) _maybeGrantJuniperReward();
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _openVideo(widget.videoPath);
@@ -44,7 +55,21 @@ class _VideoSceneWidgetState extends State<VideoSceneWidget> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.videoPath != widget.videoPath) {
       _loadFailed = false;
+      _rewardGranted = false;
       _openVideo(widget.videoPath);
+    }
+  }
+
+  void _maybeGrantJuniperReward() {
+    if (!_isJuniperVideo || _rewardGranted) return;
+    _rewardGranted = true;
+    JuniperVideoRewards.onVideoPlaybackStarted();
+  }
+
+  void _onVideoSeek() {
+    _maybeGrantJuniperReward();
+    if (_isJuniperVideo) {
+      player.play();
     }
   }
 
@@ -67,6 +92,7 @@ class _VideoSceneWidgetState extends State<VideoSceneWidget> {
 
   @override
   void dispose() {
+    _playingSubscription?.cancel();
     player.dispose();
     super.dispose();
   }
@@ -97,7 +123,10 @@ class _VideoSceneWidgetState extends State<VideoSceneWidget> {
           ),
         if (!_loadFailed)
           Positioned.fill(
-            child: UnifiedVideoControls(player: player),
+            child: UnifiedVideoControls(
+              player: player,
+              onSeek: _isJuniperVideo ? _onVideoSeek : null,
+            ),
           ),
       ],
     );

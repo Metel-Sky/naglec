@@ -59,6 +59,11 @@ final Map<String, String> stringsEn = {
   'npc_quest_juniper_intro': 'Juniper: intro (Sem\'s room)',
   'npc_quest_juniper_intro_ready': 'Ready — enter Sem\'s room',
   'npc_quest_juniper_intro_not_ready': 'Not active',
+  'npc_ask_how_are_you_dialogue':
+      '— Hi, how are you?\n'
+      '— Hi! All good, thanks. And you?\n'
+      '— Doing fine too. Glad to hear you\'re well. Have a nice day!\n'
+      '— Thanks, you too!',
   'npc_quest_spy_parents': 'Peeking at parents',
   'npc_quest_spy_caught': 'Caught',
   'npc_quest_cherie_warehouse_002': 'Cherie: Quest (2) Warehouse favor',

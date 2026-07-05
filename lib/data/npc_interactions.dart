@@ -136,6 +136,7 @@ NPCAction _actionFromTemplate(
   return NPCAction(
     label: t.label,
     allowExtraActionForMaleNpc: allowExtraActionForMaleNpc,
+    dialogueL10nKey: t.dialogueL10nKey,
     onExecute: () {
       final rel = npc.relationship;
       final useThreshold = t.relThreshold;

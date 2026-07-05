@@ -126,6 +126,20 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         _sashaMorningRunUiActive;
   }
 
+  /// Після перемотки часу — хто в кімнаті за розкладом зараз; без застарілого вибору NPC.
+  void _syncActiveLocationAfterTimeChange() {
+    if (!isInsideRoom) {
+      _selectedNpcIdInRoom = null;
+      return;
+    }
+    final activeNPCs = _getActiveNPCsInCurrentRoom();
+    final selectedId = _selectedNpcIdInRoom;
+    if (selectedId != null &&
+        !activeNPCs.any((n) => n.id == selectedId)) {
+      _selectedNpcIdInRoom = null;
+    }
+  }
+
   /// Не показувати текст квестів/івентів поза їхнім контекстом — назва поточної локації.
   void _resetNewsMessageIfOutsideQuestEventContext() {
     _purgeSemJuniperRoomIntroIfMisplaced();
@@ -622,7 +636,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _tryStartPiperHallWeekendEventIfNeeded(name);
       _ensurePiperHallWeekendEventUiCoherent();
       _ensureCherieQuest002HomeHallUiCoherent();
-      _syncSemJuniperArcOnRoomEntry();
+      _syncSemJuniperArcOnRoomEntry(triggerEveningClip: true);
       _ensureSemJuniperIntroUiCoherent();
       _resetNewsMessageIfOutsideQuestEventContext();
     });
@@ -1009,7 +1023,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     _eventVideoLoop = false;
   }
 
-  void _syncSemJuniperArcOnRoomEntry() {
+  void _syncSemJuniperArcOnRoomEntry({bool triggerEveningClip = false}) {
     final dateKey = _timeController.onlyDate;
     SemQuest001.syncArcTimersIfDue(_worldState, dateKey);
     _purgeSemJuniperRoomIntroIfMisplaced();
@@ -1055,10 +1069,15 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         return;
       }
     }
-    _syncSemJuniperEveningVisitOnRoomEntry();
+    _syncSemJuniperEveningVisitOnRoomEntry(
+      triggerClipIfEligible: triggerEveningClip,
+    );
   }
 
-  void _syncSemJuniperEveningVisitOnRoomEntry() {
+  /// [triggerClipIfEligible] — лише при вході в кімнату; перемотка часу не «спалює» кліп дня.
+  void _syncSemJuniperEveningVisitOnRoomEntry({
+    bool triggerClipIfEligible = false,
+  }) {
     final dateKey = _timeController.onlyDate;
     final h = _timeController.dateTime.hour;
     final d = _timeController.weekdayIndex;
@@ -1076,12 +1095,14 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     )) {
       return;
     }
-    if (!SemJuniperEveningVisits.isClipShownToday(_worldState, dateKey)) {
+    if (triggerClipIfEligible &&
+        SemJuniperEveningVisits.hasEveningClipForRoom(currentRoom) &&
+        !SemJuniperEveningVisits.isClipShownToday(_worldState, dateKey)) {
       _semJuniperEveningClipShowOnThisVisit = true;
       SemJuniperEveningVisits.markClipShownToday(_worldState, dateKey);
       _saveService.autosave();
     }
-    _selectedNpcIdInRoom = kSemNpcId;
+    _selectedNpcIdInRoom = kJuniperNpcId;
   }
 
   void _beginSemJuniperRoomIntro({required bool skippedFacadePath}) {

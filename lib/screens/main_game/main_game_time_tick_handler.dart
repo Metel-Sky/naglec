@@ -41,6 +41,7 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
       }
       final hour = _timeController.dateTime.hour;
       final day = _timeController.weekdayIndex;
+      _syncActiveLocationAfterTimeChange();
       _showCollegeLessonStartDialogIfNeeded();
       final animatorSlotKey = CherieQuest001.giftShopAnimatorShiftSlotKey(
         _timeController.dateTime,

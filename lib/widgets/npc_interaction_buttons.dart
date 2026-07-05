@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/npc_model.dart';
 import '../models/npc_secondary.dart';
+import '../npcs/juniper/juniper_npc.dart';
 import '../npcs/gg/gg_event_001_stojak.dart';
 import '../npcs/gg/gg_hygiene.dart';
 import '../services/game_time_controller.dart';
@@ -31,7 +32,8 @@ class NpcInteractionButtons extends StatefulWidget {
   final VoidCallback? onBack;
 
   /// Викликається після виконання кожної дії (label + npc для івент-відео тощо).
-  final void Function(String actionLabel, NPCModel npc)? onActionExecuted;
+  final void Function(String actionLabel, NPCModel npc, {String? dialogueL10nKey})?
+      onActionExecuted;
 
   /// Логіка фінансового підменю — за потреби передати з батька; якщо null, тап без ефекту.
   final VoidCallback? onFinanceGiveMoney;
@@ -133,7 +135,8 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
     }
   }
 
-  bool get _financeAvailable => !isSecondaryNpc(widget.npc);
+  bool get _financeAvailable =>
+      !isSecondaryNpc(widget.npc) && widget.npc.id != kJuniperNpcId;
 
   Widget _elevated(String label, VoidCallback onPressed) {
     return Padding(
@@ -258,7 +261,11 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
     action.onExecute();
     widget.npc.setVar('phone_unlocked', true);
     widget.onUpdate();
-    widget.onActionExecuted?.call(action.label, widget.npc);
+    widget.onActionExecuted?.call(
+      action.label,
+      widget.npc,
+      dialogueL10nKey: action.dialogueL10nKey,
+    );
   }
 
   String get _gameDayKey {

@@ -9,7 +9,6 @@ import '../npcs/juniper/juniper_npc.dart';
 import '../npcs/sem/sem_juniper_room_intro.dart';
 import '../npcs/sem/sem_juniper_evening_visits.dart';
 import '../services/game_time_controller.dart';
-import '../services/game_world_state.dart';
 import '../widgets/room_npc_scene_template.dart';
 import '../widgets/video_scene_widget.dart';
 
@@ -106,7 +105,6 @@ class StreetView extends StatelessWidget {
 
   Widget _buildRoomContent(RoomData? roomData) {
     final npcService = sl<NPCService>();
-    final world = sl<GameWorldState>();
     final dateKey = timeController.onlyDate;
     final h = timeController.dateTime.hour;
     final day = timeController.weekdayIndex;
@@ -135,8 +133,14 @@ class StreetView extends StatelessWidget {
 
     if (semJuniperEveningClipShowOnThisVisit &&
         currentStreetHouse == LocationsData.friendHouse) {
-      final visitRoom = SemJuniperEveningVisits.visitRoomId(dateKey);
-      if (visitRoom != null && visitRoom == roomNorm) {
+      final visitRoom = SemJuniperEveningVisits.locationAtHour(
+        gameDateKey: dateKey,
+        weekdayIndex: day,
+        hour: h,
+      );
+      if (visitRoom != null &&
+          SemJuniperEveningVisits.hasEveningClipForRoom(visitRoom) &&
+          visitRoom == roomNorm) {
         final clip = SemJuniperEveningVisits.dailyClipPath(dateKey, visitRoom);
         NPCModel? juniperNpc;
         for (final c in candidates) {
@@ -152,32 +156,16 @@ class StreetView extends StatelessWidget {
           child: ClipRRect(
             borderRadius:
                 BorderRadius.circular(RoomNpcSceneTemplate.defaultClipRadius),
-            child: RoomNpcSceneTemplate.layerBackground(
-              clip,
-              fallbackImagePath: roomData?.imagePath,
+            child: KeyedSubtree(
+              key: ValueKey('juniper_evening_clip_${dateKey}_$roomNorm'),
+              child: RoomNpcSceneTemplate.layerBackground(
+                clip,
+                fallbackImagePath: roomData?.imagePath,
+              ),
             ),
           ),
         );
       }
-    }
-
-    if (!suppressRoomNpcRaster &&
-        SemJuniperEveningVisits.isSemJuniperDualAvatarRoom(
-          world: world,
-          gameDateKey: dateKey,
-          weekdayIndex: day,
-          hour: h,
-          roomId: roomNorm,
-        )) {
-      // Лише фон кімнати — Sem і Juniper у лівій смузі ([MainGameNpcAvatarStrip]).
-      return ClipRRect(
-        borderRadius:
-            BorderRadius.circular(RoomNpcSceneTemplate.defaultClipRadius),
-        child: RoomNpcSceneTemplate.layerBackground(
-          bg,
-          fallbackImagePath: roomData?.imagePath,
-        ),
-      );
     }
 
     var chosen = NpcRoomScenePicker.pickDisplayedNpc(

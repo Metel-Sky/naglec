@@ -695,25 +695,6 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     final candidates = npcService.getCandidatesInRoom(currentRoom, hour, day);
     if (candidates.isEmpty) return [];
     if (candidates.length == 1) return [candidates.first.npc];
-    if (currentStreetHouse == LocationsData.friendHouse &&
-        (currentRoom == LocationsData.friendKitchen ||
-            currentRoom == LocationsData.friendRoom)) {
-      final ordered = <NPCModel>[];
-      for (final id in [kSemNpcId, kJuniperNpcId]) {
-        for (final c in candidates) {
-          if (c.npc.id == id) {
-            ordered.add(c.npc);
-            break;
-          }
-        }
-      }
-      for (final c in candidates) {
-        if (c.npc.id != kSemNpcId && c.npc.id != kJuniperNpcId) {
-          ordered.add(c.npc);
-        }
-      }
-      if (ordered.isNotEmpty) return ordered;
-    }
     if (currentRoom == LocationsData.cityEliteApartment2Bedroom) {
       final ordered = <NPCModel>[];
       for (final id in ['lana', 'riley']) {
@@ -763,7 +744,16 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     }).toList();
   }
 
-  Future<void> _handleNpcActionExecuted(String actionLabel, NPCModel npc) async {
+  Future<void> _handleNpcActionExecuted(
+    String actionLabel,
+    NPCModel npc, {
+    String? dialogueL10nKey,
+  }) async {
+    if (dialogueL10nKey != null) {
+      setState(() {
+        newsMessage = sl<LocaleController>().t(dialogueL10nKey);
+      });
+    }
     if (actionLabel != 'Подарувати') return;
     await _openGiftBackpackForNpc(npc);
   }

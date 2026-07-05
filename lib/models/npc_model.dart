@@ -63,10 +63,14 @@ class NPCAction {
   /// True для дій із івент/квест-слотів ([NpcInteractionSlot.isEventSlot]), крім придушених (напр. флірт).
   final bool allowExtraActionForMaleNpc;
 
+  /// Текст діалогу в [newsMessage] після виконання (l10n-ключ з [NpcActionTemplate]).
+  final String? dialogueL10nKey;
+
   NPCAction({
     required this.label,
     required this.onExecute,
     this.allowExtraActionForMaleNpc = false,
+    this.dialogueL10nKey,
   });
 }
 

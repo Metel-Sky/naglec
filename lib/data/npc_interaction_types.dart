@@ -96,6 +96,9 @@ class NpcActionTemplate {
   /// Після виконання дії встановити змінні NPC (етап івенту, лічильник тощо).
   final Map<String, dynamic>? setVarOnExecute;
 
+  /// Текст діалогу в [newsMessage] після виконання дії (l10n-ключ).
+  final String? dialogueL10nKey;
+
   const NpcActionTemplate({
     required this.label,
     this.lust = 0.0,
@@ -111,6 +114,7 @@ class NpcActionTemplate {
     this.relThreshold = 500.0,
     this.relThresholdForRelationship,
     this.setVarOnExecute,
+    this.dialogueL10nKey,
   });
 }
 
@@ -122,6 +126,7 @@ const List<NpcActionTemplate> defaultInteractionActions = [
     lust: 0.0,
     relationship: 2.0,
     behavior: 0.0,
+    dialogueL10nKey: 'npc_ask_how_are_you_dialogue',
   ),
 
   // Комплімент — сильніший приріст відношення/поведінки.

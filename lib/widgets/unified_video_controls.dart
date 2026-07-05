@@ -11,20 +11,26 @@ class UnifiedVideoControls extends StatelessWidget {
   const UnifiedVideoControls({
     super.key,
     required this.player,
+    this.onSeek,
   });
 
   final Player player;
+  final VoidCallback? onSeek;
 
   @override
   Widget build(BuildContext context) {
-    return _UnifiedVideoControlsBody(player: player);
+    return _UnifiedVideoControlsBody(player: player, onSeek: onSeek);
   }
 }
 
 class _UnifiedVideoControlsBody extends StatefulWidget {
-  const _UnifiedVideoControlsBody({required this.player});
+  const _UnifiedVideoControlsBody({
+    required this.player,
+    this.onSeek,
+  });
 
   final Player player;
+  final VoidCallback? onSeek;
 
   @override
   State<_UnifiedVideoControlsBody> createState() =>
@@ -132,6 +138,7 @@ class _UnifiedVideoControlsBodyState extends State<_UnifiedVideoControlsBody> {
                                     widget.player.seek(
                                       Duration(milliseconds: v.round()),
                                     );
+                                    widget.onSeek?.call();
                                   },
                                 );
                               },

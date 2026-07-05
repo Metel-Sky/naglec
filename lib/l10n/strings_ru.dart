@@ -59,6 +59,11 @@ final Map<String, String> stringsRu = {
   'npc_quest_juniper_intro': 'Juniper: знакомство (комната Sem)',
   'npc_quest_juniper_intro_ready': 'Готово к сцене — зайди в комнату Sem',
   'npc_quest_juniper_intro_not_ready': 'Не активировано',
+  'npc_ask_how_are_you_dialogue':
+      '— Привет, как дела?\n'
+      '— Привет! Всё хорошо, спасибо. А у тебя как?\n'
+      '— Тоже нормально. Рад за тебя. Хорошего дня!\n'
+      '— Спасибо, взаимно!',
   'npc_quest_spy_parents': 'Подглядывание за родителями',
   'npc_quest_spy_caught': 'Спалился',
   'npc_quest_cherie_warehouse_002': 'Cherie: Квест (2) Помощь со складом',
