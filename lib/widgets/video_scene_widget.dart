@@ -32,7 +32,7 @@ class _VideoSceneWidgetState extends State<VideoSceneWidget> {
   late final Player player = Player();
   late final VideoController controller = VideoController(player);
   bool _loadFailed = false;
-  bool _rewardGranted = false;
+  bool _statsRequestedThisMount = false;
   StreamSubscription<bool>? _playingSubscription;
 
   bool get _isJuniperVideo => JuniperVideoRewards.isJuniperAssetPath(widget.videoPath);
@@ -55,15 +55,15 @@ class _VideoSceneWidgetState extends State<VideoSceneWidget> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.videoPath != widget.videoPath) {
       _loadFailed = false;
-      _rewardGranted = false;
+      _statsRequestedThisMount = false;
       _openVideo(widget.videoPath);
     }
   }
 
   void _maybeGrantJuniperReward() {
-    if (!_isJuniperVideo || _rewardGranted) return;
-    _rewardGranted = true;
-    JuniperVideoRewards.onVideoPlaybackStarted();
+    if (!_isJuniperVideo || _statsRequestedThisMount) return;
+    _statsRequestedThisMount = true;
+    JuniperVideoRewards.tryGrantRoomVideoStats();
   }
 
   void _onVideoSeek() {

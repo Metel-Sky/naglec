@@ -8,6 +8,7 @@ import '../npcs/danielle/danielle_spy_parents_quest.dart';
 import '../npcs/sem/sem_events.dart';
 import '../npcs/sem/sem_quests.dart';
 import '../npcs/juniper/juniper_npc.dart';
+import '../npcs/juniper/juniper_quests.dart';
 import '../models/item_model.dart';
 import '../models/npc_model.dart';
 import '../services/game_world_state.dart';
@@ -386,6 +387,84 @@ abstract final class NpcQuestCheats {
         } else {
           SemQuest001.resetIntroDebugArc(world);
           profileNpc.setVar('phone_unlocked', false);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperMet:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatMet(world);
+        } else {
+          JuniperQuest001.resetCheatMet(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperLivingAtSem:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatLivingAtSem(
+            world,
+            sl<GameTimeController>().onlyDate,
+          );
+        } else {
+          JuniperQuest001.resetCheatLivingAtSem(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperSemRoomWitness:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatSemRoomWitness(world);
+        } else {
+          JuniperQuest001.resetCheatSemRoomWitness(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperSemPalivoTalk:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatSemPalivoTalk(world);
+        } else {
+          JuniperQuest001.resetCheatSemPalivoTalk(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperPalivoApologyTalk:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatJuniperPalivoTalk(world);
+        } else {
+          JuniperQuest001.resetCheatJuniperPalivoTalk(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperKompromatStep1:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatKompromatStep1Done(
+            world: world,
+            npcs: npcService.allNPCs,
+            gameDateKey: sl<GameTimeController>().onlyDate,
+          );
+        } else {
+          JuniperQuest001.resetCheatKompromatStep1Done(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperKompromatSkipFiveDays:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatSkipFiveDays(
+            world: world,
+            gameDateKey: sl<GameTimeController>().onlyDate,
+          );
+        } else {
+          JuniperQuest001.resetCheatSkipFiveDays(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperKompromatStep2:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatKompromatStep2Done(
+            world: world,
+            npcs: npcService.allNPCs,
+            gameDateKey: sl<GameTimeController>().onlyDate,
+          );
+        } else {
+          JuniperQuest001.resetCheatKompromatStep2Done(world);
         }
         break;
     }

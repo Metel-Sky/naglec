@@ -24,6 +24,26 @@ class LocationsData {
     return migrateLegacyRoomId(roomId).toLowerCase().contains('bathroom');
   }
 
+  static const Set<String> _nonResidentialHallRoomIds = {
+    collegeHall,
+    cityBcCallCenterOperatorsHall,
+    cityVipGymHall,
+    cityMallRestaurantHall,
+  };
+
+  static final RegExp _poorDistrictApartmentHallRoomId =
+      RegExp(r'^poor_district_h[12]_a\d+_room_3$');
+
+  /// Житловий зал у будинку / квартирі (не коледж, не VIP-зал, не офіс/ресторан).
+  static bool isResidentialHallRoom(String? roomId) {
+    if (roomId == null || roomId.isEmpty) return false;
+    final norm = migrateLegacyRoomId(roomId);
+    if (_nonResidentialHallRoomIds.contains(norm)) return false;
+    if (norm == hall) return true;
+    if (norm.endsWith('_hall')) return true;
+    return _poorDistrictApartmentHallRoomId.hasMatch(norm);
+  }
+
   static Map<String, RoomData> get homeRooms => LocationsLoader.homeRooms;
   static List<String> get homeRoomIds => LocationsLoader.homeRoomIds;
 

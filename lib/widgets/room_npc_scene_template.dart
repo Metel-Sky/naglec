@@ -293,7 +293,8 @@ class NpcRoomScenePicker {
     return (dayPart * 24 + hour) * 31 + location.hashCode;
   }
 
-  /// Повертає пару (npc, point) для відображення в [roomId] або null.
+  /// Застаріло: використовуй [NpcRoomSceneResolver.resolve].
+  @Deprecated('Use NpcRoomSceneResolver.resolve')
   static ({NPCModel npc, SchedulePoint point})? pickDisplayedNpc({
     required NPCService npcService,
     required String roomId,

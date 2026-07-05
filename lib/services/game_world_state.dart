@@ -1,6 +1,7 @@
 import '../data/locations_room_data.dart';
 import '../data/npc_finance_state.dart';
 import '../npcs/piper/piper_quests.dart';
+import 'game_time_controller.dart';
 
 class GameWorldState {
   /// Поточна глобальна зона (HOME, CITY, COLLEGE, etc.)
@@ -308,6 +309,9 @@ class GameWorldState {
   /// (ключ [GameTimeController.onlyDate], dd.MM.yyyy) — не частіше разу на добу.
   String? homeHallKettlebellWorkoutLastDateKey;
 
+  /// Скільки разів ГG відпочив у залі («Відпочити годинку») — для майбутніх квестів/івентів.
+  int hallRestCount = 0;
+
   /// Дата, коли за продаж білизни в туалеті коледжу вже «спалила» одна власниця
   /// (ключ [GameTimeController.onlyDate], dd.MM.yyyy) — не більше одного викриття на добу.
   String? underwearSaleExposureDayKey;
@@ -366,6 +370,9 @@ class GameWorldState {
   /// Скільки збудження ГГ додано при завершенні spyOnSemParents (для симетричного відкату).
   double? spyOnSemParentsPlayerArousalDeltaApplied;
 
+  /// Перший день поточної гри (`dd.MM.yyyy`) — база для «день N від старту».
+  String? gameStartDateKey;
+
   // --- sem_quest_001: арка Juniper (знайомство, стосунки з Sem) ---
   /// Натяк Sem «пора шукати дівчину» (sem_quest_001) — старт таймера Juniper.
   bool semJuniperGirlsTalkDone = false;
@@ -394,8 +401,47 @@ class GameWorldState {
   /// Дата початку стосунків (dd.MM.yyyy) — для 3-тижневих вечірніх візитів.
   String? semJuniperDatingStartDateKey;
 
-  /// Дата, коли вечірній кліп Juniper уже показано (dd.MM.yyyy) — один раз на добу.
+  /// Legacy save; більше не використовується.
   String? semJuniperEveningClipShownDateKey;
+
+  /// Legacy save; більше не використовується.
+  String? semJuniperShowerSceneDateKey;
+
+  /// Остання ігрова година (`dd.MM.yyyy_H`), коли нараховано бонуси за відео Juniper.
+  String? semJuniperVideoStatsHourKey;
+
+  /// Сцена 4 відео у кімнаті Sem (суб 12:00 / нд 16:00) — повний перегляд відіграно.
+  bool semJuniperSemRoomSexCompleted = false;
+
+  /// Скільки разів ГG доглянув усю сцену в кімнаті Sem (4 відео до кінця).
+  int semJuniperSemRoomSexWitnessCount = 0;
+
+  /// Скільки «палива» зібрано (0…4); перше — після `junip_sem_room_sex_04_palivo`.
+  int palivo = 0;
+
+  /// Розмова «Розповісти, що бачив Semа з Juniper» — відіграно.
+  bool semPalivoWitnessTalkDone = false;
+
+  /// Розмова «Вибачитись за інцидент» з Juniper — відіграно.
+  bool juniperPalivoApologyTalkDone = false;
+
+  /// QUEST: juniper_quest_001 — крок 1 (ванна Sem, junip_manuel_01) завершено.
+  bool juniperManuelKompromatStep1Done = false;
+
+  /// QUEST: juniper_quest_001 — день, коли ГG побачив Manuel + Juniper (крок 1).
+  String? juniperManuelKompromatStep1WitnessDateKey;
+
+  /// QUEST: juniper_quest_001 — година того перегляду (зазвичай 12).
+  int? juniperManuelKompromatStep1WitnessHour;
+
+  /// QUEST: juniper_quest_001 — день завершення кроку 1 («Зняти на відео»), fallback для кроку 2.
+  String? juniperManuelKompromatStep1DoneDateKey;
+
+  /// QUEST: juniper_quest_001 — крок 2 (кімната батьків, junip_manuel_zal_01) завершено.
+  bool juniperManuelKompromatStep2Done = false;
+
+  /// Чит: не чекати 5 днів між кроком 1 і 2 kompromat.
+  bool juniperManuelKompromatStep2SkipFiveDaysCheat = false;
 
   /// Квест «спалився»: розмова з Danielle після підглядання — відіграно.
   bool danielleSpyCaughtConfrontationDone = false;
@@ -427,6 +473,7 @@ class GameWorldState {
   Map<String, dynamic> toJson() => {
         'currentZone': currentZone,
         'currentRoom': currentRoom,
+        'gameStartDateKey': gameStartDateKey,
         'isInsideRoom': isInsideRoom,
         'currentStreetHouse': currentStreetHouse,
         'installedSpyCameraRooms': installedSpyCameraRooms,
@@ -568,6 +615,7 @@ class GameWorldState {
             homeHallDumbbellsWorkoutLastDateKey,
         'homeHallKettlebellWorkoutLastDateKey':
             homeHallKettlebellWorkoutLastDateKey,
+        'hallRestCount': hallRestCount,
         'underwearSaleExposureDayKey': underwearSaleExposureDayKey,
         'underwearSaleExposedOwnerId': underwearSaleExposedOwnerId,
         'lastDoorWeekKey': lastDoorWeekKey,
@@ -604,6 +652,23 @@ class GameWorldState {
         'semJuniperDating': semJuniperDating,
         'semJuniperDatingStartDateKey': semJuniperDatingStartDateKey,
         'semJuniperEveningClipShownDateKey': semJuniperEveningClipShownDateKey,
+        'semJuniperShowerSceneDateKey': semJuniperShowerSceneDateKey,
+        'semJuniperVideoStatsHourKey': semJuniperVideoStatsHourKey,
+        'semJuniperSemRoomSexCompleted': semJuniperSemRoomSexCompleted,
+        'semJuniperSemRoomSexWitnessCount': semJuniperSemRoomSexWitnessCount,
+        'palivo': palivo,
+        'semPalivoWitnessTalkDone': semPalivoWitnessTalkDone,
+        'juniperPalivoApologyTalkDone': juniperPalivoApologyTalkDone,
+        'juniperManuelKompromatStep1Done': juniperManuelKompromatStep1Done,
+        'juniperManuelKompromatStep1WitnessDateKey':
+            juniperManuelKompromatStep1WitnessDateKey,
+        'juniperManuelKompromatStep1WitnessHour':
+            juniperManuelKompromatStep1WitnessHour,
+        'juniperManuelKompromatStep1DoneDateKey':
+            juniperManuelKompromatStep1DoneDateKey,
+        'juniperManuelKompromatStep2Done': juniperManuelKompromatStep2Done,
+        'juniperManuelKompromatStep2SkipFiveDaysCheat':
+            juniperManuelKompromatStep2SkipFiveDaysCheat,
         'danielleSpyCaughtConfrontationDone': danielleSpyCaughtConfrontationDone,
         'danielleSpyCaughtConfrontationCount':
             danielleSpyCaughtConfrontationCount,
@@ -621,6 +686,8 @@ class GameWorldState {
     currentRoom = LocationsData.migrateLegacyRoomId(currentRoom);
     isInsideRoom = json['isInsideRoom'] ?? isInsideRoom;
     currentStreetHouse = json['currentStreetHouse'] as String?;
+    gameStartDateKey = json['gameStartDateKey'] as String? ??
+        GameTimeController.defaultGameStartDateKey;
     final list = json['installedSpyCameraRooms'];
     installedSpyCameraRooms = list != null
         ? List<String>.from(list as List)
@@ -876,6 +943,7 @@ class GameWorldState {
         json['homeHallDumbbellsWorkoutLastDateKey'] as String?;
     homeHallKettlebellWorkoutLastDateKey =
         json['homeHallKettlebellWorkoutLastDateKey'] as String?;
+    hallRestCount = (json['hallRestCount'] as num?)?.toInt() ?? 0;
     underwearSaleExposureDayKey =
         json['underwearSaleExposureDayKey'] as String?;
     underwearSaleExposedOwnerId =
@@ -935,6 +1003,37 @@ class GameWorldState {
     }
     semJuniperEveningClipShownDateKey =
         json['semJuniperEveningClipShownDateKey'] as String?;
+    semJuniperShowerSceneDateKey =
+        json['semJuniperShowerSceneDateKey'] as String?;
+    semJuniperVideoStatsHourKey =
+        json['semJuniperVideoStatsHourKey'] as String?;
+    semJuniperSemRoomSexCompleted =
+        json['semJuniperSemRoomSexCompleted'] == true;
+    semJuniperSemRoomSexWitnessCount =
+        (json['semJuniperSemRoomSexWitnessCount'] as num?)?.toInt() ?? 0;
+    final palivoRaw = json['palivo'];
+    if (palivoRaw is num) {
+      palivo = palivoRaw.toInt().clamp(0, 4);
+    } else if (palivoRaw == true) {
+      palivo = 1;
+    } else {
+      palivo = 0;
+    }
+    semPalivoWitnessTalkDone = json['semPalivoWitnessTalkDone'] == true;
+    juniperPalivoApologyTalkDone =
+        json['juniperPalivoApologyTalkDone'] == true;
+    juniperManuelKompromatStep1Done =
+        json['juniperManuelKompromatStep1Done'] == true;
+    juniperManuelKompromatStep1WitnessDateKey =
+        json['juniperManuelKompromatStep1WitnessDateKey'] as String?;
+    juniperManuelKompromatStep1WitnessHour =
+        (json['juniperManuelKompromatStep1WitnessHour'] as num?)?.toInt();
+    juniperManuelKompromatStep1DoneDateKey =
+        json['juniperManuelKompromatStep1DoneDateKey'] as String?;
+    juniperManuelKompromatStep2Done =
+        json['juniperManuelKompromatStep2Done'] == true;
+    juniperManuelKompromatStep2SkipFiveDaysCheat =
+        json['juniperManuelKompromatStep2SkipFiveDaysCheat'] == true;
     danielleSpyCaughtConfrontationDone =
         json['danielleSpyCaughtConfrontationDone'] == true;
     danielleSpyCaughtConfrontationCount =
@@ -975,6 +1074,7 @@ class GameWorldState {
     currentRoom = LocationsData.corridor;
     isInsideRoom = false;
     currentStreetHouse = null;
+    gameStartDateKey = GameTimeController.defaultGameStartDateKey;
     installedSpyCameraRooms = [];
     flyersJobOfferPending = false;
     lastFlyersDateKey = null;
@@ -1043,6 +1143,7 @@ class GameWorldState {
     rockefellerCherie005IncompleteAskLastDateKey = null;
     homeHallDumbbellsWorkoutLastDateKey = null;
     homeHallKettlebellWorkoutLastDateKey = null;
+    hallRestCount = 0;
     underwearSaleExposureDayKey = null;
     underwearSaleExposedOwnerId = null;
     lastDoorWeekKey = null;
@@ -1077,6 +1178,19 @@ class GameWorldState {
     semJuniperDating = false;
     semJuniperDatingStartDateKey = null;
     semJuniperEveningClipShownDateKey = null;
+    semJuniperShowerSceneDateKey = null;
+    semJuniperVideoStatsHourKey = null;
+    semJuniperSemRoomSexCompleted = false;
+    semJuniperSemRoomSexWitnessCount = 0;
+    palivo = 0;
+    semPalivoWitnessTalkDone = false;
+    juniperPalivoApologyTalkDone = false;
+    juniperManuelKompromatStep1Done = false;
+    juniperManuelKompromatStep1WitnessDateKey = null;
+    juniperManuelKompromatStep1WitnessHour = null;
+    juniperManuelKompromatStep1DoneDateKey = null;
+    juniperManuelKompromatStep2Done = false;
+    juniperManuelKompromatStep2SkipFiveDaysCheat = false;
     danielleSpyCaughtConfrontationDone = false;
     danielleSpyCaughtConfrontationCount = 0;
     lastNpcEconomyProcessedDateKey = null;

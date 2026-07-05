@@ -7,6 +7,7 @@ import '../services/service_locator.dart';
 import '../services/npc_service.dart';
 import '../models/npc_model.dart';
 import '../services/game_time_controller.dart';
+import '../widgets/npc_room_scene_resolver.dart';
 import '../widgets/room_npc_scene_template.dart';
 import '../data/college_schedule.dart';
 import '../npcs/nicole/nicole_npc.dart';
@@ -240,6 +241,27 @@ class _CollegeViewState extends State<CollegeView> {
     final bool showPiperLibraryEavesdrop = widget.piperLibraryEavesdropActive &&
         LocationsData.migrateLegacyRoomId(widget.currentRoom) ==
             LocationsData.canteen;
+
+    if (!widget.suppressRoomNpcRaster &&
+        !showPiperLibraryEavesdrop &&
+        !shouldHideGenericStudentScene) {
+      final layers = NpcRoomSceneResolver.resolve(
+        npcService: npcSvc,
+        roomId: widget.currentRoom,
+        hour: h,
+        weekday: day,
+        dateTime: widget.timeController.dateTime,
+        selectedNpcIdInRoom: widget.activeNpcIdInRoom,
+        baseLayers: NpcRoomSceneLayers(
+          specialBackground: specialBackground,
+          npcRasterOverlay: studentSceneRasterOverlay,
+          activeNpc: activeNPC,
+        ),
+      );
+      specialBackground = layers.specialBackground;
+      studentSceneRasterOverlay = layers.npcRasterOverlay;
+      activeNPC = layers.activeNpc;
+    }
 
     final roomData = LocationsData.collegeRooms[widget.currentRoom];
     // Відео / нестандартний медіа — повноекранно; растр студентів — фон кімнати + оверлей знизу (як у викладачів).

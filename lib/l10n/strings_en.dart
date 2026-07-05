@@ -17,6 +17,7 @@ final Map<String, String> stringsEn = {
   'home_hall_workout_finish': 'Finish',
   'home_hall_workout_need_rest': 'I need to rest first',
   'home_hall_workout_kettlebell_too_weak': 'I am still too weak for kettlebell',
+  'hall_rest_one_hour': 'Rest for an hour',
   'room_install_camera': 'Install camera',
   'room_search_button': 'Search room',
   'room_search_found_money': 'Found %s\$',
@@ -59,11 +60,31 @@ final Map<String, String> stringsEn = {
   'npc_quest_juniper_intro': 'Juniper: intro (Sem\'s room)',
   'npc_quest_juniper_intro_ready': 'Ready — enter Sem\'s room',
   'npc_quest_juniper_intro_not_ready': 'Not active',
+  'npc_quest_juniper_kompromat_001': 'Juniper: Quest (001) Kompromat',
+  'npc_quest_juniper_met': 'Met Juniper',
+  'npc_quest_juniper_living_at_sem': 'Living at Sem (3+ weeks)',
+  'npc_quest_juniper_sem_room_witness': 'Caught in Sem\'s room (≥2)',
+  'profile_juniper_sem_room_witness_count': 'Scene completions: %s',
+  'npc_quest_juniper_sem_palivo_talk': 'Talk with Sem about palivo',
+  'npc_quest_juniper_palivo_apology_talk': 'Talk with Juniper (apology)',
+  'npc_quest_juniper_kompromat_step1': 'Kompromat step 1 (Sem bathroom)',
+  'npc_quest_juniper_kompromat_skip_five_days': 'Skip five days',
+  'npc_quest_juniper_kompromat_step2': 'Kompromat step 2 (parents\' room)',
   'npc_ask_how_are_you_dialogue':
       '— Hi, how are you?\n'
       '— Hi! All good, thanks. And you?\n'
       '— Doing fine too. Glad to hear you\'re well. Have a nice day!\n'
       '— Thanks, you too!',
+  'npc_compliment_dialogue':
+      '— You look great today.\n'
+      '— Oh, thanks. Nice to hear.\n'
+      '— Just wanted to say it.\n'
+      '— Well, thanks again.',
+  'npc_joke_dialogue':
+      '— Know why a clock is never late?\n'
+      '— I don\'t know, why?\n'
+      '— Because it always knows what time it is.\n'
+      '— Ha-ha, not bad.',
   'npc_quest_spy_parents': 'Peeking at parents',
   'npc_quest_spy_caught': 'Caught',
   'npc_quest_cherie_warehouse_002': 'Cherie: Quest (2) Warehouse favor',
@@ -818,6 +839,30 @@ final Map<String, String> stringsEn = {
       '— All right! he shrugged — Mom just keeps nagging that I need to find a job.\n'
       '— So what\'s the problem? Your uncle\'s loaded and has some business, doesn\'t he?\n'
       '— Dunno, I can\'t be bothered to ask him and owe him. Weeell, anyway, I haven\'t decided yet.',
+  'sem_talk_btn_news': 'About news',
+  'sem_talk_btn_girls': 'About girls',
+  'sem_talk_btn_parents': 'About parents',
+  'sem_talk_girls_done':
+      '— We already talked about girls. Sem says nothing\'s changed for now.',
+  'sem_talk_parents_done':
+      '— We already talked about his parents. Sem didn\'t add anything new.',
+  'sem_palivo_btn_tell_juniper_witness':
+      'Tell him what you saw Sem do with Juniper',
+  'sem_palivo_girls_witness_dialogue':
+      '— Damn, bro, sorry. Long story short, I accidentally walked into your room yesterday.\n'
+      '— Damn, good thing you didn\'t come in earlier — I finished in time.\n'
+      '— Yeah, I saw you make it — Juniper was sitting there with cum on her face, acting like that\'s totally normal.\n'
+      '— Man, I was cracking up about it for half the evening.\n'
+      '— Shame her tits are so tiny.\n'
+      '— Yeah, sure, I didn\'t get lucky there, but what can you do? I\'ll find someone with bigger ones later.\n'
+      '— Yeah, later.\n'
+      '— Hey, watch out she doesn\'t push you into something.\n'
+      '— Nah, fuck that, I\'m not going there. That\'s another life.\n'
+      '— Yeah, right, like I\'ll ever get married myself.\n'
+      '— Hey, aren\'t you afraid your mom or your sister will catch you?\n'
+      '— Well, if my sister catches me, I\'ll offer to join in. But if it\'s Mom — sure, I\'d offer too, but I\'d probably get my ass kicked.\n'
+      '— Yeah, I\'d join your mom and your sister together too.\n'
+      '— Ha, you\'re quite the fantasist. That\'s the stuff dreams are made of.',
   'sem_juniper_btn_talk_girls': 'Talk about girls',
   'sem_juniper_btn_hint_girlfriend': 'Hint to Sem that it\'s time to find a girlfriend.',
   'sem_juniper_girls_talk_dialogue':
@@ -873,6 +918,32 @@ final Map<String, String> stringsEn = {
   'danielle_spy_parents_after_peek_3_dialogue':
       'A couple of minutes later Sem\'s dad changed angle and slid into Danielle\'s ass. It was so hot I grabbed myself and almost started jerking off — then I realized Danielle was staring straight at me. The next second she looked away and moaned even louder, and I decided it was time to bail…',
   'danielle_spy_parents_watch_more': 'Watch more',
+  'juniper_sem_room_sex_watch_more': 'Watch more',
+  'juniper_palivo_apology_btn': 'Apologize for the incident',
+  'juniper_palivo_apology_dialogue':
+      '— Hi, Juni. I wanted to apologize for that incident — it was an accident. I accidentally walked into Sem\'s room.\n'
+      '— Okay, I forgive you, but next time knock for sure. I hope you didn\'t see much in there.\n'
+      '— Yeah, not much, but enough for me. And okay, I\'ll knock next time.\n'
+      '— What do you mean, what did you manage to see?\n'
+      '— Small little breasts with cute nipples.\n'
+      '— Ugh, it\'s not my fault. They\'ll grow.\n'
+      '— For sure. I don\'t even doubt it.\n'
+      '— Did you really like the nipples?\n'
+      '— I really hope I get to see them again someday.\n'
+      '— Yeah. Maybe someday you will. Alright, let\'s wrap this up.\n'
+      '— Take care!',
+  'juniper_quest_001_btn_record': 'Record on video',
+  'juniper_quest_001_step1_intro':
+      '— No way! Is that Manuel with Juniper? Is he getting a blowjob?\n'
+      '— Damn, I need to get this on video — nobody will believe it otherwise. This is insane.',
+  'juniper_quest_001_step1_record_fail':
+      '— Damn, I didn\'t make it — they locked themselves in the bathroom. That sucks!\n'
+      '— I\'ll have to keep an eye on them and definitely record it if this happens again.',
+  'juniper_quest_001_step2_intro':
+      '— Wait… Manuel and Juniper? In the parents\' room?\n'
+      '— He handles her like she doesn\'t belong here. And she… doesn\'t look away.\n'
+      '— Someone moved in the hallway — they might have spotted me. I need to vanish before it\'s too late.',
+  'juniper_quest_001_btn_flee': 'Run',
   'danielle_spy_parents_continue_watching': 'Keep watching',
   'danielle_spy_parents_next': 'Next',
   'danielle_spy_parents_stealth_too_low':

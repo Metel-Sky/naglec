@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/npc_model.dart';
 import '../models/npc_secondary.dart';
 import '../npcs/juniper/juniper_npc.dart';
+import '../npcs/sem/sem_events.dart';
 import '../npcs/gg/gg_event_001_stojak.dart';
 import '../npcs/gg/gg_hygiene.dart';
 import '../services/game_time_controller.dart';
@@ -61,6 +62,12 @@ class NpcInteractionButtons extends StatefulWidget {
   /// Кошик їжі з ТРЦ: ввечері на кухні — «Мама, я купив до дому продукти».
   final VoidCallback? onMomDeliverGroceries;
 
+  /// Sem: підменю «Поговорити» — новини / дівчата / батьки / palivo.
+  final VoidCallback? onTalkSemNews;
+  final VoidCallback? onTalkSemGirls;
+  final VoidCallback? onTalkSemParents;
+  final VoidCallback? onTalkSemPalivoWitness;
+
   const NpcInteractionButtons({
     super.key,
     required this.npc,
@@ -79,6 +86,10 @@ class NpcInteractionButtons extends StatefulWidget {
     this.onTalkGgCommandPiper,
     this.onTalkTellPiperAboutPunishment,
     this.onMomDeliverGroceries,
+    this.onTalkSemNews,
+    this.onTalkSemGirls,
+    this.onTalkSemParents,
+    this.onTalkSemPalivoWitness,
   });
 
   @override
@@ -136,7 +147,9 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
   }
 
   bool get _financeAvailable =>
-      !isSecondaryNpc(widget.npc) && widget.npc.id != kJuniperNpcId;
+      !isSecondaryNpc(widget.npc) &&
+      widget.npc.id != kJuniperNpcId &&
+      widget.npc.id != kSemNpcId;
 
   Widget _elevated(String label, VoidCallback onPressed) {
     return Padding(
@@ -407,6 +420,32 @@ class _NpcInteractionButtonsState extends State<NpcInteractionButtons> {
     );
 
     if (_talkMode) {
+      if (widget.npc.id == kSemNpcId &&
+          (widget.onTalkSemNews != null ||
+              widget.onTalkSemGirls != null ||
+              widget.onTalkSemParents != null ||
+              widget.onTalkSemPalivoWitness != null)) {
+        final talkRows = <Widget>[
+          if (widget.onTalkSemNews != null)
+            _elevated(t(SemTalkMenu.l10nBtnNews), widget.onTalkSemNews!),
+          if (widget.onTalkSemGirls != null)
+            _elevated(t(SemTalkMenu.l10nBtnGirls), widget.onTalkSemGirls!),
+          if (widget.onTalkSemParents != null)
+            _elevated(t(SemTalkMenu.l10nBtnParents), widget.onTalkSemParents!),
+          if (widget.onTalkSemPalivoWitness != null)
+            _elevated(
+              t(SemPalivoGirlsTalk.l10nBtnWitness),
+              widget.onTalkSemPalivoWitness!,
+            ),
+          _backToMainActionsButton(),
+        ];
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: talkRows,
+        );
+      }
+
       final actionByLabel = <String, NPCAction>{
         for (final action in actions) action.label: action,
       };

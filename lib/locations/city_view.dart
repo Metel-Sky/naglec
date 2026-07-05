@@ -8,6 +8,7 @@ import '../services/service_locator.dart';
 import '../services/npc_service.dart';
 import '../models/npc_model.dart';
 import '../services/game_time_controller.dart';
+import '../widgets/npc_room_scene_resolver.dart';
 import '../widgets/room_npc_scene_template.dart';
 import '../widgets/video_scene_widget.dart';
 import '../widgets/laptop_shop_view.dart' show ShopProduct;
@@ -268,34 +269,43 @@ class _CityViewState extends State<CityView> {
         final candidates = _filteredCandidatesForRoom(room);
         if (candidates.isNotEmpty) {
           final dt = widget.timeController.dateTime;
-          final ({NPCModel npc, SchedulePoint point}) chosen =
-              candidates.length == 1
-                  ? candidates.first
-                  : () {
-                      if (widget.selectedNpcIdInRoom != null) {
-                        for (final c in candidates) {
-                          if (c.npc.id == widget.selectedNpcIdInRoom) {
-                            return c;
-                          }
-                        }
-                      }
-                      return candidates[
-                          Random(_dailySeed(dt, room))
-                              .nextInt(candidates.length)];
-                    }();
-          final raster =
-              NpcRoomScenePicker.npcRasterOverlayPath(chosen.npc, chosen.point);
-          final av = chosen.npc.avatarPath?.trim();
+          final h = widget.timeController.dateTime.hour;
+          final weekday = widget.timeController.weekdayIndex;
+          final npcService = sl<NPCService>();
+          final layers = NpcRoomSceneResolver.resolve(
+            npcService: npcService,
+            roomId: room,
+            hour: h,
+            weekday: weekday,
+            dateTime: dt,
+            selectedNpcIdInRoom: widget.selectedNpcIdInRoom,
+            suppressRoomNpcRaster: widget.suppressRoomNpcRaster,
+            candidates: candidates,
+            pickSeed: _dailySeed(dt, room),
+          );
+          ({NPCModel npc, SchedulePoint point})? chosen;
+          if (layers.activeNpc != null) {
+            for (final c in candidates) {
+              if (c.npc.id == layers.activeNpc!.id) {
+                chosen = c;
+                break;
+              }
+            }
+          }
+          final raster = layers.npcRasterOverlay;
+          final av = chosen?.npc.avatarPath?.trim();
           final primary = (raster != null && raster.isNotEmpty)
               ? raster
               : (av != null && av.isNotEmpty ? av : '');
-          if (primary.isNotEmpty) {
+          if (primary.isNotEmpty && chosen != null) {
             npcOverlay = _parkNpcRasterBottomOverlay(
               primaryPath: primary,
               fallbackPath: chosen.npc.avatarPath,
             );
           }
-          onBgTap = () => widget.onNPCTap(chosen.npc);
+          if (layers.activeNpc != null) {
+            onBgTap = () => widget.onNPCTap(layers.activeNpc!);
+          }
         }
       }
       return ParkView(
@@ -332,24 +342,27 @@ class _CityViewState extends State<CityView> {
     ({NPCModel npc, SchedulePoint point})? chosenPair;
 
     if (candidates.isNotEmpty && !widget.suppressRoomNpcRaster) {
-      final ({NPCModel npc, SchedulePoint point}) chosen = candidates.length == 1
-          ? candidates.first
-          : () {
-              if (widget.selectedNpcIdInRoom != null) {
-                for (final c in candidates) {
-                  if (c.npc.id == widget.selectedNpcIdInRoom) return c;
-                }
-              }
-              return candidates[Random(_dailySeed(dt, widget.currentRoom)).nextInt(candidates.length)];
-            }();
-      chosenPair = chosen;
-      final sp = chosen.point.spritePath.trim();
-      if (sp.isNotEmpty && NpcRoomScenePicker.isVideoAssetPath(sp)) {
-        specialBackground = sp;
+      final layers = NpcRoomSceneResolver.resolve(
+        npcService: npcService,
+        roomId: widget.currentRoom,
+        hour: h,
+        weekday: weekday,
+        dateTime: dt,
+        selectedNpcIdInRoom: widget.selectedNpcIdInRoom,
+        candidates: candidates,
+        pickSeed: _dailySeed(dt, widget.currentRoom),
+      );
+      specialBackground = layers.specialBackground;
+      npcRasterOverlay = layers.npcRasterOverlay;
+      activeNPC = layers.activeNpc;
+      if (activeNPC != null) {
+        for (final c in candidates) {
+          if (c.npc.id == activeNPC.id) {
+            chosenPair = c;
+            break;
+          }
+        }
       }
-      npcRasterOverlay =
-          NpcRoomScenePicker.npcRasterOverlayPath(chosen.npc, chosen.point);
-      activeNPC = chosen.npc;
     }
 
     final roomData = LocationsData.cityRooms[currentRoomNorm];
@@ -371,7 +384,8 @@ class _CityViewState extends State<CityView> {
         );
       }
       final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
-      final rileyLanaPair = currentRoomNorm == LocationsData.cityEliteApartment2Bedroom
+      final rileyLanaPair = currentRoomNorm == LocationsData.cityEliteApartment2Bedroom &&
+          widget.selectedNpcIdInRoom == null
           ? NpcRoomScenePicker.rileyLanaBedroomPair(candidates)
           : null;
       if (rileyLanaPair != null) {

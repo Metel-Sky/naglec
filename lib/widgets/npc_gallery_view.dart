@@ -54,7 +54,7 @@ class NpcGalleryView extends StatelessWidget {
     'Понеділок', 'Вівторок', 'Середа', 'Четвер', "П'ятниця", 'Субота', 'Неділя'
   ];
 
-  /// Перші три картки — родина ГG; решта — за будинком проживання, у групі — за віком.
+  /// Перші картки — родина ГG і Juniper (4-та); решта — за будинком проживання, у групі — за віком.
   static List<NPCModel> sortedForGallery(List<NPCModel> npcs) =>
       NpcGalleryResidence.sortForGallery(npcs);
 

@@ -6,8 +6,11 @@ import '../npcs/mom/mom_event002_pool.dart';
 import '../npcs/piper/piper_quests.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/juniper/juniper_npc.dart';
+import '../npcs/juniper/juniper_quests.dart';
 import '../npcs/sem/sem_events.dart';
 import '../npcs/sem/sem_quests.dart';
+import '../services/game_time_controller.dart';
+import '../services/service_locator.dart';
 
 /// Ідентифікатори для [NpcProfileQuestLine.cheatId] і [NpcQuestCheats.setQuestCompleted].
 abstract final class NpcProfileQuestCheatId {
@@ -31,6 +34,14 @@ abstract final class NpcProfileQuestCheatId {
   static const piperPunishment3 = 'piper_punishment_3';
   static const piperGgPunishment = 'piper_gg_punishment';
   static const juniperIntro = 'juniper_intro';
+  static const juniperMet = 'juniper_met';
+  static const juniperLivingAtSem = 'juniper_living_at_sem';
+  static const juniperSemRoomWitness = 'juniper_sem_room_witness';
+  static const juniperSemPalivoTalk = 'juniper_sem_palivo_talk';
+  static const juniperPalivoApologyTalk = 'juniper_palivo_apology_talk';
+  static const juniperKompromatStep1 = 'juniper_kompromat_step1';
+  static const juniperKompromatSkipFiveDays = 'juniper_kompromat_skip_five_days';
+  static const juniperKompromatStep2 = 'juniper_kompromat_step2';
 }
 
 /// Група квестів у картці NPC (другий рівень випадаючого списку).
@@ -38,10 +49,14 @@ final class NpcProfileQuestGroup {
   const NpcProfileQuestGroup({
     required this.titleKey,
     required this.lines,
+    this.horizontalInlineRow = false,
   });
 
   final String titleKey;
   final List<NpcProfileQuestLine> lines;
+
+  /// Усі рядки в одному горизонтальному рядку: «назва — 10 — switch — 20 — …».
+  final bool horizontalInlineRow;
 }
 
 /// Групи квестів (наприклад Piper: «001 погані оцінки» всередині «Квести»).
@@ -54,7 +69,94 @@ List<NpcProfileQuestGroup>? npcProfileQuestGroupsFor(String npcId) {
       ),
     ];
   }
+  if (npcId == kJuniperNpcId) {
+    return [
+      NpcProfileQuestGroup(
+        titleKey: 'npc_quest_juniper_kompromat_001',
+        lines: _juniperQuest001CheatLines(),
+        horizontalInlineRow: true,
+      ),
+    ];
+  }
   return null;
+}
+
+List<NpcProfileQuestLine> _juniperQuest001CheatLines() {
+  String gameDateKey() => sl<GameTimeController>().onlyDate;
+
+  return [
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_intro',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId && SemQuest001.isIntroDebugReady(w),
+      cheatId: NpcProfileQuestCheatId.juniperIntro,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_met',
+      isDone: (w, npc) => npc.id == kJuniperNpcId && w.semJuniperMet,
+      cheatId: NpcProfileQuestCheatId.juniperMet,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_living_at_sem',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId &&
+          JuniperQuest001.isJuniperLivingAtSemDaily(
+            world: w,
+            gameDateKey: gameDateKey(),
+          ),
+      cheatId: NpcProfileQuestCheatId.juniperLivingAtSem,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_sem_room_witness',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId &&
+          w.semJuniperSemRoomSexWitnessCount >=
+              JuniperQuest001.minSemRoomWitnessCount,
+      cheatId: NpcProfileQuestCheatId.juniperSemRoomWitness,
+      counterLineKey: 'profile_juniper_sem_room_witness_count',
+      counterValue: (w, _) => w.semJuniperSemRoomSexWitnessCount,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_sem_palivo_talk',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId && w.semPalivoWitnessTalkDone,
+      cheatId: NpcProfileQuestCheatId.juniperSemPalivoTalk,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_palivo_apology_talk',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId && w.juniperPalivoApologyTalkDone,
+      cheatId: NpcProfileQuestCheatId.juniperPalivoApologyTalk,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_kompromat_step1',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId && w.juniperManuelKompromatStep1Done,
+      cheatId: NpcProfileQuestCheatId.juniperKompromatStep1,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_kompromat_skip_five_days',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId &&
+          w.juniperManuelKompromatStep2SkipFiveDaysCheat,
+      cheatId: NpcProfileQuestCheatId.juniperKompromatSkipFiveDays,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_kompromat_step2',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId && w.juniperManuelKompromatStep2Done,
+      cheatId: NpcProfileQuestCheatId.juniperKompromatStep2,
+      compactSwitch: true,
+    ),
+  ];
 }
 
 List<NpcProfileQuestLine> _piperQuest001ProfileLines() => [
@@ -266,16 +368,7 @@ List<NpcProfileQuestLine> npcProfileQuestLinesFor(String npcId) {
     case 'piper':
       return const [];
     case kJuniperNpcId:
-      return [
-        NpcProfileQuestLine(
-          titleKey: 'npc_quest_juniper_intro',
-          isDone: (w, npc) =>
-              npc.id == kJuniperNpcId && SemQuest001.isIntroDebugReady(w),
-          cheatId: NpcProfileQuestCheatId.juniperIntro,
-          statusDoneKey: 'npc_quest_juniper_intro_ready',
-          statusPendingKey: 'npc_quest_juniper_intro_not_ready',
-        ),
-      ];
+      return const [];
     default:
       return const [];
   }

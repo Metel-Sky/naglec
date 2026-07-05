@@ -507,6 +507,8 @@ class _NpcProfileQuestsList extends StatefulWidget {
 }
 
 class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
+  static const double _inlineLabelSwitchGap = 10;
+  static const double _inlineBetweenItemsGap = 20;
   static const String _kCherieAnimatorCounterKey =
       'profile_cherie_animator_shifts_count';
   static const String _kCherieMasseurCounterKey =
@@ -872,18 +874,104 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
             textAlign: TextAlign.left,
           ),
         ),
-        children: group.lines
-            .map(
-              (q) => _buildQuestLineTile(
-                q,
-                t,
-                cheatsOn,
-                stats,
-                npcSvc,
-              ),
-            )
-            .toList(),
+        children: group.horizontalInlineRow
+            ? [
+                _buildInlineQuestRow(
+                  group.lines,
+                  t,
+                  cheatsOn,
+                  stats,
+                  npcSvc,
+                ),
+              ]
+            : group.lines
+                .map(
+                  (q) => _buildQuestLineTile(
+                    q,
+                    t,
+                    cheatsOn,
+                    stats,
+                    npcSvc,
+                  ),
+                )
+                .toList(),
       ),
+    );
+  }
+
+  Widget _buildInlineQuestRow(
+    List<NpcProfileQuestLine> lines,
+    String Function(String) t,
+    bool cheatsOn,
+    PlayerStatsController stats,
+    NPCService npcSvc,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Wrap(
+        spacing: _inlineBetweenItemsGap,
+        runSpacing: 8,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          for (final q in lines)
+            _buildInlineQuestItem(
+              q,
+              t,
+              cheatsOn,
+              stats,
+              npcSvc,
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInlineQuestItem(
+    NpcProfileQuestLine q,
+    String Function(String) t,
+    bool cheatsOn,
+    PlayerStatsController stats,
+    NPCService npcSvc,
+  ) {
+    final done = q.isDone(widget.world, widget.npc);
+    final canToggle = cheatsOn && q.cheatId != null;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          t(q.titleKey),
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 12,
+            height: 1.2,
+          ),
+        ),
+        const SizedBox(width: _inlineLabelSwitchGap),
+        Transform.scale(
+          scale: 0.78,
+          alignment: Alignment.center,
+          child: Switch(
+            value: done,
+            activeThumbColor: GameTheme.textGreen,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            onChanged: canToggle
+                ? (v) {
+                    NpcQuestCheats.setQuestCompleted(
+                      q.cheatId!,
+                      v,
+                      widget.world,
+                      stats,
+                      npcSvc,
+                      widget.npc,
+                    );
+                    sl<SaveService>().autosave();
+                    setState(() {});
+                  }
+                : null,
+          ),
+        ),
+      ],
     );
   }
 

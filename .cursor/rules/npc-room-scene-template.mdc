@@ -1,16 +1,16 @@
 ---
 description: Шаблон кімнати з NPC (фон + оверлей 90% висоти, як у коледжі)
-globs: lib/locations/**/*.dart, lib/widgets/room_npc_scene_template.dart
+globs: lib/locations/**/*.dart, lib/widgets/room_npc_scene_template.dart, lib/widgets/npc_room_scene_resolver.dart
 ---
 
 # Сцена кімнати з NPC
 
 Для локацій, де NPC показується **поверх картинки кімнати** (не повноекранне відео персонажа):
 
-- Використовуй **`RoomNpcSceneTemplate`** та **`NpcRoomScenePicker`** з `lib/widgets/room_npc_scene_template.dart`.
+- Використовуй **`RoomNpcSceneTemplate`**, **`NpcRoomScenePicker`** (утиліти шляхів) та **`NpcRoomSceneResolver`** з `lib/widgets/npc_room_scene_resolver.dart`.
 - Фон: `NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath)`.
-- Кого показувати: `NpcRoomScenePicker.pickDisplayedNpc(..., selectedNpcIdInRoom: ...)`.
-- Растр персонажа: `NpcRoomScenePicker.npcRasterOverlayPath(npc, point)` (відео в оверлеї не йдуть).
+- Кого показувати + обраний у лівій смузі: **`NpcRoomSceneResolver.resolve(...)`** (один виклик у всіх view).
+- Растр персонажа: результат `resolve` → `layers.npcRasterOverlay` (відео — `layers.specialBackground`).
 - Віджет: `RoomNpcSceneTemplate.clippedRoomWithNpcOverlay(...)`.
 
 **Не** застосовуй цей шаблон там, де саме медіа NPC має бути на весь екран (наприклад кухня мами з відео) — там залишай окрему логіку в `HomeView` / івентах.

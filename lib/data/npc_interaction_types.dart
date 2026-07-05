@@ -135,6 +135,7 @@ const List<NpcActionTemplate> defaultInteractionActions = [
     lust: 0.0,
     relationship: 3.0,
     behavior: 1.0,
+    dialogueL10nKey: 'npc_compliment_dialogue',
   ),
 
   // Пожартувати.
@@ -148,6 +149,7 @@ const List<NpcActionTemplate> defaultInteractionActions = [
     relIfHigh: 3.0,
     behIfLow: 1.0,
     behIfHigh: 1.0,
+    dialogueL10nKey: 'npc_joke_dialogue',
   ),
 
   // Подарувати — базовий приріст статів, лімітовано в меню взаємодій.

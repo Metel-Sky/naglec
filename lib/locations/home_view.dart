@@ -11,6 +11,8 @@ import '../services/player_stats_controller.dart';
 import '../models/npc_model.dart';
 import '../services/game_time_controller.dart';
 import '../widgets/room_npc_scene_template.dart';
+import '../widgets/in_room_video_scene_launcher.dart';
+import '../widgets/npc_room_scene_resolver.dart';
 import '../npcs/mom/mom_npc.dart';
 import '../npcs/mom/mom_room_hours.dart';
 import '../npcs/mom/mom_video_func.dart' as mom_vf;
@@ -33,6 +35,10 @@ class HomeView extends StatefulWidget {
   final VoidCallback? onSleep;
   /// Під час авто-сцени (напр. «спалився») — без растру/відео NPC у кімнаті, лише фон.
   final bool suppressRoomNpcRaster;
+  /// In-room відео квесту (напр. mom_quest_001 у залі).
+  final String? inRoomVideoPath;
+  final int inRoomVideoPlaybackTick;
+  final bool inRoomVideoLoop;
 
   const HomeView({
     super.key,
@@ -44,6 +50,9 @@ class HomeView extends StatefulWidget {
     this.selectedNpcIdInRoom,
     required this.onNPCTap,
     this.suppressRoomNpcRaster = false,
+    this.inRoomVideoPath,
+    this.inRoomVideoPlaybackTick = 0,
+    this.inRoomVideoLoop = true,
     this.onOpenLaptop,
     this.onOpenSafe,
     this.onSetAlarm,
@@ -90,6 +99,9 @@ class _HomeViewState extends State<HomeView> {
     if (selected != null && selected != 'mom') return false;
     return activeNpcAfterCandidates?.id == 'mom';
   }
+
+  bool _selectedAllowsNpcMedia(String npcId) =>
+      NpcRoomSceneResolver.selectionAllows(widget.selectedNpcIdInRoom, npcId);
 
   @override
   Widget build(BuildContext context) {
@@ -192,21 +204,6 @@ class _HomeViewState extends State<HomeView> {
       activeNPC = chosen.npc;
     }
 
-    // Обраний у смузі NPC у кімнаті — завжди його аватар (напр. Ельза, коли мама теж на кухні).
-    if (!widget.suppressRoomNpcRaster && widget.selectedNpcIdInRoom != null) {
-      final selectedId = widget.selectedNpcIdInRoom!;
-      if (activeNPC?.id != selectedId &&
-          npcsInRoom.any((n) => n.id == selectedId)) {
-        final selectedNpc =
-            npcsInRoom.firstWhere((n) => n.id == selectedId);
-        activeNPC = selectedNpc;
-        npcRasterOverlay = selectedNpc.avatarPath;
-        if (selectedId != 'mom') {
-          specialBackground = null;
-        }
-      }
-    }
-
     // Seed для медіа: один раз на добу для цієї кімнати (календарний день гри).
     final mediaSeed = _dailySeed(dt, widget.currentRoom) + 9999;
     // Мама на кухні: 7 — сніданок; 21 — вечеря (окремий набір від mom_room / pereodevaetsa).
@@ -245,7 +242,7 @@ class _HomeViewState extends State<HomeView> {
         widget.currentRoom == LocationsData.momRoom &&
         momRoomDynamicEveningMediaHour(h) &&
         npcService.getCurrentLocationId(momNpc, h, day) == LocationsData.momRoom;
-    if (momNightVideoHere) {
+    if (momNightVideoHere && _selectedAllowsNpcMedia('mom')) {
       final momSeed = world.momRoomNightVisitSeed ?? mediaSeed;
       specialBackground = momRoomSleepTrioHour(h)
           ? mom_vf.momRoomEveningVideoListSeeded(momSeed)
@@ -258,7 +255,7 @@ class _HomeViewState extends State<HomeView> {
         npcService.getCurrentLocationId(momNpc, h, day) ==
             LocationsData.bathroom &&
         mom_vf.momShowerScheduleHour(h, day);
-    if (momShowerHere) {
+    if (momShowerHere && _selectedAllowsNpcMedia('mom')) {
       final showerSeed = world.momBathroomVisitSeed ?? mediaSeed;
       specialBackground = mom_vf.momShowerMorningVideosSeeded(showerSeed);
       activeNPC ??= momNpc;
@@ -270,14 +267,48 @@ class _HomeViewState extends State<HomeView> {
         npcService.getCurrentLocationId(piperNpc, h, day) ==
             LocationsData.bathroom &&
         piperShowerScheduleHour(h, day);
-    if (piperShowerHere) {
+    if (piperShowerHere && _selectedAllowsNpcMedia('piper')) {
       final showerSeed = world.piperBathroomVisitSeed ?? mediaSeed;
       specialBackground = piperShowerVideoSeeded(showerSeed);
       activeNPC ??= piperNpc;
     }
     // 4. Визначаємо фінальний шлях до медіа
     final roomData = LocationsData.homeRooms[widget.currentRoom];
+    final layers = NpcRoomSceneResolver.resolve(
+      npcService: npcService,
+      roomId: widget.currentRoom,
+      hour: h,
+      weekday: day,
+      dateTime: dt,
+      selectedNpcIdInRoom: widget.selectedNpcIdInRoom,
+      suppressRoomNpcRaster: widget.suppressRoomNpcRaster,
+      baseLayers: NpcRoomSceneLayers(
+        specialBackground: specialBackground,
+        npcRasterOverlay: npcRasterOverlay,
+        activeNpc: activeNPC,
+      ),
+    );
+    specialBackground = layers.specialBackground;
+    npcRasterOverlay = layers.npcRasterOverlay;
+    activeNPC = layers.activeNpc;
     final String finalMedia = specialBackground ?? roomData?.imagePath ?? 'lib/assets/location/home_gg/rooms/kitchen.jpg';
+
+    final questVideo = widget.inRoomVideoPath;
+    if (questVideo != null &&
+        LocationsData.migrateLegacyRoomId(widget.currentRoom) == LocationsData.hall) {
+      return GestureDetector(
+        onTap: () {
+          if (activeNPC != null) widget.onNPCTap(activeNPC);
+        },
+        child: InRoomVideoSceneLauncher.buildZoneLayer(
+          videoPath: questVideo,
+          playbackTick: widget.inRoomVideoPlaybackTick,
+          keyPrefix: 'home_quest',
+          loop: widget.inRoomVideoLoop,
+          fallbackImagePath: roomData?.imagePath,
+        ),
+      );
+    }
 
     // 5. Повертаємо контент кімнати
     final bool useNpcOverlayScene =
@@ -300,6 +331,7 @@ class _HomeViewState extends State<HomeView> {
               child: _buildMediaContent(
                 finalMedia,
                 videoFallbackImagePath: roomData?.imagePath,
+                playbackTick: mediaSeed,
               ),
             ),
           );
@@ -435,13 +467,17 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildMediaContent(
     String path, {
     String? videoFallbackImagePath,
+    int playbackTick = 0,
   }) {
-    return RoomNpcSceneTemplate.layerBackground(
-      path,
-      fallbackImagePath: NpcRoomScenePicker.isVideoAssetPath(path)
-          ? videoFallbackImagePath
-          : null,
-    );
+    if (NpcRoomScenePicker.isVideoAssetPath(path)) {
+      return InRoomVideoSceneLauncher.buildZoneLayer(
+        videoPath: path,
+        playbackTick: playbackTick,
+        keyPrefix: 'home_mom',
+        fallbackImagePath: videoFallbackImagePath,
+      );
+    }
+    return RoomNpcSceneTemplate.layerBackground(path);
   }
 
   // --- СІТКА КІМНАТ ---

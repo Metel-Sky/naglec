@@ -13,15 +13,8 @@ mixin MomGameFlow on MainGameScreenStateBase {
 
   void _resetMomQuest001PresentationSession() {
     _momQuest001PresentationSyncedStep = null;
+    _momQuest001VideoPath = null;
     _ui.setEventImagePath(null);
-    _eventVideoPath = null;
-    _eventVideoOnComplete = null;
-    _eventVideoPendingButton = null;
-    _eventVideoOnButtonPressed = null;
-    _eventVideoCloseWhenCompleted = true;
-    _eventVideoFullScreen = false;
-    _eventVideoLoop = false;
-    _eventVideoMuted = false;
   }
 
   void _abortMomQuest001ProgressAndUi() {
@@ -46,28 +39,18 @@ mixin MomGameFlow on MainGameScreenStateBase {
 
   void _applyMomQuest001Patch(MomQuest001Patch p) {
     _ui.clearEventSubState();
-    final loc = sl<LocaleController>();
-    newsMessage = loc.t(p.newsL10nKey);
-    if (p.imagePath != null) {
-      _ui.setEventImagePath(p.imagePath);
-    }
+    newsMessage = sl<LocaleController>().t(p.newsL10nKey);
+    _momQuest001VideoPath = null;
+    if (p.imagePath != null) _ui.setEventImagePath(p.imagePath);
     if (p.videoPath != null) {
-      _eventVideoPath = p.videoPath;
-      _eventVideoMuted = false;
-      _eventVideoFullScreen = p.fullScreen;
-      _eventVideoCloseWhenCompleted = p.closeWhenCompleted;
-      _eventVideoLoop = p.loopVideo;
-      _eventVideoOnComplete = null;
-      _eventVideoPendingButton = null;
-      _eventVideoOnButtonPressed = null;
-    } else {
-      _eventVideoPath = null;
-      _eventVideoOnComplete = null;
-      _eventVideoPendingButton = null;
-      _eventVideoOnButtonPressed = null;
-      _eventVideoCloseWhenCompleted = true;
-      _eventVideoFullScreen = false;
-      _eventVideoLoop = false;
+      final h = _launchInRoomVideo(
+        videoPath: p.videoPath!,
+        previousPlaybackTick: _momQuest001VideoTick,
+        loop: p.loopVideo,
+      );
+      _momQuest001VideoTick = h.playbackTick;
+      _momQuest001VideoPath = h.videoPath;
+      _momQuest001VideoLoop = h.loop;
     }
     _momQuest001PresentationSyncedStep = _worldState.momQuest001Step;
   }

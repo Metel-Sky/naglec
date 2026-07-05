@@ -99,7 +99,7 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   String? get _overlayEventVideoPath {
     final path = _eventVideoPath;
     if (path == null) return null;
-    if (SemJuniperRoomIntro.ownsEventVideo(path)) return null;
+    if (InRoomVideoPlayback.ownsKnownEventVideoPath(path)) return null;
     return path;
   }
 
@@ -247,7 +247,7 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   /// Sem показано біля дверей після успішного «Позвати Сема» на цьому фасаді.
   bool _semSummonedAtFriendFacade = false;
   /// Відкритий діалог «Поговорити» з Sem біля дверей (у меню лише «Піти»).
-  bool _semFriendHouseTalkActive = false;
+  bool _semTalkSubmenuActive = false;
   /// Івент «Розмова про батьків»: діалог + лише «Піти» до виходу на вул. Шевченка.
   bool _semParentsTalkActive = false;
 
@@ -257,21 +257,100 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   bool _semGirlsSisterTalkActive = false;
   /// sem_quest_001: підрозділ «натякнути шукати дівчину».
   bool _semGirlsHintTalkActive = false;
+  bool _juniperPalivoApologyTalkActive = false;
 
   /// sem_quest_001: follow-up «ну шо, знайшов когось?» на фасаді.
   bool _semGirlsFollowUpActive = false;
+
+  void _resetSemTalkFlowUi({bool clearSummoned = true}) {
+    _semTalkSubmenuActive = false;
+    _semGirlsTalkActive = false;
+    _semGirlsSisterTalkActive = false;
+    _semGirlsHintTalkActive = false;
+    _semGirlsFollowUpActive = false;
+    _semParentsTalkActive = false;
+    if (clearSummoned) _semSummonedAtFriendFacade = false;
+  }
 
   /// sem_quest_001: сцена знайомства з Juniper у кімнаті Sem.
   bool _semJuniperIntroUiActive = false;
   bool _semJuniperIntroSkippedPath = false;
 
-  /// sem_quest_001: показати вечірній кліп Juniper при цьому заході в кімнату (1 раз/добу).
+  /// sem_quest_001: вечірній кліп Juniper у кімнаті (кожен вхід / перемотка часу).
   bool _semJuniperEveningClipShowOnThisVisit = false;
+  int _juniperEveningClipPlaybackTick = 0;
+  String? _juniperEveningClipVideoPath;
+
+  /// sem_quest_001: сцена душу Juniper (3 відео, кнопки «Продовжити» / «Піти»).
+  bool _juniperShowerUiActive = false;
+  int _juniperShowerTier = 1;
+  int _juniperShowerSetIndex = 0;
+  int _juniperShowerPlaybackTick = 0;
+  /// Відео душу Juniper — у [StreetView] через [VideoSceneWidget], не EventInteractionOverlay.
+  String? _juniperShowerVideoPath;
+
+  /// sem_quest_001: 4 відео у кімнаті Sem (суб 12:00 / нд 16:00).
+  bool _juniperSemRoomSexUiActive = false;
+  int _juniperSemRoomSexTier = 1;
+  int _juniperSemRoomSexPlaybackTick = 0;
+  String? _juniperSemRoomSexVideoPath;
+
+  /// QUEST: juniper_quest_001 — in-room kompromat (крок 1 ванна / крок 2 батьків).
+  JuniperManuelKompromatPhase _juniperManuelKompromatPhase =
+      JuniperManuelKompromatPhase.inactive;
+  int _juniperManuelKompromatPlaybackTick = 0;
+  String? _juniperManuelKompromatVideoPath;
+
+  bool get _juniperManuelKompromatUiActive =>
+      _juniperManuelKompromatPhase ==
+          JuniperManuelKompromatPhase.step1Video ||
+      _juniperManuelKompromatPhase ==
+          JuniperManuelKompromatPhase.step1AfterRecord;
+
+  bool get _juniperManuelKompromatAfterRecord =>
+      _juniperManuelKompromatPhase ==
+      JuniperManuelKompromatPhase.step1AfterRecord;
+
+  bool get _juniperManuelKompromatStep2UiActive =>
+      _juniperManuelKompromatPhase ==
+      JuniperManuelKompromatPhase.step2Video;
 
   /// Картинка + діалог «spyOnSemParents» біля кімнати батьків.
   bool _spyOnSemParentsUiActive = false;
   DanielleSpyParentsPhase _spyParentsPhase = DanielleSpyParentsPhase.door;
   bool _danielleSpyCaughtUiActive = false;
+
+  void _clearJuniperShowerUiOnly() {
+    _juniperShowerUiActive = false;
+    _juniperShowerTier = 1;
+    _juniperShowerSetIndex = 0;
+    _juniperShowerVideoPath = null;
+  }
+
+  void _clearInRoomVideoOverlayBlockers() {
+    _clearJuniperShowerUiOnly();
+    _ui.setEventImagePath(null);
+    _eventVideoPath = null;
+    _eventVideoPendingButton = null;
+    _eventVideoOnButtonPressed = null;
+  }
+
+  InRoomVideoSceneHandle _launchInRoomVideo({
+    required String videoPath,
+    required int previousPlaybackTick,
+    bool loop = true,
+    bool allowEventImageOverlay = false,
+  }) =>
+      InRoomVideoSceneLauncher.launch(
+        videoPath: videoPath,
+        previousPlaybackTick: previousPlaybackTick,
+        clearOverlayBlockers: _clearInRoomVideoOverlayBlockers,
+        overlayEventVideoPath: _overlayEventVideoPath,
+        eventVideoPendingButton: _eventVideoPendingButton,
+        eventImagePath: _eventImagePath,
+        allowEventImageOverlay: allowEventImageOverlay,
+        loop: loop,
+      );
 
   // --- Sasha: comunicate_sasha_in_zal ---
   bool _sashaComunicateInHallUiActive = false;
@@ -314,6 +393,9 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
 
   /// Останній крок mom_quest_001 після [_applyMomQuest001Patch].
   int? _momQuest001PresentationSyncedStep;
+  String? _momQuest001VideoPath;
+  int _momQuest001VideoTick = 0;
+  bool _momQuest001VideoLoop = true;
 
   /// Останній крок mom_event_002 після [_applyMomEvent002Patch].
   int? _momEvent002PresentationSyncedStep;
@@ -419,9 +501,7 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
 
       _selectedNpcIdInRoom = null;
       _friendHouseStreetFacade = false;
-      _semSummonedAtFriendFacade = false;
-      _semFriendHouseTalkActive = false;
-      _semParentsTalkActive = false;
+      _resetSemTalkFlowUi();
 
       // Повертаємо гравця в «вулицю» (сітка будинків).
       currentZone = 'STREET';
@@ -546,6 +626,15 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     _saveService.autosave();
   }
 
+  /// Вихід з кімнати будинку Sem на рівень вище (сітка кімнат / коридор).
+  void _exitFriendHouseInteriorToCorridor() {
+    _nav.setZoneAndRoom(_nav.currentZone, LocationsData.friendCorridor);
+    _nav.setIsInsideRoom(false);
+    newsMessage = LocationsData.getLocationDisplayName(
+      LocationsData.friendCorridor,
+    );
+  }
+
   void _finishSemJuniperIntro() {
     if (!mounted) return;
     SemJuniperRoomIntro.markComplete(
@@ -559,9 +648,8 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
       _semJuniperIntroUiActive = false;
       _semJuniperIntroSkippedPath = false;
       _ui.setEventImagePath(null);
-      newsMessage = LocationsData.getLocationDisplayName(
-        LocationsData.friendRoom,
-      );
+      _selectedNpcIdInRoom = null;
+      _exitFriendHouseInteriorToCorridor();
     });
     _saveService.autosave();
   }
@@ -653,11 +741,7 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
       _eventVideoPendingButton = null;
       _eventVideoOnButtonPressed = null;
       _eventVideoLoop = false;
-      _nav.setZoneAndRoom(_nav.currentZone, LocationsData.friendCorridor);
-      _nav.setIsInsideRoom(false);
-      newsMessage = LocationsData.getLocationDisplayName(
-        LocationsData.friendCorridor,
-      );
+      _exitFriendHouseInteriorToCorridor();
       _saveService.autosave();
     });
   }

@@ -42,6 +42,7 @@ class MainGameScreenState extends MainGameScreenStateBase
         _ensurePiperQuest001Step6ClosureUiCoherent();
         _maybeResumePiperHallWeekendEventAfterLoad();
         _ensurePiperHallWeekendEventUiCoherent();
+        _ensureJuniperManuelKompromatUiCoherent();
         _maybeResumeCherieMassageFunEventAfterLoad();
         _maybeStartDanielleSpyCaughtAutoInRoom();
         _tryAutoStartSashaHallComunicateVideo();
@@ -227,11 +228,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     fit: StackFit.expand,
                                     clipBehavior: Clip.hardEdge,
                                     children: [
-                                      if (_overlayEventVideoPath == null &&
-                                          _eventVideoPendingButton == null &&
-                                          (_eventImagePath == null ||
-                                              _danielleSpyCaughtUiActive ||
-                                              _isPiperQuest001GgDealRevealOverlayActive())) ...[
+                                      if (_usesStreetViewRoomContentLayer) ...[
                                         ListenableBuilder(
                                           listenable: _timeController,
                                           builder: (context, _) {
@@ -566,8 +563,12 @@ class MainGameScreenState extends MainGameScreenStateBase
                                               location: LocationsData.cityBcLogistics,
                                               hour: hour,
                                               onUpdate: () => setState(_prepareForPlayerAction),
-                                              onActionExecuted: (label, npc) =>
-                                                  _handleNpcActionExecuted(label, npc),
+                                              onActionExecuted: (label, npc, {dialogueL10nKey}) =>
+                                                  _handleNpcActionExecuted(
+                                                    label,
+                                                    npc,
+                                                    dialogueL10nKey: dialogueL10nKey,
+                                                  ),
                                               onFinanceGiveMoney: () => _npcFinanceGiveMoney(luda),
                                               onFinanceGiveLoan: () => _npcFinanceGiveLoan(luda),
                                               onFinanceRepayGgDebt:
@@ -715,6 +716,158 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     _navBtn(
                                       tCaught('danielle_spy_caught_confirm'),
                                       _finishDanielleSpyCaughtQuest,
+                                    ),
+                                  ],
+                                );
+                              }
+                              if (SemJuniperRoomIntro.isSceneActive(
+                                introUiActive: _semJuniperIntroUiActive,
+                                zone: currentZone,
+                                streetHouse: currentStreetHouse,
+                                insideRoom: isInsideRoom,
+                                room: currentRoom,
+                              )) {
+                                return GameDialogPanel(
+                                  message: _semJuniperIntroDialogueMessage(),
+                                  highlightNames: const [
+                                    'Juniper',
+                                    'Sem',
+                                    'Джуніпер',
+                                  ],
+                                  navButtons: [
+                                    _semJuniperIntroPriorityActionPanelIfAny() ??
+                                        const SizedBox.shrink(),
+                                  ],
+                                );
+                              }
+                              if (_juniperShowerUiActive) {
+                                final tShower = sl<LocaleController>().t;
+                                switch (_juniperShowerTier) {
+                                  case 1:
+                                  case 2:
+                                    return GameDialogPanel(
+                                      message: _messageWithSelectedNpcStripLine(''),
+                                      highlightNames: const ['Juniper'],
+                                      navButtons: [
+                                        _navBtn(
+                                          tShower(
+                                            'danielle_spy_parents_continue_watching',
+                                          ),
+                                          _juniperShowerTier == 1
+                                              ? _juniperShowerWatchMoreAfterVideo1
+                                              : _juniperShowerWatchMoreAfterVideo2,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        _navBtn(
+                                          tShower('danielle_spy_parents_leave'),
+                                          _finishJuniperShowerScene,
+                                        ),
+                                      ],
+                                    );
+                                  default:
+                                    return GameDialogPanel(
+                                      message: _messageWithSelectedNpcStripLine(''),
+                                      highlightNames: const ['Juniper'],
+                                      navButtons: [
+                                        _navBtn(
+                                          tShower('danielle_spy_parents_leave'),
+                                          _finishJuniperShowerScene,
+                                        ),
+                                      ],
+                                    );
+                                }
+                              }
+                              if (_juniperSemRoomSexUiActive) {
+                                final tSex = sl<LocaleController>().t;
+                                switch (_juniperSemRoomSexTier) {
+                                  case 1:
+                                  case 2:
+                                  case 3:
+                                    return GameDialogPanel(
+                                      message: _messageWithSelectedNpcStripLine(''),
+                                      highlightNames: const ['Juniper'],
+                                      navButtons: [
+                                        _navBtn(
+                                          tSex(JuniperSemRoomSexVideos.l10nWatchMore),
+                                          _juniperSemRoomSexWatchMore,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        _navBtn(
+                                          tSex('danielle_spy_parents_leave'),
+                                          _finishJuniperSemRoomSexScene,
+                                        ),
+                                      ],
+                                    );
+                                  default:
+                                    return GameDialogPanel(
+                                      message: _messageWithSelectedNpcStripLine(''),
+                                      highlightNames: const ['Juniper'],
+                                      navButtons: [
+                                        _navBtn(
+                                          tSex('danielle_spy_parents_leave'),
+                                          _finishJuniperSemRoomSexScene,
+                                        ),
+                                      ],
+                                    );
+                                }
+                              }
+                              if (_isJuniperManuelKompromatStep2UiCoherent()) {
+                                final tK = sl<LocaleController>().t;
+                                return GameDialogPanel(
+                                  message: tK(JuniperQuest001.l10nStep2Intro),
+                                  highlightNames: const [
+                                    'Juniper',
+                                    'Manuel',
+                                    'Джуніпер',
+                                  ],
+                                  navButtons: [
+                                    _navBtn(
+                                      tK(JuniperQuest001.l10nBtnFlee),
+                                      _juniperManuelKompromatStep2FleePressed,
+                                    ),
+                                  ],
+                                );
+                              }
+                              if (_isJuniperManuelKompromatStep1UiCoherent()) {
+                                final tK = sl<LocaleController>().t;
+                                if (_juniperManuelKompromatAfterRecord) {
+                                  return GameDialogPanel(
+                                    message: tK(
+                                      JuniperQuest001.l10nStep1RecordFail,
+                                    ),
+                                    highlightNames: const [
+                                      'Juniper',
+                                      'Manuel',
+                                      'Джуніпер',
+                                    ],
+                                    navButtons: [
+                                      _navBtn(
+                                        tK('danielle_spy_parents_leave'),
+                                        _finishJuniperManuelKompromatScene,
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return GameDialogPanel(
+                                  message: tK(JuniperQuest001.l10nStep1Intro),
+                                  highlightNames: const [
+                                    'Juniper',
+                                    'Manuel',
+                                    'Джуніпер',
+                                  ],
+                                  navButtons: [
+                                    _navBtn(
+                                      tK(JuniperQuest001.l10nBtnRecord),
+                                      () {
+                                        setState(() {
+                                          _juniperManuelKompromatRecordPressed();
+                                        });
+                                      },
+                                    ),
+                                    const SizedBox(height: 8),
+                                    _navBtn(
+                                      tK('danielle_spy_parents_leave'),
+                                      _finishJuniperManuelKompromatScene,
                                     ),
                                   ],
                                 );
@@ -869,11 +1022,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                               ];
                               var combinedMessage = messages.isNotEmpty
                                   ? messages.join(' ')
-                                  : (_isQuestOrEventScriptedDialogForNews()
-                                      ? newsMessage
-                                      : (_selectedNpcIdInRoom != null
-                                          ? ''
-                                          : newsMessage));
+                                  : newsMessage;
                               List<String> dialogueHighlightNames;
                               final locPanel = sl<LocaleController>();
                               if (messages.isEmpty) {

@@ -41,6 +41,7 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
       }
       final hour = _timeController.dateTime.hour;
       final day = _timeController.weekdayIndex;
+      _syncSemJuniperArcOnRoomEntry();
       _syncActiveLocationAfterTimeChange();
       _showCollegeLessonStartDialogIfNeeded();
       final animatorSlotKey = CherieQuest001.giftShopAnimatorShiftSlotKey(
@@ -377,8 +378,8 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
       _maybeAbortMomQuest001WrongLocation();
       _maybeAbortMomEvent002WrongLocation();
       _ensureCherieQuest002HomeHallUiCoherent();
-      _syncSemJuniperArcOnRoomEntry();
       _ensureSemJuniperIntroUiCoherent();
+      _ensureJuniperManuelKompromatUiCoherent();
       _resetNewsMessageIfOutsideQuestEventContext();
     });
   }

@@ -7,6 +7,7 @@ import '../data/poor_district/poor_district_house_2.dart';
 import '../models/npc_model.dart';
 import '../npcs/all_npcs.dart';
 import '../npcs/juniper/juniper_npc.dart';
+import '../npcs/juniper/juniper_sem_room_sex_videos.dart';
 import '../npcs/sem/sem_juniper_evening_visits.dart';
 import 'cherie_quest002_location_pin.dart';
 import 'cherie_quest004_location_pin.dart';
@@ -460,6 +461,20 @@ class NPCService {
     if (npc.id == kJuniperNpcId) {
       final world = sl<GameWorldState>();
       final dateKey = sl<GameTimeController>().onlyDate;
+      if (SemJuniperEveningVisits.isWeekendSemRoomPresenceActive(
+        world,
+        effectiveDay,
+        hour,
+      )) {
+        return LocationsData.friendRoom;
+      }
+      if (JuniperSemRoomSexVideos.isSceneActiveAt(
+        world: world,
+        weekdayIndex: effectiveDay,
+        hour: hour,
+      )) {
+        return LocationsData.friendRoom;
+      }
       if (SemJuniperEveningVisits.isActive(
         world,
         dateKey,
@@ -470,6 +485,7 @@ class NPCService {
           gameDateKey: dateKey,
           weekdayIndex: effectiveDay,
           hour: hour,
+          world: world,
         );
       }
       if (SemJuniperEarlyVisits.isActive(
@@ -482,6 +498,7 @@ class NPCService {
           gameDateKey: dateKey,
           weekdayIndex: effectiveDay,
           hour: hour,
+          world: world,
         );
       }
       return null;
@@ -640,6 +657,39 @@ class NPCService {
     if (npc.id == kJuniperNpcId) {
       final world = sl<GameWorldState>();
       final dateKey = sl<GameTimeController>().onlyDate;
+      if (SemJuniperEveningVisits.isWeekendSemRoomPresenceActive(
+        world,
+        effectiveDay,
+        hour,
+      ) &&
+          normRoom == LocationsData.friendRoom) {
+        return SchedulePoint(
+          hourStart: SemJuniperEveningVisits.weekendSemRoomHourStart,
+          hourEnd: SemJuniperEveningVisits.weekendSemRoomHourEndExclusive - 1,
+          location: LocationsData.friendRoom,
+          actionLabel: SemJuniperEveningVisits.actionLabelForRoom(
+            LocationsData.friendRoom,
+          ),
+          spritePath: npc.avatarPath ?? '',
+          days: const [5, 6],
+        );
+      }
+      if (JuniperSemRoomSexVideos.isSceneActiveAt(
+        world: world,
+        weekdayIndex: effectiveDay,
+        hour: hour,
+      ) &&
+          normRoom == LocationsData.friendRoom) {
+        return SchedulePoint(
+          hourStart: hour,
+          hourEnd: hour,
+          location: LocationsData.friendRoom,
+          actionLabel: SemJuniperEveningVisits.actionLabelForRoom(
+            LocationsData.friendRoom,
+          ),
+          spritePath: npc.avatarPath ?? '',
+        );
+      }
       if (SemJuniperEarlyVisits.isActive(
         world,
         dateKey,
@@ -650,6 +700,7 @@ class NPCService {
           gameDateKey: dateKey,
           weekdayIndex: effectiveDay,
           hour: hour,
+          world: world,
         );
         if (visitRoom != null && visitRoom == normRoom) {
           return SchedulePoint(
@@ -672,6 +723,7 @@ class NPCService {
           gameDateKey: dateKey,
           weekdayIndex: effectiveDay,
           hour: hour,
+          world: world,
         );
         if (visitRoom != null && visitRoom == normRoom) {
           return SchedulePoint(

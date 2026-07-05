@@ -1,5 +1,5 @@
 ---
-description: Квести/івенти не змішують діалог і кнопки; один активний scripted UI-власник
+description: Квести/івенти — ізольовані кроки (відео+текст+кнопки+локація), один UI-власник
 alwaysApply: true
 ---
 
@@ -7,6 +7,47 @@ alwaysApply: true
 
 Один момент гри = **один власник** `newsMessage` **і** кнопок у `_buildActionPanel` / `GameDialogPanel`.  
 Текст від квесту A + кнопки від івенту B — **заборонено** (приклад бага: здача Piper + `mom_event_002`).
+
+## Ізоляція кроку (обов’язково)
+
+**Кожен крок** = **один пакет**, що не розвалюється:
+
+| Разом | Не окремо |
+|-------|-----------|
+| фаза/прапор кроку | текст у `newsMessage` без фази |
+| локація (зона + кімната) | кнопки без перевірки локації |
+| відео / картинка кроку | діалог без відео в іншій кімнаті |
+| l10n-текст кроку | «висячий» текст після виходу з кімнати |
+
+**Заборонено:** стартувати крок лише текстом; показувати текст кроку N у коридорі / іншій кімнаті, коли відео й кнопки кроку N не активні.
+
+### Де тримати логіку
+
+У `lib/npcs/<npc>/` — **клас сцени кроку** (без віджетів), напр. `JuniperManuelKompromatInRoomScene`:
+
+- `videoPathForPhase` / `streetViewVideoPath` — відео
+- `dialogueL10nKeyForPhase` — текст
+- `isStepNUiCoherent(...)` — **фаза + правильна кімната** (не лише `phase == stepN`)
+- `is*DialogMessage` — скидання «залиплого» `newsMessage`
+
+На екрані — **пара** `_purge*IfMisplaced()` + `_ensure*UiCoherent()`:
+
+- purge: фаза/відео/картинка/текст кроку, якщо гравець **не** в локації кроку
+- ensure: `newsMessage` = l10n **лише** коли `isStepNUiCoherent` = true
+
+Викликати ensure/purge при: вході в кімнату, зміні часу, «назад» / виході з будинку, завантаженні сейву.
+
+### UI на екрані
+
+- `GameDialogPanel` і `_isQuestOrEventScriptedDialogForNews()` — **`isStepNUiCoherent`**, не голий прапор фази.
+- Кнопки кроку — тільки в локаційному меню, тільки при coherent.
+- In-room відео — `InRoomVideoSceneLauncher` (див. `in-room-video-playback.mdc`).
+
+### Еталони
+
+- `lib/npcs/juniper/juniper_manuel_kompromat_in_room_scene.dart` + `_ensureJuniperManuelKompromatUiCoherent`
+- `SemJuniperRoomIntro` + `_ensureSemJuniperIntroUiCoherent`
+- Piper: `_ensurePiperQuest001Step2ApproachUiCoherent`, `_ensurePiperQuest001Step4CorridorUiCoherent`
 
 ## Контракт власника
 
@@ -41,10 +82,13 @@ alwaysApply: true
 
 ## Новий квест — чеклист
 
+- [ ] Клас сцени кроку: `isStep*UiCoherent`, `dialogueL10nKeyForPhase`, purge + ensure на екрані.
+- [ ] Текст кроку **не** пишеться в `newsMessage` окремо від ensure / старту фази.
 - [ ] `isScriptedDialogActive` враховує **усі** фази, включно з ack без `step`.
-- [ ] Priority-панель покриває **ті самі** фази.
+- [ ] Priority-панель покриває **ті самі** фази і **ту саму** локацію, що coherent.
 - [ ] Після one-shot дії є dismiss; при dismiss — handoff до іншого активного флоу, якщо він був у черзі.
-- [ ] Перевірка вручну: та сама кімната + паралельний івент NPC (кухня/зал/коридор) — немає змішаних кнопок.
+- [ ] Перевірка вручну: вихід у коридор / іншу кімнату — **немає** тексту/кнопок чужого кроку.
+- [ ] Перевірка вручну: та сама кімната + паралельний івент NPC — немає змішаних кнопок.
 
 ## Реалістичність
 

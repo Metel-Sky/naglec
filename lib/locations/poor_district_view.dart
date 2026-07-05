@@ -7,6 +7,7 @@ import '../services/player_stats_controller.dart';
 import '../models/npc_model.dart';
 import '../services/game_time_controller.dart';
 import '../widgets/insufficient_money_dialog.dart';
+import '../widgets/npc_room_scene_resolver.dart';
 import '../widgets/room_npc_scene_template.dart';
 
 class PoorDistrictView extends StatefulWidget {
@@ -80,28 +81,27 @@ class _PoorDistrictViewState extends State<PoorDistrictView> {
     final day = widget.timeController.weekdayIndex;
     final dt = widget.timeController.dateTime;
 
-    var chosen = NpcRoomScenePicker.pickDisplayedNpc(
+    final layers = NpcRoomSceneResolver.resolve(
       npcService: npcService,
       roomId: widget.currentRoom,
       hour: h,
       weekday: day,
       dateTime: dt,
       selectedNpcIdInRoom: widget.selectedNpcIdInRoom,
+      suppressRoomNpcRaster: widget.suppressRoomNpcRaster,
     );
-    if (widget.suppressRoomNpcRaster) chosen = null;
 
     final roomData = LocationsData.poorDistrictRooms[widget.currentRoom];
     final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
-    final npcRaster = chosen == null
-        ? null
-        : NpcRoomScenePicker.npcRasterOverlayPath(chosen.npc, chosen.point);
+    final npcRaster = layers.npcRasterOverlay;
+    final activeNpc = layers.activeNpc;
 
     return RoomNpcSceneTemplate.clippedRoomWithNpcOverlay(
       roomBackgroundPath: bg,
       npcRasterAssetPath: npcRaster,
-      npcRasterFallbackPath: chosen?.npc.avatarPath,
+      npcRasterFallbackPath: activeNpc?.avatarPath,
       onTap: () {
-        if (chosen != null) widget.onNPCTap(chosen.npc);
+        if (activeNpc != null) widget.onNPCTap(activeNpc);
       },
     );
   }
@@ -117,20 +117,17 @@ class _PoorDistrictViewState extends State<PoorDistrictView> {
     final bgPath =
         _poorDistrictGymExercising ? _poorDistrictGymExerciseImage : gymBg;
 
-    ({NPCModel npc, SchedulePoint point})? chosen;
-    if (!_poorDistrictGymExercising && !widget.suppressRoomNpcRaster) {
-      chosen = NpcRoomScenePicker.pickDisplayedNpc(
-        npcService: npcService,
-        roomId: widget.currentRoom,
-        hour: h,
-        weekday: day,
-        dateTime: dt,
-        selectedNpcIdInRoom: widget.selectedNpcIdInRoom,
-      );
-    }
-    final npcRaster = chosen == null
-        ? null
-        : NpcRoomScenePicker.npcRasterOverlayPath(chosen.npc, chosen.point);
+    final layers = (!_poorDistrictGymExercising && !widget.suppressRoomNpcRaster)
+        ? NpcRoomSceneResolver.resolve(
+            npcService: npcService,
+            roomId: widget.currentRoom,
+            hour: h,
+            weekday: day,
+            dateTime: dt,
+            selectedNpcIdInRoom: widget.selectedNpcIdInRoom,
+          )
+        : NpcRoomSceneLayers.empty;
+    final npcRaster = layers.npcRasterOverlay;
     final rawNpc = npcRaster;
     final hasNpc = rawNpc != null &&
         rawNpc.isNotEmpty &&
@@ -153,7 +150,7 @@ class _PoorDistrictViewState extends State<PoorDistrictView> {
               Positioned.fill(
                 child: RoomNpcSceneTemplate.layerBackground(bgPath),
               ),
-              if (hasNpc && chosen != null)
+              if (hasNpc && layers.activeNpc != null)
                 Positioned(
                   left: 0,
                   right: 0,
@@ -161,7 +158,7 @@ class _PoorDistrictViewState extends State<PoorDistrictView> {
                   height: overlayHeight,
                   child: GestureDetector(
                     behavior: HitTestBehavior.translucent,
-                    onTap: () => widget.onNPCTap(chosen!.npc),
+                    onTap: () => widget.onNPCTap(layers.activeNpc!),
                     child: Image.asset(
                       rawNpc,
                       fit: BoxFit.contain,
@@ -170,7 +167,7 @@ class _PoorDistrictViewState extends State<PoorDistrictView> {
                       alignment: Alignment.bottomCenter,
                       filterQuality: FilterQuality.medium,
                       errorBuilder: (context, error, stackTrace) {
-                        final fb = chosen!.npc.avatarPath?.trim();
+                        final fb = layers.activeNpc!.avatarPath?.trim();
                         if (fb != null && fb.isNotEmpty) {
                           return Image.asset(
                             fb,

@@ -5,6 +5,7 @@ import '../services/service_locator.dart';
 import '../services/npc_service.dart';
 import '../models/npc_model.dart';
 import '../services/game_time_controller.dart';
+import '../widgets/npc_room_scene_resolver.dart';
 import '../widgets/room_npc_scene_template.dart';
 
 class OutOfTownView extends StatefulWidget {
@@ -48,28 +49,27 @@ class _OutOfTownViewState extends State<OutOfTownView> {
     final day = widget.timeController.weekdayIndex;
     final dt = widget.timeController.dateTime;
 
-    var chosen = NpcRoomScenePicker.pickDisplayedNpc(
+    final layers = NpcRoomSceneResolver.resolve(
       npcService: npcService,
       roomId: widget.currentRoom,
       hour: h,
       weekday: day,
       dateTime: dt,
       selectedNpcIdInRoom: widget.selectedNpcIdInRoom,
+      suppressRoomNpcRaster: widget.suppressRoomNpcRaster,
     );
-    if (widget.suppressRoomNpcRaster) chosen = null;
 
     final roomData = LocationsData.outOfTownRooms[widget.currentRoom];
     final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
-    final npcRaster = chosen == null
-        ? null
-        : NpcRoomScenePicker.npcRasterOverlayPath(chosen.npc, chosen.point);
+    final npcRaster = layers.npcRasterOverlay;
+    final activeNpc = layers.activeNpc;
 
     return RoomNpcSceneTemplate.clippedRoomWithNpcOverlay(
       roomBackgroundPath: bg,
       npcRasterAssetPath: npcRaster,
-      npcRasterFallbackPath: chosen?.npc.avatarPath,
+      npcRasterFallbackPath: activeNpc?.avatarPath,
       onTap: () {
-        if (chosen != null) widget.onNPCTap(chosen.npc);
+        if (activeNpc != null) widget.onNPCTap(activeNpc);
       },
     );
   }

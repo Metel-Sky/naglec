@@ -1,4 +1,5 @@
 import '../../models/npc_model.dart';
+import '../../services/game_world_state.dart';
 
 /// Івенти та збережений прогрес для Sem (кориш).
 ///
@@ -51,4 +52,31 @@ NPCModel? findSemNpc(Iterable<NPCModel> npcs) {
     if (n.id == kSemNpcId) return n;
   }
   return null;
+}
+
+/// Підменю «Поговорити» з Sem (у кімнаті або біля дверей).
+abstract final class SemTalkMenu {
+  SemTalkMenu._();
+
+  static const String l10nBtnNews = 'sem_talk_btn_news';
+  static const String l10nBtnGirls = 'sem_talk_btn_girls';
+  static const String l10nBtnParents = 'sem_talk_btn_parents';
+  static const String l10nNewsFallback = 'friend_house_sem_talk_dialogue';
+  static const String l10nGirlsDone = 'sem_talk_girls_done';
+  static const String l10nParentsDone = 'sem_talk_parents_done';
+}
+
+/// Розмова з Sem після першого «палива» (palivo ≥ 1): розповісти про Juniper у кімнаті.
+abstract final class SemPalivoGirlsTalk {
+  SemPalivoGirlsTalk._();
+
+  static const String l10nBtnWitness = 'sem_palivo_btn_tell_juniper_witness';
+  static const String l10nDialogue = 'sem_palivo_girls_witness_dialogue';
+
+  static bool canShowButton(GameWorldState world) =>
+      world.palivo >= 1 && !world.semPalivoWitnessTalkDone;
+
+  static void markDone(GameWorldState world) {
+    world.semPalivoWitnessTalkDone = true;
+  }
 }

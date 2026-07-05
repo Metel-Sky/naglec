@@ -57,10 +57,10 @@ abstract final class DanielleSpyParentsQuest {
   }
 
   /// Година ігрового часу **після** [GameNavigationController.handleRoomEntry]
-  /// (враховує +5 хв при вході в кімнату). 20–22: у будні Danielle і Manuel
-  /// разом у [friendParentsRoom] за розкладом (раніше о 20 Danielle була на кухні — тригер ніколи не спрацьовував).
+  /// (враховує +5 хв при вході в кімнату). Лише 20:00–20:59 у будні — обидва
+  /// батьки в [friendParentsRoom] за розкладом (слот Danielle 20:00–20:59).
   static const int triggerHour = 20;
-  static const int triggerHourEnd = 22;
+  static const int triggerHourEnd = 20;
 
   static const int minStealth = 30;
 
@@ -77,6 +77,29 @@ abstract final class DanielleSpyParentsQuest {
     return null;
   }
 
+  static bool isInSpyTimeWindow({
+    required int hour,
+    required int weekdayIndex,
+  }) {
+    if (weekdayIndex > 4) return false;
+    return hour >= triggerHour && hour <= triggerHourEnd;
+  }
+
+  static bool areParentsTogetherInParentsRoom({
+    required NPCService npcService,
+    required int hour,
+    required int weekdayIndex,
+  }) {
+    final danielle = _npcById(npcService.allNPCs, 'danielle');
+    final manuel = _npcById(npcService.allNPCs, 'korish_father');
+    if (danielle == null || manuel == null) return false;
+
+    final dLoc = npcService.getCurrentLocationId(danielle, hour, weekdayIndex);
+    final mLoc = npcService.getCurrentLocationId(manuel, hour, weekdayIndex);
+    return dLoc == LocationsData.friendParentsRoom &&
+        mLoc == LocationsData.friendParentsRoom;
+  }
+
   /// Умови без перевірки поточної кімнати (після успішного входу в [friendParentsRoom]).
   static bool canTrigger({
     required GameWorldState world,
@@ -87,28 +110,18 @@ abstract final class DanielleSpyParentsQuest {
   }) {
     if (world.spyOnSemParentsDone) return false;
     if (playerStats.player.stealth_mode < minStealth) return false;
-    if (hourAfterEntry < triggerHour || hourAfterEntry > triggerHourEnd) {
+    if (!isInSpyTimeWindow(hour: hourAfterEntry, weekdayIndex: weekdayIndex)) {
       return false;
     }
-    // Сцена розрахована на будні, коли обидва батьки мають бути вдома ввечері.
-    if (weekdayIndex > 4) return false;
 
     final sem = findSemNpc(npcService.allNPCs);
     if (sem == null || !SemParentsTalkEvent.isComplete(sem)) return false;
 
-    final danielle = _npcById(npcService.allNPCs, 'danielle');
-    final manuel = _npcById(npcService.allNPCs, 'korish_father');
-    if (danielle == null || manuel == null) return false;
-
-    final dLoc =
-        npcService.getCurrentLocationId(danielle, hourAfterEntry, weekdayIndex);
-    final mLoc =
-        npcService.getCurrentLocationId(manuel, hourAfterEntry, weekdayIndex);
-    if (dLoc != LocationsData.friendParentsRoom ||
-        mLoc != LocationsData.friendParentsRoom) {
-      return false;
-    }
-    return true;
+    return areParentsTogetherInParentsRoom(
+      npcService: npcService,
+      hour: hourAfterEntry,
+      weekdayIndex: weekdayIndex,
+    );
   }
 
   static const String danielleNpcId = 'danielle';
