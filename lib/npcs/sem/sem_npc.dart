@@ -7,7 +7,7 @@ const List<int> _weekend = [5, 6];
 const String kSemGalleryPortraitPath = 'lib/assets/npcs/sem/sem_ava.jpg';
 const String kSemAvatarPath = 'lib/assets/npcs/sem/sem.png';
 
-/// Sem (кориш) — коледж 10–17 у будні (той самий роумінг, що й одногрупниці).
+/// Sem (кориш) — коледж 9–17 у будні (той самий роумінг, що й одногрупниці).
 NPCModel createSemNpc() {
   return NPCModel(
     id: 'sem',
@@ -30,14 +30,6 @@ NPCModel createSemNpc() {
       ),
       SchedulePoint(
         hourStart: 9,
-        hourEnd: 9,
-        location: LocationsData.friendRoom,
-        actionLabel: 'У кімнаті',
-        spritePath: kSemAvatarPath,
-        days: _weekdays,
-      ),
-      SchedulePoint(
-        hourStart: 10,
         hourEnd: 17,
         location: LocationsData.collegeHall,
         actionLabel: 'У коледжі',

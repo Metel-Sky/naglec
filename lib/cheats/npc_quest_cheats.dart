@@ -8,7 +8,7 @@ import '../npcs/danielle/danielle_spy_parents_quest.dart';
 import '../npcs/sem/sem_events.dart';
 import '../npcs/sem/sem_quests.dart';
 import '../npcs/juniper/juniper_npc.dart';
-import '../npcs/juniper/juniper_quests.dart';
+import '../npcs/juniper/juniper_quest_001_kompromat.dart';
 import '../models/item_model.dart';
 import '../models/npc_model.dart';
 import '../services/game_world_state.dart';
@@ -465,6 +465,54 @@ abstract final class NpcQuestCheats {
           );
         } else {
           JuniperQuest001.resetCheatKompromatStep2Done(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperKompromatSkipFiveDaysStep3:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatSkipFiveDaysStep3(
+            world: world,
+            gameDateKey: sl<GameTimeController>().onlyDate,
+          );
+        } else {
+          JuniperQuest001.resetCheatSkipFiveDaysStep3(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperKompromatStep3:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatKompromatStep3Done(
+            world: world,
+            npcs: npcService.allNPCs,
+            playerStats: sl<PlayerStatsController>(),
+            gameDateKey: sl<GameTimeController>().onlyDate,
+          );
+        } else {
+          JuniperQuest001.resetCheatKompromatStep3Done(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperKompromatSkipThreeDaysStep4:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatSkipThreeDaysStep4(
+            world: world,
+            gameDateKey: sl<GameTimeController>().onlyDate,
+          );
+        } else {
+          JuniperQuest001.resetCheatSkipThreeDaysStep4(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperKompromatStep4:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest001.applyCheatKompromatStep4Done(
+            world: world,
+            npcs: npcService.allNPCs,
+            playerStats: sl<PlayerStatsController>(),
+            gameDateKey: sl<GameTimeController>().onlyDate,
+          );
+        } else {
+          JuniperQuest001.resetCheatKompromatStep4Done(world);
         }
         break;
     }

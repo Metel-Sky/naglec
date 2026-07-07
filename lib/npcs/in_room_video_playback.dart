@@ -1,5 +1,5 @@
-import '../npcs/juniper/juniper_manuel_kompromat_in_room_scene.dart';
-import '../npcs/juniper/juniper_quests.dart';
+import '../npcs/juniper/juniper_quest_001_kompromat.dart';
+import '../npcs/juniper/juniper_quest_003.dart';
 import '../npcs/juniper/juniper_sem_room_sex_videos.dart';
 import '../npcs/juniper/juniper_shower_videos.dart';
 import '../npcs/mom/mom_videos.dart';
@@ -18,6 +18,7 @@ abstract final class InRoomVideoPlayback {
         JuniperShowerVideos.isShowerAssetPath(path) ||
         JuniperSemRoomSexVideos.isSexAssetPath(path) ||
         JuniperManuelKompromatInRoomScene.ownsEventVideo(path) ||
+        JuniperQuest003.ownsEventVideo(path) ||
         MomVideos.ownsEventVideo(path);
   }
 

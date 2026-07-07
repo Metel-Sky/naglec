@@ -401,9 +401,10 @@ class MainGameScreenState extends MainGameScreenStateBase
                                                   ),
                                                   Positioned.fill(
                                                     child: MasturbateVideoOverlay(
-                                                      videoPath: 'lib/assets/gg/ups_first_1.webm',
+                                                      videoPath: _masturbateVideoPath,
                                                       closeWhenCompleted: true,
-                                                      onClose: () => setState(() => _showMasturbateVideo = false),
+                                                      onClose: () =>
+                                                          setState(_closeMasturbateVideoOverlay),
                                                     ),
                                                   ),
                                                 ],
@@ -811,6 +812,97 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     );
                                 }
                               }
+                              if (_isJuniperManuelKompromatStep4UiCoherent()) {
+                                final tK = sl<LocaleController>().t;
+                                if (_juniperManuelKompromatStep4AfterRecord) {
+                                  return GameDialogPanel(
+                                    message: tK(JuniperQuest001.l10nStep4AfterRecord),
+                                    messageTrailing: Padding(
+                                      padding: const EdgeInsets.only(top: 12),
+                                      child: Text(
+                                        tK(JuniperQuest001.l10nStep4RecordSuccess),
+                                        style: const TextStyle(
+                                          color: GameTheme.textGreen,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    navButtons: [
+                                      _navBtn(
+                                        tK('danielle_spy_parents_leave'),
+                                        _finishJuniperManuelKompromatStep4Scene,
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return GameDialogPanel(
+                                  message: tK(JuniperQuest001.l10nStep4Intro),
+                                  highlightNames: const [
+                                    'Juniper',
+                                    'Manuel',
+                                    'Джуніпер',
+                                  ],
+                                  navButtons: [
+                                    _navBtn(
+                                      tK(JuniperQuest001.l10nBtnRecord),
+                                      () {
+                                        setState(() {
+                                          _juniperManuelKompromatStep4RecordPressed();
+                                        });
+                                      },
+                                    ),
+                                    const SizedBox(height: 8),
+                                    _navBtn(
+                                      tK('danielle_spy_parents_leave'),
+                                      _finishJuniperManuelKompromatStep4Scene,
+                                    ),
+                                  ],
+                                );
+                              }
+                              if (_isJuniperManuelKompromatStep3UiCoherent()) {
+                                final tK = sl<LocaleController>().t;
+                                if (_juniperManuelKompromatStep3AfterRecord) {
+                                  return GameDialogPanel(
+                                    message: tK(
+                                      JuniperQuest001.l10nStep3RecordFail,
+                                    ),
+                                    highlightNames: const [
+                                      'Juniper',
+                                      'Manuel',
+                                      'Джуніпер',
+                                    ],
+                                    navButtons: [
+                                      _navBtn(
+                                        tK('danielle_spy_parents_leave'),
+                                        _finishJuniperManuelKompromatStep3Scene,
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return GameDialogPanel(
+                                  message: tK(JuniperQuest001.l10nStep3Intro),
+                                  highlightNames: const [
+                                    'Juniper',
+                                    'Manuel',
+                                    'Джуніпер',
+                                  ],
+                                  navButtons: [
+                                    _navBtn(
+                                      tK(JuniperQuest001.l10nBtnRecord),
+                                      () {
+                                        setState(() {
+                                          _juniperManuelKompromatStep3RecordPressed();
+                                        });
+                                      },
+                                    ),
+                                    const SizedBox(height: 8),
+                                    _navBtn(
+                                      tK('danielle_spy_parents_leave'),
+                                      _finishJuniperManuelKompromatStep3Scene,
+                                    ),
+                                  ],
+                                );
+                              }
                               if (_isJuniperManuelKompromatStep2AfterFleeUiCoherent()) {
                                 final tK = sl<LocaleController>().t;
                                 return GameDialogPanel(
@@ -820,12 +912,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     'Manuel',
                                     'Джуніпер',
                                   ],
-                                  navButtons: [
-                                    _navBtn(
-                                      tK('danielle_spy_parents_leave'),
-                                      _finishJuniperManuelKompromatStep2AfterFleeScene,
-                                    ),
-                                  ],
+                                  navButtons: [_buildActionPanel()],
                                 );
                               }
                               if (_isJuniperManuelKompromatStep2UiCoherent()) {
@@ -1126,6 +1213,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                               return GameDialogPanel(
                                 message: combinedMessage,
                                 highlightNames: dialogueHighlightNames,
+                                greenEventStyle: _juniperQuest003GreenCorridorHintActive(),
                                 messageTrailing: panelMessageTrailing,
                                 navButtons: galleryOrProfileOpen
                                     ? const <Widget>[]

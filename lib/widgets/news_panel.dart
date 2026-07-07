@@ -76,6 +76,8 @@ class NewsPanel extends StatelessWidget {
   final Widget? trailing;
   /// Імена для підсвічування в тексті (активний NPC тощо), без урахування регістру.
   final List<String> highlightNames;
+  /// Зелений стиль основного тексту (підказка квесту / івенту).
+  final bool greenEventStyle;
 
   const NewsPanel({
     super.key,
@@ -83,6 +85,7 @@ class NewsPanel extends StatelessWidget {
     this.redWarningPrefix,
     this.trailing,
     this.highlightNames = const [],
+    this.greenEventStyle = false,
   });
 
   static const TextStyle _baseMessageStyle = TextStyle(
@@ -110,11 +113,22 @@ class NewsPanel extends StatelessWidget {
     fontWeight: FontWeight.w700,
   );
 
+  static final TextStyle _greenEventStyle = TextStyle(
+    color: Colors.green.shade400,
+    fontSize: 16,
+    height: 1.3,
+    fontWeight: FontWeight.w700,
+  );
+
+  TextStyle get _effectiveBaseMessageStyle =>
+      greenEventStyle ? _greenEventStyle : _baseMessageStyle;
+
   Widget _messageRichText() {
+    final baseStyle = _effectiveBaseMessageStyle;
     final spans = buildDialogueHighlightSpans(
       customMessage,
       highlightNames,
-      _baseMessageStyle,
+      baseStyle,
       _highlightStyle,
     );
     return Text.rich(

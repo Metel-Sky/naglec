@@ -7,6 +7,8 @@ import '../data/poor_district/poor_district_house_2.dart';
 import '../models/npc_model.dart';
 import '../npcs/all_npcs.dart';
 import '../npcs/juniper/juniper_npc.dart';
+import '../npcs/juniper/juniper_at_sem_schedule.dart';
+import '../npcs/juniper/juniper_quest_003.dart';
 import '../npcs/juniper/juniper_sem_room_sex_videos.dart';
 import '../npcs/sem/sem_juniper_evening_visits.dart';
 import 'cherie_quest002_location_pin.dart';
@@ -461,6 +463,12 @@ class NPCService {
     if (npc.id == kJuniperNpcId) {
       final world = sl<GameWorldState>();
       final dateKey = sl<GameTimeController>().onlyDate;
+      if (JuniperQuest003.isJuniperPinnedToFriendLounge(world)) {
+        return LocationsData.friendLounge;
+      }
+      if (JuniperQuest003.isJuniperPinnedToFriendHall(world)) {
+        return LocationsData.friendHall;
+      }
       if (SemJuniperEveningVisits.isWeekendSemRoomPresenceActive(
         world,
         effectiveDay,
@@ -501,6 +509,18 @@ class NPCService {
           world: world,
         );
       }
+      if (JuniperAtSemSchedule.isActive(
+        world: world,
+        gameDateKey: dateKey,
+        weekdayIndex: effectiveDay,
+        hour: hour,
+      )) {
+        return JuniperAtSemSchedule.locationIdAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+        );
+      }
       return null;
     }
     final gameMinute = sl<GameTimeController>().dateTime.minute;
@@ -508,7 +528,7 @@ class NPCService {
         npc.id, effectiveDay, hour, gameMinute)) {
       return LocationsData.toilet;
     }
-    // Студентки + Sem: 10–17 у будні — під час пар випадкова з 3 аудиторій, на перервах як у вчителів.
+    // Студентки + Sem: 9–17 у будні — під час пар випадкова з 3 аудиторій, на перервах як у вчителів.
     if (collegeRoamingStudentNpcIds.contains(npc.id) &&
         collegeWeekdayIndices.contains(effectiveDay) &&
         isCollegeStudentCampusHour(hour)) {
@@ -738,6 +758,31 @@ class NPCService {
           );
         }
       }
+      if (JuniperAtSemSchedule.isActive(
+        world: world,
+        gameDateKey: dateKey,
+        weekdayIndex: effectiveDay,
+        hour: hour,
+      )) {
+        final homeRoom = JuniperAtSemSchedule.locationIdAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+        );
+        if (homeRoom == normRoom) {
+          final homeHour = hour == JuniperAtSemSchedule.weekdayHomeMorningHour
+              ? JuniperAtSemSchedule.weekdayHomeMorningHour
+              : JuniperAtSemSchedule.weekdayHomeMiddayHour;
+          return SchedulePoint(
+            hourStart: homeHour,
+            hourEnd: homeHour,
+            location: homeRoom,
+            actionLabel: JuniperAtSemSchedule.actionLabelForRoom(homeRoom),
+            spritePath: npc.avatarPath ?? '',
+            days: const [0, 1, 2, 3, 4],
+          );
+        }
+      }
     }
 
     if (npc.id == 'nicole') {
@@ -751,7 +796,7 @@ class NPCService {
       }
     }
 
-    // Студенти: спрайт з маркерного слоту «college_hall» 10–17, хоча фактична кімната — аудиторія/перерва.
+    // Студенти: спрайт з маркерного слоту «college_hall» 9–17, хоча фактична кімната — аудиторія/перерва.
     if (collegeRoamingStudentNpcIds.contains(npc.id) &&
         collegeWeekdayIndices.contains(effectiveDay) &&
         isCollegeStudentCampusHour(hour)) {

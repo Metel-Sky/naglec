@@ -70,6 +70,12 @@ final Map<String, String> stringsEn = {
   'npc_quest_juniper_kompromat_step1': 'Kompromat step 1 (Sem bathroom)',
   'npc_quest_juniper_kompromat_skip_five_days': 'Skip five days',
   'npc_quest_juniper_kompromat_step2': 'Kompromat step 2 (Sem hall)',
+  'npc_quest_juniper_kompromat_skip_five_days_step3':
+      'Skip five days (step 3)',
+  'npc_quest_juniper_kompromat_step3': 'Kompromat step 3 (Sem bathroom)',
+  'npc_quest_juniper_kompromat_skip_three_days_step4':
+      'Skip three days (step 4)',
+  'npc_quest_juniper_kompromat_step4': 'Kompromat step 4 (Sem bathroom)',
   'npc_ask_how_are_you_dialogue':
       '— Hi, how are you?\n'
       '— Hi! All good, thanks. And you?\n'
@@ -808,6 +814,9 @@ final Map<String, String> stringsEn = {
   'debug_location_label': 'LOCATION: %s',
   'phone_call': 'Call',
   'phone_sms': 'SMS',
+  'phone_home_contacts': 'Contacts',
+  'phone_home_gallery': 'Gallery',
+  'phone_gallery_empty': 'You have no saved files yet.',
   'video_load_failed': 'Could not load video. Add file: %s',
   'asset_load_failed_short': 'Failed to load: %s',
   'settings_link_shown': 'Link: %s',
@@ -920,6 +929,23 @@ final Map<String, String> stringsEn = {
   'danielle_spy_parents_watch_more': 'Watch more',
   'juniper_sem_room_sex_watch_more': 'Watch more',
   'juniper_palivo_apology_btn': 'Apologize for the incident',
+  'juniper_quest_002_btn_talk_kompromat': 'Talk about the kompromat',
+  'juniper_quest_002_step1_dialogue':
+      'Hi, Juniper! How are you?\n'
+      'Oh, hi! I\'m great. And you?\n'
+      'Good too. I have something here. I want to show you.\n'
+      'Ooh, you\'re intriguing me. I\'m curious what it is. Go on, show me.',
+  'juniper_quest_002_btn_show_video': 'Show the video',
+  'juniper_quest_002_btn_defer': 'Okay, next time',
+  'juniper_quest_003_btn_masturbate': 'Masturbate',
+  'juniper_quest_003_corridor_hall_sounds':
+      'I hear strange sounds from the hall.',
+  'juniper_quest_003_hall_dialogue':
+      'Entering the hall, I heard Juniper talking to someone on the phone. I got curious and listened in a little. I was shocked to hear that she caught me masturbating in the lounge.\n\n'
+      'First, she caught me. Second, she\'s telling her friends about it on the phone.\n\n'
+      'But it gets more interesting. She said it turned her on a lot. That she can barely hold back and is waiting for Sem to come home so she can suck him off. But if she had the chance, she\'d suck me off right now.\n\n'
+      'Strange thoughts crossed my mind — I\'d gladly let her have my cock.\n\n'
+      'Okay, enough thinking about that. Time to go.',
   'juniper_palivo_apology_dialogue':
       '— Hi, Juni. I wanted to apologize for that incident — it was an accident. I accidentally walked into Sem\'s room.\n'
       '— Okay, I forgive you, but next time knock for sure. I hope you didn\'t see much in there.\n'
@@ -948,6 +974,23 @@ final Map<String, String> stringsEn = {
       'Damn, having that kind of power over people must feel great.\n\n'
       'I definitely have to get them on video.',
   'juniper_quest_001_btn_flee': 'Run',
+  'juniper_quest_001_step3_intro':
+      'Damn, they\'re at it again.\n\n'
+      'I guess for them it\'s already "routine." And look — damn, the way he\'s pounding into her.\n\n'
+      'Hell, I\'d gladly join them right now.\n\n'
+      'Yeah, this time I definitely have to record it.',
+  'juniper_quest_001_step3_record_fail':
+      'What the hell? They closed the door again — not in time.',
+  'juniper_quest_001_step4_intro':
+      'Oh! Damn, I\'m not even surprised. They\'re at it again.\n\n'
+      'Well, this time for sure — I\'ve got them.',
+  'juniper_quest_001_step4_after_record':
+      'That\'s it — now I can make them do whatever I want.',
+  'juniper_quest_001_step4_record_success': 'Video saved to gallery',
+  'juniper_quest_001_item_compromat_name':
+      'Kompromat on Juniper and Manuel',
+  'juniper_quest_001_item_compromat_description':
+      'Video of Manuel and Juniper in the Sem bathroom.',
   'danielle_spy_parents_continue_watching': 'Keep watching',
   'danielle_spy_parents_next': 'Next',
   'danielle_spy_parents_stealth_too_low':

@@ -6,7 +6,7 @@ import '../npcs/mom/mom_event002_pool.dart';
 import '../npcs/piper/piper_quests.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/juniper/juniper_npc.dart';
-import '../npcs/juniper/juniper_quests.dart';
+import '../npcs/juniper/juniper_quest_001_kompromat.dart';
 import '../npcs/sem/sem_events.dart';
 import '../npcs/sem/sem_quests.dart';
 import '../services/game_time_controller.dart';
@@ -42,6 +42,12 @@ abstract final class NpcProfileQuestCheatId {
   static const juniperKompromatStep1 = 'juniper_kompromat_step1';
   static const juniperKompromatSkipFiveDays = 'juniper_kompromat_skip_five_days';
   static const juniperKompromatStep2 = 'juniper_kompromat_step2';
+  static const juniperKompromatSkipFiveDaysStep3 =
+      'juniper_kompromat_skip_five_days_step3';
+  static const juniperKompromatStep3 = 'juniper_kompromat_step3';
+  static const juniperKompromatSkipThreeDaysStep4 =
+      'juniper_kompromat_skip_three_days_step4';
+  static const juniperKompromatStep4 = 'juniper_kompromat_step4';
 }
 
 /// Група квестів у картці NPC (другий рівень випадаючого списку).
@@ -154,6 +160,36 @@ List<NpcProfileQuestLine> _juniperQuest001CheatLines() {
       isDone: (w, npc) =>
           npc.id == kJuniperNpcId && w.juniperManuelKompromatStep2Done,
       cheatId: NpcProfileQuestCheatId.juniperKompromatStep2,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_kompromat_skip_five_days_step3',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId &&
+          w.juniperManuelKompromatStep3SkipFiveDaysCheat,
+      cheatId: NpcProfileQuestCheatId.juniperKompromatSkipFiveDaysStep3,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_kompromat_step3',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId && w.juniperManuelKompromatStep3Done,
+      cheatId: NpcProfileQuestCheatId.juniperKompromatStep3,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_kompromat_skip_three_days_step4',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId &&
+          w.juniperManuelKompromatStep4SkipThreeDaysCheat,
+      cheatId: NpcProfileQuestCheatId.juniperKompromatSkipThreeDaysStep4,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_kompromat_step4',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId && w.juniperManuelKompromatStep4Done,
+      cheatId: NpcProfileQuestCheatId.juniperKompromatStep4,
       compactSwitch: true,
     ),
   ];

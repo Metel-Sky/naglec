@@ -41,6 +41,12 @@ class GameUiStateController extends ChangeNotifier {
   bool _showMasturbateVideo = false;
   bool get showMasturbateVideo => _showMasturbateVideo;
 
+  String? _masturbateVideoPath;
+  String? get masturbateVideoPath => _masturbateVideoPath;
+
+  static const String defaultMasturbateVideoPath =
+      'lib/assets/gg/ups_first_1.webm';
+
   bool _isWatchingElsaVideoInLaptop = false;
   bool get isWatchingElsaVideoInLaptop => _isWatchingElsaVideoInLaptop;
 
@@ -174,6 +180,14 @@ class GameUiStateController extends ChangeNotifier {
   }
   void setWatchingPornInLaptop(bool val) { _isWatchingPornInLaptop = val; notifyListeners(); }
   void setShowMasturbateVideo(bool val) { _showMasturbateVideo = val; notifyListeners(); }
+
+  void setMasturbateVideoPath(String? path) {
+    _masturbateVideoPath = path;
+    notifyListeners();
+  }
+
+  String get effectiveMasturbateVideoPath =>
+      _masturbateVideoPath ?? defaultMasturbateVideoPath;
   void setWatchingElsaVideoInLaptop(bool val) { _isWatchingElsaVideoInLaptop = val; notifyListeners(); }
   void setShowFlyersVideo(bool val) { _showFlyersVideo = val; notifyListeners(); }
   void setShowConstructionVideo(bool val) { _showConstructionVideo = val; notifyListeners(); }
@@ -364,6 +378,7 @@ class GameUiStateController extends ChangeNotifier {
     _isLaptopOpen = false;
     _isWatchingPornInLaptop = false;
     _showMasturbateVideo = false;
+    _masturbateVideoPath = null;
     _isWatchingElsaVideoInLaptop = false;
     notifyListeners();
   }

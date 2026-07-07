@@ -346,6 +346,9 @@ class GameWorldState {
   /// Наприклад: ['mom', 'elsa', 'piper', 'luda'].
   List<String> compromatNpcIds = [];
 
+  /// Відео компромату у галереї телефона (id записів, напр. juniper_manuel_compromat).
+  List<String> phoneCompromatEntryIds = [];
+
   /// Дата/час покупки картки в VIP тренажерку (ISO). Строк дії — 30 днів.
   String? vipGymCardPurchasedAtIso;
 
@@ -437,11 +440,47 @@ class GameWorldState {
   /// QUEST: juniper_quest_001 — день завершення кроку 1 («Зняти на відео»), fallback для кроку 2.
   String? juniperManuelKompromatStep1DoneDateKey;
 
-  /// QUEST: juniper_quest_001 — крок 2 (кімната батьків, junip_manuel_zal_01) завершено.
+  /// QUEST: juniper_quest_001 — крок 2 (зал Sem, junip_manuel_zal_01) завершено.
   bool juniperManuelKompromatStep2Done = false;
+
+  /// QUEST: juniper_quest_001 — день завершення кроку 2 («Тікати»), якір для кроку 3.
+  String? juniperManuelKompromatStep2DoneDateKey;
 
   /// Чит: не чекати 5 днів між кроком 1 і 2 kompromat.
   bool juniperManuelKompromatStep2SkipFiveDaysCheat = false;
+
+  /// QUEST: juniper_quest_001 — крок 3 (ванна Sem, junip_manuel_02) завершено.
+  bool juniperManuelKompromatStep3Done = false;
+
+  /// QUEST: juniper_quest_001 — день завершення кроку 3, якір для кроку 4.
+  String? juniperManuelKompromatStep3DoneDateKey;
+
+  /// Чит: не чекати 5 днів між кроком 2 і 3 kompromat.
+  bool juniperManuelKompromatStep3SkipFiveDaysCheat = false;
+
+  /// QUEST: juniper_quest_001 — крок 4 (ванна Sem, junip_manuel_03) / квест завершено.
+  bool juniperManuelKompromatStep4Done = false;
+
+  /// Чит: не чекати 3 дні між кроком 3 і 4 kompromat.
+  bool juniperManuelKompromatStep4SkipThreeDaysCheat = false;
+
+  /// QUEST: juniper_quest_002_naslidku — розмова про компромат розпочата.
+  bool juniperQuest002NaslidkuStarted = false;
+
+  /// QUEST: juniper_quest_002_naslidku — крок 1 (показ відео) завершено.
+  bool juniperQuest002Step1Done = false;
+
+  /// QUEST: juniper_quest_003 — старт (кнопка «Вздрочнуть» у гостиній Sem).
+  bool juniperQuest003Started = false;
+
+  /// QUEST: juniper_quest_003 — після catch-відео: Juniper у залі, підслуховування.
+  bool juniperQuest003HallFollowUpActive = false;
+
+  /// QUEST: juniper_quest_003 — with_gg_02 у залі Sem відіграно.
+  bool juniperQuest003HallSceneDone = false;
+
+  /// QUEST: juniper_quest_003 — catch-відео в гостиній: Juniper тимчасово в залі сцени.
+  bool juniperQuest003LoungePinActive = false;
 
   /// Квест «спалився»: розмова з Danielle після підглядання — відіграно.
   bool danielleSpyCaughtConfrontationDone = false;
@@ -636,6 +675,7 @@ class GameWorldState {
         'piperBathroomVisitSeed': piperBathroomVisitSeed,
         'hasMomOfficeCompromatVideo3': hasMomOfficeCompromatVideo3,
         'compromatNpcIds': compromatNpcIds,
+        'phoneCompromatEntryIds': phoneCompromatEntryIds,
         'vipGymCardPurchasedAtIso': vipGymCardPurchasedAtIso,
         'spyOnSemParentsDone': spyOnSemParentsDone,
         'spyOnSemParentsSpottedByDanielle': spyOnSemParentsSpottedByDanielle,
@@ -667,8 +707,24 @@ class GameWorldState {
         'juniperManuelKompromatStep1DoneDateKey':
             juniperManuelKompromatStep1DoneDateKey,
         'juniperManuelKompromatStep2Done': juniperManuelKompromatStep2Done,
+        'juniperManuelKompromatStep2DoneDateKey':
+            juniperManuelKompromatStep2DoneDateKey,
         'juniperManuelKompromatStep2SkipFiveDaysCheat':
             juniperManuelKompromatStep2SkipFiveDaysCheat,
+        'juniperManuelKompromatStep3Done': juniperManuelKompromatStep3Done,
+        'juniperManuelKompromatStep3DoneDateKey':
+            juniperManuelKompromatStep3DoneDateKey,
+        'juniperManuelKompromatStep3SkipFiveDaysCheat':
+            juniperManuelKompromatStep3SkipFiveDaysCheat,
+        'juniperManuelKompromatStep4Done': juniperManuelKompromatStep4Done,
+        'juniperManuelKompromatStep4SkipThreeDaysCheat':
+            juniperManuelKompromatStep4SkipThreeDaysCheat,
+        'juniperQuest002NaslidkuStarted': juniperQuest002NaslidkuStarted,
+        'juniperQuest002Step1Done': juniperQuest002Step1Done,
+        'juniperQuest003Started': juniperQuest003Started,
+        'juniperQuest003HallFollowUpActive': juniperQuest003HallFollowUpActive,
+        'juniperQuest003HallSceneDone': juniperQuest003HallSceneDone,
+        'juniperQuest003LoungePinActive': juniperQuest003LoungePinActive,
         'danielleSpyCaughtConfrontationDone': danielleSpyCaughtConfrontationDone,
         'danielleSpyCaughtConfrontationCount':
             danielleSpyCaughtConfrontationCount,
@@ -971,6 +1027,10 @@ class GameWorldState {
     compromatNpcIds = compromatList != null
         ? List<String>.from(compromatList as List)
         : [];
+    final phoneCompromatList = json['phoneCompromatEntryIds'];
+    phoneCompromatEntryIds = phoneCompromatList != null
+        ? List<String>.from(phoneCompromatList as List)
+        : [];
     vipGymCardPurchasedAtIso = json['vipGymCardPurchasedAtIso'] as String?;
     compromatNpcIds = compromatNpcIds.map((id) {
       if (id == 'lisa') return 'elsa';
@@ -1032,8 +1092,30 @@ class GameWorldState {
         json['juniperManuelKompromatStep1DoneDateKey'] as String?;
     juniperManuelKompromatStep2Done =
         json['juniperManuelKompromatStep2Done'] == true;
+    juniperManuelKompromatStep2DoneDateKey =
+        json['juniperManuelKompromatStep2DoneDateKey'] as String?;
     juniperManuelKompromatStep2SkipFiveDaysCheat =
         json['juniperManuelKompromatStep2SkipFiveDaysCheat'] == true;
+    juniperManuelKompromatStep3Done =
+        json['juniperManuelKompromatStep3Done'] == true;
+    juniperManuelKompromatStep3DoneDateKey =
+        json['juniperManuelKompromatStep3DoneDateKey'] as String?;
+    juniperManuelKompromatStep3SkipFiveDaysCheat =
+        json['juniperManuelKompromatStep3SkipFiveDaysCheat'] == true;
+    juniperManuelKompromatStep4Done =
+        json['juniperManuelKompromatStep4Done'] == true;
+    juniperManuelKompromatStep4SkipThreeDaysCheat =
+        json['juniperManuelKompromatStep4SkipThreeDaysCheat'] == true;
+    juniperQuest002NaslidkuStarted =
+        json['juniperQuest002NaslidkuStarted'] == true;
+    juniperQuest002Step1Done = json['juniperQuest002Step1Done'] == true;
+    juniperQuest003Started = json['juniperQuest003Started'] == true;
+    juniperQuest003HallFollowUpActive =
+        json['juniperQuest003HallFollowUpActive'] == true;
+    juniperQuest003HallSceneDone =
+        json['juniperQuest003HallSceneDone'] == true;
+    juniperQuest003LoungePinActive =
+        json['juniperQuest003LoungePinActive'] == true;
     danielleSpyCaughtConfrontationDone =
         json['danielleSpyCaughtConfrontationDone'] == true;
     danielleSpyCaughtConfrontationCount =
@@ -1163,6 +1245,7 @@ class GameWorldState {
     piperBathroomVisitSeed = null;
     hasMomOfficeCompromatVideo3 = false;
     compromatNpcIds = [];
+    phoneCompromatEntryIds = [];
     vipGymCardPurchasedAtIso = null;
     spyOnSemParentsDone = false;
     spyOnSemParentsSpottedByDanielle = false;
@@ -1190,7 +1273,19 @@ class GameWorldState {
     juniperManuelKompromatStep1WitnessHour = null;
     juniperManuelKompromatStep1DoneDateKey = null;
     juniperManuelKompromatStep2Done = false;
+    juniperManuelKompromatStep2DoneDateKey = null;
     juniperManuelKompromatStep2SkipFiveDaysCheat = false;
+    juniperManuelKompromatStep3Done = false;
+    juniperManuelKompromatStep3DoneDateKey = null;
+    juniperManuelKompromatStep3SkipFiveDaysCheat = false;
+    juniperManuelKompromatStep4Done = false;
+    juniperManuelKompromatStep4SkipThreeDaysCheat = false;
+    juniperQuest002NaslidkuStarted = false;
+    juniperQuest002Step1Done = false;
+    juniperQuest003Started = false;
+    juniperQuest003HallFollowUpActive = false;
+    juniperQuest003HallSceneDone = false;
+    juniperQuest003LoungePinActive = false;
     danielleSpyCaughtConfrontationDone = false;
     danielleSpyCaughtConfrontationCount = 0;
     lastNpcEconomyProcessedDateKey = null;

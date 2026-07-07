@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../models/npc_model.dart';
 import '../services/npc_service.dart';
@@ -15,8 +14,12 @@ import '../models/npc_secondary.dart';
 import '../utils/npc_portrait_paths.dart';
 import 'npc_circle_avatar_image.dart';
 import 'npc_profile_owes_alex_row.dart';
+import 'lesson_video_screen.dart';
+import 'phone_compromat_gallery_data.dart';
 
-/// Телефон зі списком контактів: аватар (тап = статистика NPC), місце знаходження, подзвонити/SMS.
+enum _PhoneScreen { home, contacts, gallery, video }
+
+/// Телефон: робочий стіл, контакти, галерея компромату.
 class PhoneView extends StatefulWidget {
   final VoidCallback onClose;
   final GameTimeController timeController;
@@ -32,8 +35,28 @@ class PhoneView extends StatefulWidget {
 }
 
 class _PhoneViewState extends State<PhoneView> {
+  static const double _phoneOuterRadius = 40;
+  static const double _contentInset = 12;
+  static const double _phoneInnerRadius = _phoneOuterRadius - _contentInset;
+
   String? _bottomMessage;
   Timer? _messageTimer;
+  _PhoneScreen _screen = _PhoneScreen.home;
+  String? _galleryVideoPath;
+
+  void _openContacts() => setState(() => _screen = _PhoneScreen.contacts);
+
+  void _openGallery() => setState(() => _screen = _PhoneScreen.gallery);
+
+  void _goHome() => setState(() {
+        _screen = _PhoneScreen.home;
+        _galleryVideoPath = null;
+      });
+
+  void _openGalleryVideo(String path) => setState(() {
+        _galleryVideoPath = path;
+        _screen = _PhoneScreen.video;
+      });
 
   void _showPhoneMessage(String text) {
     _messageTimer?.cancel();
@@ -86,126 +109,352 @@ class _PhoneViewState extends State<PhoneView> {
     final day = widget.timeController.weekdayIndex;
     final screenHeight = MediaQuery.of(context).size.height;
     final phoneMaxHeight = screenHeight * 0.75;
-    final phoneMinHeight = math.min(580.0, phoneMaxHeight);
+    final phoneHeight = phoneMaxHeight.clamp(520.0, 680.0);
+    final messageBarHeight = _bottomMessage != null ? 52.0 : 0.0;
+    final t = sl<LocaleController>().t;
 
     return Center(
       child: Material(
         color: Colors.transparent,
         child: Container(
           width: 360,
-          constraints: BoxConstraints(
-            minHeight: phoneMinHeight,
-            maxHeight: phoneMaxHeight,
-          ),
+          height: phoneHeight,
           decoration: BoxDecoration(
             color: Colors.black,
-            borderRadius: BorderRadius.circular(40),
+            borderRadius: BorderRadius.circular(_phoneOuterRadius),
             border: Border.all(color: Colors.grey, width: 1),
             boxShadow: [
               BoxShadow(color: Colors.black54, blurRadius: 20, spreadRadius: 2),
             ],
           ),
+          clipBehavior: Clip.antiAlias,
           child: Stack(
+            fit: StackFit.expand,
             children: [
               Column(
-                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Верхня панель (notch)
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${widget.timeController.dateTime.hour.toString().padLeft(2, '0')}:${widget.timeController.dateTime.minute.toString().padLeft(2, '0')}',
-                          style: const TextStyle(color: Colors.white70, fontSize: 14),
-                        ),
-                        const Icon(Icons.signal_cellular_4_bar, color: Colors.white54, size: 18),
-                        const Icon(Icons.battery_full, color: Colors.white54, size: 18),
-                      ],
+                  _buildStatusBar(),
+                  if (_screen == _PhoneScreen.home)
+                    _buildHomeHeader()
+                  else if (_screen != _PhoneScreen.video)
+                    _buildSubScreenHeader(
+                      title: _screen == _PhoneScreen.contacts
+                          ? t('phone_home_contacts')
+                          : t('phone_home_gallery'),
                     ),
-                  ),
-                  // Заголовок
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Контакти',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  Expanded(
+                    child: switch (_screen) {
+                      _PhoneScreen.home => _buildHomeScreen(messageBarHeight),
+                      _PhoneScreen.contacts => _buildContactsScreen(
+                          npcService: npcService,
+                          contacts: contacts,
+                          hour: hour,
+                          day: day,
+                          messageBarHeight: messageBarHeight,
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.close, color: Colors.white70),
-                          onPressed: widget.onClose,
+                      _PhoneScreen.gallery => _buildGalleryScreen(
+                          messageBarHeight: messageBarHeight,
                         ),
-                      ],
-                    ),
-                  ),
-                  // Список контактів
-                  Flexible(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
-                      itemCount: contacts.length,
-                      itemBuilder: (context, index) {
-                        final npc = contacts[index];
-                        final locationId = npcService.getCurrentLocationId(npc, hour, day);
-                        final locationText = locationId != null
-                            ? LocationsData.getGeneralLocationName(locationId)
-                            : '(невідомо)';
-                        final portraitPath =
-                            npcPhoneContactPortraitPath(npc, npcService, hour, day);
-                        return _ContactCard(
-                          npc: npc,
-                          portraitPath: portraitPath,
-                          role: _roleForContact(npc.id),
-                          locationText: locationText,
-                          onAvatarTap: () => _showNpcStats(context, npc, npcService, hour, day),
-                          onCall: () => _showPhoneMessage('Дзвінок ${npc.name}...'),
-                          onSms: () => _showPhoneMessage('SMS для ${npc.name}...'),
-                        );
-                      },
-                    ),
+                      _PhoneScreen.video => _buildGalleryVideoScreen(
+                          messageBarHeight: messageBarHeight,
+                        ),
+                    },
                   ),
                 ],
               ),
-              // Полоска повідомлення приклеєна до нижнього краю телефону
-              if (_bottomMessage != null) ...[
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Material(
-                    color: Colors.grey.shade800,
-                    borderRadius: const BorderRadius.vertical(bottom: Radius.circular(40)),
-                    child: SafeArea(
-                      top: false,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        child: Row(
-                          children: [
-                            Icon(Icons.info_outline, size: 20, color: Colors.grey.shade300),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                _bottomMessage!,
-                                style: TextStyle(color: Colors.grey.shade200, fontSize: 14),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+              if (_bottomMessage != null) _buildMessageBar(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatusBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '${widget.timeController.dateTime.hour.toString().padLeft(2, '0')}:${widget.timeController.dateTime.minute.toString().padLeft(2, '0')}',
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+          const Icon(Icons.signal_cellular_4_bar, color: Colors.white54, size: 18),
+          const Icon(Icons.battery_full, color: Colors.white54, size: 18),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHomeHeader() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.white70),
+            onPressed: widget.onClose,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSubScreenHeader({required String title}) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white70),
+            onPressed: _goHome,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+          ),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.white70),
+            onPressed: widget.onClose,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHomeScreen(double messageBarHeight) {
+    final t = sl<LocaleController>().t;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        _contentInset,
+        0,
+        _contentInset,
+        _contentInset + messageBarHeight,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(_phoneInnerRadius),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              'lib/assets/left_panel/wallper.webp',
+              fit: BoxFit.cover,
+            ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withValues(alpha: 0.35),
+                  ],
+                  stops: const [0.45, 1.0],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 36, left: 28, right: 28),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _PhoneHomeApp(
+                      icon: Icons.contacts,
+                      iconColor: GameTheme.bgDark,
+                      label: t('phone_home_contacts'),
+                      onTap: _openContacts,
+                    ),
+                    _PhoneHomeApp(
+                      icon: Icons.video_library,
+                      iconColor: GameTheme.bgDark,
+                      label: t('phone_home_gallery'),
+                      onTap: _openGallery,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContactsScreen({
+    required NPCService npcService,
+    required List<NPCModel> contacts,
+    required int hour,
+    required int day,
+    required double messageBarHeight,
+  }) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        _contentInset,
+        0,
+        _contentInset,
+        _contentInset + messageBarHeight,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(_phoneInnerRadius),
+        clipBehavior: Clip.antiAlias,
+        child: ListView.builder(
+          padding: const EdgeInsets.only(bottom: _contentInset),
+          itemCount: contacts.length,
+          itemBuilder: (context, index) {
+            final npc = contacts[index];
+            final locationId = npcService.getCurrentLocationId(npc, hour, day);
+            final locationText = locationId != null
+                ? LocationsData.getGeneralLocationName(locationId)
+                : '(невідомо)';
+            final portraitPath = npcPhoneContactPortraitPath(
+              npc,
+              npcService,
+              hour,
+              day,
+            );
+            return _ContactCard(
+              npc: npc,
+              portraitPath: portraitPath,
+              role: _roleForContact(npc.id),
+              locationText: locationText,
+              onAvatarTap: () => _showNpcStats(
+                context,
+                npc,
+                npcService,
+                hour,
+                day,
+              ),
+              onCall: () => _showPhoneMessage('Дзвінок ${npc.name}...'),
+              onSms: () => _showPhoneMessage('SMS для ${npc.name}...'),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGalleryScreen({required double messageBarHeight}) {
+    final t = sl<LocaleController>().t;
+    final entries = getPhoneCompromatGalleryEntries();
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        _contentInset,
+        0,
+        _contentInset,
+        _contentInset + messageBarHeight,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(_phoneInnerRadius),
+        clipBehavior: Clip.antiAlias,
+        child: entries.isEmpty
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    t('phone_gallery_empty'),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontSize: 15,
                     ),
                   ),
                 ),
-            ],
-          ],
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, _contentInset),
+                itemCount: entries.length,
+                itemBuilder: (context, index) {
+                  final entry = entries[index];
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: index == entries.length - 1 ? 0 : 10,
+                    ),
+                    child: _PhoneGalleryTile(
+                      label: entry.label,
+                      onTap: () => _openGalleryVideo(entry.videoPath),
+                    ),
+                  );
+                },
+              ),
+      ),
+    );
+  }
+
+  Widget _buildGalleryVideoScreen({required double messageBarHeight}) {
+    final path = _galleryVideoPath;
+    if (path == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        _contentInset,
+        0,
+        _contentInset,
+        _contentInset + messageBarHeight,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(_phoneInnerRadius),
+        clipBehavior: Clip.antiAlias,
+        child: EmbeddedLessonVideo(
+          videoPath: path,
+          onCompleted: () {},
+          onClose: (_) => setState(() => _screen = _PhoneScreen.gallery),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMessageBar() {
+    return Positioned(
+      left: _contentInset,
+      right: _contentInset,
+      bottom: _contentInset,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(_phoneInnerRadius),
+          bottomRight: Radius.circular(_phoneInnerRadius),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Material(
+          color: Colors.grey.shade800,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 20, color: Colors.grey.shade300),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    _bottomMessage!,
+                    style: TextStyle(color: Colors.grey.shade200, fontSize: 14),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -596,6 +845,103 @@ class _NpcStatsDialogState extends State<_NpcStatsDialog> {
     if (v < 600) return 'Поступлива';
     if (v < 800) return 'Залежна';
     return 'Покірна';
+  }
+}
+
+class _PhoneHomeApp extends StatelessWidget {
+  const _PhoneHomeApp({
+    required this.icon,
+    required this.iconColor,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final Color iconColor;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.92),
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.25),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Icon(icon, size: 32, color: iconColor),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              shadows: [
+                Shadow(color: Colors.black54, blurRadius: 4),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PhoneGalleryTile extends StatelessWidget {
+  const _PhoneGalleryTile({
+    required this.label,
+    required this.onTap,
+  });
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: GameTheme.mainGrey.withValues(alpha: 0.95),
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Icon(Icons.play_circle_filled,
+                  size: 28, color: GameTheme.bgDark.withValues(alpha: 0.85)),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

@@ -10,6 +10,8 @@ class GameDialogPanel extends StatelessWidget {
   final Widget? messageTrailing;
   /// Підсвітка імен у діалозі (наприклад активний NPC).
   final List<String> highlightNames;
+  /// Зелений стиль основного тексту (підказка квесту / івенту).
+  final bool greenEventStyle;
   final List<Widget> navButtons;
 
   const GameDialogPanel({
@@ -18,6 +20,7 @@ class GameDialogPanel extends StatelessWidget {
     this.messageRedWarning,
     this.messageTrailing,
     this.highlightNames = const [],
+    this.greenEventStyle = false,
     required this.navButtons,
   });
 
@@ -34,6 +37,7 @@ class GameDialogPanel extends StatelessWidget {
             redWarningPrefix: messageRedWarning,
             trailing: messageTrailing,
             highlightNames: highlightNames,
+            greenEventStyle: greenEventStyle,
           ),
         ),
         const SizedBox(width: 12),

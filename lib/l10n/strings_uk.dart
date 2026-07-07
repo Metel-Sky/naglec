@@ -70,6 +70,12 @@ final Map<String, String> stringsUk = {
   'npc_quest_juniper_kompromat_step1': 'Крок 1 kompromat (ванна Sem)',
   'npc_quest_juniper_kompromat_skip_five_days': 'Пропустити п\'ять днів',
   'npc_quest_juniper_kompromat_step2': 'Крок 2 kompromat (зал Sem)',
+  'npc_quest_juniper_kompromat_skip_five_days_step3':
+      'Пропустити п\'ять днів (крок 3)',
+  'npc_quest_juniper_kompromat_step3': 'Крок 3 kompromat (ванна Sem)',
+  'npc_quest_juniper_kompromat_skip_three_days_step4':
+      'Пропустити три дні (крок 4)',
+  'npc_quest_juniper_kompromat_step4': 'Крок 4 kompromat (ванна Sem)',
   'npc_ask_how_are_you_dialogue':
       '— Привіт, як справи?\n'
       '— Привіт! Все добре, дякую. А у тебе як?\n'
@@ -812,6 +818,9 @@ final Map<String, String> stringsUk = {
   'debug_location_label': 'ЛОКАЦІЯ: %s',
   'phone_call': 'Подзвонити',
   'phone_sms': 'SMS',
+  'phone_home_contacts': 'Контакти',
+  'phone_home_gallery': 'Галерея',
+  'phone_gallery_empty': 'Поки що у вас нема збережених файлів',
   'video_load_failed': 'Не вдалося завантажити відео. Додайте файл: %s',
   'asset_load_failed_short': 'Не вдалося завантажити: %s',
   'settings_link_shown': 'Посилання: %s',
@@ -924,6 +933,23 @@ final Map<String, String> stringsUk = {
   'danielle_spy_parents_watch_more': 'Дивитись далі',
   'juniper_sem_room_sex_watch_more': 'Дивитись далі',
   'juniper_palivo_apology_btn': 'Вибачитись за інцидент',
+  'juniper_quest_002_btn_talk_kompromat': 'Поговорити про компромат',
+  'juniper_quest_002_step1_dialogue':
+      'Привіт, Джуніпер! Як справи?\n'
+      'Аа, привіт! Все чудово. А ти як?\n'
+      'Теж добре. А в мене тут дещо є. Хочу тобі показати.\n'
+      'О, ти мене інтригуєш. Мені вже цікаво, що там. Давай, показуй.',
+  'juniper_quest_002_btn_show_video': 'Показати відео',
+  'juniper_quest_002_btn_defer': 'Ладно, в наступний раз',
+  'juniper_quest_003_btn_masturbate': 'Вздрочнути',
+  'juniper_quest_003_corridor_hall_sounds':
+      'Я чую якісь дивні звуки з залу.',
+  'juniper_quest_003_hall_dialogue':
+      'Зайшовши в зал, я почув, що Джуніпер розмовляє з кимось по телефону. Мені стало цікаво, і я трошки підслухав. Яке ж для мене було здивування почути, що вона спалила, як я дрочив у гостиній.\n\n'
+      'По-перше, спалила. По-друге, ще й комусь з подруг по телефону розповідає.\n\n'
+      'Але далі цікавіше. Вона розповіла, що це її дуже сильно збудило. Що вона ледь стримується і чекає, коли прийде Сем, щоб відсмоктати йому. Але якби була можливість, вона б прям зараз відсмоктала мені.\n\n'
+      'У мене з\'явились дивні думки, що я за радість сам би дав їй у рот.\n\n'
+      'Так, все, досить про це думати. Треба йти.',
   'juniper_palivo_apology_dialogue':
       '— Привіт, Джуні. Я хотів вибачитись за той інцидент — це була випадковість. Я випадково зайшов до Сема в кімнату.\n'
       '— Добре, вибачаю, але наступний раз обов\'язково постукай. Сподіваюсь, ти там небагато побачив.\n'
@@ -952,6 +978,23 @@ final Map<String, String> stringsUk = {
       'Блін, мабуть, круто мати таку владу над людьми.\n\n'
       'Обов\'язково треба їх зняти на відео.',
   'juniper_quest_001_btn_flee': 'Тікати',
+  'juniper_quest_001_step3_intro':
+      'Блін, знову вони «трахаються».\n\n'
+      'Я так розумію, для них це вже «звична справа». І подивись, блін, гарно він її так насаджує.\n\n'
+      'Бля, я б оце з радістю до них зараз приєднався.\n\n'
+      'Так, все, в цей раз точно треба зняти.',
+  'juniper_quest_001_step3_record_fail':
+      'Якого хера? Знову вони закрили двері не вчасно.',
+  'juniper_quest_001_step4_intro':
+      'Опа! Блін, я навіть не здивований. Знову вони трахаються.\n\n'
+      'Ну, в цей раз точно, вони попались.',
+  'juniper_quest_001_step4_after_record':
+      'Ну все, тепер я з ними зроблю все, що захочу.',
+  'juniper_quest_001_step4_record_success': 'Відео збережено в галерею',
+  'juniper_quest_001_item_compromat_name':
+      'Компромат на Juniper і Manuel',
+  'juniper_quest_001_item_compromat_description':
+      'Відеозапис Manuel і Juniper у ванній Sem.',
   'danielle_spy_parents_continue_watching': 'Продовжити дивитись',
   'danielle_spy_parents_next': 'Далі',
   'danielle_spy_parents_stealth_too_low':

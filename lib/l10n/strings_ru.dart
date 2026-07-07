@@ -70,6 +70,12 @@ final Map<String, String> stringsRu = {
   'npc_quest_juniper_kompromat_step1': 'Шаг 1 kompromat (ванна Sem)',
   'npc_quest_juniper_kompromat_skip_five_days': 'Пропустить пять дней',
   'npc_quest_juniper_kompromat_step2': 'Шаг 2 kompromat (зал Sem)',
+  'npc_quest_juniper_kompromat_skip_five_days_step3':
+      'Пропустить пять дней (шаг 3)',
+  'npc_quest_juniper_kompromat_step3': 'Шаг 3 kompromat (ванна Sem)',
+  'npc_quest_juniper_kompromat_skip_three_days_step4':
+      'Пропустить три дня (шаг 4)',
+  'npc_quest_juniper_kompromat_step4': 'Шаг 4 kompromat (ванна Sem)',
   'npc_ask_how_are_you_dialogue':
       '— Привет, как дела?\n'
       '— Привет! Всё хорошо, спасибо. А у тебя как?\n'
@@ -814,6 +820,9 @@ final Map<String, String> stringsRu = {
   'debug_location_label': 'ЛОКАЦИЯ: %s',
   'phone_call': 'Позвонить',
   'phone_sms': 'SMS',
+  'phone_home_contacts': 'Контакты',
+  'phone_home_gallery': 'Галерея',
+  'phone_gallery_empty': 'Пока у вас нет сохранённых файлов.',
   'video_load_failed': 'Не удалось загрузить видео. Добавьте файл: %s',
   'asset_load_failed_short': 'Не удалось загрузить: %s',
   'settings_link_shown': 'Ссылка: %s',
@@ -926,6 +935,23 @@ final Map<String, String> stringsRu = {
   'danielle_spy_parents_watch_more': 'Смотреть дальше',
   'juniper_sem_room_sex_watch_more': 'Смотреть дальше',
   'juniper_palivo_apology_btn': 'Извиниться за инцидент',
+  'juniper_quest_002_btn_talk_kompromat': 'Поговорить о компромате',
+  'juniper_quest_002_step1_dialogue':
+      'Привет, Джунипер! Как дела?\n'
+      'Аа, привет! Всё отлично. А ты как?\n'
+      'Тоже хорошо. А у меня тут кое-что есть. Хочу тебе показать.\n'
+      'О, ты меня интригуешь. Мне уже интересно, что там. Давай, показывай.',
+  'juniper_quest_002_btn_show_video': 'Показать видео',
+  'juniper_quest_002_btn_defer': 'Ладно, в следующий раз',
+  'juniper_quest_003_btn_masturbate': 'Вздрочнуть',
+  'juniper_quest_003_corridor_hall_sounds':
+      'Я слышу какие-то странные звуки из зала.',
+  'juniper_quest_003_hall_dialogue':
+      'Зайдя в зал, я услышал, что Juniper разговаривает с кем-то по телефону. Мне стало интересно, и я немного подслушал. Каково же было моё удивление услышать, что она спалила, как я дрочил в гостиной.\n\n'
+      'Во-первых, спалила. Во-вторых, ещё и кому-то из подруг по телефону рассказывает.\n\n'
+      'Но дальше интереснее. Она рассказала, что это её очень сильно возбудило. Что она еле сдерживается и ждёт, когда придёт Sem, чтобы отсосать ему. Но если бы была возможность, она бы прямо сейчас отсосала мне.\n\n'
+      'У меня появились странные мысли, что я с радостью сам бы дал ей в рот.\n\n'
+      'Так, всё, хватит об этом думать. Пора идти.',
   'juniper_palivo_apology_dialogue':
       '— Привет, Джуни. Хотел извиниться за тот инцидент — это была случайность. Я случайно зашёл в комнату Sem.\n'
       '— Ладно, прощаю, но в следующий раз обязательно постучи. Надеюсь, ты там немного увидел.\n'
@@ -954,6 +980,23 @@ final Map<String, String> stringsRu = {
       'Блин, наверное, круто иметь такую власть над людьми.\n\n'
       'Обязательно надо их снять на видео.',
   'juniper_quest_001_btn_flee': 'Смыться',
+  'juniper_quest_001_step3_intro':
+      'Блин, опять они «трахаются».\n\n'
+      'Я так понимаю, для них это уже «обычное дело». И посмотри, блин, как классно он её так насадил.\n\n'
+      'Бля, я бы с радостью к ним сейчас присоединился.\n\n'
+      'Так, всё, в этот раз точно надо снять.',
+  'juniper_quest_001_step3_record_fail':
+      'Какого чёрта? Опять они закрыли дверь не вовремя.',
+  'juniper_quest_001_step4_intro':
+      'Опа! Блин, я даже не удивлён. Опять они трахаются.\n\n'
+      'Ну, в этот раз точно — они попались.',
+  'juniper_quest_001_step4_after_record':
+      'Ну всё, теперь я с ними сделаю всё, что захочу.',
+  'juniper_quest_001_step4_record_success': 'Видео сохранено в галерею',
+  'juniper_quest_001_item_compromat_name':
+      'Компромат на Juniper и Manuel',
+  'juniper_quest_001_item_compromat_description':
+      'Видеозапись Manuel и Juniper в ванной Sem.',
   'danielle_spy_parents_continue_watching': 'Продолжить смотреть',
   'danielle_spy_parents_next': 'Далее',
   'danielle_spy_parents_stealth_too_low':

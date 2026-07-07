@@ -43,9 +43,9 @@ String collegeTeacherBreakRoom(String npcId, int weekdayIndex, int hour) {
   return collegeTeacherBreakRoomIds[i];
 }
 
-// --- Студентки + Sem: коледж 10–17, перерви як у вчителів, пари — випадкова з 3 аудиторій ---
+// --- Студентки + Sem: коледж 9–17, перерви як у вчителів, пари — випадкова з 3 аудиторій ---
 
-/// Дівчата-студентки з роумінгом по коледжу (маркер у розкладі — [LocationsData.collegeHall] 10–17).
+/// Дівчата-студентки з роумінгом по коледжу (маркер у розкладі — [LocationsData.collegeHall] 9–17).
 const List<String> collegeFemaleStudentNpcIds = [
   'elsa',
   'piper',
@@ -61,8 +61,8 @@ const List<String> collegeRoamingStudentNpcIds = [
   'sem',
 ];
 
-/// Будні 10:00–17:59 — на території коледжу (фактична кімната задається роумінгом).
-bool isCollegeStudentCampusHour(int hour) => hour >= 10 && hour <= 17;
+/// Будні 9:00–17:59 — на території коледжу (фактична кімната задається роумінгом).
+bool isCollegeStudentCampusHour(int hour) => hour >= 9 && hour <= 17;
 
 /// Під час пар — випадкова аудиторія: англійська (1), математика (2), історія (3).
 String collegeStudentLessonAuditorium(String npcId, int weekdayIndex, int hour) {

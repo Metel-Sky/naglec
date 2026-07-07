@@ -53,6 +53,15 @@ class StreetView extends StatelessWidget {
   final String? semJuniperManuelKompromatVideoPath;
   final int semJuniperManuelKompromatPlaybackTick;
 
+  /// QUEST: juniper_quest_003 — «Вздрочнути і піти» у гостиній Sem.
+  final String? semJuniperQuest003VideoPath;
+  final int semJuniperQuest003PlaybackTick;
+
+  /// QUEST: juniper_quest_003 — with_gg_02 у залі Sem (окремий шар, вищий пріоритет).
+  final bool semJuniperQuest003HallVideoActive;
+  final String? semJuniperQuest003HallVideoPath;
+  final int semJuniperQuest003HallPlaybackTick;
+
   const StreetView({
     super.key,
     required this.currentStreetHouse,
@@ -74,6 +83,11 @@ class StreetView extends StatelessWidget {
     this.semJuniperSemRoomSexPlaybackTick = 0,
     this.semJuniperManuelKompromatVideoPath,
     this.semJuniperManuelKompromatPlaybackTick = 0,
+    this.semJuniperQuest003VideoPath,
+    this.semJuniperQuest003PlaybackTick = 0,
+    this.semJuniperQuest003HallVideoActive = false,
+    this.semJuniperQuest003HallVideoPath,
+    this.semJuniperQuest003HallPlaybackTick = 0,
     required this.friendHouseStreetFacade,
     required this.onFriendHouseStreetFacadeChanged,
   });
@@ -142,6 +156,20 @@ class StreetView extends StatelessWidget {
 
     final bg = NpcRoomScenePicker.roomBackgroundPath(roomData?.imagePath);
 
+    final hallQuest003Path = semJuniperQuest003HallVideoPath?.trim();
+    if (semJuniperQuest003HallVideoActive &&
+        hallQuest003Path != null &&
+        hallQuest003Path.isNotEmpty &&
+        currentStreetHouse == LocationsData.friendHouse &&
+        roomNorm == LocationsData.friendHall) {
+      return InRoomVideoSceneLauncher.buildZoneLayer(
+        videoPath: hallQuest003Path,
+        playbackTick: semJuniperQuest003HallPlaybackTick,
+        keyPrefix: 'juniper_quest_003_hall',
+        loop: true,
+      );
+    }
+
     final manuelKompromatPath = semJuniperManuelKompromatVideoPath?.trim();
     if (manuelKompromatPath != null &&
         manuelKompromatPath.isNotEmpty &&
@@ -153,6 +181,20 @@ class StreetView extends StatelessWidget {
         playbackTick: semJuniperManuelKompromatPlaybackTick,
         keyPrefix: 'juniper_manuel_kompromat',
         fallbackImagePath: roomData?.imagePath,
+      );
+    }
+
+    final quest003Path = semJuniperQuest003VideoPath?.trim();
+    if (quest003Path != null &&
+        quest003Path.isNotEmpty &&
+        currentStreetHouse == LocationsData.friendHouse &&
+        roomNorm == LocationsData.friendLounge) {
+      return InRoomVideoSceneLauncher.buildZoneLayer(
+        videoPath: quest003Path,
+        playbackTick: semJuniperQuest003PlaybackTick,
+        keyPrefix: 'juniper_quest_003_lounge',
+        fallbackImagePath: roomData?.imagePath,
+        loop: true,
       );
     }
 

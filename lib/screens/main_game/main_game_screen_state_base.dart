@@ -54,6 +54,9 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   bool get _showMasturbateVideo => _ui.showMasturbateVideo;
   set _showMasturbateVideo(bool v) => _ui.setShowMasturbateVideo(v);
 
+  String get _masturbateVideoPath => _ui.effectiveMasturbateVideoPath;
+  set _masturbateVideoPath(String? v) => _ui.setMasturbateVideoPath(v);
+
   bool get _isWatchingElsaVideoInLaptop => _ui.isWatchingElsaVideoInLaptop;
   set _isWatchingElsaVideoInLaptop(bool v) => _ui.setWatchingElsaVideoInLaptop(v);
 
@@ -258,6 +261,15 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   /// sem_quest_001: підрозділ «натякнути шукати дівчину».
   bool _semGirlsHintTalkActive = false;
   bool _juniperPalivoApologyTalkActive = false;
+  bool _juniperQuest002Step1UiActive = false;
+
+  /// QUEST: juniper_quest_003 — «Вздрочнути і піти» у гостиній Sem.
+  bool _juniperQuest003UiActive = false;
+  int _juniperQuest003PlaybackTick = 0;
+  String? _juniperQuest003VideoPath;
+  bool _juniperQuest003HallUiActive = false;
+  int _juniperQuest003HallPlaybackTick = 0;
+  String? _juniperQuest003HallVideoPath;
 
   /// sem_quest_001: follow-up «ну шо, знайшов когось?» на фасаді.
   bool _semGirlsFollowUpActive = false;
@@ -295,7 +307,7 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   int _juniperSemRoomSexPlaybackTick = 0;
   String? _juniperSemRoomSexVideoPath;
 
-  /// QUEST: juniper_quest_001 — in-room kompromat (крок 1 ванна / крок 2 зал / after flee вітальня).
+  /// QUEST: juniper_quest_001 — in-room kompromat (крок 1 ванна / крок 2 зал / after flee вітальня / крок 3 ванна).
   JuniperManuelKompromatPhase _juniperManuelKompromatPhase =
       JuniperManuelKompromatPhase.inactive;
   int _juniperManuelKompromatPlaybackTick = 0;
@@ -319,6 +331,26 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
       _juniperManuelKompromatPhase ==
       JuniperManuelKompromatPhase.step2AfterFlee;
 
+  bool get _juniperManuelKompromatStep3UiActive =>
+      _juniperManuelKompromatPhase ==
+          JuniperManuelKompromatPhase.step3Video ||
+      _juniperManuelKompromatPhase ==
+          JuniperManuelKompromatPhase.step3AfterRecord;
+
+  bool get _juniperManuelKompromatStep3AfterRecord =>
+      _juniperManuelKompromatPhase ==
+      JuniperManuelKompromatPhase.step3AfterRecord;
+
+  bool get _juniperManuelKompromatStep4UiActive =>
+      _juniperManuelKompromatPhase ==
+          JuniperManuelKompromatPhase.step4Video ||
+      _juniperManuelKompromatPhase ==
+          JuniperManuelKompromatPhase.step4AfterRecord;
+
+  bool get _juniperManuelKompromatStep4AfterRecord =>
+      _juniperManuelKompromatPhase ==
+      JuniperManuelKompromatPhase.step4AfterRecord;
+
   /// Картинка + діалог «spyOnSemParents» біля кімнати батьків.
   bool _spyOnSemParentsUiActive = false;
   DanielleSpyParentsPhase _spyParentsPhase = DanielleSpyParentsPhase.door;
@@ -331,8 +363,19 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     _juniperShowerVideoPath = null;
   }
 
+  void _clearJuniperQuest003UiOnly() {
+    _juniperQuest003UiActive = false;
+    _juniperQuest003VideoPath = null;
+  }
+
+  void _clearJuniperQuest003HallUiOnly() {
+    _juniperQuest003HallUiActive = false;
+    _juniperQuest003HallVideoPath = null;
+  }
+
   void _clearInRoomVideoOverlayBlockers() {
     _clearJuniperShowerUiOnly();
+    _clearJuniperQuest003UiOnly();
     _ui.setEventImagePath(null);
     _eventVideoPath = null;
     _eventVideoPendingButton = null;
