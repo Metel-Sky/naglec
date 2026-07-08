@@ -170,6 +170,20 @@ class StreetView extends StatelessWidget {
       );
     }
 
+    final showerPath = semJuniperShowerVideoPath?.trim();
+    if (showerPath != null &&
+        showerPath.isNotEmpty &&
+        currentStreetHouse == LocationsData.friendHouse &&
+        roomNorm == LocationsData.friendBathroom) {
+      return InRoomVideoSceneLauncher.buildZoneLayer(
+        videoPath: showerPath,
+        playbackTick: semJuniperShowerPlaybackTick,
+        keyPrefix: 'juniper_shower',
+        fallbackImagePath: roomData?.imagePath,
+        loop: true,
+      );
+    }
+
     final manuelKompromatPath = semJuniperManuelKompromatVideoPath?.trim();
     if (manuelKompromatPath != null &&
         manuelKompromatPath.isNotEmpty &&
@@ -226,27 +240,6 @@ class StreetView extends StatelessWidget {
           ),
           child: VideoSceneWidget(
             videoPath: semRoomSexPath,
-            loop: true,
-            fallbackImagePath: roomData?.imagePath,
-          ),
-        ),
-      );
-    }
-
-    final showerPath = semJuniperShowerVideoPath?.trim();
-    if (showerPath != null &&
-        showerPath.isNotEmpty &&
-        currentStreetHouse == LocationsData.friendHouse &&
-        roomNorm == LocationsData.friendBathroom) {
-      return ClipRRect(
-        borderRadius:
-            BorderRadius.circular(RoomNpcSceneTemplate.defaultClipRadius),
-        child: KeyedSubtree(
-          key: ValueKey(
-            'juniper_shower_${showerPath}_$semJuniperShowerPlaybackTick',
-          ),
-          child: VideoSceneWidget(
-            videoPath: showerPath,
             loop: true,
             fallbackImagePath: roomData?.imagePath,
           ),

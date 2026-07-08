@@ -380,6 +380,7 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
       _ensureCherieQuest002HomeHallUiCoherent();
       _ensureSemJuniperIntroUiCoherent();
       _ensureJuniperManuelKompromatUiCoherent();
+      _syncQuestUiArbitration();
       _resetNewsMessageIfOutsideQuestEventContext();
     });
   }

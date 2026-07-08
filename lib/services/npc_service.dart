@@ -466,7 +466,14 @@ class NPCService {
       if (JuniperQuest003.isJuniperPinnedToFriendLounge(world)) {
         return LocationsData.friendLounge;
       }
-      if (JuniperQuest003.isJuniperPinnedToFriendHall(world)) {
+      if (JuniperQuest003.isJuniperPinnedToFriendRoomCatchDaySex(
+        world: world,
+        gameDateKey: dateKey,
+        hour: hour,
+      )) {
+        return LocationsData.friendRoom;
+      }
+      if (JuniperQuest003.isJuniperPinnedToFriendHall(world, hour: hour)) {
         return LocationsData.friendHall;
       }
       if (SemJuniperEveningVisits.isWeekendSemRoomPresenceActive(
@@ -478,6 +485,7 @@ class NPCService {
       }
       if (JuniperSemRoomSexVideos.isSceneActiveAt(
         world: world,
+        gameDateKey: dateKey,
         weekdayIndex: effectiveDay,
         hour: hour,
       )) {
@@ -495,6 +503,17 @@ class NPCService {
           hour: hour,
           world: world,
         );
+      }
+      if (world.semJuniperDating) {
+        final visitRoom = SemJuniperEveningVisits.locationAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+          world: world,
+        );
+        if (visitRoom == LocationsData.friendBathroom) {
+          return visitRoom;
+        }
       }
       if (SemJuniperEarlyVisits.isActive(
         world,
@@ -696,6 +715,7 @@ class NPCService {
       }
       if (JuniperSemRoomSexVideos.isSceneActiveAt(
         world: world,
+        gameDateKey: dateKey,
         weekdayIndex: effectiveDay,
         hour: hour,
       ) &&
@@ -755,6 +775,27 @@ class NPCService {
             days: SemJuniperEveningVisits.weekdaysForWeek(
               SemJuniperEveningVisits.datingWeekIndex(world, dateKey)!,
             ),
+          );
+        }
+      }
+      if (world.semJuniperDating) {
+        final visitRoom = SemJuniperEveningVisits.locationAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+          world: world,
+        );
+        if (visitRoom == LocationsData.friendBathroom &&
+            normRoom == LocationsData.friendBathroom) {
+          return SchedulePoint(
+            hourStart: SemJuniperEveningVisits.scheduledShowerHour,
+            hourEnd: SemJuniperEveningVisits.scheduledShowerHour,
+            location: LocationsData.friendBathroom,
+            actionLabel: SemJuniperEveningVisits.actionLabelForRoom(
+              LocationsData.friendBathroom,
+            ),
+            spritePath: npc.avatarPath ?? '',
+            days: SemJuniperEveningVisits.lateVisitWeekdays,
           );
         }
       }

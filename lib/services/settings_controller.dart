@@ -8,11 +8,13 @@ class SettingsController with ChangeNotifier {
   double _musicVolume = 0.7;
   bool _cheatsEnabled = false;
   bool _useQuestRuntimeV2 = false;
+  bool _useQuestUiIsolation = true;
   bool _questRuntimeMirrorMode = true;
 
   double get musicVolume => _musicVolume;
   bool get cheatsEnabled => _cheatsEnabled;
   bool get useQuestRuntimeV2 => _useQuestRuntimeV2;
+  bool get useQuestUiIsolation => _useQuestUiIsolation;
   bool get questRuntimeMirrorMode => _questRuntimeMirrorMode;
 
   set musicVolume(double v) {
@@ -34,6 +36,14 @@ class SettingsController with ChangeNotifier {
   set useQuestRuntimeV2(bool v) {
     if (v != _useQuestRuntimeV2) {
       _useQuestRuntimeV2 = v;
+      _save();
+      notifyListeners();
+    }
+  }
+
+  set useQuestUiIsolation(bool v) {
+    if (v != _useQuestUiIsolation) {
+      _useQuestUiIsolation = v;
       _save();
       notifyListeners();
     }
@@ -64,6 +74,9 @@ class SettingsController with ChangeNotifier {
         if (json['useQuestRuntimeV2'] is bool) {
           _useQuestRuntimeV2 = json['useQuestRuntimeV2'] as bool;
         }
+        if (json['useQuestUiIsolation'] is bool) {
+          _useQuestUiIsolation = json['useQuestUiIsolation'] as bool;
+        }
         if (json['questRuntimeMirrorMode'] is bool) {
           _questRuntimeMirrorMode = json['questRuntimeMirrorMode'] as bool;
         }
@@ -80,6 +93,7 @@ class SettingsController with ChangeNotifier {
         'musicVolume': _musicVolume,
         'cheatsEnabled': _cheatsEnabled,
         'useQuestRuntimeV2': _useQuestRuntimeV2,
+        'useQuestUiIsolation': _useQuestUiIsolation,
         'questRuntimeMirrorMode': _questRuntimeMirrorMode,
       }));
     } catch (_) {}

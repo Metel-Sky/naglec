@@ -14,6 +14,7 @@ import '../quests/runtime/quest_effect_runner.dart';
 import '../quests/runtime/quest_runtime.dart';
 import '../quests/runtime/quest_state_repository.dart';
 import '../quests/runtime/sasha_event_runtime.dart';
+import '../quests/runtime/ui/quest_ui_isolation.dart';
 import '../npcs/sasha/sasha_quest_definitions.dart';
 import '../npcs/cherie/cherie_quest_definitions.dart';
 
@@ -117,6 +118,14 @@ void setupServiceLocator() {
 
   if (!sl.isRegistered<SashaEventRuntime>()) {
     sl.registerLazySingleton<SashaEventRuntime>(() => const SashaEventRuntime());
+  }
+
+  if (!sl.isRegistered<QuestRuntimeRegistry>()) {
+    sl.registerLazySingleton<QuestRuntimeRegistry>(() {
+      final registry = QuestRuntimeRegistry();
+      registry.registerAll(SemJuniperDanielleFlows.all());
+      return registry;
+    });
   }
 }
 

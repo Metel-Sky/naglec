@@ -1,7 +1,14 @@
 part of '../main_game_screen.dart';
 
 class MainGameScreenState extends MainGameScreenStateBase
-    with MomGameFlow, CherieGameFlow, PiperGameFlow, MainGameNpcFinance, MainGameQuestFlows, MainGameTimeTickHandler {
+    with
+        MomGameFlow,
+        CherieGameFlow,
+        PiperGameFlow,
+        MainGameNpcFinance,
+        MainGameQuestFlows,
+        QuestUiIsolationHost,
+        MainGameTimeTickHandler {
   @override
   void initState() {
     super.initState();
@@ -522,6 +529,7 @@ class MainGameScreenState extends MainGameScreenStateBase
                               _playerStats,
                             ]),
                             builder: (context, _) {
+                              _syncQuestUiArbitration();
                               if (_showMomOfficeView) {
                                 return GameDialogPanel(
                                   message: 'Кабінет мами',
@@ -704,7 +712,14 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   navButtons: [_buildActionPanel()],
                                 );
                               }
-                              if (_danielleSpyCaughtUiActive) {
+                              if (_useQuestUiIsolation) {
+                                final isolationDialog = _questUiIsolationDialogIfAny();
+                                if (isolationDialog != null) return isolationDialog;
+                              }
+                              if (_shouldShowLegacyClusterDialog(
+                                QuestFlowIds.danielleSpyCaught,
+                              ) &&
+                                  _danielleSpyCaughtUiActive) {
                                 final tCaught = sl<LocaleController>().t;
                                 return GameDialogPanel(
                                   message: tCaught(
@@ -721,7 +736,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   ],
                                 );
                               }
-                              if (SemJuniperRoomIntro.isSceneActive(
+                              if (_shouldShowLegacyClusterDialog(
+                                    QuestFlowIds.semJuniperIntro) &&
+                                SemJuniperRoomIntro.isSceneActive(
                                 introUiActive: _semJuniperIntroUiActive,
                                 zone: currentZone,
                                 streetHouse: currentStreetHouse,
@@ -741,7 +758,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   ],
                                 );
                               }
-                              if (_juniperShowerUiActive) {
+                              if (_shouldShowLegacyClusterDialog(
+                                    QuestFlowIds.juniperShower) &&
+                                _juniperShowerUiActive) {
                                 final tShower = sl<LocaleController>().t;
                                 switch (_juniperShowerTier) {
                                   case 1:
@@ -778,7 +797,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     );
                                 }
                               }
-                              if (_juniperSemRoomSexUiActive) {
+                              if (_shouldShowLegacyClusterDialog(
+                                    QuestFlowIds.juniperSemRoomSex) &&
+                                _juniperSemRoomSexUiActive) {
                                 final tSex = sl<LocaleController>().t;
                                 switch (_juniperSemRoomSexTier) {
                                   case 1:
@@ -812,7 +833,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                     );
                                 }
                               }
-                              if (_isJuniperManuelKompromatStep4UiCoherent()) {
+                              if (_shouldShowLegacyClusterDialog(
+                                    QuestFlowIds.juniperManuelKompromat) &&
+                                _isJuniperManuelKompromatStep4UiCoherent()) {
                                 final tK = sl<LocaleController>().t;
                                 if (_juniperManuelKompromatStep4AfterRecord) {
                                   return GameDialogPanel(
@@ -859,7 +882,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   ],
                                 );
                               }
-                              if (_isJuniperManuelKompromatStep3UiCoherent()) {
+                              if (_shouldShowLegacyClusterDialog(
+                                    QuestFlowIds.juniperManuelKompromat) &&
+                                _isJuniperManuelKompromatStep3UiCoherent()) {
                                 final tK = sl<LocaleController>().t;
                                 if (_juniperManuelKompromatStep3AfterRecord) {
                                   return GameDialogPanel(
@@ -903,7 +928,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   ],
                                 );
                               }
-                              if (_isJuniperManuelKompromatStep2AfterFleeUiCoherent()) {
+                              if (_shouldShowLegacyClusterDialog(
+                                    QuestFlowIds.juniperManuelKompromat) &&
+                                _isJuniperManuelKompromatStep2AfterFleeUiCoherent()) {
                                 final tK = sl<LocaleController>().t;
                                 return GameDialogPanel(
                                   message: tK(JuniperQuest001.l10nStep2AfterFlee),
@@ -915,7 +942,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   navButtons: [_buildActionPanel()],
                                 );
                               }
-                              if (_isJuniperManuelKompromatStep2UiCoherent()) {
+                              if (_shouldShowLegacyClusterDialog(
+                                    QuestFlowIds.juniperManuelKompromat) &&
+                                _isJuniperManuelKompromatStep2UiCoherent()) {
                                 final tK = sl<LocaleController>().t;
                                 return GameDialogPanel(
                                   message: tK(JuniperQuest001.l10nStep2Intro),
@@ -932,7 +961,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   ],
                                 );
                               }
-                              if (_isJuniperManuelKompromatStep1UiCoherent()) {
+                              if (_shouldShowLegacyClusterDialog(
+                                    QuestFlowIds.juniperManuelKompromat) &&
+                                _isJuniperManuelKompromatStep1UiCoherent()) {
                                 final tK = sl<LocaleController>().t;
                                 if (_juniperManuelKompromatAfterRecord) {
                                   return GameDialogPanel(
@@ -976,7 +1007,9 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   ],
                                 );
                               }
-                              if (_spyOnSemParentsUiActive) {
+                              if (_shouldShowLegacyClusterDialog(
+                                    QuestFlowIds.spyOnSemParents) &&
+                                  _spyOnSemParentsUiActive) {
                                 final tSpy = sl<LocaleController>().t;
                                 final st = _playerStats.player.stealth_mode;
                                 switch (_spyParentsPhase) {

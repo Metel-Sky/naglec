@@ -5,8 +5,9 @@ import '../../services/player_stats_controller.dart';
 import '../../services/save_service.dart';
 import '../../services/service_locator.dart';
 import 'juniper_npc.dart';
+import 'juniper_quest_003.dart';
 
-/// Відео Juniper у кімнаті Sem (4 ролики) — субота 12:00, неділя 16:00.
+/// Відео Juniper у кімнаті Sem (4 ролики) — суб 12:00, нд 16:00; у день catch quest 003 — 18:00.
 abstract final class JuniperSemRoomSexVideos {
   JuniperSemRoomSexVideos._();
 
@@ -49,18 +50,25 @@ abstract final class JuniperSemRoomSexVideos {
   static bool isInSemRoom(String roomId) =>
       LocationsData.migrateLegacyRoomId(roomId) == LocationsData.friendRoom;
 
-  /// Juniper у кімнаті Sem за розкладом (після старту стосунків).
+  /// Juniper у кімнаті Sem за розкладом або quest 003 catch-день о 18:00.
   static bool isSceneActiveAt({
     required GameWorldState world,
+    required String gameDateKey,
     required int weekdayIndex,
     required int hour,
   }) {
     if (!world.semJuniperDating) return false;
-    return isScheduledHour(weekdayIndex, hour);
+    if (isScheduledHour(weekdayIndex, hour)) return true;
+    return JuniperQuest003.isCatchDaySemRoomSexWindow(
+      world: world,
+      gameDateKey: gameDateKey,
+      hour: hour,
+    );
   }
 
   static bool isActiveInRoom({
     required GameWorldState world,
+    required String gameDateKey,
     required int weekdayIndex,
     required int hour,
     required String zone,
@@ -76,6 +84,7 @@ abstract final class JuniperSemRoomSexVideos {
     if (!isInSemRoom(room)) return false;
     return isSceneActiveAt(
       world: world,
+      gameDateKey: gameDateKey,
       weekdayIndex: weekdayIndex,
       hour: hour,
     );

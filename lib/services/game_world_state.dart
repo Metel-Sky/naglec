@@ -482,6 +482,12 @@ class GameWorldState {
   /// QUEST: juniper_quest_003 — catch-відео в гостиній: Juniper тимчасово в залі сцени.
   bool juniperQuest003LoungePinActive = false;
 
+  /// QUEST: juniper_quest_003 — календарний день catch-сцени (sex о 18:00).
+  String? juniperQuest003CatchDateKey;
+
+  /// QUEST: juniper_quest_003 — день, коли catch sex о 18:00 уже відіграно (1 раз на добу).
+  String? juniperQuest003CatchDaySemRoomSexPlayedDateKey;
+
   /// Квест «спалився»: розмова з Danielle після підглядання — відіграно.
   bool danielleSpyCaughtConfrontationDone = false;
   /// Скільки разів ГГ уже проходив розмову «спалився» з Danielle.
@@ -725,6 +731,9 @@ class GameWorldState {
         'juniperQuest003HallFollowUpActive': juniperQuest003HallFollowUpActive,
         'juniperQuest003HallSceneDone': juniperQuest003HallSceneDone,
         'juniperQuest003LoungePinActive': juniperQuest003LoungePinActive,
+        'juniperQuest003CatchDateKey': juniperQuest003CatchDateKey,
+        'juniperQuest003CatchDaySemRoomSexPlayedDateKey':
+            juniperQuest003CatchDaySemRoomSexPlayedDateKey,
         'danielleSpyCaughtConfrontationDone': danielleSpyCaughtConfrontationDone,
         'danielleSpyCaughtConfrontationCount':
             danielleSpyCaughtConfrontationCount,
@@ -1116,6 +1125,10 @@ class GameWorldState {
         json['juniperQuest003HallSceneDone'] == true;
     juniperQuest003LoungePinActive =
         json['juniperQuest003LoungePinActive'] == true;
+    juniperQuest003CatchDateKey =
+        json['juniperQuest003CatchDateKey'] as String?;
+    juniperQuest003CatchDaySemRoomSexPlayedDateKey =
+        json['juniperQuest003CatchDaySemRoomSexPlayedDateKey'] as String?;
     danielleSpyCaughtConfrontationDone =
         json['danielleSpyCaughtConfrontationDone'] == true;
     danielleSpyCaughtConfrontationCount =
@@ -1286,6 +1299,8 @@ class GameWorldState {
     juniperQuest003HallFollowUpActive = false;
     juniperQuest003HallSceneDone = false;
     juniperQuest003LoungePinActive = false;
+    juniperQuest003CatchDateKey = null;
+    juniperQuest003CatchDaySemRoomSexPlayedDateKey = null;
     danielleSpyCaughtConfrontationDone = false;
     danielleSpyCaughtConfrontationCount = 0;
     lastNpcEconomyProcessedDateKey = null;

@@ -48,21 +48,15 @@ abstract final class JuniperShowerVideos {
     return videos[clampedTier - 1];
   }
 
-  /// Juniper у душі Sem за розкладом вечірніх візитів.
+  /// Juniper у душі Sem: пн/ср/пт/нд о 22:00 (поки [semJuniperDating]).
+  /// Не обмежувати 3-тижневим вікном вечірніх візитів — душ лишається в розкладі.
   static bool isJuniperInShowerAt({
     required GameWorldState world,
     required String gameDateKey,
     required int weekdayIndex,
     required int hour,
   }) {
-    if (!SemJuniperEveningVisits.isActive(
-      world,
-      gameDateKey,
-      weekdayIndex,
-      hour,
-    )) {
-      return false;
-    }
+    if (!world.semJuniperDating) return false;
     return SemJuniperEveningVisits.locationAtHour(
           gameDateKey: gameDateKey,
           weekdayIndex: weekdayIndex,
