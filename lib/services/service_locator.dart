@@ -124,6 +124,8 @@ void setupServiceLocator() {
     sl.registerLazySingleton<QuestRuntimeRegistry>(() {
       final registry = QuestRuntimeRegistry();
       registry.registerAll(SemJuniperDanielleFlows.all());
+      registry.registerAll(JuniperQuest003Flows.all());
+      registry.registerAll(JuniperQuest002Flows.all());
       return registry;
     });
   }

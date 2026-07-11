@@ -86,9 +86,35 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     return null;
   }
 
+  bool _canShowJuniperQuest003MasturbateRoomButton() =>
+      !_juniperQuest003UiActive &&
+      JuniperQuest003OfferHelp.activeStep(_worldState) ==
+          JuniperQuest003OfferHelpStep.inactive &&
+      JuniperQuest003.canShowMasturbateButton(
+        world: _worldState,
+        arousal: _playerStats.arousal,
+        zone: currentZone,
+        streetHouse: currentStreetHouse,
+        insideRoom: isInsideRoom,
+        room: currentRoom,
+      );
+
+  void _appendJuniperQuest003MasturbateRoomButton(List<Widget> actionWidgets) {
+    if (!_canShowJuniperQuest003MasturbateRoomButton()) return;
+    final t = sl<LocaleController>().t;
+    actionWidgets.add(
+      _navBtn(
+        t(JuniperQuest003.l10nBtnMasturbate).toUpperCase(),
+        () => setState(_onJuniperQuest003MasturbatePressed),
+      ),
+    );
+    actionWidgets.add(const SizedBox(height: 8));
+  }
+
   /// gg_event_001_stojak: лише «Піти», без квестових/стандартних кнопок NPC.
   Widget? _ggEvent001StojakPriorityActionPanelIfAny() {
     if (!isInsideRoom) return null;
+    if (_canShowJuniperQuest003MasturbateRoomButton()) return null;
     final activeNPCs = _getActiveNPCsInCurrentRoom();
     if (activeNPCs.isEmpty) return null;
     final stats = _playerStats;
@@ -201,12 +227,14 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                 ) ||
                 JuniperQuest003.isHallFollowUpDialogContext(
                   world: _worldState,
+                  gameDateKey: _timeController.onlyDate,
                   hour: _timeController.dateTime.hour,
                   zone: currentZone,
                   streetHouse: currentStreetHouse,
                   insideRoom: isInsideRoom,
                   room: currentRoom,
-                )));
+                ) ||
+                _isJuniperQuest003OfferHelpScriptedDialogActive()));
   }
 
   bool _juniperQuest003GreenCorridorHintActive() =>
@@ -316,6 +344,25 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     final npcService = sl<NPCService>();
     final hour = _timeController.dateTime.hour;
     final day = _timeController.weekdayIndex;
+    final juniperInHouse = JuniperQuest003.isJuniperInFriendHouse(
+      npcService: npcService,
+      hour: hour,
+      day: day,
+    );
+    if (juniperInHouse) {
+      JuniperQuest003.beginLoungeCatchPin(_worldState);
+    }
+    if (JuniperQuest003OfferHelp.shouldStartOnSixthCatch(
+      world: _worldState,
+      gameDateKey: _timeController.onlyDate,
+      zone: currentZone,
+      streetHouse: currentStreetHouse,
+      insideRoom: isInsideRoom,
+      room: currentRoom,
+    )) {
+      _beginJuniperQuest003OfferHelpStep1();
+      return;
+    }
     final videoPath = JuniperQuest003.resolveMasturbateVideoPath(
       world: _worldState,
       npcService: npcService,
@@ -323,8 +370,12 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       day: day,
     );
     JuniperQuest003.markStarted(_worldState);
-    if (JuniperQuest003.shouldApplyCatchSceneRewards(videoPath)) {
-      JuniperQuest003.beginLoungeCatchPin(_worldState);
+    if (juniperInHouse &&
+        JuniperQuest003.shouldApplyCatchSceneRewards(videoPath)) {
+      JuniperQuest003.applyCatchSceneRewards(
+        npcService: npcService,
+        videoPath: videoPath,
+      );
     }
     JuniperQuest003.applyPlayerArousalReset(_playerStats);
     final handle = _launchInRoomVideo(
@@ -339,6 +390,132 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     _saveService.autosave();
   }
 
+  bool _isJuniperQuest003OfferHelpScriptedDialogActive() {
+    final step = JuniperQuest003OfferHelp.activeStep(_worldState);
+    if (step == JuniperQuest003OfferHelpStep.inactive) return false;
+    return JuniperQuest003OfferHelp.isOfferUiCoherent(
+      world: _worldState,
+      uiActive: _juniperQuest003UiActive,
+      step: step,
+      zone: currentZone,
+      streetHouse: currentStreetHouse,
+      insideRoom: isInsideRoom,
+      room: currentRoom,
+    );
+  }
+
+  void _launchJuniperQuest003OfferHelpVideo(
+    JuniperQuest003OfferHelpStep step,
+  ) {
+    final videoPath = JuniperQuest003OfferHelp.videoPathForStep(step);
+    if (videoPath == null) return;
+    final handle = _launchInRoomVideo(
+      videoPath: videoPath,
+      previousPlaybackTick: _juniperQuest003PlaybackTick,
+      loop: true,
+    );
+    _juniperQuest003UiActive = true;
+    _juniperQuest003VideoPath = handle.videoPath;
+    _juniperQuest003PlaybackTick = handle.playbackTick;
+  }
+
+  void _beginJuniperQuest003OfferHelpStep1() {
+    JuniperQuest003.markStarted(_worldState);
+    JuniperQuest003.applyPlayerArousalReset(_playerStats);
+    JuniperQuest003OfferHelp.beginStep1(_worldState);
+    _launchJuniperQuest003OfferHelpVideo(
+      JuniperQuest003OfferHelpStep.step1Offer,
+    );
+    _ensureJuniperQuest003OfferHelpUiCoherent();
+    _saveService.autosave();
+  }
+
+  void _ensureJuniperQuest003OfferHelpUiCoherent() {
+    final step = JuniperQuest003OfferHelp.activeStep(_worldState);
+    if (!_juniperQuest003UiActive ||
+        !JuniperQuest003OfferHelp.isOfferUiCoherent(
+          world: _worldState,
+          uiActive: true,
+          step: step,
+          zone: currentZone,
+          streetHouse: currentStreetHouse,
+          insideRoom: isInsideRoom,
+          room: currentRoom,
+        )) {
+      return;
+    }
+    final key = JuniperQuest003OfferHelp.dialogueL10nKeyForStep(step);
+    if (key != null) {
+      newsMessage = sl<LocaleController>().t(key);
+    } else {
+      newsMessage = '';
+    }
+  }
+
+  void _onJuniperQuest003OfferRefused() {
+    JuniperQuest003OfferHelp.applyRefusePenalties(
+      npcService: sl<NPCService>(),
+    );
+    JuniperQuest003OfferHelp.beginColdShoulder(
+      _worldState,
+      gameDateKey: _timeController.onlyDate,
+    );
+    _clearJuniperQuest003UiOnly();
+    JuniperQuest003.clearLoungePin(_worldState);
+    _resetJuniperQuest003DialogNewsIfPresent();
+    _resetNewsMessageIfOutsideQuestEventContext();
+    _saveService.autosave();
+  }
+
+  void _onJuniperQuest003OfferAgreeStep1() {
+    JuniperQuest003OfferHelp.advanceToStep2(_worldState);
+    _launchJuniperQuest003OfferHelpVideo(
+      JuniperQuest003OfferHelpStep.step2SecretTalk,
+    );
+    _ensureJuniperQuest003OfferHelpUiCoherent();
+    _saveService.autosave();
+  }
+
+  void _onJuniperQuest003OfferSecretStep2() {
+    JuniperQuest003OfferHelp.advanceToStep3Sex(_worldState);
+    _launchJuniperQuest003OfferHelpVideo(
+      JuniperQuest003OfferHelpStep.step3Sex,
+    );
+    JuniperVideoSexStats.onVideoStarted(
+      JuniperQuest003OfferHelp.videoStep3SexPath,
+    );
+    newsMessage = '';
+    _saveService.autosave();
+  }
+
+  void _finishJuniperQuest003OfferHelpSexScene() {
+    JuniperQuest003OfferHelp.finishSexScene(_worldState);
+    _clearJuniperQuest003UiOnly();
+    _resetNewsMessageIfOutsideQuestEventContext();
+    _saveService.autosave();
+  }
+
+  void _syncJuniperQuest003OfferHelpOnRoomEntry() {
+    final step = JuniperQuest003OfferHelp.activeStep(_worldState);
+    if (step == JuniperQuest003OfferHelpStep.inactive) return;
+    if (!JuniperQuest003.isInFriendLounge(
+      zone: currentZone,
+      streetHouse: currentStreetHouse,
+      insideRoom: isInsideRoom,
+      room: currentRoom,
+    )) {
+      if (_juniperQuest003UiActive) {
+        _clearJuniperQuest003UiOnly();
+      }
+      return;
+    }
+    if (!_juniperQuest003UiActive) {
+      _launchJuniperQuest003OfferHelpVideo(step);
+    }
+    _ensureJuniperQuest003OfferHelpUiCoherent();
+    _saveService.autosave();
+  }
+
   void _leaveJuniperQuest003LoungeWithoutMasturbating() {
     _exitFriendHouseInteriorToCorridor();
     _resetNewsMessageIfOutsideQuestEventContext();
@@ -347,6 +524,17 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
 
   void _finishJuniperQuest003Scene() {
     if (!mounted) return;
+    if (JuniperQuest003OfferHelp.isOfferHelpFlowActive(_worldState)) {
+      final step = JuniperQuest003OfferHelp.activeStep(_worldState);
+      setState(() {
+        if (step == JuniperQuest003OfferHelpStep.step3Sex) {
+          _finishJuniperQuest003OfferHelpSexScene();
+        } else {
+          _onJuniperQuest003OfferRefused();
+        }
+      });
+      return;
+    }
     final wasCatchScene =
         _juniperQuest003VideoPath == JuniperQuest003.juniperHandjobVideoPath;
     final catchVideoPath = _juniperQuest003VideoPath;
@@ -354,14 +542,22 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       _clearJuniperQuest003UiOnly();
       JuniperQuest003.clearLoungePin(_worldState);
       if (wasCatchScene && catchVideoPath != null) {
+        final canHallFollowUp =
+            JuniperQuest003.canBeginHallFollowUpAfterCatch(_worldState);
         JuniperQuest003.applyCatchSceneRewards(
           npcService: sl<NPCService>(),
           videoPath: catchVideoPath,
         );
-        JuniperQuest003.beginHallFollowUp(
+        JuniperQuest003.recordLoungeCatch(
           _worldState,
           gameDateKey: _timeController.onlyDate,
         );
+        if (canHallFollowUp) {
+          JuniperQuest003.beginHallFollowUp(
+            _worldState,
+            gameDateKey: _timeController.onlyDate,
+          );
+        }
       }
       _exitFriendHouseInteriorToCorridor();
       if (wasCatchScene) {
@@ -376,6 +572,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   void _finishJuniperQuest003HallScene() {
     if (!mounted) return;
     setState(() {
+      JuniperQuest003.applyHallFollowUpRewards(npcService: sl<NPCService>());
       JuniperQuest003.completeHallFollowUp(_worldState);
       _clearJuniperQuest003HallUiOnly();
       _exitFriendHouseInteriorToCorridor();
@@ -400,6 +597,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   bool _isJuniperQuest003HallFollowUpDialogContext() =>
       JuniperQuest003.isHallFollowUpDialogContext(
         world: _worldState,
+        gameDateKey: _timeController.onlyDate,
         hour: _timeController.dateTime.hour,
         zone: currentZone,
         streetHouse: currentStreetHouse,
@@ -408,10 +606,16 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       );
 
   bool _isJuniperQuest003HallStreetViewVideoActive() =>
-      _isJuniperQuest003HallFollowUpDialogContext();
+      _juniperQuest003HallUiActive &&
+      JuniperQuest003.isInFriendHall(
+        zone: currentZone,
+        streetHouse: currentStreetHouse,
+        insideRoom: isInsideRoom,
+        room: currentRoom,
+      );
 
   String? _semJuniperQuest003HallStreetViewVideoPath() {
-    if (!_isJuniperQuest003HallFollowUpDialogContext()) return null;
+    if (!_isJuniperQuest003HallStreetViewVideoActive()) return null;
     final active = _juniperQuest003HallVideoPath?.trim();
     if (active != null && active.isNotEmpty) return active;
     return JuniperQuest003.hallFollowUpVideoPath;
@@ -423,6 +627,8 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         hallUiActive: false,
         loungeVideoPathActive: _juniperQuest003VideoPath,
         hallVideoPathActive: null,
+        world: _worldState,
+        gameDateKey: _timeController.onlyDate,
         hour: _timeController.dateTime.hour,
         zone: currentZone,
         streetHouse: currentStreetHouse,
@@ -436,6 +642,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     if (_juniperQuest003HallUiActive &&
         JuniperQuest003.isHallFollowUpDialogContext(
           world: _worldState,
+          gameDateKey: _timeController.onlyDate,
           hour: _timeController.dateTime.hour,
           zone: currentZone,
           streetHouse: currentStreetHouse,
@@ -468,7 +675,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     if (!_juniperQuest003HallUiActive) return;
     if (JuniperQuest003.isHallFollowUpVideoSceneActive(
       uiActive: true,
-      hour: _timeController.dateTime.hour,
+      world: _worldState,
       zone: currentZone,
       streetHouse: currentStreetHouse,
       insideRoom: isInsideRoom,
@@ -497,6 +704,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     }
     if (!JuniperQuest003.isHallFollowUpDialogContext(
       world: _worldState,
+      gameDateKey: _timeController.onlyDate,
       hour: _timeController.dateTime.hour,
       zone: currentZone,
       streetHouse: currentStreetHouse,
@@ -525,6 +733,22 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
 
   void _purgeJuniperQuest003IfMisplaced() {
     if (!_juniperQuest003UiActive) return;
+    if (JuniperQuest003OfferHelp.isOfferHelpFlowActive(_worldState)) {
+      final step = JuniperQuest003OfferHelp.activeStep(_worldState);
+      if (JuniperQuest003OfferHelp.isOfferUiCoherent(
+        world: _worldState,
+        uiActive: true,
+        step: step,
+        zone: currentZone,
+        streetHouse: currentStreetHouse,
+        insideRoom: isInsideRoom,
+        room: currentRoom,
+      )) {
+        return;
+      }
+      _clearJuniperQuest003UiOnly();
+      return;
+    }
     if (JuniperQuest003.isLoungeVideoSceneActive(
       uiActive: true,
       zone: currentZone,
@@ -542,7 +766,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     if (!_juniperQuest003HallUiActive) return null;
     if (!JuniperQuest003.isHallFollowUpVideoSceneActive(
       uiActive: true,
-      hour: _timeController.dateTime.hour,
+      world: _worldState,
       zone: currentZone,
       streetHouse: currentStreetHouse,
       insideRoom: isInsideRoom,
@@ -567,6 +791,71 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     );
   }
 
+  Widget? _juniperQuest003OfferHelpActionPanel(
+    JuniperQuest003OfferHelpStep step,
+  ) {
+    final t = sl<LocaleController>().t;
+    switch (step) {
+      case JuniperQuest003OfferHelpStep.step1Offer:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _navBtn(
+                t(JuniperQuest003OfferHelp.l10nBtnRefuse),
+                () => setState(_onJuniperQuest003OfferRefused),
+              ),
+              const SizedBox(height: 8),
+              _navBtn(
+                t(JuniperQuest003OfferHelp.l10nBtnAgree),
+                () => setState(_onJuniperQuest003OfferAgreeStep1),
+              ),
+            ],
+          ),
+        );
+      case JuniperQuest003OfferHelpStep.step2SecretTalk:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _navBtn(
+                t(JuniperQuest003OfferHelp.l10nBtnRefuse),
+                () => setState(_onJuniperQuest003OfferRefused),
+              ),
+              const SizedBox(height: 8),
+              _navBtn(
+                t(JuniperQuest003OfferHelp.l10nBtnSecret),
+                () => setState(_onJuniperQuest003OfferSecretStep2),
+              ),
+            ],
+          ),
+        );
+      case JuniperQuest003OfferHelpStep.step3Sex:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _navBtn(
+                t('danielle_spy_parents_leave'),
+                () => setState(_finishJuniperQuest003OfferHelpSexScene),
+              ),
+            ],
+          ),
+        );
+      case JuniperQuest003OfferHelpStep.inactive:
+        return null;
+    }
+  }
+
   Widget? _juniperQuest003DuringVideoPriorityActionPanelIfAny() {
     if (!_juniperQuest003UiActive) return null;
     if (!JuniperQuest003.isLoungeVideoSceneActive(
@@ -577,6 +866,18 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       room: currentRoom,
     )) {
       return null;
+    }
+    final offerStep = JuniperQuest003OfferHelp.activeStep(_worldState);
+    if (JuniperQuest003OfferHelp.isOfferUiCoherent(
+      world: _worldState,
+      uiActive: true,
+      step: offerStep,
+      zone: currentZone,
+      streetHouse: currentStreetHouse,
+      insideRoom: isInsideRoom,
+      room: currentRoom,
+    )) {
+      return _juniperQuest003OfferHelpActionPanel(offerStep);
     }
     final t = sl<LocaleController>().t;
     return Container(
@@ -595,6 +896,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   Widget? _juniperQuest003MasturbatePriorityActionPanelIfAny() {
     if (_juniperQuest003UiActive) return null;
     if (!JuniperQuest003.canShowMasturbateButton(
+      world: _worldState,
       arousal: _playerStats.arousal,
       zone: currentZone,
       streetHouse: currentStreetHouse,
@@ -764,6 +1066,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       }
       _selectedNpcIdInRoom = null;
     }
+    _syncDefaultNpcSelectionInRoomIfNeeded();
   }
 
   /// Не показувати текст квестів/івентів поза їхнім контекстом — назва поточної локації.
@@ -819,6 +1122,20 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
   void _handleRoomNpcTap(NPCModel npc) {
     _prepareForPlayerAction();
     _selectedNpcIdInRoom = npc.id;
+    if (npc.id != kJuniperNpcId && _semJuniperEveningClipShowOnThisVisit) {
+      _semJuniperEveningClipShowOnThisVisit = false;
+      _juniperEveningClipVideoPath = null;
+    }
+    if (npc.id == kJuniperNpcId &&
+        JuniperQuest003OfferHelp.isColdShoulderActive(
+          _worldState,
+          gameDateKey: _timeController.onlyDate,
+        )) {
+      newsMessage = sl<LocaleController>().t(
+        JuniperQuest003OfferHelp.l10nColdShoulderDialogue,
+      );
+      return;
+    }
     if (_isQuestOrEventScriptedDialogForNews()) return;
     if (GgHygiene.isStinky(_worldState)) {
       newsMessage = sl<LocaleController>().t('gg_hygiene_stinky_reply');
@@ -1778,6 +2095,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
         return;
       }
     }
+    _syncDefaultNpcSelectionInRoomIfNeeded();
     _syncSemJuniperEveningVisitOnRoomEntry();
     _syncJuniperSemRoomSexOnRoomEntry();
     _syncJuniperShowerOnRoomEntry();
@@ -1786,6 +2104,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     _syncJuniperManuelKompromatOnRoomEntry();
     _syncJuniperManuelKompromatStep2OnRoomEntry();
     _syncJuniperQuest003HallFollowUpOnRoomEntry();
+    _syncJuniperQuest003OfferHelpOnRoomEntry();
   }
 
   void _clearJuniperManuelKompromatUiOnly() {
@@ -2222,7 +2541,9 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             : SemJuniperEveningVisits.dailyClipPath(dateKey, roomNorm);
       }
     }
-    _selectedNpcIdInRoom = kJuniperNpcId;
+    if (_selectedNpcIdInRoom == null || _selectedNpcIdInRoom == kJuniperNpcId) {
+      _selectedNpcIdInRoom = kJuniperNpcId;
+    }
   }
 
   InRoomVideoSceneHandle _launchJuniperShowerInRoomVideo(String videoPath) =>
@@ -3327,7 +3648,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
             semJuniperQuest003VideoPath: _semJuniperQuest003LoungeStreetViewVideoPath(),
             semJuniperQuest003PlaybackTick: _juniperQuest003PlaybackTick,
             semJuniperQuest003HallVideoActive:
-                _isJuniperQuest003HallFollowUpDialogContext(),
+                _isJuniperQuest003HallStreetViewVideoActive(),
             semJuniperQuest003HallVideoPath:
                 _semJuniperQuest003HallStreetViewVideoPath(),
             semJuniperQuest003HallPlaybackTick: _juniperQuest003HallPlaybackTick,
@@ -4865,14 +5186,16 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     return _actionPanelSection(mallChildren);
   }
 
-  Widget _buildActionPanel() {
+  Widget _buildActionPanel({bool skipQuestUiIsolation = false}) {
     return ListenableBuilder(
       listenable: Listenable.merge([_timeController, _playerStats, _ui]),
       builder: (context, _) {
         _syncMomEvent002KitchenRecheckIfNeeded();
         _syncQuestUiArbitration();
-        final questUiIsolationPanel = _questUiIsolationActionPanelIfAny();
-        if (questUiIsolationPanel != null) return questUiIsolationPanel;
+        if (!skipQuestUiIsolation) {
+          final questUiIsolationPanel = _questUiIsolationActionPanelIfAny();
+          if (questUiIsolationPanel != null) return questUiIsolationPanel;
+        }
         final int hour = _timeController.dateTime.hour;
         final int day = _timeController.weekdayIndex;
         final currentRoomNorm = LocationsData.migrateLegacyRoomId(currentRoom);
@@ -6003,6 +6326,14 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
               actionWidgets.add(const SizedBox(height: 8));
             }
             if (npc.id == kJuniperNpcId &&
+                JuniperQuest003OfferHelp.isColdShoulderActive(
+                  _worldState,
+                  gameDateKey: _timeController.onlyDate,
+                )) {
+              actionWidgets.add(
+                _navBtn(t('danielle_spy_parents_leave'), _handleBackTap),
+              );
+            } else if (npc.id == kJuniperNpcId &&
                 JuniperQuest002Naslidku.canShowTalkAboutKompromatButton(
                   world: _worldState,
                   activeNpcs: activeNPCs,
@@ -6016,6 +6347,10 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
               actionWidgets.add(const SizedBox(height: 8));
             }
             if (npc.id == kJuniperNpcId &&
+                !JuniperQuest003OfferHelp.isColdShoulderActive(
+                  _worldState,
+                  gameDateKey: _timeController.onlyDate,
+                ) &&
                 JuniperPalivoApologyTalk.canShowButton(_worldState)) {
               actionWidgets.add(
                 _navBtn(t(JuniperPalivoApologyTalk.l10nBtn), () {
@@ -6032,8 +6367,13 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
               actionWidgets.add(const SizedBox(height: 8));
             }
             // Для всіх інших NPC — стандартні кнопки взаємодії (навіть якщо ще не тапнули по смузі NPC).
-            actionWidgets.add(
-              NpcInteractionButtons(
+            if (!(npc.id == kJuniperNpcId &&
+                JuniperQuest003OfferHelp.isColdShoulderActive(
+                  _worldState,
+                  gameDateKey: _timeController.onlyDate,
+                ))) {
+              actionWidgets.add(
+                NpcInteractionButtons(
                 key: ValueKey(npc.id),
                 npc: npc,
                 location: currentRoom,
@@ -6135,8 +6475,9 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
                         SemPalivoGirlsTalk.canShowButton(_worldState)
                     ? _semTalkPalivoWitness
                     : null,
-              ),
-            );
+                ),
+              );
+            }
           }
           }
           _appendResidentialHallRestButtonIfNeeded(
@@ -6904,4 +7245,438 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       },
     );
   }
+
+  // --- Quest UI Isolation Runtime (Sem/Juniper/Danielle cluster) ---
+
+  QuestRuntimeRegistry get _questUiRegistry => sl<QuestRuntimeRegistry>();
+
+  QuestUiArbitrationResult _questUiArbitration = QuestUiArbitrationResult.empty;
+
+  bool get _useQuestUiIsolation => sl<SettingsController>().useQuestUiIsolation;
+
+  String? get _questUiOwnerFlowId =>
+      _questUiArbitration.hasOwner ? _questUiArbitration.ownerFlowId : null;
+
+  void _syncQuestUiArbitration() {
+    if (!_useQuestUiIsolation) {
+      _questUiArbitration = QuestUiArbitrationResult.empty;
+      return;
+    }
+    _purgeQuestUiMisplacedFlows();
+    _ensureJuniperQuest003HallFollowUpUiCoherent();
+    _ensureJuniperQuest002Step1UiCoherent();
+    final context = _buildQuestUiContext();
+    _questUiArbitration = QuestUiArbiter.resolve(
+      _questUiRegistry.flows,
+      context,
+    );
+    assert(
+      QuestUiArbiter.satisfiesSingleOwnerInvariant(_questUiArbitration),
+      'Quest UI arbitration must have at most one owner',
+    );
+  }
+
+  void _purgeQuestUiMisplacedFlows() {
+    if (!_useQuestUiIsolation) return;
+    _purgeSemJuniperRoomIntroIfMisplaced();
+    _purgeJuniperManuelKompromatIfMisplaced();
+    _purgeJuniperQuest002Step1IfMisplaced();
+    _purgeJuniperQuest003IfMisplaced();
+    _purgeJuniperQuest003HallIfMisplaced();
+    _purgeJuniperSemRoomSexIfBlockedOrMisplaced();
+    if (_juniperShowerUiActive &&
+        !(currentZone == 'STREET' &&
+            currentStreetHouse == LocationsData.friendHouse &&
+            isInsideRoom &&
+            JuniperShowerVideos.isInFriendBathroom(currentRoom))) {
+      _clearJuniperShowerUiOnly();
+    }
+    if (_spyOnSemParentsUiActive && !_isInFriendParentsRoom()) {
+      _finishSpyOnSemParentsToCorridor();
+    }
+  }
+
+  QuestUiContext _buildQuestUiContext() {
+    return QuestUiContext(
+      zone: currentZone,
+      streetHouse: currentStreetHouse,
+      insideRoom: isInsideRoom,
+      room: currentRoom,
+      hour: _timeController.dateTime.hour,
+      weekdayIndex: _timeController.weekdayIndex,
+      gameDateKey: _timeController.onlyDate,
+      danielleSpyCaughtUiActive: _danielleSpyCaughtUiActive,
+      spyOnSemParentsUiActive: _spyOnSemParentsUiActive,
+      semJuniperIntroUiActive: _semJuniperIntroUiActive,
+      juniperShowerUiActive: _juniperShowerUiActive,
+      juniperSemRoomSexUiActive: _juniperSemRoomSexUiActive,
+      juniperQuest003UiActive: _juniperQuest003UiActive,
+      juniperQuest003HallUiActive: _juniperQuest003HallUiActive,
+      juniperQuest003HallFollowUpActive:
+          JuniperQuest003.isHallFollowUpActive(_worldState),
+      juniperQuest003HallSceneDone: _worldState.juniperQuest003HallSceneDone,
+      juniperQuest002Step1UiActive: _juniperQuest002Step1UiActive,
+      juniperManuelKompromatPhase: _juniperManuelKompromatPhase,
+      juniperManuelKompromatStep1Coherent: _isJuniperManuelKompromatStep1UiCoherent(),
+      juniperManuelKompromatStep2Coherent: _isJuniperManuelKompromatStep2UiCoherent(),
+      juniperManuelKompromatStep2AfterFleeCoherent:
+          _isJuniperManuelKompromatStep2AfterFleeUiCoherent(),
+      juniperManuelKompromatStep3Coherent: _isJuniperManuelKompromatStep3UiCoherent(),
+      juniperManuelKompromatStep4Coherent: _isJuniperManuelKompromatStep4UiCoherent(),
+      semGirlsTalkActive: _semGirlsTalkActive,
+      semGirlsSisterTalkActive: _semGirlsSisterTalkActive,
+      semGirlsHintTalkActive: _semGirlsHintTalkActive,
+      semGirlsFollowUpActive: _semGirlsFollowUpActive,
+      semParentsTalkActive: _semParentsTalkActive,
+      semTalkSubmenuActive: _semTalkSubmenuActive,
+      friendHouseStreetFacade: _friendHouseStreetFacade,
+      semSummonedAtFriendFacade: _semSummonedAtFriendFacade,
+      danielleSpyCaughtCoherent: _danielleSpyCaughtUiActive,
+      spyOnSemParentsCoherent: _spyOnSemParentsUiActive && _isInFriendParentsRoom(),
+      semJuniperIntroCoherent: SemJuniperRoomIntro.isSceneActive(
+        introUiActive: _semJuniperIntroUiActive,
+        zone: currentZone,
+        streetHouse: currentStreetHouse,
+        insideRoom: isInsideRoom,
+        room: currentRoom,
+      ),
+      juniperShowerCoherent: _juniperShowerUiActive &&
+          currentZone == 'STREET' &&
+          currentStreetHouse == LocationsData.friendHouse &&
+          isInsideRoom &&
+          JuniperShowerVideos.isInFriendBathroom(currentRoom),
+      juniperSemRoomSexCoherent: _juniperSemRoomSexUiActive &&
+          currentZone == 'STREET' &&
+          currentStreetHouse == LocationsData.friendHouse &&
+          isInsideRoom &&
+          JuniperSemRoomSexVideos.isInSemRoom(currentRoom),
+      juniperQuest003HallCoherent:
+          JuniperQuest003.isHallFollowUpInHallLocation(
+            world: _worldState,
+            zone: currentZone,
+            streetHouse: currentStreetHouse,
+            insideRoom: isInsideRoom,
+            room: currentRoom,
+          ) ||
+          (_juniperQuest003HallUiActive &&
+              JuniperQuest003.isInFriendHall(
+                zone: currentZone,
+                streetHouse: currentStreetHouse,
+                insideRoom: isInsideRoom,
+                room: currentRoom,
+              )),
+      juniperQuest003LoungeCoherent: JuniperQuest003.isLoungeVideoSceneActive(
+        uiActive: _juniperQuest003UiActive,
+        zone: currentZone,
+        streetHouse: currentStreetHouse,
+        insideRoom: isInsideRoom,
+        room: currentRoom,
+      ),
+      juniperQuest003LoungeOfferCoherent: JuniperQuest003.isLoungeOfferUiCoherent(
+        world: _worldState,
+        arousal: _playerStats.arousal,
+        loungeUiActive: _juniperQuest003UiActive,
+        zone: currentZone,
+        streetHouse: currentStreetHouse,
+        insideRoom: isInsideRoom,
+        room: currentRoom,
+      ),
+      juniperQuest003CorridorCoherent: JuniperQuest003.isCorridorHallSoundsHintContext(
+        world: _worldState,
+        zone: currentZone,
+        streetHouse: currentStreetHouse,
+        insideRoom: isInsideRoom,
+        room: currentRoom,
+      ),
+      juniperQuest002Step1Coherent: _juniperQuest002Step1UiActive &&
+          JuniperQuest002Naslidku.isStep1UiCoherent(
+            step1UiActive: true,
+            activeNpcs: _getActiveNPCsInCurrentRoom(),
+          ),
+      semGirlsTalkCoherent: _semTalkContextActive &&
+          (_semGirlsTalkActive ||
+              _semGirlsSisterTalkActive ||
+              _semGirlsHintTalkActive ||
+              _semGirlsFollowUpActive),
+      semParentsTalkCoherent:
+          _semParentsTalkActive && _friendHouseStreetFacade,
+      semFacadeTalkCoherent: _friendHouseStreetFacade &&
+          _semSummonedAtFriendFacade &&
+          !isInsideRoom &&
+          currentZone == 'STREET' &&
+          currentStreetHouse == null,
+    );
+  }
+
+  bool _isQuestUiIsolationOwner(String flowId) =>
+      _useQuestUiIsolation && _questUiOwnerFlowId == flowId;
+
+  bool _hasQuestUiIsolationClusterOwner() =>
+      _useQuestUiIsolation && _questUiArbitration.hasOwner;
+
+  Widget? _questUiIsolationActionPanelIfAny() {
+    if (!_useQuestUiIsolation || !_questUiArbitration.hasOwner) return null;
+    return _questFlowActionPanel(_questUiArbitration.ownerFlowId!);
+  }
+
+  Widget? _questFlowActionPanel(String flowId) {
+    switch (flowId) {
+      case QuestFlowIds.danielleSpyCaught:
+        final tCaught = sl<LocaleController>().t;
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _navBtn(
+                tCaught('danielle_spy_caught_confirm'),
+                _finishDanielleSpyCaughtQuest,
+              ),
+            ],
+          ),
+        );
+      case QuestFlowIds.semJuniperIntro:
+        return _semJuniperIntroPriorityActionPanelIfAny();
+      case QuestFlowIds.juniperShower:
+        return _juniperShowerIsolationActionPanel();
+      case QuestFlowIds.juniperSemRoomSex:
+        return _juniperSemRoomSexIsolationActionPanel();
+      case QuestFlowIds.juniperManuelKompromat:
+        return _juniperManuelKompromatStep2AfterFleePriorityActionPanelIfAny();
+      case QuestFlowIds.juniperQuest003Corridor:
+        return null;
+      case QuestFlowIds.juniperQuest003Hall:
+        return _juniperQuest003HallDuringVideoPriorityActionPanelIfAny();
+      case QuestFlowIds.juniperQuest003Lounge:
+        return _juniperQuest003DuringVideoPriorityActionPanelIfAny() ??
+            _juniperQuest003MasturbatePriorityActionPanelIfAny();
+      case QuestFlowIds.juniperQuest002Step1:
+        return _juniperQuest002Step1PriorityActionPanelIfAny();
+      case QuestFlowIds.semGirlsTalk:
+        return _semGirlsTalkPriorityActionPanelIfAny();
+      case QuestFlowIds.spyOnSemParents:
+        return _spyOnSemParentsIsolationActionPanel();
+      default:
+        return null;
+    }
+  }
+
+  Widget _juniperShowerIsolationActionPanel() {
+    final tShower = sl<LocaleController>().t;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (_juniperShowerTier == 1 || _juniperShowerTier == 2) ...[
+            _navBtn(
+              tShower('danielle_spy_parents_continue_watching'),
+              _juniperShowerTier == 1
+                  ? _juniperShowerWatchMoreAfterVideo1
+                  : _juniperShowerWatchMoreAfterVideo2,
+            ),
+            const SizedBox(height: 8),
+          ],
+          _navBtn(
+            tShower('danielle_spy_parents_leave'),
+            _finishJuniperShowerScene,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _juniperSemRoomSexIsolationActionPanel() {
+    final tSex = sl<LocaleController>().t;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (_juniperSemRoomSexTier >= 1 && _juniperSemRoomSexTier <= 3) ...[
+            _navBtn(
+              tSex(JuniperSemRoomSexVideos.l10nWatchMore),
+              _juniperSemRoomSexWatchMore,
+            ),
+            const SizedBox(height: 8),
+          ],
+          _navBtn(
+            tSex('danielle_spy_parents_leave'),
+            _finishJuniperSemRoomSexScene,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _spyOnSemParentsIsolationActionPanel() {
+    final t = sl<LocaleController>().t;
+    final stealth = _playerStats.player.stealth_mode;
+    final children = <Widget>[];
+    switch (_spyParentsPhase) {
+      case DanielleSpyParentsPhase.door:
+        if (stealth >= DanielleSpyParentsQuest.peek2MinStealth) {
+          children.add(
+            _navBtn(
+              t('danielle_spy_parents_peek'),
+              () => setState(() => _applyDanielleSpyWatchTier(1)),
+            ),
+          );
+          children.add(const SizedBox(height: 8));
+        }
+        break;
+      case DanielleSpyParentsPhase.watchVideo1:
+        if (stealth >= DanielleSpyParentsQuest.peek3MinStealth) {
+          children.add(
+            _navBtn(
+              t('danielle_spy_parents_watch_more'),
+              _danielleSpyWatchMoreAfterVideo1,
+            ),
+          );
+          children.add(const SizedBox(height: 8));
+        }
+        break;
+      case DanielleSpyParentsPhase.watchVideo2:
+        children.add(
+          _navBtn(
+            t('danielle_spy_parents_watch_more'),
+            _danielleSpyWatchMoreAfterVideo2,
+          ),
+        );
+        children.add(const SizedBox(height: 8));
+      case DanielleSpyParentsPhase.watchVideo3:
+        break;
+    }
+    children.add(
+      _navBtn(t('danielle_spy_parents_leave'), _finishSpyOnSemParentsToCorridor),
+    );
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
+    );
+  }
+
+  String _spyOnSemParentsIsolationDialogMessage() {
+    final t = sl<LocaleController>().t;
+    return switch (_spyParentsPhase) {
+      DanielleSpyParentsPhase.door => t('danielle_spy_parents_dialogue'),
+      DanielleSpyParentsPhase.watchVideo1 ||
+      DanielleSpyParentsPhase.watchVideo2 ||
+      DanielleSpyParentsPhase.watchVideo3 =>
+        t(DanielleSpyParentsQuest.afterPeekDialogueKeyForTier(
+          switch (_spyParentsPhase) {
+            DanielleSpyParentsPhase.watchVideo1 => 1,
+            DanielleSpyParentsPhase.watchVideo2 => 2,
+            _ => 3,
+          },
+        )),
+    };
+  }
+
+  Widget? _questUiIsolationDialogIfAny() {
+    if (!_useQuestUiIsolation || !_questUiArbitration.hasOwner) return null;
+    final flowId = _questUiArbitration.ownerFlowId!;
+    final t = sl<LocaleController>().t;
+
+    switch (flowId) {
+      case QuestFlowIds.danielleSpyCaught:
+        return GameDialogPanel(
+          message: t(
+            DanielleSpyCaughtQuest.dialogueL10nKey(_worldState),
+          ),
+          highlightNames: const [],
+          navButtons: [_questFlowActionPanel(flowId)!],
+        );
+      case QuestFlowIds.semJuniperIntro:
+        return GameDialogPanel(
+          message: _semJuniperIntroDialogueMessage(),
+          highlightNames: const ['Juniper', 'Sem', 'Джуніпер'],
+          navButtons: [
+            _questFlowActionPanel(flowId) ?? const SizedBox.shrink(),
+          ],
+        );
+      case QuestFlowIds.juniperShower:
+        return GameDialogPanel(
+          message: _messageWithSelectedNpcStripLine(''),
+          highlightNames: const ['Juniper'],
+          navButtons: [_questFlowActionPanel(flowId)!],
+        );
+      case QuestFlowIds.juniperSemRoomSex:
+        return GameDialogPanel(
+          message: _messageWithSelectedNpcStripLine(''),
+          highlightNames: const ['Juniper'],
+          navButtons: [_questFlowActionPanel(flowId)!],
+        );
+      case QuestFlowIds.spyOnSemParents:
+        return GameDialogPanel(
+          message: _spyOnSemParentsIsolationDialogMessage(),
+          highlightNames: const [],
+          navButtons: [_questFlowActionPanel(flowId)!],
+        );
+      case QuestFlowIds.juniperQuest002Step1:
+        return GameDialogPanel(
+          message: t(JuniperQuest002Naslidku.l10nStep1Dialogue),
+          highlightNames: const ['Juniper', 'Джуніпер'],
+          navButtons: [
+            _questFlowActionPanel(flowId) ?? const SizedBox.shrink(),
+          ],
+        );
+      case QuestFlowIds.juniperQuest003Corridor:
+        return GameDialogPanel(
+          message: t(JuniperQuest003.l10nCorridorHallSounds),
+          highlightNames: const [],
+          greenEventStyle: true,
+          navButtons: [_buildActionPanel(skipQuestUiIsolation: true)],
+        );
+      case QuestFlowIds.juniperQuest003Hall:
+        return GameDialogPanel(
+          message: t(JuniperQuest003.l10nHallDialogue),
+          highlightNames: const ['Juniper', 'Джуніпер'],
+          navButtons: [
+            _questFlowActionPanel(flowId) ?? const SizedBox.shrink(),
+          ],
+        );
+      case QuestFlowIds.juniperQuest003Lounge:
+        final loungePanel = _questFlowActionPanel(flowId);
+        if (loungePanel == null) return null;
+        final offerStep = JuniperQuest003OfferHelp.activeStep(_worldState);
+        final offerKey =
+            JuniperQuest003OfferHelp.dialogueL10nKeyForStep(offerStep);
+        final loungeMessage = offerKey != null
+            ? t(offerKey)
+            : _messageWithSelectedNpcStripLine(newsMessage);
+        return GameDialogPanel(
+          message: loungeMessage,
+          highlightNames: const ['Juniper', 'Джуніпер'],
+          navButtons: [loungePanel],
+        );
+      default:
+        return null;
+    }
+  }
+
+  bool _isQuestUiIsolationScriptedDialogForNews() {
+    if (!_useQuestUiIsolation || !_questUiArbitration.hasOwner) return false;
+    return _questUiArbitration.ownerFlowId != QuestFlowIds.semFacadeTalk;
+  }
+
+  bool _shouldAllowLegacyClusterActionPanel(String flowId) {
+    if (!_useQuestUiIsolation) return true;
+    if (!_hasQuestUiIsolationClusterOwner()) return true;
+    return _isQuestUiIsolationOwner(flowId);
+  }
+
+  bool _shouldShowLegacyClusterDialog(String flowId) =>
+      !_useQuestUiIsolation || _isQuestUiIsolationOwner(flowId);
 }

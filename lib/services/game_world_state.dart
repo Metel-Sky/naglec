@@ -473,6 +473,12 @@ class GameWorldState {
   /// QUEST: juniper_quest_003 — старт (кнопка «Вздрочнуть» у гостиній Sem).
   bool juniperQuest003Started = false;
 
+  /// QUEST: juniper_quest_003 — скільки разів Juniper «спалила» catch-сцену.
+  int juniperQuest003CatchCount = 0;
+
+  /// QUEST: juniper_quest_003 — квест завершено (фінал усієї арки).
+  bool juniperQuest003Completed = false;
+
   /// QUEST: juniper_quest_003 — після catch-відео: Juniper у залі, підслуховування.
   bool juniperQuest003HallFollowUpActive = false;
 
@@ -482,11 +488,23 @@ class GameWorldState {
   /// QUEST: juniper_quest_003 — catch-відео в гостиній: Juniper тимчасово в залі сцени.
   bool juniperQuest003LoungePinActive = false;
 
-  /// QUEST: juniper_quest_003 — календарний день catch-сцени (sex о 18:00).
+  /// QUEST: juniper_quest_003 — календарний день останнього catch.
   String? juniperQuest003CatchDateKey;
 
-  /// QUEST: juniper_quest_003 — день, коли catch sex о 18:00 уже відіграно (1 раз на добу).
+  /// QUEST: juniper_quest_003 — день, коли доступна сцена в кімнаті Sem (1 раз на добу).
+  String? juniperQuest003SemRoomOfferDateKey;
+
+  /// QUEST: juniper_quest_003 — день, коли catch sex у кімнаті Sem уже відіграно.
   String? juniperQuest003CatchDaySemRoomSexPlayedDateKey;
+
+  /// QUEST: juniper_quest_003 — крок гілки «пропозиція допомоги» (enum index).
+  int juniperQuest003OfferHelpStep = 0;
+
+  /// QUEST: juniper_quest_003 — cold shoulder після відмови (до dd.MM.yyyy).
+  String? juniperQuest003OfferRefusedColdUntilDateKey;
+
+  /// QUEST: juniper_quest_003 — гілка «пропозиція допомоги» уже відіграна (відмова або секс).
+  bool juniperQuest003OfferHelpResolved = false;
 
   /// Квест «спалився»: розмова з Danielle після підглядання — відіграно.
   bool danielleSpyCaughtConfrontationDone = false;
@@ -728,12 +746,19 @@ class GameWorldState {
         'juniperQuest002NaslidkuStarted': juniperQuest002NaslidkuStarted,
         'juniperQuest002Step1Done': juniperQuest002Step1Done,
         'juniperQuest003Started': juniperQuest003Started,
+        'juniperQuest003CatchCount': juniperQuest003CatchCount,
+        'juniperQuest003Completed': juniperQuest003Completed,
         'juniperQuest003HallFollowUpActive': juniperQuest003HallFollowUpActive,
         'juniperQuest003HallSceneDone': juniperQuest003HallSceneDone,
         'juniperQuest003LoungePinActive': juniperQuest003LoungePinActive,
         'juniperQuest003CatchDateKey': juniperQuest003CatchDateKey,
+        'juniperQuest003SemRoomOfferDateKey': juniperQuest003SemRoomOfferDateKey,
         'juniperQuest003CatchDaySemRoomSexPlayedDateKey':
             juniperQuest003CatchDaySemRoomSexPlayedDateKey,
+        'juniperQuest003OfferHelpStep': juniperQuest003OfferHelpStep,
+        'juniperQuest003OfferRefusedColdUntilDateKey':
+            juniperQuest003OfferRefusedColdUntilDateKey,
+        'juniperQuest003OfferHelpResolved': juniperQuest003OfferHelpResolved,
         'danielleSpyCaughtConfrontationDone': danielleSpyCaughtConfrontationDone,
         'danielleSpyCaughtConfrontationCount':
             danielleSpyCaughtConfrontationCount,
@@ -1119,6 +1144,9 @@ class GameWorldState {
         json['juniperQuest002NaslidkuStarted'] == true;
     juniperQuest002Step1Done = json['juniperQuest002Step1Done'] == true;
     juniperQuest003Started = json['juniperQuest003Started'] == true;
+    juniperQuest003CatchCount =
+        (json['juniperQuest003CatchCount'] as num?)?.toInt() ?? 0;
+    juniperQuest003Completed = json['juniperQuest003Completed'] == true;
     juniperQuest003HallFollowUpActive =
         json['juniperQuest003HallFollowUpActive'] == true;
     juniperQuest003HallSceneDone =
@@ -1127,8 +1155,16 @@ class GameWorldState {
         json['juniperQuest003LoungePinActive'] == true;
     juniperQuest003CatchDateKey =
         json['juniperQuest003CatchDateKey'] as String?;
+    juniperQuest003SemRoomOfferDateKey =
+        json['juniperQuest003SemRoomOfferDateKey'] as String?;
     juniperQuest003CatchDaySemRoomSexPlayedDateKey =
         json['juniperQuest003CatchDaySemRoomSexPlayedDateKey'] as String?;
+    juniperQuest003OfferHelpStep =
+        (json['juniperQuest003OfferHelpStep'] as num?)?.toInt() ?? 0;
+    juniperQuest003OfferRefusedColdUntilDateKey =
+        json['juniperQuest003OfferRefusedColdUntilDateKey'] as String?;
+    juniperQuest003OfferHelpResolved =
+        json['juniperQuest003OfferHelpResolved'] == true;
     danielleSpyCaughtConfrontationDone =
         json['danielleSpyCaughtConfrontationDone'] == true;
     danielleSpyCaughtConfrontationCount =
@@ -1296,11 +1332,17 @@ class GameWorldState {
     juniperQuest002NaslidkuStarted = false;
     juniperQuest002Step1Done = false;
     juniperQuest003Started = false;
+    juniperQuest003CatchCount = 0;
+    juniperQuest003Completed = false;
     juniperQuest003HallFollowUpActive = false;
     juniperQuest003HallSceneDone = false;
     juniperQuest003LoungePinActive = false;
     juniperQuest003CatchDateKey = null;
+    juniperQuest003SemRoomOfferDateKey = null;
     juniperQuest003CatchDaySemRoomSexPlayedDateKey = null;
+    juniperQuest003OfferHelpStep = 0;
+    juniperQuest003OfferRefusedColdUntilDateKey = null;
+    juniperQuest003OfferHelpResolved = false;
     danielleSpyCaughtConfrontationDone = false;
     danielleSpyCaughtConfrontationCount = 0;
     lastNpcEconomyProcessedDateKey = null;

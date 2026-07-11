@@ -946,6 +946,24 @@ final Map<String, String> stringsEn = {
       'But it gets more interesting. She said it turned her on a lot. That she can barely hold back and is waiting for Sem to come home so she can suck him off. But if she had the chance, she\'d suck me off right now.\n\n'
       'Strange thoughts crossed my mind — I\'d gladly let her have my cock.\n\n'
       'Okay, enough thinking about that. Time to go.',
+  'juniper_quest_003_offer_step1_dialogue':
+      'Juniper slipped in without me noticing.\n\n'
+      'Hi, Alex! What are you doing here?\n\n'
+      'Oh damn, Juniper, don\'t come in. Wait, I\'m busy. You should knock!\n\n'
+      'Alex, don\'t worry, it\'s fine. Want me to help you?\n\n'
+      'Help how? Help with what? Help who?\n\n'
+      'I have the same problem as you. And if I don\'t finish now, I\'ll start jumping on people. And anyway, move that pillow. I\'ve already seen everything. This isn\'t the first time you\'ve been doing something like this here.',
+  'juniper_quest_003_offer_step2_dialogue':
+      'That\'s all well and good, but what do we tell Sem? Sem is my friend after all.\n\n'
+      'That\'s exactly what we won\'t tell him anything about. I don\'t think he needs to know. It\'ll be our little secret.\n\n'
+      'While she was saying all this, she slid her hand into her panties and started touching herself.\n\n'
+      'My arousal was off the charts, and I was ready for whatever she offered.\n\n'
+      'Fine, I know how to keep secrets. And you?\n\n'
+      'Of course I do. If I didn\'t, I wouldn\'t be standing here.',
+  'juniper_quest_003_offer_btn_refuse': 'Refuse',
+  'juniper_quest_003_offer_btn_agree': 'Agree',
+  'juniper_quest_003_offer_btn_secret': 'Secret it is',
+  'juniper_quest_003_offer_cold_shoulder_dialogue': 'We have nothing to talk about',
   'juniper_palivo_apology_dialogue':
       '— Hi, Juni. I wanted to apologize for that incident — it was an accident. I accidentally walked into Sem\'s room.\n'
       '— Okay, I forgive you, but next time knock for sure. I hope you didn\'t see much in there.\n'

@@ -53,6 +53,7 @@ abstract final class NpcRoomSceneResolver {
           dateTime: dateTime,
           candidates: candidates,
           pickSeed: pickSeed,
+          selectedNpcIdInRoom: selectedNpcIdInRoom,
         );
 
     return _applySelected(
@@ -90,15 +91,23 @@ abstract final class NpcRoomSceneResolver {
     required DateTime dateTime,
     List<({NPCModel npc, SchedulePoint point})>? candidates,
     int? pickSeed,
+    String? selectedNpcIdInRoom,
   }) {
     final list =
         candidates ?? npcService.getCandidatesInRoom(roomId, hour, weekday);
     if (list.isEmpty) return NpcRoomSceneLayers.empty;
-    final chosen = list.length == 1
-        ? list.first
-        : list[Random(
-            pickSeed ?? NpcRoomScenePicker.hourlySeed(dateTime, hour, roomId),
-          ).nextInt(list.length)];
+    if (list.length == 1) return fromCandidate(list.first);
+
+    final selected = selectedNpcIdInRoom?.trim();
+    if (selected != null && selected.isNotEmpty) {
+      for (final c in list) {
+        if (c.npc.id == selected) return fromCandidate(c);
+      }
+    }
+
+    final chosen = list[
+        Random(pickSeed ?? NpcRoomScenePicker.hourlySeed(dateTime, hour, roomId))
+            .nextInt(list.length)];
     return fromCandidate(chosen);
   }
 
@@ -113,9 +122,10 @@ abstract final class NpcRoomSceneResolver {
     final selected = selectedNpcIdInRoom?.trim();
     if (selected == null || selected.isEmpty) return current;
 
-    if (current.specialBackground != null &&
-        current.activeNpc?.id == selected) {
-      return current;
+    if (current.activeNpc?.id == selected) {
+      if (current.specialBackground != null || current.npcRasterOverlay != null) {
+        return current;
+      }
     }
 
     final norm = LocationsData.migrateLegacyRoomId(roomId);

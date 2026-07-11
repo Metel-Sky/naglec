@@ -8,6 +8,7 @@ import '../models/npc_model.dart';
 import '../npcs/all_npcs.dart';
 import '../npcs/juniper/juniper_npc.dart';
 import '../npcs/juniper/juniper_at_sem_schedule.dart';
+import '../npcs/juniper/juniper_quest_001_kompromat.dart';
 import '../npcs/juniper/juniper_quest_003.dart';
 import '../npcs/juniper/juniper_sem_room_sex_videos.dart';
 import '../npcs/sem/sem_juniper_evening_visits.dart';
@@ -473,21 +474,35 @@ class NPCService {
       )) {
         return LocationsData.friendRoom;
       }
-      if (JuniperQuest003.isJuniperPinnedToFriendHall(world, hour: hour)) {
-        return LocationsData.friendHall;
-      }
-      if (SemJuniperEveningVisits.isWeekendSemRoomPresenceActive(
+      if (JuniperQuest003.isJuniperPinnedToFriendHall(
         world,
-        effectiveDay,
-        hour,
+        hour: hour,
+        gameDateKey: dateKey,
       )) {
-        return LocationsData.friendRoom;
+        return LocationsData.friendHall;
       }
       if (JuniperSemRoomSexVideos.isSceneActiveAt(
         world: world,
         gameDateKey: dateKey,
         weekdayIndex: effectiveDay,
         hour: hour,
+      )) {
+        return LocationsData.friendRoom;
+      }
+      if (JuniperQuest001Kompromat.isJuniperLivingAtSemDaily(
+        world: world,
+        gameDateKey: dateKey,
+      )) {
+        return JuniperAtSemSchedule.locationIdAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+        );
+      }
+      if (SemJuniperEveningVisits.isWeekendSemRoomPresenceActive(
+        world,
+        effectiveDay,
+        hour,
       )) {
         return LocationsData.friendRoom;
       }
@@ -526,18 +541,6 @@ class NPCService {
           weekdayIndex: effectiveDay,
           hour: hour,
           world: world,
-        );
-      }
-      if (JuniperAtSemSchedule.isActive(
-        world: world,
-        gameDateKey: dateKey,
-        weekdayIndex: effectiveDay,
-        hour: hour,
-      )) {
-        return JuniperAtSemSchedule.locationIdAtHour(
-          gameDateKey: dateKey,
-          weekdayIndex: effectiveDay,
-          hour: hour,
         );
       }
       return null;
@@ -696,6 +699,32 @@ class NPCService {
     if (npc.id == kJuniperNpcId) {
       final world = sl<GameWorldState>();
       final dateKey = sl<GameTimeController>().onlyDate;
+      final livingDaily = JuniperQuest001Kompromat.isJuniperLivingAtSemDaily(
+        world: world,
+        gameDateKey: dateKey,
+      );
+      if (livingDaily &&
+          JuniperAtSemSchedule.isActive(
+            world: world,
+            gameDateKey: dateKey,
+            weekdayIndex: effectiveDay,
+            hour: hour,
+          )) {
+        final homeRoom = JuniperAtSemSchedule.locationIdAtHour(
+          gameDateKey: dateKey,
+          weekdayIndex: effectiveDay,
+          hour: hour,
+        );
+        if (homeRoom != null && homeRoom == normRoom) {
+          return SchedulePoint(
+            hourStart: hour,
+            hourEnd: hour,
+            location: homeRoom,
+            actionLabel: JuniperAtSemSchedule.actionLabelForRoom(homeRoom),
+            spritePath: npc.avatarPath ?? '',
+          );
+        }
+      }
       if (SemJuniperEveningVisits.isWeekendSemRoomPresenceActive(
         world,
         effectiveDay,
@@ -799,31 +828,8 @@ class NPCService {
           );
         }
       }
-      if (JuniperAtSemSchedule.isActive(
-        world: world,
-        gameDateKey: dateKey,
-        weekdayIndex: effectiveDay,
-        hour: hour,
-      )) {
-        final homeRoom = JuniperAtSemSchedule.locationIdAtHour(
-          gameDateKey: dateKey,
-          weekdayIndex: effectiveDay,
-          hour: hour,
-        );
-        if (homeRoom == normRoom) {
-          final homeHour = hour == JuniperAtSemSchedule.weekdayHomeMorningHour
-              ? JuniperAtSemSchedule.weekdayHomeMorningHour
-              : JuniperAtSemSchedule.weekdayHomeMiddayHour;
-          return SchedulePoint(
-            hourStart: homeHour,
-            hourEnd: homeHour,
-            location: homeRoom,
-            actionLabel: JuniperAtSemSchedule.actionLabelForRoom(homeRoom),
-            spritePath: npc.avatarPath ?? '',
-            days: const [0, 1, 2, 3, 4],
-          );
-        }
-      }
+
+      return null;
     }
 
     if (npc.id == 'nicole') {

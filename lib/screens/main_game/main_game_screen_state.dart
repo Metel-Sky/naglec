@@ -7,7 +7,6 @@ class MainGameScreenState extends MainGameScreenStateBase
         PiperGameFlow,
         MainGameNpcFinance,
         MainGameQuestFlows,
-        QuestUiIsolationHost,
         MainGameTimeTickHandler {
   @override
   void initState() {
@@ -1172,6 +1171,8 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   playerArousal: _playerStats.arousal,
                                   playerMaxArousal: maxA,
                                   zone: currentZone,
+                                  streetHouse: currentStreetHouse,
+                                  insideRoom: isInsideRoom,
                                   room: currentRoom,
                                   hour: dt.hour,
                                   world: _worldState,

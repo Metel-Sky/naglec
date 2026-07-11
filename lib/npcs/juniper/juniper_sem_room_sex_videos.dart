@@ -59,10 +59,9 @@ abstract final class JuniperSemRoomSexVideos {
   }) {
     if (!world.semJuniperDating) return false;
     if (isScheduledHour(weekdayIndex, hour)) return true;
-    return JuniperQuest003.isCatchDaySemRoomSexWindow(
+    return JuniperQuest003.isSemRoomSexOfferActive(
       world: world,
       gameDateKey: gameDateKey,
-      hour: hour,
     );
   }
 

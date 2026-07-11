@@ -18,6 +18,7 @@ abstract final class JuniperVideoSexStats {
     'junip_sem_room_sex_03.mp4',
     'junip_manuel_02.mp4',
     'junip_manuel_03.mp4',
+    'with_gg_05.mp4',
   };
 
   static String? _basename(String videoPath) {

@@ -808,13 +808,8 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     });
   }
 
-  /// Seed для вибору одного NPC з кількох (добовий, як у HomeView / CityView).
-  static int _dailySeed(DateTime dt, String location) {
-    final dayPart = dt.year * 10000 + dt.month * 100 + dt.day;
-    return dayPart * 31 + location.hashCode;
-  }
-
-  /// Список NPC, які зараз у поточній кімнаті (для вибору при 2+ NPC). Обраний по seed — перший (підсвічується зеленим).
+  /// Список NPC, які зараз у поточній кімнаті (для вибору при 2+ NPC).
+  /// Обраний гравцем — перший; решта — стабільний порядок за id.
   List<NPCModel> _getActiveNPCsInCurrentRoom() {
     if (!isInsideRoom) return [];
     if (currentRoom == LocationsData.cityMallGiftShop) {
@@ -823,40 +818,80 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
     final npcService = sl<NPCService>();
     final hour = _timeController.dateTime.hour;
     final day = _timeController.weekdayIndex;
-    final candidates = npcService.getCandidatesInRoom(currentRoom, hour, day);
-    if (candidates.isEmpty) return [];
-    if (candidates.length == 1) return [candidates.first.npc];
+
+    final inRoom = npcService.getNPCsInRoom(currentRoom, hour, day);
+    final present = inRoom.where((npc) {
+      final point = npcService.representativeSchedulePoint(
+        npc,
+        currentRoom,
+        hour,
+        day,
+      );
+      if (point != null && point.spritePath.trim().isNotEmpty) return true;
+      final av = npc.avatarPath?.trim();
+      return av != null && av.isNotEmpty;
+    }).toList();
+
+    if (present.isEmpty) return [];
+    if (present.length == 1) return present;
+
+    List<NPCModel> ordered;
     if (currentRoom == LocationsData.cityEliteApartment2Bedroom) {
-      final ordered = <NPCModel>[];
+      ordered = <NPCModel>[];
       for (final id in ['lana', 'riley']) {
-        for (final c in candidates) {
-          if (c.npc.id == id) {
-            ordered.add(c.npc);
+        for (final n in present) {
+          if (n.id == id) {
+            ordered.add(n);
             break;
           }
         }
       }
-      for (final c in candidates) {
-        if (c.npc.id != 'riley' && c.npc.id != 'lana') {
-          ordered.add(c.npc);
+      for (final n in present) {
+        if (n.id != 'riley' && n.id != 'lana') {
+          ordered.add(n);
         }
       }
-      if (ordered.isNotEmpty) return ordered;
+      if (ordered.isEmpty) ordered = List<NPCModel>.from(present);
+    } else {
+      ordered = List<NPCModel>.from(present)
+        ..sort((a, b) => a.id.compareTo(b.id));
     }
-    final chosen = candidates[Random(_dailySeed(_timeController.dateTime, currentRoom)).nextInt(candidates.length)];
 
-    final list = <NPCModel>[
-      chosen.npc,
-      ...candidates.where((c) => c.npc.id != chosen.npc.id).map((c) => c.npc),
-    ];
+    final selectedId = _selectedNpcIdInRoom;
+    if (selectedId != null &&
+        ordered.any((n) => n.id == selectedId)) {
+      return [
+        ...ordered.where((n) => n.id == selectedId),
+        ...ordered.where((n) => n.id != selectedId),
+      ];
+    }
 
     if (currentZone == 'COLLEGE' && currentRoom == LocationsData.collegeCorridor) {
-      final loshok = list.where((n) => n.id == 'loshok').toList();
-      final others = list.where((n) => n.id != 'loshok').toList();
+      final loshok = ordered.where((n) => n.id == 'loshok').toList();
+      final others = ordered.where((n) => n.id != 'loshok').toList();
       return [...others, ...loshok];
     }
 
-    return list;
+    return ordered;
+  }
+
+  /// Коли в кімнаті кілька NPC — явний вибір першого, щоб смуга, центр і кнопки збігались.
+  void _syncDefaultNpcSelectionInRoomIfNeeded() {
+    if (!isInsideRoom) return;
+    final roomNorm = LocationsData.migrateLegacyRoomId(currentRoom);
+    if (!CityNpcLocationsUiRules.shouldAutoSelectNpcInAvatarStrip(roomNorm)) {
+      return;
+    }
+    final activeNPCs = _getActiveNPCsInCurrentRoom();
+    if (activeNPCs.isEmpty) {
+      _selectedNpcIdInRoom = null;
+      return;
+    }
+    final selectedId = _selectedNpcIdInRoom;
+    if (selectedId != null && activeNPCs.any((n) => n.id == selectedId)) {
+      return;
+    }
+    _selectedNpcIdInRoom = activeNPCs.first.id;
   }
 
   /// Магазин подарунків (ТРЦ): показуємо тільки тих, хто в кімнаті «по факту»

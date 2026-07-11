@@ -34,6 +34,14 @@ mixin MainGameTimeTickHandler on MainGameScreenStateBase, MomGameFlow, PiperGame
         _timeController.dateTime,
       );
       GgHygiene.syncDayTick(_worldState, _timeController.dateTime);
+      JuniperQuest003.syncDayTick(
+        _worldState,
+        gameDateKey: _timeController.onlyDate,
+      );
+      JuniperQuest003OfferHelp.syncColdShoulderExpiry(
+        _worldState,
+        gameDateKey: _timeController.onlyDate,
+      );
       npcService.resetSondoxTriggersAtMorning(_timeController.dateTime);
       if (_collegeToiletUnderwearSaleActive &&
           !_isCollegeToiletGuysBreakWindow()) {

@@ -3,6 +3,8 @@ import 'dart:math';
 import '../../data/locations_room_data.dart';
 import '../../services/game_world_state.dart';
 import '../sem/sem_juniper_evening_visits.dart';
+import 'juniper_at_sem_schedule.dart';
+import 'juniper_quest_001_kompromat.dart';
 
 /// Відео Juniper у душі (3 набори × 3 ролики) — sem_quest_001, вечірні візити.
 abstract final class JuniperShowerVideos {
@@ -48,8 +50,7 @@ abstract final class JuniperShowerVideos {
     return videos[clampedTier - 1];
   }
 
-  /// Juniper у душі Sem: пн/ср/пт/нд о 22:00 (поки [semJuniperDating]).
-  /// Не обмежувати 3-тижневим вікном вечірніх візитів — душ лишається в розкладі.
+  /// Juniper у душі Sem: постійний розклад після поселення або вечірні візити (тижні 1–3).
   static bool isJuniperInShowerAt({
     required GameWorldState world,
     required String gameDateKey,
@@ -57,6 +58,12 @@ abstract final class JuniperShowerVideos {
     required int hour,
   }) {
     if (!world.semJuniperDating) return false;
+    if (JuniperQuest001Kompromat.isJuniperLivingAtSemDaily(
+      world: world,
+      gameDateKey: gameDateKey,
+    )) {
+      return JuniperAtSemSchedule.isShowerHour(weekdayIndex, hour);
+    }
     return SemJuniperEveningVisits.locationAtHour(
           gameDateKey: gameDateKey,
           weekdayIndex: weekdayIndex,

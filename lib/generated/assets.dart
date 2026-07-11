@@ -39,6 +39,7 @@ class $AssetsGgGen {
   final AssetGenImage ggStinky = const AssetGenImage(
       'lib/assets/gg/gg_stinky.png');
   final String girya = 'lib/assets/gg/girya.mp4';
+  final String handjob = 'lib/assets/gg/handjob.mp4';
   final String mapCity = 'lib/assets/gg/map_city.md';
   final AssetGenImage pers = const AssetGenImage('lib/assets/gg/pers.png');
   final AssetGenImage startScreen = const AssetGenImage(
@@ -329,6 +330,9 @@ class $AssetsLeftPanelGen {
       'lib/assets/left_panel/setting.png');
   final AssetGenImage setting2 = const AssetGenImage(
       'lib/assets/left_panel/setting_2.png');
+  final String wallpaper = 'lib/assets/left_panel/wallpaper.avif';
+  final AssetGenImage wallper = const AssetGenImage(
+      'lib/assets/left_panel/wallper.webp');
 }
 
 class $AssetsLocationGen {
@@ -1421,10 +1425,32 @@ class $AssetsJuniperGen {
   const $AssetsJuniperGen();
 
   final $AssetsImgGen img = const $AssetsImgGen();
+  final String ggHjUSema01 = 'lib/assets/npcs/juniper/gg_hj_u_sema_01.mp4';
   final String junipKitchn = 'lib/assets/npcs/juniper/junip_kitchn.mp4';
+  final String junipKitchn1 = 'lib/assets/npcs/juniper/junip_kitchn_1.mp4';
+  final String junipManuel01 = 'lib/assets/npcs/juniper/junip_manuel_01.mp4';
+  final String junipManuel02 = 'lib/assets/npcs/juniper/junip_manuel_02.mp4';
+  final String junipManuel03 = 'lib/assets/npcs/juniper/junip_manuel_03.mp4';
+  final String junipManuelZal01 = 'lib/assets/npcs/juniper/junip_manuel_zal_01.mp4';
   final String junipSemRoom01 = 'lib/assets/npcs/juniper/junip_sem_room_01.mp4';
   final String junipSemRoom02 = 'lib/assets/npcs/juniper/junip_sem_room_02.mp4';
-  final String junipSemRoom030 = 'lib/assets/npcs/juniper/junip_sem_room_03.0.mp4';
+  final String junipSemRoomSex01 = 'lib/assets/npcs/juniper/junip_sem_room_sex_01.mp4';
+  final String junipSemRoomSex02 = 'lib/assets/npcs/juniper/junip_sem_room_sex_02.mp4';
+  final String junipSemRoomSex03 = 'lib/assets/npcs/juniper/junip_sem_room_sex_03.mp4';
+  final String junipSemRoomSex04Palivo = 'lib/assets/npcs/juniper/junip_sem_room_sex_04_palivo.mp4';
+  final String junipSemRoomZnakomstvo = 'lib/assets/npcs/juniper/junip_sem_room_znakomstvo.mp4';
+  final String junipShower101 = 'lib/assets/npcs/juniper/junip_shower_1_01.mp4';
+  final String junipShower102 = 'lib/assets/npcs/juniper/junip_shower_1_02.mp4';
+  final String junipShower103 = 'lib/assets/npcs/juniper/junip_shower_1_03.mp4';
+  final String junipShower201 = 'lib/assets/npcs/juniper/junip_shower_2_01.mp4';
+  final String junipShower202 = 'lib/assets/npcs/juniper/junip_shower_2_02.mp4';
+  final String junipShower203 = 'lib/assets/npcs/juniper/junip_shower_2_03.mp4';
+  final String junipShower301 = 'lib/assets/npcs/juniper/junip_shower_3_01.mp4';
+  final String junipShower302 = 'lib/assets/npcs/juniper/junip_shower_3_02.mp4';
+  final String junipShower303 = 'lib/assets/npcs/juniper/junip_shower_3_03.mp4';
+  final String kompromManuel = 'lib/assets/npcs/juniper/komprom_manuel.mp4';
+  final String withGg02 = 'lib/assets/npcs/juniper/with_gg_02.mp4';
+  final String withGg03 = 'lib/assets/npcs/juniper/with_gg_03.mp4';
 }
 
 class $AssetsImgGen {
@@ -1436,6 +1462,8 @@ class $AssetsImgGen {
       'lib/assets/npcs/juniper/img/37731812-jun013atk-415132002_880x660.jpg');
   final AssetGenImage a39089025Jun013atk412928288880x660 = const AssetGenImage(
       'lib/assets/npcs/juniper/img/39089025-jun013atk-412928288_880x660.jpg');
+  final AssetGenImage closeDor = const AssetGenImage(
+      'lib/assets/npcs/juniper/img/close_dor.png');
   final AssetGenImage juniper = const AssetGenImage(
       'lib/assets/npcs/juniper/img/juniper.jpg');
   final AssetGenImage juniperAva = const AssetGenImage(

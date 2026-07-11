@@ -110,7 +110,6 @@ part '../npcs/piper/piper_game_flow.dart';
 part 'main_game/main_game_quest_and_zone.dart';
 part 'main_game/main_game_time_tick_handler.dart';
 part 'main_game/main_game_npc_finance.dart';
-part 'main_game/quest_ui_isolation_host.dart';
 part 'main_game/main_game_screen_state.dart';
 
 class MainGameScreen extends StatefulWidget {

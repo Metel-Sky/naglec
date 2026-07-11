@@ -100,6 +100,9 @@ class StreetView extends StatelessWidget {
     }
   }
 
+  bool _selectedAllowsNpcMedia(String npcId) =>
+      NpcRoomSceneResolver.selectionAllows(selectedNpcIdInRoom, npcId);
+
   @override
   Widget build(BuildContext context) {
     // Під’їзд до дому кориша: повний блок — фото будинку та кнопки
@@ -248,6 +251,7 @@ class StreetView extends StatelessWidget {
     }
 
     if (semJuniperEveningClipShowOnThisVisit &&
+        _selectedAllowsNpcMedia(kJuniperNpcId) &&
         currentStreetHouse == LocationsData.friendHouse) {
       final visitRoom = SemJuniperEveningVisits.locationAtHour(
         gameDateKey: dateKey,
