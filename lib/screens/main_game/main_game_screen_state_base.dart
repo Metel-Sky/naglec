@@ -375,7 +375,6 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
 
   void _clearInRoomVideoOverlayBlockers() {
     _clearJuniperShowerUiOnly();
-    _clearJuniperQuest003UiOnly();
     _ui.setEventImagePath(null);
     _eventVideoPath = null;
     _eventVideoPendingButton = null;

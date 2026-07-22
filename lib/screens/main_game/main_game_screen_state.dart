@@ -1171,8 +1171,6 @@ class MainGameScreenState extends MainGameScreenStateBase
                                   playerArousal: _playerStats.arousal,
                                   playerMaxArousal: maxA,
                                   zone: currentZone,
-                                  streetHouse: currentStreetHouse,
-                                  insideRoom: isInsideRoom,
                                   room: currentRoom,
                                   hour: dt.hour,
                                   world: _worldState,
