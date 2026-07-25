@@ -7,6 +7,7 @@ import '../npcs/piper/piper_quests.dart';
 import '../npcs/den/den_events.dart';
 import '../npcs/juniper/juniper_npc.dart';
 import '../npcs/juniper/juniper_quest_001_kompromat.dart';
+import '../npcs/juniper/juniper_quest_003.dart';
 import '../npcs/sem/sem_events.dart';
 import '../npcs/sem/sem_quests.dart';
 import '../services/game_time_controller.dart';
@@ -48,6 +49,10 @@ abstract final class NpcProfileQuestCheatId {
   static const juniperKompromatSkipThreeDaysStep4 =
       'juniper_kompromat_skip_three_days_step4';
   static const juniperKompromatStep4 = 'juniper_kompromat_step4';
+  static const juniperQuest003HallFollowUp = 'juniper_quest_003_hall_follow_up';
+  static const juniperQuest003CatchFive = 'juniper_quest_003_catch_five';
+  static const juniperQuest003OfferStep1 = 'juniper_quest_003_offer_step1';
+  static const juniperQuest003Completed = 'juniper_quest_003_completed';
 }
 
 /// Група квестів у картці NPC (другий рівень випадаючого списку).
@@ -80,6 +85,11 @@ List<NpcProfileQuestGroup>? npcProfileQuestGroupsFor(String npcId) {
       NpcProfileQuestGroup(
         titleKey: 'npc_quest_juniper_kompromat_001',
         lines: _juniperQuest001CheatLines(),
+        horizontalInlineRow: true,
+      ),
+      NpcProfileQuestGroup(
+        titleKey: 'npc_quest_juniper_arousal_003',
+        lines: _juniperQuest003CheatLines(),
         horizontalInlineRow: true,
       ),
     ];
@@ -190,6 +200,43 @@ List<NpcProfileQuestLine> _juniperQuest001CheatLines() {
       isDone: (w, npc) =>
           npc.id == kJuniperNpcId && w.juniperManuelKompromatStep4Done,
       cheatId: NpcProfileQuestCheatId.juniperKompromatStep4,
+      compactSwitch: true,
+    ),
+  ];
+}
+
+List<NpcProfileQuestLine> _juniperQuest003CheatLines() {
+  return [
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_quest_003_hall',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId &&
+          JuniperQuest003.isCheatHallFollowUpActive(w),
+      cheatId: NpcProfileQuestCheatId.juniperQuest003HallFollowUp,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_quest_003_catch_five',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId && JuniperQuest003.isCheatCatchFiveReady(w),
+      cheatId: NpcProfileQuestCheatId.juniperQuest003CatchFive,
+      counterLineKey: 'profile_juniper_quest_003_catch_count',
+      counterValue: (w, _) => w.juniperQuest003CatchCount,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_quest_003_offer_step1',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId &&
+          JuniperQuest003OfferHelp.isCheatOfferStep1Active(w),
+      cheatId: NpcProfileQuestCheatId.juniperQuest003OfferStep1,
+      compactSwitch: true,
+    ),
+    NpcProfileQuestLine(
+      titleKey: 'npc_quest_juniper_quest_003_completed',
+      isDone: (w, npc) =>
+          npc.id == kJuniperNpcId && JuniperQuest003.isCompleted(w),
+      cheatId: NpcProfileQuestCheatId.juniperQuest003Completed,
       compactSwitch: true,
     ),
   ];

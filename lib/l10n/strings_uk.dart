@@ -76,6 +76,12 @@ final Map<String, String> stringsUk = {
   'npc_quest_juniper_kompromat_skip_three_days_step4':
       'Пропустити три дні (крок 4)',
   'npc_quest_juniper_kompromat_step4': 'Крок 4 kompromat (ванна Sem)',
+  'npc_quest_juniper_arousal_003': 'Juniper: Квест (003) Збудження',
+  'npc_quest_juniper_quest_003_hall': 'Коридор + зал (після catch)',
+  'npc_quest_juniper_quest_003_catch_five': '5 catch (готово до offer)',
+  'profile_juniper_quest_003_catch_count': 'Catch: %s',
+  'npc_quest_juniper_quest_003_offer_step1': 'Offer help (крок 1)',
+  'npc_quest_juniper_quest_003_completed': 'Квест 003 завершено',
   'npc_ask_how_are_you_dialogue':
       '— Привіт, як справи?\n'
       '— Привіт! Все добре, дякую. А у тебе як?\n'

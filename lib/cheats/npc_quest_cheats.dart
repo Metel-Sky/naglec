@@ -9,6 +9,7 @@ import '../npcs/sem/sem_events.dart';
 import '../npcs/sem/sem_quests.dart';
 import '../npcs/juniper/juniper_npc.dart';
 import '../npcs/juniper/juniper_quest_001_kompromat.dart';
+import '../npcs/juniper/juniper_quest_003.dart';
 import '../models/item_model.dart';
 import '../models/npc_model.dart';
 import '../services/game_world_state.dart';
@@ -513,6 +514,50 @@ abstract final class NpcQuestCheats {
           );
         } else {
           JuniperQuest001.resetCheatKompromatStep4Done(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperQuest003HallFollowUp:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest003.applyCheatHallFollowUp(
+            world,
+            gameDateKey: sl<GameTimeController>().onlyDate,
+            playerStats: stats,
+          );
+        } else {
+          JuniperQuest003.resetCheatHallFollowUp(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperQuest003CatchFive:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest003.applyCheatCatchFive(
+            world,
+            gameDateKey: sl<GameTimeController>().onlyDate,
+            playerStats: stats,
+          );
+        } else {
+          JuniperQuest003.resetCheatCatchFive(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperQuest003OfferStep1:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest003OfferHelp.applyCheatOfferStep1(
+            world,
+            gameDateKey: sl<GameTimeController>().onlyDate,
+            playerStats: stats,
+          );
+        } else {
+          JuniperQuest003OfferHelp.resetCheatOfferStep1(world);
+        }
+        break;
+      case NpcProfileQuestCheatId.juniperQuest003Completed:
+        if (profileNpc.id != kJuniperNpcId) break;
+        if (completed) {
+          JuniperQuest003.applyCheatCompleted(world);
+        } else {
+          JuniperQuest003.resetCheatAll(world);
         }
         break;
     }

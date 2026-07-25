@@ -381,6 +381,8 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     _juniperQuest003UiActive = true;
     _juniperQuest003VideoPath = handle.videoPath;
     _juniperQuest003PlaybackTick = handle.playbackTick;
+    _juniperQuest003CatchSceneActive =
+        handle.videoPath == JuniperQuest003.juniperHandjobVideoPath;
     newsMessage = '';
     _saveService.autosave();
   }
@@ -593,17 +595,23 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       });
       return;
     }
-    final wasCatchScene =
-        _juniperQuest003VideoPath == JuniperQuest003.juniperHandjobVideoPath;
-    final catchVideoPath = _juniperQuest003VideoPath;
+    final wasCatchScene = _juniperQuest003CatchSceneActive ||
+        _juniperQuest003VideoPath == JuniperQuest003.juniperHandjobVideoPath ||
+        (_worldState.juniperQuest003LoungePinActive &&
+            !JuniperQuest003OfferHelp.isOfferHelpFlowActive(_worldState));
+    final catchVideoPath = _juniperQuest003VideoPath ??
+        (wasCatchScene ? JuniperQuest003.juniperHandjobVideoPath : null);
 
-    if (wasCatchScene && catchVideoPath != null) {
+    if (wasCatchScene) {
+      JuniperQuest003OfferHelp.syncStuckStepIfBelowCatchThreshold(_worldState);
       final canHallFollowUp =
           JuniperQuest003.canBeginHallFollowUpAfterCatch(_worldState);
-      JuniperQuest003.applyCatchSceneRewards(
-        npcService: sl<NPCService>(),
-        videoPath: catchVideoPath,
-      );
+      if (catchVideoPath != null) {
+        JuniperQuest003.applyCatchSceneRewards(
+          npcService: sl<NPCService>(),
+          videoPath: catchVideoPath,
+        );
+      }
       JuniperQuest003.recordLoungeCatch(
         _worldState,
         gameDateKey: _timeController.onlyDate,
@@ -618,7 +626,14 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
           );
         }
         _exitFriendHouseInteriorToCorridor();
-        _ensureJuniperQuest003HallFollowUpUiCoherent();
+        if (canHallFollowUp &&
+            JuniperQuest003.isHallFollowUpAllowed(_worldState)) {
+          newsMessage = sl<LocaleController>().t(
+            JuniperQuest003.l10nCorridorHallSounds,
+          );
+        } else {
+          _ensureJuniperQuest003HallFollowUpUiCoherent();
+        }
         _saveService.autosave();
       });
       return;
@@ -2082,6 +2097,13 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     JuniperQuest003OfferHelp.syncStuckStepIfBelowCatchThreshold(_worldState);
     SemQuest001.syncArcTimersIfDue(_worldState, dateKey);
     _purgeSemJuniperRoomIntroIfMisplaced();
+
+    // Quest 003 hall/offer — завжди, навіть якщо нижче early-return (corridor noise / intro).
+    void syncQuest003FollowUps() {
+      _syncJuniperQuest003HallFollowUpOnRoomEntry();
+      _syncJuniperQuest003OfferHelpOnRoomEntry();
+    }
+
     if (SemQuest001.shouldShowCorridorNoise(
       world: _worldState,
       gameDateKey: dateKey,
@@ -2091,8 +2113,18 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       room: currentRoom,
     )) {
       SemQuest001.markCorridorNoiseShown(_worldState);
-      newsMessage = sl<LocaleController>().t(SemQuest001.l10nCorridorNoise);
+      // Не перебивати зелений текст quest 003.
+      if (!JuniperQuest003.isCorridorHallSoundsHintContext(
+        world: _worldState,
+        zone: currentZone,
+        streetHouse: currentStreetHouse,
+        insideRoom: isInsideRoom,
+        room: currentRoom,
+      )) {
+        newsMessage = sl<LocaleController>().t(SemQuest001.l10nCorridorNoise);
+      }
       _saveService.autosave();
+      syncQuest003FollowUps();
       return;
     }
     if (!_semJuniperIntroUiActive) {
@@ -2110,6 +2142,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       )) {
         _beginSemJuniperRoomIntro(skippedFacadePath: true);
         _saveService.autosave();
+        syncQuest003FollowUps();
         return;
       }
       if (SemJuniperRoomIntro.canAutoStart(
@@ -2121,6 +2154,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
       )) {
         _beginSemJuniperRoomIntro(skippedFacadePath: false);
         _saveService.autosave();
+        syncQuest003FollowUps();
         return;
       }
     }
@@ -2132,8 +2166,7 @@ mixin MainGameQuestFlows on MainGameScreenStateBase, MomGameFlow, CherieGameFlow
     _syncJuniperManuelKompromatStep3OnRoomEntry();
     _syncJuniperManuelKompromatOnRoomEntry();
     _syncJuniperManuelKompromatStep2OnRoomEntry();
-    _syncJuniperQuest003HallFollowUpOnRoomEntry();
-    _syncJuniperQuest003OfferHelpOnRoomEntry();
+    syncQuest003FollowUps();
   }
 
   void _clearJuniperManuelKompromatUiOnly() {

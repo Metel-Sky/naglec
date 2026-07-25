@@ -76,6 +76,12 @@ final Map<String, String> stringsEn = {
   'npc_quest_juniper_kompromat_skip_three_days_step4':
       'Skip three days (step 4)',
   'npc_quest_juniper_kompromat_step4': 'Kompromat step 4 (Sem bathroom)',
+  'npc_quest_juniper_arousal_003': 'Juniper: Quest (003) Arousal',
+  'npc_quest_juniper_quest_003_hall': 'Corridor + hall (after catch)',
+  'npc_quest_juniper_quest_003_catch_five': '5 catches (offer ready)',
+  'profile_juniper_quest_003_catch_count': 'Catches: %s',
+  'npc_quest_juniper_quest_003_offer_step1': 'Offer help (step 1)',
+  'npc_quest_juniper_quest_003_completed': 'Quest 003 completed',
   'npc_ask_how_are_you_dialogue':
       '— Hi, how are you?\n'
       '— Hi! All good, thanks. And you?\n'

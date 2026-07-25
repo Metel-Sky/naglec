@@ -267,6 +267,8 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   bool _juniperQuest003UiActive = false;
   int _juniperQuest003PlaybackTick = 0;
   String? _juniperQuest003VideoPath;
+  /// True while lounge catch-відео (Juniper спалила) активне — для hall follow-up.
+  bool _juniperQuest003CatchSceneActive = false;
   bool _juniperQuest003HallUiActive = false;
   int _juniperQuest003HallPlaybackTick = 0;
   String? _juniperQuest003HallVideoPath;
@@ -366,6 +368,7 @@ abstract class MainGameScreenStateBase extends State<MainGameScreen> {
   void _clearJuniperQuest003UiOnly() {
     _juniperQuest003UiActive = false;
     _juniperQuest003VideoPath = null;
+    _juniperQuest003CatchSceneActive = false;
   }
 
   void _clearJuniperQuest003HallUiOnly() {
