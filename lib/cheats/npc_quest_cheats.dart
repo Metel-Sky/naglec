@@ -1,3 +1,4 @@
+import '../config/app_build_flags.dart';
 import '../data/npc_profile_quests_registry.dart';
 import '../npcs/cherie/cherie_quests.dart';
 import '../npcs/mom/mom_quest001.dart';
@@ -102,6 +103,7 @@ abstract final class NpcQuestCheats {
     NPCService npcService,
     NPCModel profileNpc,
   ) {
+    if (!AppBuildFlags.cheatsAvailable) return;
     switch (cheatId) {
       case NpcProfileQuestCheatId.semParentsTalk:
         final sem =

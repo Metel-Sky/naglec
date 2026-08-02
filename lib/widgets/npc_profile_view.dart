@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../cheats/npc_quest_cheats.dart';
+import '../config/app_build_flags.dart';
 import '../data/npc_profile_display.dart';
 import '../data/npc_profile_quests_registry.dart';
 import '../data/npc_sex_stats.dart';
@@ -322,7 +323,8 @@ class _NpcProfileStatsPanelState extends State<_NpcProfileStatsPanel> {
     return ListenableBuilder(
       listenable: sl<SettingsController>(),
       builder: (context, _) {
-        final cheatsOn = sl<SettingsController>().cheatsEnabled;
+        final cheatsOn = AppBuildFlags.cheatsAvailable &&
+            sl<SettingsController>().cheatsEnabled;
 
         return LayoutBuilder(
           builder: (context, constraints) {
@@ -948,29 +950,30 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
           ),
         ),
         const SizedBox(width: _inlineLabelSwitchGap),
-        Transform.scale(
-          scale: 0.78,
-          alignment: Alignment.center,
-          child: Switch(
-            value: done,
-            activeThumbColor: GameTheme.textGreen,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            onChanged: canToggle
-                ? (v) {
-                    NpcQuestCheats.setQuestCompleted(
-                      q.cheatId!,
-                      v,
-                      widget.world,
-                      stats,
-                      npcSvc,
-                      widget.npc,
-                    );
-                    sl<SaveService>().autosave();
-                    setState(() {});
-                  }
-                : null,
+        if (cheatsOn)
+          Transform.scale(
+            scale: 0.78,
+            alignment: Alignment.center,
+            child: Switch(
+              value: done,
+              activeThumbColor: GameTheme.textGreen,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              onChanged: canToggle
+                  ? (v) {
+                      NpcQuestCheats.setQuestCompleted(
+                        q.cheatId!,
+                        v,
+                        widget.world,
+                        stats,
+                        npcSvc,
+                        widget.npc,
+                      );
+                      sl<SaveService>().autosave();
+                      setState(() {});
+                    }
+                  : null,
+            ),
           ),
-        ),
       ],
     );
   }
@@ -1086,29 +1089,31 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
               statusLabel,
               style: statusStyle,
             ),
-      trailing: Transform.scale(
-        scale: q.compactSwitch ? 0.78 : 0.92,
-        alignment: Alignment.centerRight,
-        child: Switch(
-          value: done,
-          activeThumbColor: GameTheme.textGreen,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          onChanged: canToggle
-              ? (v) {
-                  NpcQuestCheats.setQuestCompleted(
-                    q.cheatId!,
-                    v,
-                    widget.world,
-                    stats,
-                    npcSvc,
-                    widget.npc,
-                  );
-                  sl<SaveService>().autosave();
-                  setState(() {});
-                }
-              : null,
-        ),
-      ),
+      trailing: cheatsOn
+          ? Transform.scale(
+              scale: q.compactSwitch ? 0.78 : 0.92,
+              alignment: Alignment.centerRight,
+              child: Switch(
+                value: done,
+                activeThumbColor: GameTheme.textGreen,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                onChanged: canToggle
+                    ? (v) {
+                        NpcQuestCheats.setQuestCompleted(
+                          q.cheatId!,
+                          v,
+                          widget.world,
+                          stats,
+                          npcSvc,
+                          widget.npc,
+                        );
+                        sl<SaveService>().autosave();
+                        setState(() {});
+                      }
+                    : null,
+              ),
+            )
+          : null,
     );
   }
 
@@ -1136,7 +1141,7 @@ class _NpcProfileQuestsListState extends State<_NpcProfileQuestsList> {
       listenable: settings,
       builder: (context, _) {
         final cheatsOn = settings.cheatsEnabled;
-        if (groups != null && groups.isNotEmpty) {
+        if (cheatsOn && groups != null && groups.isNotEmpty) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: groups

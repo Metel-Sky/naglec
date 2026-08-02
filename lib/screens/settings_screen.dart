@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/app_build_flags.dart';
 import '../theme/game_theme.dart';
 import '../services/service_locator.dart';
 import '../services/locale_controller.dart';
@@ -191,16 +192,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 20),
-                                  SwitchListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    title: Text(
-                                      t('settings_cheats'),
-                                      style: const TextStyle(color: Colors.white70, fontSize: 15),
+                                  if (AppBuildFlags.cheatsAvailable)
+                                    SwitchListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(
+                                        t('settings_cheats'),
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      value: settings.cheatsEnabled,
+                                      activeThumbColor: GameTheme.textGreen,
+                                      onChanged: (v) =>
+                                          settings.cheatsEnabled = v,
                                     ),
-                                    value: settings.cheatsEnabled,
-                                    activeThumbColor: GameTheme.textGreen,
-                                    onChanged: (v) => settings.cheatsEnabled = v,
-                                  ),
                                 ],
                               ),
                             );

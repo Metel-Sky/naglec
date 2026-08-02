@@ -15,7 +15,27 @@ flutter pub get
 flutter run
 ```
 
-Для релізної збірки під конкретну платформу — стандартні команди Flutter (`flutter build macos` тощо).
+### Windows: публічний реліз **без чітів**
+
+У `release` чіти **вимкнені на етапі збірки** (немає пункту в налаштуваннях і перемикачів у профілі NPC):
+
+```bash
+flutter build windows --release
+```
+
+Внутрішній реліз **з чітами**:
+
+```bash
+flutter build windows --release --dart-define=ENABLE_CHEATS=true
+```
+
+Debug / `flutter run` — чіти доступні за замовчуванням (увімкнути в налаштуваннях). Вимкнути навіть у debug:
+
+```bash
+flutter run --dart-define=ENABLE_CHEATS=false
+```
+
+Прапорець: `lib/config/app_build_flags.dart` (`AppBuildFlags.cheatsAvailable`).
 
 Якщо після додавання нових файлів у `lib/assets/` вони не потрапляють у бандл, зазвичай допомагає **`flutter clean`** і повторний `flutter run` (у `pubspec.yaml` частина шляхів перелічена явно).
 

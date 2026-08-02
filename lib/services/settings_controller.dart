@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../config/app_build_flags.dart';
+
 /// Гучність музики 0.0..1.0, чити ввімкнено/вимкнено. Зберігається в файл.
 class SettingsController with ChangeNotifier {
   double _musicVolume = 0.7;
@@ -12,7 +14,11 @@ class SettingsController with ChangeNotifier {
   bool _questRuntimeMirrorMode = true;
 
   double get musicVolume => _musicVolume;
-  bool get cheatsEnabled => _cheatsEnabled;
+
+  /// Ефективний стан чітів: у релізі без `ENABLE_CHEATS` завжди `false`.
+  bool get cheatsEnabled =>
+      AppBuildFlags.cheatsAvailable && _cheatsEnabled;
+
   bool get useQuestRuntimeV2 => _useQuestRuntimeV2;
   bool get useQuestUiIsolation => _useQuestUiIsolation;
   bool get questRuntimeMirrorMode => _questRuntimeMirrorMode;
@@ -26,6 +32,7 @@ class SettingsController with ChangeNotifier {
   }
 
   set cheatsEnabled(bool v) {
+    if (!AppBuildFlags.cheatsAvailable) return;
     if (v != _cheatsEnabled) {
       _cheatsEnabled = v;
       _save();
@@ -69,7 +76,10 @@ class SettingsController with ChangeNotifier {
           _musicVolume = (json['musicVolume'] as num).toDouble().clamp(0.0, 1.0);
         }
         if (json['cheatsEnabled'] is bool) {
-          _cheatsEnabled = json['cheatsEnabled'] as bool;
+          _cheatsEnabled = AppBuildFlags.cheatsAvailable &&
+              (json['cheatsEnabled'] as bool);
+        } else {
+          _cheatsEnabled = false;
         }
         if (json['useQuestRuntimeV2'] is bool) {
           _useQuestRuntimeV2 = json['useQuestRuntimeV2'] as bool;
@@ -91,7 +101,7 @@ class SettingsController with ChangeNotifier {
       final file = File('${dir.path}/$_fileName');
       await file.writeAsString(jsonEncode({
         'musicVolume': _musicVolume,
-        'cheatsEnabled': _cheatsEnabled,
+        if (AppBuildFlags.cheatsAvailable) 'cheatsEnabled': _cheatsEnabled,
         'useQuestRuntimeV2': _useQuestRuntimeV2,
         'useQuestUiIsolation': _useQuestUiIsolation,
         'questRuntimeMirrorMode': _questRuntimeMirrorMode,

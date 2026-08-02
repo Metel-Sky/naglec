@@ -1,3 +1,4 @@
+import '../config/app_build_flags.dart';
 import '../models/npc_model.dart';
 import '../services/game_world_state.dart';
 import '../npcs/cherie/cherie_quests.dart';
@@ -72,6 +73,7 @@ final class NpcProfileQuestGroup {
 
 /// Групи квестів (наприклад Piper: «001 погані оцінки» всередині «Квести»).
 List<NpcProfileQuestGroup>? npcProfileQuestGroupsFor(String npcId) {
+  if (!AppBuildFlags.cheatsAvailable) return null;
   if (npcId == 'piper') {
     return [
       NpcProfileQuestGroup(
